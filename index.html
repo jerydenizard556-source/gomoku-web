@@ -1184,11 +1184,13 @@ h1 {
 
         </div>
 
-        <div id="undoBox" class="rematch-box undo-box">
+        <div id="undoBox" class="rematch-box undo-box" style="display:block;">
 
-            <div id="undoMessage" class="rematch-message"></div>
+            <div id="undoMessage" class="rematch-message">↩️ Après avoir joué un pion, vous pouvez demander son annulation.</div>
 
-            <div id="undoActions" class="rematch-actions"></div>
+            <div id="undoActions" class="rematch-actions">
+                <button type="button" id="undoRequestButton" class="undo-button undo-request">↩️ Demande rejwe pion</button>
+            </div>
 
         </div>
 
@@ -4563,61 +4565,49 @@ function sendRematchResponse(
 ================================================== */
 
 function updateUndoUI() {
-
     const box = document.getElementById("undoBox");
     const message = document.getElementById("undoMessage");
     const actions = document.getElementById("undoActions");
-
     if (!box || !message || !actions) return;
 
     box.style.display = "none";
     message.textContent = "";
     actions.innerHTML = "";
 
-    if (onlineConnectionMode === "spectator" || onlineGameOver) {
-        return;
-    }
+    if (onlineConnectionMode === "spectator" || onlineGameOver) return;
 
     if (onlineUndoRequest !== null) {
         box.style.display = "block";
-
         if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
-            message.textContent = "⏳ Demande de rejwe envoyée. En attente de l'adversaire.";
+            message.textContent = "⏳ Demande de rejwe pion envoyée. En attente de l'adversaire.";
             return;
         }
-
         message.textContent = "🔄 Votre adversaire demande d'annuler son dernier pion.";
-
         const accept = document.createElement("button");
-        accept.type = "button";
-        accept.className = "undo-button undo-accept";
-        accept.textContent = "✅ Accepter";
-        accept.addEventListener("click", function() { sendUndoResponse(true); });
-
+        accept.type = "button"; accept.className = "undo-button undo-accept"; accept.textContent = "✅ Accepter";
+        accept.onclick = function(){ sendUndoResponse(true); };
         const refuse = document.createElement("button");
-        refuse.type = "button";
-        refuse.className = "undo-button undo-refuse";
-        refuse.textContent = "❌ Refuser";
-        refuse.addEventListener("click", function() { sendUndoResponse(false); });
-
-        actions.appendChild(accept);
-        actions.appendChild(refuse);
-        return;
-    }
-
-    if (!onlineLastMove || Number(onlineLastMove.player) !== Number(onlinePlayer)) {
+        refuse.type = "button"; refuse.className = "undo-button undo-refuse"; refuse.textContent = "❌ Refuser";
+        refuse.onclick = function(){ sendUndoResponse(false); };
+        actions.append(accept, refuse);
         return;
     }
 
     box.style.display = "block";
-    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
+    if (!onlineLastMove) {
+        message.textContent = "↩️ Demande rejwe pion : joue d'abord un pion pour pouvoir l'annuler.";
+        return;
+    }
 
-    const request = document.createElement("button");
-    request.type = "button";
-    request.className = "undo-button undo-request";
-    request.textContent = "🔄 Demande rejwe";
-    request.addEventListener("click", requestUndo);
-    actions.appendChild(request);
+    if (Number(onlineLastMove.player) === Number(onlinePlayer)) {
+        message.textContent = "Tu viens de jouer un pion. Tu peux demander à l'adversaire de l'annuler.";
+        const request = document.createElement("button");
+        request.type = "button"; request.className = "undo-button undo-request"; request.textContent = "↩️ Demande rejwe pion";
+        request.onclick = requestUndo;
+        actions.appendChild(request);
+    } else {
+        message.textContent = "↩️ Demande rejwe pion disponible après ton prochain coup.";
+    }
 }
 
 function requestUndo() {
