@@ -545,6 +545,35 @@ h1 {
     gap: 12px;
 }
 
+.undo-box {
+    margin-top: 12px;
+}
+
+.undo-button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 4px;
+}
+
+.undo-request {
+    background: #2563EB;
+    color: #FFFFFF;
+}
+
+.undo-accept {
+    background: #16A34A;
+    color: #FFFFFF;
+}
+
+.undo-refuse {
+    background: #DC2626;
+    color: #FFFFFF;
+}
+
 /* MOBILE */
 
 @media (max-width: 500px) {
@@ -1152,6 +1181,14 @@ h1 {
                 id="rematchActions"
                 class="rematch-actions">
             </div>
+
+        </div>
+
+        <div id="undoBox" class="rematch-box undo-box">
+
+            <div id="undoMessage" class="rematch-message"></div>
+
+            <div id="undoActions" class="rematch-actions"></div>
 
         </div>
 
@@ -2891,6 +2928,7 @@ let onlineWinningLine = null;
 
 let onlineLastMove = null;
 let onlineRematchRequest = null;
+let onlineUndoRequest = null;
 
 let onlineSessionToken = null;
 
@@ -3613,6 +3651,7 @@ function connectServer(callback) {
                     onlineLastMove = null;
                     onlineRematchRequest =
                         null;
+                    onlineUndoRequest = null;
 
                     document
                         .getElementById(
@@ -3722,6 +3761,9 @@ function connectServer(callback) {
                         .textContent =
                         onlineRoom;
 
+                    const playerRoomRow = document.getElementById("gameRoomCode");
+                    if (playerRoomRow && playerRoomRow.parentElement) playerRoomRow.parentElement.style.display = "block";
+
                     document
                         .getElementById(
                             "onlineError"
@@ -3827,6 +3869,8 @@ function connectServer(callback) {
                     onlineSessionToken = null;
 
                     document.getElementById("gameRoomCode").textContent = data.room;
+                    const spectatorRoom = document.getElementById("gameRoomCode");
+                    if (spectatorRoom && spectatorRoom.parentElement) spectatorRoom.parentElement.style.display = "none";
                     document.getElementById("gameOnlineError").textContent = "";
 
                     showScreen("onlineGameScreen");
@@ -3984,6 +4028,14 @@ function connectServer(callback) {
                             )
                             : null;
 
+                    onlineUndoRequest =
+                        data.undo_request !==
+                        undefined &&
+                        data.undo_request !==
+                        null
+                            ? Number(data.undo_request)
+                            : null;
+
                     onlineWinningLine =
                         data.winning_line ||
                         null;
@@ -3995,6 +4047,7 @@ function connectServer(callback) {
                     updateOnlineResult();
                     updateOnlineTimers();
                     updateRematchUI();
+                    updateUndoUI();
                     updateOnlineNewGameButton();
 
                     startOnlineDisplayTimer();
@@ -4070,6 +4123,11 @@ function updateOnlineScoreDisplay() {
         redName.textContent = p2.name || p2.username || "Joueur 2";
     }
 
+    const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
+    const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
+    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + (p1.name || p1.username || "Joueur 1");
+    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + (p2.name || p2.username || "Joueur 2");
+
     document
         .getElementById(
             "onlineBlackScore"
@@ -4114,6 +4172,12 @@ function updateOnlineStatus() {
     /*
        DEMANDE REJWE
     */
+
+    if (onlineUndoRequest !== null) {
+        document.getElementById("gameOnlineError").textContent =
+            "⏳ Attendez la réponse au rejwe.";
+        return;
+    }
 
     if (
         onlineRematchRequest !== null
@@ -4495,6 +4559,91 @@ function sendRematchResponse(
 }
 
 /* ==================================================
+   DEMANDE REJWE PANDAN MATCH LA
+================================================== */
+
+function updateUndoUI() {
+
+    const box = document.getElementById("undoBox");
+    const message = document.getElementById("undoMessage");
+    const actions = document.getElementById("undoActions");
+
+    if (!box || !message || !actions) return;
+
+    box.style.display = "none";
+    message.textContent = "";
+    actions.innerHTML = "";
+
+    if (onlineConnectionMode === "spectator" || onlineGameOver) {
+        return;
+    }
+
+    if (onlineUndoRequest !== null) {
+        box.style.display = "block";
+
+        if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
+            message.textContent = "⏳ Demande de rejwe envoyée. En attente de l'adversaire.";
+            return;
+        }
+
+        message.textContent = "🔄 Votre adversaire demande d'annuler son dernier pion.";
+
+        const accept = document.createElement("button");
+        accept.type = "button";
+        accept.className = "undo-button undo-accept";
+        accept.textContent = "✅ Accepter";
+        accept.addEventListener("click", function() { sendUndoResponse(true); });
+
+        const refuse = document.createElement("button");
+        refuse.type = "button";
+        refuse.className = "undo-button undo-refuse";
+        refuse.textContent = "❌ Refuser";
+        refuse.addEventListener("click", function() { sendUndoResponse(false); });
+
+        actions.appendChild(accept);
+        actions.appendChild(refuse);
+        return;
+    }
+
+    if (!onlineLastMove || Number(onlineLastMove.player) !== Number(onlinePlayer)) {
+        return;
+    }
+
+    box.style.display = "block";
+    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
+
+    const request = document.createElement("button");
+    request.type = "button";
+    request.className = "undo-button undo-request";
+    request.textContent = "🔄 Demande rejwe";
+    request.addEventListener("click", requestUndo);
+    actions.appendChild(request);
+}
+
+function requestUndo() {
+    if (!socket || socket.readyState !== WebSocket.OPEN || !onlineRoom) return;
+    if (onlineConnectionMode === "spectator" || onlineGameOver) return;
+    if (!onlineLastMove || Number(onlineLastMove.player) !== Number(onlinePlayer)) return;
+    if (onlineUndoRequest !== null) return;
+
+    socket.send(JSON.stringify({
+        type: "undo_request",
+        room: onlineRoom
+    }));
+}
+
+function sendUndoResponse(accepted) {
+    if (!socket || socket.readyState !== WebSocket.OPEN || !onlineRoom) return;
+    if (onlineUndoRequest === null || Number(onlineUndoRequest) === Number(onlinePlayer)) return;
+
+    socket.send(JSON.stringify({
+        type: "undo_response",
+        room: onlineRoom,
+        accepted: Boolean(accepted)
+    }));
+}
+
+/* ==================================================
    CLICK ONLINE
 ================================================== */
 
@@ -4639,6 +4788,7 @@ document
             onlineLastMove = null;
             onlineRematchRequest =
                 null;
+            onlineUndoRequest = null;
 
             onlineWinningLine =
                 null;
@@ -4727,6 +4877,7 @@ document
             onlineLastMove = null;
             onlineRematchRequest =
                 null;
+            onlineUndoRequest = null;
 
             onlineWinningLine =
                 null;
