@@ -4111,24 +4111,43 @@ function connectServer(callback) {
 
 function updateOnlineScoreDisplay() {
 
-    const p1 = onlinePlayersState["1"] || {};
-    const p2 = onlinePlayersState["2"] || {};
+    const p1 = onlinePlayersState["1"] || onlinePlayersState[1] || {};
+    const p2 = onlinePlayersState["2"] || onlinePlayersState[2] || {};
+
+    /*
+       NOMS DES JOUEURS :
+       Le serveur envoie le pseudo dans players.
+       On accepte name ou username et on garde le pseudo
+       du compte local comme secours pour le joueur connecté.
+    */
+    let name1 = p1.name || p1.username || "";
+    let name2 = p2.name || p2.username || "";
+
+    if ((!name1 || name1 === "Joueur 1") && Number(onlinePlayer) === 1 && currentUsername) {
+        name1 = currentUsername;
+    }
+    if ((!name2 || name2 === "Joueur 2") && Number(onlinePlayer) === 2 && currentUsername) {
+        name2 = currentUsername;
+    }
+
+    name1 = name1 || "Joueur 1";
+    name2 = name2 || "Joueur 2";
 
     const blackName = document.getElementById("onlineBlackName");
     const redName = document.getElementById("onlineRedName");
 
     if (blackName) {
-        blackName.textContent = p1.name || p1.username || "Joueur 1";
+        blackName.textContent = name1;
     }
 
     if (redName) {
-        redName.textContent = p2.name || p2.username || "Joueur 2";
+        redName.textContent = name2;
     }
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
     const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
-    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + (p1.name || p1.username || "Joueur 1");
-    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + (p2.name || p2.username || "Joueur 2");
+    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + name1;
+    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + name2;
 
     document
         .getElementById(
