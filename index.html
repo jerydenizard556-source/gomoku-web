@@ -87,6 +87,79 @@ h1 {
     cursor: not-allowed;
 }
 
+/* ==================================================
+   COMPTE
+================================================== */
+
+.account-box {
+    max-width: 390px;
+    margin: 25px auto;
+    padding: 18px;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    background: #1F2937;
+}
+
+.account-box h2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.account-box input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #4B5563;
+    background: white;
+    color: #111;
+    font-size: 16px;
+}
+
+.account-button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #273449;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.account-button:hover {
+    background: #374151;
+}
+
+.account-status {
+    min-height: 24px;
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.account-success {
+    color: #4ADE80;
+}
+
+.account-error {
+    color: #F87171;
+}
+
+.account-user {
+    margin-top: 12px;
+    color: #D4AF37;
+    font-weight: bold;
+}
+
+.account-separator {
+    height: 1px;
+    background: #374151;
+    margin: 25px 0;
+}
+
 /* ONLINE MENU */
 
 .online-box {
@@ -570,6 +643,10 @@ h1 {
     .win-message {
         font-size: 18px;
     }
+
+    .account-box {
+        margin: 20px 10px;
+    }
 }
 </style>
 </head>
@@ -578,7 +655,9 @@ h1 {
 
 <div class="app">
 
-<!-- MENU PRINCIPAL -->
+<!-- ==================================================
+     MENU PRINCIPAL
+================================================== -->
 
 <section id="homeScreen" class="screen active">
 
@@ -598,11 +677,97 @@ h1 {
             🌐 Jouer en Ligne
         </button>
 
+        <button class="menu-button" id="accountMode">
+            👤 Créer un compte / Connexion
+        </button>
+
     </div>
 
 </section>
 
-<!-- ROBOT -->
+<!-- ==================================================
+     COMPTE
+================================================== -->
+
+<section id="accountScreen" class="screen">
+
+    <h1>👤 Compte joueur</h1>
+
+    <div class="account-box">
+
+        <h2>Créer un compte</h2>
+
+        <input
+            id="registerUsername"
+            type="text"
+            maxlength="50"
+            placeholder="Pseudo">
+
+        <input
+            id="registerEmail"
+            type="email"
+            maxlength="255"
+            placeholder="Email">
+
+        <input
+            id="registerPassword"
+            type="password"
+            placeholder="Mot de passe">
+
+        <input
+            id="registerPasswordConfirmation"
+            type="password"
+            placeholder="Confirmer le mot de passe">
+
+        <button
+            class="account-button"
+            id="registerBtn">
+            Créer mon compte
+        </button>
+
+        <div class="account-separator"></div>
+
+        <h2>Connexion</h2>
+
+        <input
+            id="loginInput"
+            type="text"
+            placeholder="Pseudo ou email">
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="Mot de passe">
+
+        <button
+            class="account-button"
+            id="loginBtn">
+            Se connecter
+        </button>
+
+        <div
+            id="accountStatus"
+            class="account-status">
+        </div>
+
+        <div
+            id="accountUser"
+            class="account-user">
+        </div>
+
+    </div>
+
+    <button
+        class="back-button"
+        id="accountBack">
+        ← Retour
+    </button>
+
+</section>
+
+<!-- ==================================================
+     ROBOT
+================================================== -->
 
 <section id="robotScreen" class="screen">
 
@@ -650,7 +815,9 @@ h1 {
 
 </section>
 
-<!-- LOCAL -->
+<!-- ==================================================
+     LOCAL
+================================================== -->
 
 <section id="localScreen" class="screen">
 
@@ -698,7 +865,9 @@ h1 {
 
 </section>
 
-<!-- ONLINE MENU -->
+<!-- ==================================================
+     ONLINE MENU
+================================================== -->
 
 <section id="onlineScreen" class="screen">
 
@@ -768,7 +937,9 @@ h1 {
 
 </section>
 
-<!-- ONLINE GAME -->
+<!-- ==================================================
+     ONLINE GAME
+================================================== -->
 
 <section id="onlineGameScreen" class="screen">
 
@@ -854,7 +1025,9 @@ h1 {
 
 </section>
 
-<!-- ÉCRAN VICTOIRE LOCAL / ROBOT -->
+<!-- ==================================================
+     ÉCRAN VICTOIRE
+================================================== -->
 
 <section id="winScreen" class="screen">
 
@@ -898,6 +1071,76 @@ const SERVER_URL =
 
 const BOARD_SIZE = 20;
 const START_TIME = 10 * 60;
+
+/* ==================================================
+   COMPTE / AUTHENTIFICATION
+================================================== */
+
+let currentPlayerId = null;
+let currentUsername = null;
+let currentEmail = null;
+let accountToken = null;
+let accountConnected = false;
+
+function updateAccountDisplay() {
+
+    const status =
+        document.getElementById(
+            "accountStatus"
+        );
+
+    const user =
+        document.getElementById(
+            "accountUser"
+        );
+
+    if (!status || !user) {
+        return;
+    }
+
+    if (accountConnected) {
+
+        user.textContent =
+            "👤 Connecté : " +
+            currentUsername;
+
+    } else {
+
+        user.textContent = "";
+    }
+}
+
+function showAccountMessage(
+    message,
+    success
+) {
+
+    const status =
+        document.getElementById(
+            "accountStatus"
+        );
+
+    if (!status) {
+        return;
+    }
+
+    status.textContent =
+        message || "";
+
+    status.classList.remove(
+        "account-success",
+        "account-error"
+    );
+
+    if (message) {
+
+        status.classList.add(
+            success
+                ? "account-success"
+                : "account-error"
+        );
+    }
+}
 
 /* ==================================================
    ÉCRANS
@@ -1066,7 +1309,7 @@ function drawStone(cell, color) {
 }
 
 /* ==================================================
-   LIGN VICTOIRE
+   LIGNE VICTOIRE
 ================================================== */
 
 function drawWinningLine(
@@ -2154,7 +2397,7 @@ function checkWin(
 }
 
 /* ==================================================
-   VICTOIRE LOCAL / ROBOT
+   VICTOIRE
 ================================================== */
 
 function showWinScreen(message) {
@@ -2264,11 +2507,30 @@ document
         }
     );
 
+/* ==================================================
+   ONLINE
+   CONNEXION OBLIGATOIRE
+================================================== */
+
 document
     .getElementById("onlineMode")
     .addEventListener(
         "click",
         function() {
+
+            if (!accountConnected) {
+
+                showAccountMessage(
+                    "⚠️ Vous devez créer un compte ou vous connecter pour jouer en ligne.",
+                    false
+                );
+
+                showScreen(
+                    "accountScreen"
+                );
+
+                return;
+            }
 
             document
                 .getElementById(
@@ -2294,6 +2556,50 @@ document
 
             showScreen(
                 "onlineScreen"
+            );
+        }
+    );
+
+/* ==================================================
+   ÉCRAN COMPTE
+================================================== */
+
+document
+    .getElementById("accountMode")
+    .addEventListener(
+        "click",
+        function() {
+
+            updateAccountDisplay();
+
+            if (accountConnected) {
+
+                showAccountMessage(
+                    "Vous êtes déjà connecté.",
+                    true
+                );
+            } else {
+
+                showAccountMessage(
+                    "",
+                    true
+                );
+            }
+
+            showScreen(
+                "accountScreen"
+            );
+        }
+    );
+
+document
+    .getElementById("accountBack")
+    .addEventListener(
+        "click",
+        function() {
+
+            showScreen(
+                "homeScreen"
             );
         }
     );
@@ -2408,6 +2714,209 @@ let onlineDisplayInterval = null;
 let searchingForOpponent = false;
 
 /* ==================================================
+   CRÉER COMPTE
+================================================== */
+
+document
+    .getElementById("registerBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            const username =
+                document
+                    .getElementById(
+                        "registerUsername"
+                    )
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById(
+                        "registerEmail"
+                    )
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById(
+                        "registerPassword"
+                    )
+                    .value;
+
+            const confirmation =
+                document
+                    .getElementById(
+                        "registerPasswordConfirmation"
+                    )
+                    .value;
+
+            if (!username) {
+
+                showAccountMessage(
+                    "Veuillez entrer un pseudo.",
+                    false
+                );
+
+                return;
+            }
+
+            if (!email) {
+
+                showAccountMessage(
+                    "Veuillez entrer votre email.",
+                    false
+                );
+
+                return;
+            }
+
+            if (!password) {
+
+                showAccountMessage(
+                    "Veuillez entrer un mot de passe.",
+                    false
+                );
+
+                return;
+            }
+
+            if (password !== confirmation) {
+
+                showAccountMessage(
+                    "Les mots de passe ne correspondent pas.",
+                    false
+                );
+
+                return;
+            }
+
+            showAccountMessage(
+                "⏳ Création du compte...",
+                true
+            );
+
+            connectServer(
+                function() {
+
+                    if (
+                        !socket ||
+                        socket.readyState !==
+                        WebSocket.OPEN
+                    ) {
+
+                        showAccountMessage(
+                            "Impossible de se connecter au serveur.",
+                            false
+                        );
+
+                        return;
+                    }
+
+                    socket.send(
+                        JSON.stringify({
+                            type:
+                                "register",
+                            username:
+                                username,
+                            email:
+                                email,
+                            password:
+                                password,
+                            password_confirmation:
+                                confirmation
+                        })
+                    );
+                }
+            );
+        }
+    );
+
+/* ==================================================
+   CONNEXION
+================================================== */
+
+document
+    .getElementById("loginBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            const login =
+                document
+                    .getElementById(
+                        "loginInput"
+                    )
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById(
+                        "loginPassword"
+                    )
+                    .value;
+
+            if (!login) {
+
+                showAccountMessage(
+                    "Veuillez entrer votre pseudo ou votre email.",
+                    false
+                );
+
+                return;
+            }
+
+            if (!password) {
+
+                showAccountMessage(
+                    "Veuillez entrer votre mot de passe.",
+                    false
+                );
+
+                return;
+            }
+
+            showAccountMessage(
+                "⏳ Connexion...",
+                true
+            );
+
+            connectServer(
+                function() {
+
+                    if (
+                        !socket ||
+                        socket.readyState !==
+                        WebSocket.OPEN
+                    ) {
+
+                        showAccountMessage(
+                            "Impossible de se connecter au serveur.",
+                            false
+                        );
+
+                        return;
+                    }
+
+                    socket.send(
+                        JSON.stringify({
+                            type:
+                                "login",
+                            login:
+                                login,
+                            password:
+                                password
+                        })
+                    );
+                }
+            );
+        }
+    );
+
+/* ==================================================
    TROUVER ADVERSAIRE
 ================================================== */
 
@@ -2416,6 +2925,20 @@ document
     .addEventListener(
         "click",
         function() {
+
+            if (!accountConnected) {
+
+                showScreen(
+                    "accountScreen"
+                );
+
+                showAccountMessage(
+                    "Vous devez être connecté.",
+                    false
+                );
+
+                return;
+            }
 
             searchingForOpponent = true;
 
@@ -2515,6 +3038,20 @@ document
     .addEventListener(
         "click",
         function() {
+
+            if (!accountConnected) {
+
+                showScreen(
+                    "accountScreen"
+                );
+
+                showAccountMessage(
+                    "Vous devez être connecté.",
+                    false
+                );
+
+                return;
+            }
 
             document
                 .getElementById(
@@ -2824,6 +3361,115 @@ function connectServer(callback) {
                     JSON.parse(
                         event.data
                     );
+
+                /* ==================================
+                   REGISTER
+                ================================== */
+
+                if (
+                    data.type ===
+                    "register_result"
+                ) {
+
+                    if (data.success) {
+
+                        currentPlayerId =
+                            data.player_id;
+
+                        currentUsername =
+                            data.username;
+
+                        currentEmail =
+                            data.email;
+
+                        accountToken =
+                            data.account_token ||
+                            null;
+
+                        accountConnected =
+                            true;
+
+                        updateAccountDisplay();
+
+                        showAccountMessage(
+                            "✅ Compte créé avec succès. Vous êtes connecté.",
+                            true
+                        );
+
+                    } else {
+
+                        showAccountMessage(
+                            data.message ||
+                            "Impossible de créer le compte.",
+                            false
+                        );
+                    }
+
+                    return;
+                }
+
+                /* ==================================
+                   LOGIN
+                ================================== */
+
+                if (
+                    data.type ===
+                    "login_result"
+                ) {
+
+                    if (data.success) {
+
+                        currentPlayerId =
+                            data.player_id;
+
+                        currentUsername =
+                            data.username;
+
+                        currentEmail =
+                            data.email;
+
+                        accountToken =
+                            data.account_token ||
+                            null;
+
+                        accountConnected =
+                            true;
+
+                        updateAccountDisplay();
+
+                        showAccountMessage(
+                            "✅ Connexion réussie.",
+                            true
+                        );
+
+                    } else {
+
+                        accountConnected =
+                            false;
+
+                        currentPlayerId =
+                            null;
+
+                        currentUsername =
+                            null;
+
+                        currentEmail =
+                            null;
+
+                        accountToken =
+                            null;
+
+                        updateAccountDisplay();
+
+                        showAccountMessage(
+                            data.message ||
+                            "Identifiants incorrects.",
+                            false
+                        );
+                    }
+
+                    return;
+                }
 
                 /* ==================================
                    RECHERCHE
@@ -3203,12 +3849,6 @@ function connectServer(callback) {
                         data.last_move ||
                         null;
 
-                    /*
-                       IMPORTANT:
-                       Le serveur envoie ici
-                       directement 1 ou 2.
-                    */
-
                     onlineRematchRequest =
                         data.rematch_request !==
                         undefined &&
@@ -3307,7 +3947,7 @@ function updateOnlineScoreDisplay() {
 }
 
 /* ==================================================
-   STATUS ONLINE CORRIGÉ
+   STATUS ONLINE
 ================================================== */
 
 function updateOnlineStatus() {
@@ -3320,10 +3960,6 @@ function updateOnlineStatus() {
     if (!status) {
         return;
     }
-
-    /*
-       DEMANDE REJWE
-    */
 
     if (
         onlineRematchRequest !== null
@@ -3350,10 +3986,6 @@ function updateOnlineStatus() {
 
         return;
     }
-
-    /*
-       MATCH FINI
-    */
 
     if (onlineGameOver) {
 
@@ -3425,7 +4057,7 @@ function updateOnlineStatus() {
 }
 
 /* ==================================================
-   RESULTAT ONLINE CORRIGÉ
+   RESULTAT ONLINE
 ================================================== */
 
 function updateOnlineResult() {
@@ -3595,7 +4227,7 @@ function renderOnlineState() {
 }
 
 /* ==================================================
-   REJWE CORRIGÉ
+   REJWE
 ================================================== */
 
 function updateRematchUI() {
@@ -3628,17 +4260,9 @@ function updateRematchUI() {
     actions.innerHTML =
         "";
 
-    /*
-       Pa gen dènye kou
-    */
-
     if (!onlineLastMove) {
         return;
     }
-
-    /*
-       GEN DEMANN REJWE
-    */
 
     if (
         onlineRematchRequest !== null
@@ -3652,10 +4276,6 @@ function updateRematchUI() {
                 onlineRematchRequest
             );
 
-        /*
-           Se nou menm ki mande rejwe.
-        */
-
         if (
             requester ===
             Number(onlinePlayer)
@@ -3666,10 +4286,6 @@ function updateRematchUI() {
 
             return;
         }
-
-        /*
-           Se advèsè a ki mande rejwe.
-        */
 
         message.textContent =
             "🔄 Advèsè a mande pou rejwe dènye kou a.";
@@ -3732,11 +4348,6 @@ function updateRematchUI() {
 
         return;
     }
-
-    /*
-       PA GEN DEMANN.
-       Dènye kou a se nou menm ki fè li.
-    */
 
     if (
         Number(
@@ -3943,6 +4554,20 @@ document
         "click",
         function() {
 
+            if (!accountConnected) {
+
+                showScreen(
+                    "accountScreen"
+                );
+
+                showAccountMessage(
+                    "Vous devez être connecté.",
+                    false
+                );
+
+                return;
+            }
+
             document
                 .getElementById(
                     "onlineError"
@@ -4007,6 +4632,20 @@ document
     .addEventListener(
         "click",
         function() {
+
+            if (!accountConnected) {
+
+                showScreen(
+                    "accountScreen"
+                );
+
+                showAccountMessage(
+                    "Vous devez être connecté.",
+                    false
+                );
+
+                return;
+            }
 
             const code =
                 document
