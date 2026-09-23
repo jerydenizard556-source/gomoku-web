@@ -3418,6 +3418,74 @@ function connectServer(callback) {
                     );
 
                 /* ==================================
+                   COMPTE - INSCRIPTION
+                ================================== */
+
+                if (data.type === "register_result") {
+
+                    accountRequestInProgress = false;
+
+                    if (data.success) {
+                        currentPlayerId = data.player_id || null;
+                        currentUsername = data.username || null;
+                        currentEmail = data.email || null;
+                        accountToken = data.account_token || null;
+                        accountConnected = true;
+
+                        updateAccountDisplay();
+                        showAccountMessage(
+                            "✅ " + (data.message || "Compte créé avec succès."),
+                            true
+                        );
+
+                        setTimeout(function() {
+                            showAccountMenu();
+                        }, 500);
+                    } else {
+                        showAccountMessage(
+                            "❌ " + (data.message || "Impossible de créer le compte."),
+                            false
+                        );
+                    }
+
+                    return;
+                }
+
+                /* ==================================
+                   COMPTE - CONNEXION
+                ================================== */
+
+                if (data.type === "login_result") {
+
+                    accountRequestInProgress = false;
+
+                    if (data.success) {
+                        currentPlayerId = data.player_id || null;
+                        currentUsername = data.username || null;
+                        currentEmail = data.email || null;
+                        accountToken = data.account_token || null;
+                        accountConnected = true;
+
+                        updateAccountDisplay();
+                        showAccountMessage(
+                            "✅ " + (data.message || "Connexion réussie."),
+                            true
+                        );
+
+                        setTimeout(function() {
+                            showAccountMenu();
+                        }, 500);
+                    } else {
+                        showAccountMessage(
+                            "❌ " + (data.message || "Pseudo/email ou mot de passe incorrect."),
+                            false
+                        );
+                    }
+
+                    return;
+                }
+
+                /* ==================================
                    RECHERCHE
                 ================================== */
 
