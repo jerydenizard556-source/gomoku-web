@@ -1145,12 +1145,12 @@ h1 {
         <div class="score-board">
 
             <div class="score-player">
-                ⚫ <span id="onlineBlackName">Joueur 1</span> :
+                ⚫ <span id="onlineBlackName">En attente...</span> :
                 <span id="onlineBlackScore">0</span>
             </div>
 
             <div class="score-player">
-                🔴 <span id="onlineRedName">Joueur 2</span> :
+                🔴 <span id="onlineRedName">En attente...</span> :
                 <span id="onlineRedScore">0</span>
             </div>
 
@@ -4118,17 +4118,17 @@ function updateOnlineScoreDisplay() {
     const redName = document.getElementById("onlineRedName");
 
     if (blackName) {
-        blackName.textContent = p1.name || p1.username || "Joueur 1";
+        blackName.textContent = p1.name || p1.username || (Number(onlinePlayer) === 1 && currentUsername ? currentUsername : "En attente...");
     }
 
     if (redName) {
-        redName.textContent = p2.name || p2.username || "Joueur 2";
+        redName.textContent = p2.name || p2.username || (Number(onlinePlayer) === 2 && currentUsername ? currentUsername : "En attente...");
     }
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
     const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
-    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + (p1.name || p1.username || "Joueur 1");
-    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + (p2.name || p2.username || "Joueur 2");
+    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + (p1.name || p1.username || (Number(onlinePlayer) === 1 && currentUsername ? currentUsername : "En attente..."));
+    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + (p2.name || p2.username || (Number(onlinePlayer) === 2 && currentUsername ? currentUsername : "En attente..."));
 
     document
         .getElementById(
@@ -5257,8 +5257,8 @@ function closeOnlineConnection() {
     const spectatorCount = document.getElementById("onlineSpectatorCount");
     const notice = document.getElementById("onlineMatchNotice");
 
-    if (blackName) blackName.textContent = "Joueur 1";
-    if (redName) redName.textContent = "Joueur 2";
+    if (blackName) blackName.textContent = Number(onlinePlayer) === 1 && currentUsername ? currentUsername : "En attente...";
+    if (redName) redName.textContent = Number(onlinePlayer) === 2 && currentUsername ? currentUsername : "En attente...";
     if (spectatorCount) spectatorCount.textContent = "👁️ Spectateurs : 0";
     if (notice) notice.textContent = "";
 
