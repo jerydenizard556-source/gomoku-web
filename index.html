@@ -288,12 +288,69 @@ h1 {
 
 .rematch-box {
     max-width: 600px;
+    width: 100%;
+    height: 64px;
     margin: 12px auto;
-    padding: 12px;
+    padding: 8px 12px;
     border: 1px solid #D4AF37;
     border-radius: 9px;
     background: #1F2937;
-    display: none;
+    display: block;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+.rematch-box.show {
+    visibility: visible;
+}
+
+.online-match-notice {
+    min-height: 28px;
+    margin: 4px auto 6px;
+    color: #D4AF37;
+    font-weight: bold;
+}
+
+.spectator-count {
+    color: #D1D5DB;
+    font-size: 14px;
+    margin: 5px 0 8px;
+}
+
+.spectator-box {
+    max-width: 600px;
+    margin: 25px auto;
+}
+
+.live-match-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.live-match-button {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #374151;
+    border-radius: 10px;
+    background: #273449;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.live-match-button:hover {
+    background: #374151;
+}
+
+.live-empty {
+    padding: 15px;
+    color: #D1D5DB;
+    border: 1px solid #374151;
+    border-radius: 10px;
+    background: #1F2937;
 }
 
 .rematch-message {
@@ -572,7 +629,6 @@ h1 {
     }
 }
 
-
     /* ==================================================
        COMPTE / MENU JOUEUR
     ================================================== */
@@ -815,6 +871,7 @@ h1 {
     <button class="back-button" id="settingsBack">← Retour</button>
 </section>
 
+
 <!-- ROBOT -->
 
 <section id="robotScreen" class="screen">
@@ -989,7 +1046,6 @@ h1 {
 
 </section>
 
-
 <!-- SALLE D'ATTENTE -->
 <section id="waitingRoomScreen" class="screen">
     <h1>⏳ Salle d'attente</h1>
@@ -1005,15 +1061,29 @@ h1 {
     <button class="back-button" id="waitingBack">← Retour</button>
 </section>
 
+
 <!-- SPECTATEUR -->
+
 <section id="spectatorScreen" class="screen">
+
     <h1>👁️ Regarder un match</h1>
+
     <div class="spectator-box">
-        <input id="spectatorRoomInput" type="text" maxlength="6" placeholder="CODE PARTIE">
-        <button class="account-button" id="spectatorJoinBtn" type="button">👁️ Regarder</button>
+
+        <div class="status">Choisissez un match en direct :</div>
+
+        <div id="liveMatchList" class="live-match-list"></div>
+
         <div id="spectatorError" class="error"></div>
+
+        <button class="account-button" id="refreshSpectatorBtn" type="button">🔄 Actualiser</button>
+
     </div>
-    <button class="back-button" id="spectatorBack">← Retour</button>
+
+    <button class="back-button" id="spectatorBack">
+        ← Retour
+    </button>
+
 </section>
 
 <!-- ONLINE GAME -->
@@ -1028,6 +1098,12 @@ h1 {
             Connexion...
         </div>
 
+        <div id="onlineMatchNotice" class="online-match-notice"></div>
+
+        <div id="onlineSpectatorCount" class="spectator-count">
+            👁️ Spectateurs : 0
+        </div>
+
         <div class="room">
 
             Code :
@@ -1035,17 +1111,15 @@ h1 {
 
         </div>
 
-        <div id="onlineSpectatorCount" class="spectator-count">👁️ Spectateurs : 0</div>
-
         <div class="score-board">
 
             <div class="score-player">
-                ⚫ Noir :
+                ⚫ <span id="onlineBlackName">Joueur 1</span> :
                 <span id="onlineBlackScore">0</span>
             </div>
 
             <div class="score-player">
-                🔴 Rouge :
+                🔴 <span id="onlineRedName">Joueur 2</span> :
                 <span id="onlineRedScore">0</span>
             </div>
 
@@ -1186,6 +1260,7 @@ function showAccountMenu() {
     }
     showScreen("accountMenuScreen");
 }
+
 
 /* ==================================================
    ÉCRANS
@@ -2558,14 +2633,6 @@ document
         "click",
         function() {
 
-            onlineOpenedFromAccountMenu = false;
-
-            if (!accountConnected) {
-                showScreen("accountScreen");
-                showAccountMessage("🔐 Connectez-vous pour jouer en ligne.", false);
-                return;
-            }
-
             document
                 .getElementById(
                     "onlineError"
@@ -2790,6 +2857,7 @@ document.getElementById("settingsBack").addEventListener("click", function() {
     showAccountMenu();
 });
 
+
 /* ==================================================
    ONLINE VARIABLES
 ================================================== */
@@ -2807,6 +2875,7 @@ let onlineTurn = 1;
 let onlineWinner = null;
 let onlineGameOver = false;
 let onlineDraw = false;
+let onlineAbandonment = false;
 
 let onlineBlackTime = START_TIME;
 let onlineRedTime = START_TIME;
@@ -2972,6 +3041,97 @@ document
 
         }
     );
+
+/* ==================================================
+   REGARDER UN MATCH
+================================================== */
+
+document
+    .getElementById("spectatorModeBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            onlineConnectionMode = "spectator-list";
+            onlinePlayer = 0;
+            onlineRoom = null;
+            onlineSessionToken = null;
+            onlineBoardState = {};
+            onlinePlayersState = {};
+            onlineRematchRequest = null;
+            onlineLastMove = null;
+
+            const list = document.getElementById("liveMatchList");
+            const error = document.getElementById("spectatorError");
+
+            if (list) {
+                list.innerHTML = '<div class="live-empty">🔎 Recherche des matchs en direct...</div>';
+            }
+
+            if (error) {
+                error.textContent = "";
+            }
+
+            showScreen("spectatorScreen");
+
+            connectServer(function() {
+
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: "live_matches"
+                    }));
+                }
+            });
+        }
+    );
+
+document
+    .getElementById("spectatorBack")
+    .addEventListener(
+        "click",
+        function() {
+            closeOnlineConnection();
+            showScreen("onlineScreen");
+        }
+    );
+
+/* ==================================================
+   SALLE D'ATTENTE
+================================================== */
+
+document.getElementById("waitingRoomBtn").addEventListener("click", function() {
+    if (!accountConnected) {
+        showScreen("accountScreen");
+        showAccountMessage("🔐 Connectez-vous pour accéder à la salle d'attente.", false);
+        return;
+    }
+    if (!onlineRoom) {
+        document.getElementById("waitingStatus").textContent = "Aucune partie créée pour le moment.";
+    } else {
+        document.getElementById("waitingRoomCode").textContent = onlineRoom;
+        document.getElementById("waitingStatus").textContent = "⏳ En attente du deuxième joueur...";
+    }
+    showScreen("waitingRoomScreen");
+});
+
+document.getElementById("waitingBack").addEventListener("click", function() {
+    showScreen("onlineScreen");
+});
+
+document.getElementById("refreshSpectatorBtn").addEventListener("click", function() {
+    if (onlineConnectionMode !== "spectator") {
+        onlineConnectionMode = "spectator-list";
+    }
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({type:"live_matches"}));
+    } else {
+        connectServer(function() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({type:"live_matches"}));
+            }
+        });
+    }
+});
 
 /* ==================================================
    TIMER ONLINE
@@ -3258,38 +3418,6 @@ function connectServer(callback) {
                     );
 
                 /* ==================================
-                   COMPTE
-                ================================== */
-
-                if (data.type === "register_result" || data.type === "login_result") {
-
-                    accountRequestInProgress = false;
-
-                    if (data.success) {
-                        currentPlayerId = data.player_id;
-                        currentUsername = data.username;
-                        currentEmail = data.email;
-                        accountToken = data.account_token || null;
-                        accountConnected = true;
-                        updateAccountDisplay();
-                        showAccountMessage(
-                            data.type === "register_result"
-                                ? "✅ Compte créé avec succès. Vous êtes connecté."
-                                : "✅ Connexion réussie.",
-                            true
-                        );
-                        showAccountMenu();
-                    } else {
-                        showAccountMessage(
-                            data.message || "Identifiants invalides.",
-                            false
-                        );
-                    }
-
-                    return;
-                }
-
-                /* ==================================
                    RECHERCHE
                 ================================== */
 
@@ -3314,6 +3442,64 @@ function connectServer(callback) {
                             "onlineError"
                         )
                         .textContent = "";
+
+                    return;
+                }
+
+                /* ==================================
+                   LISTE DES MATCHS EN DIRECT
+                ================================== */
+
+                if (data.type === "live_matches") {
+
+                    const list = document.getElementById("liveMatchList");
+
+                    if (!list) {
+                        return;
+                    }
+
+                    list.innerHTML = "";
+
+                    const matches = Array.isArray(data.matches)
+                        ? data.matches
+                        : [];
+
+                    if (matches.length === 0) {
+                        list.innerHTML =
+                            '<div class="live-empty">👁️ Aucun match en direct pour le moment.</div>';
+                        return;
+                    }
+
+                    matches.forEach(function(match) {
+
+                        const button = document.createElement("button");
+                        button.type = "button";
+                        button.className = "live-match-button";
+                        button.textContent =
+                            "👁️ " +
+                            (match.player1 || "Joueur 1") +
+                            " ⚫ VS 🔴 " +
+                            (match.player2 || "Joueur 2") +
+                            "   •   Spectateurs : " +
+                            Number(match.spectator_count || 0);
+
+                        button.addEventListener("click", function() {
+
+                            onlineConnectionMode = "spectator";
+                            onlinePlayer = 0;
+                            onlineRoom = match.room;
+                            onlineSessionToken = null;
+
+                            if (socket && socket.readyState === WebSocket.OPEN) {
+                                socket.send(JSON.stringify({
+                                    type: "watch",
+                                    room: match.room
+                                }));
+                            }
+                        });
+
+                        list.appendChild(button);
+                    });
 
                     return;
                 }
@@ -3344,6 +3530,17 @@ function connectServer(callback) {
 
                     onlineConnectionMode =
                         "matchmaking";
+
+                    const matchNotice = document.getElementById("onlineMatchNotice");
+                    if (matchNotice) {
+                        matchNotice.textContent =
+                            data.message || "🎮 Adversaire trouvé ! Le match va commencer.";
+                        setTimeout(function() {
+                            if (matchNotice) {
+                                matchNotice.textContent = "";
+                            }
+                        }, 5000);
+                    }
 
                     onlineLastMove = null;
                     onlineRematchRequest =
@@ -3551,6 +3748,31 @@ function connectServer(callback) {
                 }
 
                 /* ==================================
+                   SPECTATEUR CONNECTÉ
+                ================================== */
+
+                if (data.type === "watching") {
+
+                    onlineConnectionMode = "spectator";
+                    onlinePlayer = 0;
+                    onlineRoom = data.room;
+                    onlineSessionToken = null;
+
+                    document.getElementById("gameRoomCode").textContent = data.room;
+                    document.getElementById("gameOnlineError").textContent = "";
+
+                    showScreen("onlineGameScreen");
+
+                    createBoard(
+                        document.getElementById("onlineBoard"),
+                        onlineClick
+                    );
+
+                    startOnlineDisplayTimer();
+                    return;
+                }
+
+                /* ==================================
                    RECONNECT
                 ================================== */
 
@@ -3595,32 +3817,6 @@ function connectServer(callback) {
                 }
 
                 /* ==================================
-                   SPECTATEUR / SALLE D'ATTENTE
-                ================================== */
-
-                if (data.type === "spectator_joined") {
-                    onlineConnectionMode = "spectator";
-                    onlineRoom = data.room || onlineRoom;
-                    onlinePlayer = 0;
-                    document.getElementById("gameRoomCode").textContent = onlineRoom || "---";
-                    document.getElementById("spectatorError").textContent = "";
-                    showScreen("onlineGameScreen");
-                    createBoard(document.getElementById("onlineBoard"), onlineClick);
-                    startOnlineDisplayTimer();
-                    return;
-                }
-
-                if (data.type === "waiting_room") {
-                    document.getElementById("waitingRoomCode").textContent = data.room || onlineRoom || "---";
-                    document.getElementById("waitingPlayer1").textContent = data.player1 || "En attente...";
-                    document.getElementById("waitingPlayer2").textContent = data.player2 || "En attente...";
-                    document.getElementById("waitingSpectatorCount").textContent = Number(data.spectators || 0);
-                    document.getElementById("waitingStatus").textContent = data.message || "⏳ En attente...";
-                    showScreen("waitingRoomScreen");
-                    return;
-                }
-
-                /* ==================================
                    ÉTAT DU JEU
                 ================================== */
 
@@ -3636,6 +3832,12 @@ function connectServer(callback) {
 
                     onlinePlayersState =
                         data.players || {};
+
+                    const spectatorCount = document.getElementById("onlineSpectatorCount");
+                    if (spectatorCount) {
+                        spectatorCount.textContent =
+                            "👁️ Spectateurs : " + Number(data.spectator_count || data.spectators_count || 0);
+                    }
 
                     onlineTurn =
                         Number(
@@ -3662,6 +3864,11 @@ function connectServer(callback) {
                     onlineDraw =
                         Boolean(
                             data.draw
+                        );
+
+                    onlineAbandonment =
+                        Boolean(
+                            data.abandonment
                         );
 
                     onlineBlackTime =
@@ -3712,16 +3919,6 @@ function connectServer(callback) {
                     onlineWinningLine =
                         data.winning_line ||
                         null;
-
-                    const spectatorCount = Number(data.spectators || data.spectator_count || 0);
-                    const spectatorCountElement = document.getElementById("onlineSpectatorCount");
-                    if (spectatorCountElement) {
-                        spectatorCountElement.textContent = "👁️ Spectateurs : " + spectatorCount;
-                    }
-                    const waitingCount = document.getElementById("waitingSpectatorCount");
-                    if (waitingCount) {
-                        waitingCount.textContent = spectatorCount;
-                    }
 
                     renderOnlineState();
 
@@ -3791,6 +3988,20 @@ function connectServer(callback) {
 
 function updateOnlineScoreDisplay() {
 
+    const p1 = onlinePlayersState["1"] || {};
+    const p2 = onlinePlayersState["2"] || {};
+
+    const blackName = document.getElementById("onlineBlackName");
+    const redName = document.getElementById("onlineRedName");
+
+    if (blackName) {
+        blackName.textContent = p1.name || p1.username || "Joueur 1";
+    }
+
+    if (redName) {
+        redName.textContent = p2.name || p2.username || "Joueur 2";
+    }
+
     document
         .getElementById(
             "onlineBlackScore"
@@ -3818,6 +4029,17 @@ function updateOnlineStatus() {
         );
 
     if (!status) {
+        return;
+    }
+
+    if (onlineConnectionMode === "spectator") {
+        if (onlineGameOver) {
+            status.textContent = onlineDraw
+                ? "🤝 Match nul"
+                : "👁️ Match terminé";
+        } else {
+            status.textContent = "👁️ Vous regardez le match en direct";
+        }
         return;
     }
 
@@ -3856,6 +4078,14 @@ function updateOnlineStatus() {
     */
 
     if (onlineGameOver) {
+
+        if (onlineAbandonment) {
+            status.textContent =
+                Number(onlineWinner) === Number(onlinePlayer)
+                    ? "🚪 Votre adversaire a quitté la partie. Vous gagnez par abandon."
+                    : "❌ Partie terminée par abandon.";
+            return;
+        }
 
         if (onlineDraw) {
 
@@ -3962,19 +4192,32 @@ function updateOnlineResult() {
         return;
     }
 
+    if (onlineConnectionMode === "spectator") {
+        const winnerName = onlinePlayersState[String(onlineWinner)]?.name ||
+            onlinePlayersState[String(onlineWinner)]?.username ||
+            "Le joueur gagnant";
+
+        result.textContent = onlineAbandonment
+            ? "🚪 Match terminé : " + winnerName + " gagne par abandon."
+            : "🏆 Gagnant : " + winnerName;
+        return;
+    }
+
     if (
         Number(onlineWinner) ===
         Number(onlinePlayer)
     ) {
 
-        result.textContent =
-            "🏆 OU GENYEN";
+        result.textContent = onlineAbandonment
+            ? "🏆 OU GENYEN — adversaire a kite match la."
+            : "🏆 OU GENYEN";
 
         return;
     }
 
-    result.textContent =
-        "❌ OU PÈDI";
+    result.textContent = onlineAbandonment
+        ? "❌ OU PÈDI — ou kite match la."
+        : "❌ OU PÈDI";
 }
 
 /* ==================================================
@@ -3982,21 +4225,10 @@ function updateOnlineResult() {
 ================================================== */
 
 function updateOnlineNewGameButton() {
-
-    const button =
-        document.getElementById(
-            "onlineNewGame"
-        );
-
-    if (!button) {
-        return;
+    const button = document.getElementById("onlineNewGame");
+    if (button) {
+        button.style.display = "none";
     }
-
-    button.style.display =
-        onlineGameOver &&
-        onlineRematchRequest === null
-            ? "inline-block"
-            : "none";
 }
 
 /* ==================================================
@@ -4100,217 +4332,70 @@ function renderOnlineState() {
 
 function updateRematchUI() {
 
-    const box =
-        document.getElementById(
-            "rematchBox"
-        );
+    const box = document.getElementById("rematchBox");
+    const message = document.getElementById("rematchMessage");
+    const actions = document.getElementById("rematchActions");
 
-    const message =
-        document.getElementById(
-            "rematchMessage"
-        );
+    if (!box || !message || !actions) return;
 
-    const actions =
-        document.getElementById(
-            "rematchActions"
-        );
+    box.style.display = "none";
+    message.textContent = "";
+    actions.innerHTML = "";
 
-    if (!box || !message || !actions) {
+    if (onlineConnectionMode === "spectator" || !onlineGameOver || onlineDraw || !onlineWinner) {
         return;
     }
 
-    box.style.display =
-        "none";
+    if (onlineRematchRequest !== null) {
+        box.style.display = "block";
+        const requester = Number(onlineRematchRequest);
 
-    message.textContent =
-        "";
-
-    actions.innerHTML =
-        "";
-
-    /*
-       Pa gen dènye kou
-    */
-
-    if (!onlineLastMove) {
-        return;
-    }
-
-    /*
-       GEN DEMANN REJWE
-    */
-
-    if (
-        onlineRematchRequest !== null
-    ) {
-
-        box.style.display =
-            "block";
-
-        const requester =
-            Number(
-                onlineRematchRequest
-            );
-
-        /*
-           Se nou menm ki mande rejwe.
-        */
-
-        if (
-            requester ===
-            Number(onlinePlayer)
-        ) {
-
-            message.textContent =
-                "⏳ Demande rejwe voye. N ap tann advèsè a.";
-
+        if (requester === Number(onlinePlayer)) {
+            message.textContent = "⏳ Demande de revanche envoyée. En attente de l'adversaire.";
             return;
         }
 
-        /*
-           Se advèsè a ki mande rejwe.
-        */
+        message.textContent = "🔄 Votre adversaire demande une revanche.";
 
-        message.textContent =
-            "🔄 Advèsè a mande pou rejwe dènye kou a.";
+        const accept = document.createElement("button");
+        accept.type = "button";
+        accept.className = "rematch-button rematch-accept";
+        accept.textContent = "✅ Accepter";
+        accept.addEventListener("click", function() { sendRematchResponse(true); });
 
-        const accept =
-            document.createElement(
-                "button"
-            );
+        const refuse = document.createElement("button");
+        refuse.type = "button";
+        refuse.className = "rematch-button rematch-refuse";
+        refuse.textContent = "❌ Refuser";
+        refuse.addEventListener("click", function() { sendRematchResponse(false); });
 
-        accept.type =
-            "button";
-
-        accept.className =
-            "rematch-button rematch-accept";
-
-        accept.textContent =
-            "✅ Accepter";
-
-        accept.addEventListener(
-            "click",
-            function() {
-
-                sendRematchResponse(
-                    true
-                );
-            }
-        );
-
-        const refuse =
-            document.createElement(
-                "button"
-            );
-
-        refuse.type =
-            "button";
-
-        refuse.className =
-            "rematch-button rematch-refuse";
-
-        refuse.textContent =
-            "❌ Refuser";
-
-        refuse.addEventListener(
-            "click",
-            function() {
-
-                sendRematchResponse(
-                    false
-                );
-            }
-        );
-
-        actions.appendChild(
-            accept
-        );
-
-        actions.appendChild(
-            refuse
-        );
-
+        actions.appendChild(accept);
+        actions.appendChild(refuse);
         return;
     }
 
-    /*
-       PA GEN DEMANN.
-       Dènye kou a se nou menm ki fè li.
-    */
+    if (Number(onlineWinner) !== Number(onlinePlayer)) {
+        box.style.display = "block";
+        message.textContent = "Vous avez perdu. Demandez une revanche à votre adversaire.";
 
-    if (
-        Number(
-            onlineLastMove.player
-        ) ===
-        Number(onlinePlayer)
-    ) {
-
-        box.style.display =
-            "block";
-
-        message.textContent =
-            "Ou ka mande pou rejwe dènye kou a.";
-
-        const request =
-            document.createElement(
-                "button"
-            );
-
-        request.type =
-            "button";
-
-        request.className =
-            "rematch-button rematch-request";
-
-        request.textContent =
-            "↩️ Demande rejwe";
-
-        request.addEventListener(
-            "click",
-            requestRematch
-        );
-
-        actions.appendChild(
-            request
-        );
+        const request = document.createElement("button");
+        request.type = "button";
+        request.className = "rematch-button rematch-request";
+        request.textContent = "🔄 Demander une revanche";
+        request.addEventListener("click", requestRematch);
+        actions.appendChild(request);
     }
 }
 
 function requestRematch() {
+    if (!socket || socket.readyState !== WebSocket.OPEN || !onlineRoom) return;
+    if (!onlineGameOver || onlineDraw || !onlineWinner) return;
+    if (Number(onlineWinner) === Number(onlinePlayer)) return;
 
-    if (
-        !socket ||
-        socket.readyState !==
-        WebSocket.OPEN
-    ) {
-        return;
-    }
-
-    if (!onlineRoom) {
-        return;
-    }
-
-    if (!onlineLastMove) {
-        return;
-    }
-
-    if (
-        Number(
-            onlineLastMove.player
-        ) !==
-        Number(onlinePlayer)
-    ) {
-        return;
-    }
-
-    socket.send(
-        JSON.stringify({
-            type:
-                "rematch_request",
-            room:
-                onlineRoom
-        })
-    );
+    socket.send(JSON.stringify({
+        type: "rematch_request",
+        room: onlineRoom
+    }));
 }
 
 function sendRematchResponse(
@@ -4352,7 +4437,8 @@ function onlineClick(
 ) {
 
     if (onlineConnectionMode === "spectator" || Number(onlinePlayer) === 0) {
-        document.getElementById("gameOnlineError").textContent = "👁️ Mode spectateur : vous ne pouvez pas jouer.";
+        document.getElementById("gameOnlineError").textContent =
+            "👁️ Mode spectateur : vous ne pouvez pas jouer.";
         return;
     }
 
@@ -4437,66 +4523,6 @@ function onlineClick(
         })
     );
 }
-
-/* ==================================================
-   SALLE D'ATTENTE / SPECTATEUR - INTERFACE
-================================================== */
-
-document.getElementById("waitingRoomBtn").addEventListener("click", function() {
-    if (!accountConnected) {
-        showScreen("accountScreen");
-        showAccountMessage("🔐 Connectez-vous pour accéder à la salle d'attente.", false);
-        return;
-    }
-    document.getElementById("waitingStatus").textContent = "⏳ En attente des joueurs...";
-    document.getElementById("waitingRoomCode").textContent = onlineRoom || "---";
-    showScreen("waitingRoomScreen");
-});
-
-document.getElementById("waitingBack").addEventListener("click", function() {
-    showScreen("onlineScreen");
-});
-
-document.getElementById("spectatorModeBtn").addEventListener("click", function() {
-    if (!accountConnected) {
-        showScreen("accountScreen");
-        showAccountMessage("🔐 Connectez-vous pour regarder un match.", false);
-        return;
-    }
-    document.getElementById("spectatorError").textContent = "";
-    showScreen("spectatorScreen");
-});
-
-document.getElementById("spectatorBack").addEventListener("click", function() {
-    showScreen("onlineScreen");
-});
-
-document.getElementById("spectatorJoinBtn").addEventListener("click", function() {
-    const code = document.getElementById("spectatorRoomInput").value.trim().toUpperCase();
-    if (code.length !== 6) {
-        document.getElementById("spectatorError").textContent = "Le code doit contenir 6 caractères.";
-        return;
-    }
-
-    document.getElementById("spectatorError").textContent = "⏳ Connexion au match...";
-
-    /* Le serveur sera modifié juste après l'index.html pour accepter
-       plusieurs spectateurs dans la même salle. */
-    onlineConnectionMode = "spectator";
-    onlineRoom = code;
-    onlinePlayer = 0;
-
-    connectServer(function() {
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
-            document.getElementById("spectatorError").textContent = "❌ Serveur non disponible.";
-            return;
-        }
-        socket.send(JSON.stringify({
-            type: "spectate",
-            room: code
-        }));
-    });
-});
 
 /* ==================================================
    CRÉER AVEC UN AMI
@@ -4822,11 +4848,9 @@ document
 
             closeOnlineConnection();
 
-            if (onlineOpenedFromAccountMenu && accountConnected) {
-                showAccountMenu();
-            } else {
-                showScreen("homeScreen");
-            }
+            showScreen(
+                "homeScreen"
+            );
         }
     );
 
@@ -4838,11 +4862,9 @@ document
 
             closeOnlineConnection();
 
-            if (onlineOpenedFromAccountMenu && accountConnected) {
-                showAccountMenu();
-            } else {
-                showScreen("homeScreen");
-            }
+            showScreen(
+                "homeScreen"
+            );
         }
     );
 
@@ -4895,6 +4917,7 @@ function closeOnlineConnection() {
     onlineWinner = null;
     onlineGameOver = false;
     onlineDraw = false;
+    onlineAbandonment = false;
 
     onlineBlackTime =
         START_TIME;
@@ -4961,11 +4984,6 @@ function closeOnlineConnection() {
         .textContent =
         "0";
 
-    const spectatorCountElement = document.getElementById("onlineSpectatorCount");
-    if (spectatorCountElement) {
-        spectatorCountElement.textContent = "👁️ Spectateurs : 0";
-    }
-
     document
         .getElementById(
             "onlineRedScore"
@@ -5012,6 +5030,16 @@ function closeOnlineConnection() {
         .classList.remove(
             "show"
         );
+
+    const blackName = document.getElementById("onlineBlackName");
+    const redName = document.getElementById("onlineRedName");
+    const spectatorCount = document.getElementById("onlineSpectatorCount");
+    const notice = document.getElementById("onlineMatchNotice");
+
+    if (blackName) blackName.textContent = "Joueur 1";
+    if (redName) redName.textContent = "Joueur 2";
+    if (spectatorCount) spectatorCount.textContent = "👁️ Spectateurs : 0";
+    if (notice) notice.textContent = "";
 
     document
         .getElementById(
