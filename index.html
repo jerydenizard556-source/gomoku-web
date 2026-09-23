@@ -87,79 +87,6 @@ h1 {
     cursor: not-allowed;
 }
 
-/* ==================================================
-   COMPTE
-================================================== */
-
-.account-box {
-    max-width: 390px;
-    margin: 25px auto;
-    padding: 18px;
-    border: 1px solid #374151;
-    border-radius: 12px;
-    background: #1F2937;
-}
-
-.account-box h2 {
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
-
-.account-box input {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border: 1px solid #4B5563;
-    background: white;
-    color: #111;
-    font-size: 16px;
-}
-
-.account-button {
-    width: 100%;
-    padding: 13px;
-    margin-top: 5px;
-    border-radius: 8px;
-    border: 1px solid #374151;
-    background: #273449;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.account-button:hover {
-    background: #374151;
-}
-
-.account-status {
-    min-height: 24px;
-    margin-top: 14px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.account-success {
-    color: #4ADE80;
-}
-
-.account-error {
-    color: #F87171;
-}
-
-.account-user {
-    margin-top: 12px;
-    color: #D4AF37;
-    font-weight: bold;
-}
-
-.account-separator {
-    height: 1px;
-    background: #374151;
-    margin: 25px 0;
-}
-
 /* ONLINE MENU */
 
 .online-box {
@@ -643,11 +570,152 @@ h1 {
     .win-message {
         font-size: 18px;
     }
-
-    .account-box {
-        margin: 20px 10px;
-    }
 }
+
+
+    /* ==================================================
+       COMPTE / MENU JOUEUR
+    ================================================== */
+
+    .account-box,
+    .profile-box,
+    .settings-box,
+    .waiting-box,
+    .spectator-box {
+        max-width: 420px;
+        margin: 22px auto;
+        padding: 20px;
+        border: 1px solid #374151;
+        border-radius: 14px;
+        background: #1F2937;
+        box-sizing: border-box;
+    }
+
+    .account-box h2 {
+        margin: 8px 0 14px;
+        color: #D4AF37;
+    }
+
+    .account-box input,
+    .spectator-box input {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 7px 0;
+        padding: 12px 14px;
+        border: 1px solid #4B5563;
+        border-radius: 9px;
+        background: #111827;
+        color: #F9FAFB;
+        outline: none;
+    }
+
+    .account-button {
+        width: 100%;
+        margin-top: 8px;
+        padding: 12px;
+        border: 1px solid #D4AF37;
+        border-radius: 9px;
+        background: #374151;
+        color: #F9FAFB;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .account-button:hover {
+        background: #4B5563;
+    }
+
+    .account-separator {
+        height: 1px;
+        background: #374151;
+        margin: 22px 0;
+    }
+
+    .account-status {
+        min-height: 24px;
+        margin-top: 12px;
+        color: #D1D5DB;
+        text-align: center;
+    }
+
+    .account-user,
+    .account-user-menu {
+        max-width: 420px;
+        margin: 15px auto;
+        padding: 12px;
+        border: 1px solid #D4AF37;
+        border-radius: 10px;
+        background: #1F2937;
+        color: #D4AF37;
+        font-weight: bold;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .account-menu-list {
+        margin: 25px auto;
+    }
+
+    .logout-button {
+        background: #7F1D1D !important;
+        border-color: #991B1B !important;
+    }
+
+    .logout-button:hover {
+        background: #991B1B !important;
+    }
+
+    .profile-row {
+        padding: 12px 0;
+        border-bottom: 1px solid #374151;
+    }
+
+    .profile-row:last-child {
+        border-bottom: none;
+    }
+
+    .profile-label {
+        display: block;
+        color: #9CA3AF;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .profile-value {
+        font-size: 17px;
+        font-weight: bold;
+        word-break: break-word;
+    }
+
+    .settings-box {
+        text-align: center;
+        color: #D1D5DB;
+        line-height: 1.5;
+    }
+
+    .waiting-list {
+        text-align: left;
+        margin: 15px 0;
+    }
+
+    .waiting-player {
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 9px;
+        background: #111827;
+        border: 1px solid #374151;
+    }
+
+    .spectator-count {
+        margin: 10px auto;
+        padding: 9px 12px;
+        border-radius: 9px;
+        background: #1F2937;
+        color: #D4AF37;
+        font-weight: bold;
+        text-align: center;
+    }
+
 </style>
 </head>
 
@@ -655,9 +723,7 @@ h1 {
 
 <div class="app">
 
-<!-- ==================================================
-     MENU PRINCIPAL
-================================================== -->
+<!-- MENU PRINCIPAL -->
 
 <section id="homeScreen" class="screen active">
 
@@ -678,96 +744,78 @@ h1 {
         </button>
 
         <button class="menu-button" id="accountMode">
-            👤 Créer un compte / Connexion
+            👤 Compte joueur
         </button>
 
     </div>
 
 </section>
 
-<!-- ==================================================
-     COMPTE
-================================================== -->
 
+<!-- COMPTE -->
 <section id="accountScreen" class="screen">
 
     <h1>👤 Compte joueur</h1>
 
     <div class="account-box">
-
         <h2>Créer un compte</h2>
-
-        <input
-            id="registerUsername"
-            type="text"
-            maxlength="50"
-            placeholder="Pseudo">
-
-        <input
-            id="registerEmail"
-            type="email"
-            maxlength="255"
-            placeholder="Email">
-
-        <input
-            id="registerPassword"
-            type="password"
-            placeholder="Mot de passe">
-
-        <input
-            id="registerPasswordConfirmation"
-            type="password"
-            placeholder="Confirmer le mot de passe">
-
-        <button
-            class="account-button"
-            id="registerBtn">
-            Créer mon compte
-        </button>
+        <input id="registerUsername" type="text" maxlength="50" placeholder="Pseudo">
+        <input id="registerEmail" type="email" maxlength="255" placeholder="Email">
+        <input id="registerPassword" type="password" placeholder="Mot de passe">
+        <input id="registerPasswordConfirmation" type="password" placeholder="Confirmer le mot de passe">
+        <button class="account-button" id="registerBtn" type="button">Créer mon compte</button>
 
         <div class="account-separator"></div>
 
         <h2>Connexion</h2>
-
-        <input
-            id="loginInput"
-            type="text"
-            placeholder="Pseudo ou email">
-
-        <input
-            id="loginPassword"
-            type="password"
-            placeholder="Mot de passe">
-
-        <button
-            class="account-button"
-            id="loginBtn">
-            Se connecter
-        </button>
-
-        <div
-            id="accountStatus"
-            class="account-status">
-        </div>
-
-        <div
-            id="accountUser"
-            class="account-user">
-        </div>
-
+        <input id="loginInput" type="text" placeholder="Pseudo ou email">
+        <input id="loginPassword" type="password" placeholder="Mot de passe">
+        <button class="account-button" id="loginBtn" type="button">Se connecter</button>
+        <div id="accountStatus" class="account-status"></div>
+        <div id="accountUser" class="account-user"></div>
     </div>
 
-    <button
-        class="back-button"
-        id="accountBack">
-        ← Retour
-    </button>
-
+    <button class="back-button" id="accountBack">← Retour</button>
 </section>
 
-<!-- ==================================================
-     ROBOT
-================================================== -->
+<!-- MENU APRÈS CONNEXION -->
+<section id="accountMenuScreen" class="screen">
+    <h1>👤 Espace joueur</h1>
+    <div class="account-user-menu" id="accountMenuUser"></div>
+
+    <div class="main-menu account-menu-list">
+        <button class="menu-button" id="accountPlayBtn">🎮 Jouer</button>
+        <button class="menu-button" id="profileBtn">👤 Mon profil</button>
+        <button class="menu-button" id="accountOnlineBtn">🌐 Jouer en Ligne</button>
+        <button class="menu-button" id="settingsBtn">⚙️ Paramètres</button>
+        <button class="menu-button logout-button" id="logoutBtn">🚪 Déconnexion</button>
+    </div>
+
+    <button class="back-button" id="accountMenuBack">← Retour</button>
+</section>
+
+<!-- PROFIL -->
+<section id="profileScreen" class="screen">
+    <h1>👤 Mon profil</h1>
+    <div class="profile-box">
+        <div class="profile-row"><span class="profile-label">Pseudo</span><span id="profileUsername" class="profile-value">---</span></div>
+        <div class="profile-row"><span class="profile-label">Email</span><span id="profileEmail" class="profile-value">---</span></div>
+        <div class="profile-row"><span class="profile-label">ID joueur</span><span id="profilePlayerId" class="profile-value">---</span></div>
+    </div>
+    <button class="back-button" id="profileBack">← Retour</button>
+</section>
+
+<!-- PARAMÈTRES -->
+<section id="settingsScreen" class="screen">
+    <h1>⚙️ Paramètres</h1>
+    <div class="settings-box">
+        <p>Les paramètres du jeu seront ajoutés ici.</p>
+        <p>Pour le moment, aucun réglage supplémentaire n'est nécessaire.</p>
+    </div>
+    <button class="back-button" id="settingsBack">← Retour</button>
+</section>
+
+<!-- ROBOT -->
 
 <section id="robotScreen" class="screen">
 
@@ -815,9 +863,7 @@ h1 {
 
 </section>
 
-<!-- ==================================================
-     LOCAL
-================================================== -->
+<!-- LOCAL -->
 
 <section id="localScreen" class="screen">
 
@@ -865,9 +911,7 @@ h1 {
 
 </section>
 
-<!-- ==================================================
-     ONLINE MENU
-================================================== -->
+<!-- ONLINE MENU -->
 
 <section id="onlineScreen" class="screen">
 
@@ -881,6 +925,14 @@ h1 {
 
         <button class="online-choice" id="friendModeBtn">
             👥 Jouer avec un ami
+        </button>
+
+        <button class="online-choice" id="waitingRoomBtn">
+            ⏳ Salle d'attente
+        </button>
+
+        <button class="online-choice" id="spectatorModeBtn">
+            👁️ Regarder un match
         </button>
 
     </div>
@@ -937,9 +989,34 @@ h1 {
 
 </section>
 
-<!-- ==================================================
-     ONLINE GAME
-================================================== -->
+
+<!-- SALLE D'ATTENTE -->
+<section id="waitingRoomScreen" class="screen">
+    <h1>⏳ Salle d'attente</h1>
+    <div class="waiting-box">
+        <div class="room">Code : <span id="waitingRoomCode">---</span></div>
+        <div class="waiting-list">
+            <div class="waiting-player">⚫ Joueur 1 : <span id="waitingPlayer1">En attente...</span></div>
+            <div class="waiting-player">🔴 Joueur 2 : <span id="waitingPlayer2">En attente...</span></div>
+            <div class="waiting-player">👁️ Spectateurs : <span id="waitingSpectatorCount">0</span></div>
+        </div>
+        <div id="waitingStatus" class="status">En attente...</div>
+    </div>
+    <button class="back-button" id="waitingBack">← Retour</button>
+</section>
+
+<!-- SPECTATEUR -->
+<section id="spectatorScreen" class="screen">
+    <h1>👁️ Regarder un match</h1>
+    <div class="spectator-box">
+        <input id="spectatorRoomInput" type="text" maxlength="6" placeholder="CODE PARTIE">
+        <button class="account-button" id="spectatorJoinBtn" type="button">👁️ Regarder</button>
+        <div id="spectatorError" class="error"></div>
+    </div>
+    <button class="back-button" id="spectatorBack">← Retour</button>
+</section>
+
+<!-- ONLINE GAME -->
 
 <section id="onlineGameScreen" class="screen">
 
@@ -957,6 +1034,8 @@ h1 {
             <span id="gameRoomCode">---</span>
 
         </div>
+
+        <div id="onlineSpectatorCount" class="spectator-count">👁️ Spectateurs : 0</div>
 
         <div class="score-board">
 
@@ -1025,9 +1104,7 @@ h1 {
 
 </section>
 
-<!-- ==================================================
-     ÉCRAN VICTOIRE
-================================================== -->
+<!-- ÉCRAN VICTOIRE LOCAL / ROBOT -->
 
 <section id="winScreen" class="screen">
 
@@ -1073,7 +1150,7 @@ const BOARD_SIZE = 20;
 const START_TIME = 10 * 60;
 
 /* ==================================================
-   COMPTE / AUTHENTIFICATION
+   COMPTE JOUEUR
 ================================================== */
 
 let currentPlayerId = null;
@@ -1081,65 +1158,33 @@ let currentUsername = null;
 let currentEmail = null;
 let accountToken = null;
 let accountConnected = false;
+let accountRequestInProgress = false;
+let onlineOpenedFromAccountMenu = false;
+
+function showAccountMessage(message, success) {
+    const box = document.getElementById("accountStatus");
+    if (!box) return;
+    box.textContent = message || "";
+    box.style.color = success ? "#86EFAC" : "#FCA5A5";
+}
 
 function updateAccountDisplay() {
-
-    const status =
-        document.getElementById(
-            "accountStatus"
-        );
-
-    const user =
-        document.getElementById(
-            "accountUser"
-        );
-
-    if (!status || !user) {
-        return;
-    }
-
-    if (accountConnected) {
-
-        user.textContent =
-            "👤 Connecté : " +
-            currentUsername;
-
-    } else {
-
-        user.textContent = "";
+    const user = document.getElementById("accountUser");
+    if (user) {
+        user.textContent = accountConnected
+            ? "👤 Connecté : " + currentUsername
+            : "";
     }
 }
 
-function showAccountMessage(
-    message,
-    success
-) {
-
-    const status =
-        document.getElementById(
-            "accountStatus"
-        );
-
-    if (!status) {
-        return;
+function showAccountMenu() {
+    const user = document.getElementById("accountMenuUser");
+    if (user) {
+        user.textContent = accountConnected
+            ? "👤 Connecté : " + currentUsername
+            : "";
     }
-
-    status.textContent =
-        message || "";
-
-    status.classList.remove(
-        "account-success",
-        "account-error"
-    );
-
-    if (message) {
-
-        status.classList.add(
-            success
-                ? "account-success"
-                : "account-error"
-        );
-    }
+    showScreen("accountMenuScreen");
 }
 
 /* ==================================================
@@ -1309,7 +1354,7 @@ function drawStone(cell, color) {
 }
 
 /* ==================================================
-   LIGNE VICTOIRE
+   LIGN VICTOIRE
 ================================================== */
 
 function drawWinningLine(
@@ -2397,7 +2442,7 @@ function checkWin(
 }
 
 /* ==================================================
-   VICTOIRE
+   VICTOIRE LOCAL / ROBOT
 ================================================== */
 
 function showWinScreen(message) {
@@ -2507,28 +2552,17 @@ document
         }
     );
 
-/* ==================================================
-   ONLINE
-   CONNEXION OBLIGATOIRE
-================================================== */
-
 document
     .getElementById("onlineMode")
     .addEventListener(
         "click",
         function() {
 
+            onlineOpenedFromAccountMenu = false;
+
             if (!accountConnected) {
-
-                showAccountMessage(
-                    "⚠️ Vous devez créer un compte ou vous connecter pour jouer en ligne.",
-                    false
-                );
-
-                showScreen(
-                    "accountScreen"
-                );
-
+                showScreen("accountScreen");
+                showAccountMessage("🔐 Connectez-vous pour jouer en ligne.", false);
                 return;
             }
 
@@ -2556,50 +2590,6 @@ document
 
             showScreen(
                 "onlineScreen"
-            );
-        }
-    );
-
-/* ==================================================
-   ÉCRAN COMPTE
-================================================== */
-
-document
-    .getElementById("accountMode")
-    .addEventListener(
-        "click",
-        function() {
-
-            updateAccountDisplay();
-
-            if (accountConnected) {
-
-                showAccountMessage(
-                    "Vous êtes déjà connecté.",
-                    true
-                );
-            } else {
-
-                showAccountMessage(
-                    "",
-                    true
-                );
-            }
-
-            showScreen(
-                "accountScreen"
-            );
-        }
-    );
-
-document
-    .getElementById("accountBack")
-    .addEventListener(
-        "click",
-        function() {
-
-            showScreen(
-                "homeScreen"
             );
         }
     );
@@ -2665,19 +2655,146 @@ document
     );
 
 /* ==================================================
+   COMPTE - ACTIONS
+================================================== */
+
+document.getElementById("accountMode").addEventListener("click", function() {
+    if (accountConnected) {
+        showAccountMenu();
+        return;
+    }
+    updateAccountDisplay();
+    showAccountMessage("", true);
+    showScreen("accountScreen");
+});
+
+document.getElementById("accountBack").addEventListener("click", function() {
+    showScreen("homeScreen");
+});
+
+document.getElementById("registerBtn").addEventListener("click", function() {
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+    const confirmation = document.getElementById("registerPasswordConfirmation").value;
+
+    if (!username || !email || !password || !confirmation) {
+        showAccountMessage("⚠️ Remplissez tous les champs.", false);
+        return;
+    }
+    if (password !== confirmation) {
+        showAccountMessage("⚠️ Les mots de passe ne correspondent pas.", false);
+        return;
+    }
+
+    accountRequestInProgress = true;
+    showAccountMessage("⏳ Création du compte...", true);
+
+    connectServer(function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            accountRequestInProgress = false;
+            showAccountMessage("❌ Serveur non disponible.", false);
+            return;
+        }
+        socket.send(JSON.stringify({
+            type: "register",
+            username: username,
+            email: email,
+            password: password,
+            password_confirmation: confirmation
+        }));
+    });
+});
+
+document.getElementById("loginBtn").addEventListener("click", function() {
+    const login = document.getElementById("loginInput").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    if (!login || !password) {
+        showAccountMessage("⚠️ Entrez votre pseudo/email et votre mot de passe.", false);
+        return;
+    }
+
+    accountRequestInProgress = true;
+    showAccountMessage("⏳ Connexion...", true);
+
+    connectServer(function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            accountRequestInProgress = false;
+            showAccountMessage("❌ Serveur non disponible.", false);
+            return;
+        }
+        socket.send(JSON.stringify({
+            type: "login",
+            login: login,
+            password: password
+        }));
+    });
+});
+
+document.getElementById("accountPlayBtn").addEventListener("click", function() {
+    showScreen("homeScreen");
+});
+
+document.getElementById("profileBtn").addEventListener("click", function() {
+    document.getElementById("profileUsername").textContent = currentUsername || "---";
+    document.getElementById("profileEmail").textContent = currentEmail || "---";
+    document.getElementById("profilePlayerId").textContent = currentPlayerId || "---";
+    showScreen("profileScreen");
+});
+
+document.getElementById("accountOnlineBtn").addEventListener("click", function() {
+    if (!accountConnected) {
+        showScreen("accountScreen");
+        showAccountMessage("Vous devez être connecté.", false);
+        return;
+    }
+    onlineOpenedFromAccountMenu = true;
+    document.getElementById("onlineError").textContent = "";
+    document.getElementById("friendBox").classList.remove("show");
+    document.getElementById("searchingBox").classList.remove("show");
+    showScreen("onlineScreen");
+});
+
+document.getElementById("settingsBtn").addEventListener("click", function() {
+    showScreen("settingsScreen");
+});
+
+document.getElementById("logoutBtn").addEventListener("click", function() {
+    closeOnlineConnection();
+    accountConnected = false;
+    currentPlayerId = null;
+    currentUsername = null;
+    currentEmail = null;
+    accountToken = null;
+    accountRequestInProgress = false;
+    document.getElementById("registerUsername").value = "";
+    document.getElementById("registerEmail").value = "";
+    document.getElementById("registerPassword").value = "";
+    document.getElementById("registerPasswordConfirmation").value = "";
+    document.getElementById("loginInput").value = "";
+    document.getElementById("loginPassword").value = "";
+    updateAccountDisplay();
+    showScreen("homeScreen");
+});
+
+document.getElementById("accountMenuBack").addEventListener("click", function() {
+    showScreen("homeScreen");
+});
+
+document.getElementById("profileBack").addEventListener("click", function() {
+    showAccountMenu();
+});
+
+document.getElementById("settingsBack").addEventListener("click", function() {
+    showAccountMenu();
+});
+
+/* ==================================================
    ONLINE VARIABLES
 ================================================== */
 
 let socket = null;
-
-/*
-   NOUVEAU :
-   Lè WebSocket la poko fini konekte,
-   nou mete aksyon yo nan lis sa a.
-   Konsa callback Register/Login/Online
-   pa pèdi.
-*/
-let pendingServerCallbacks = [];
 
 let onlinePlayer = null;
 let onlineRoom = null;
@@ -2723,209 +2840,6 @@ let onlineDisplayInterval = null;
 let searchingForOpponent = false;
 
 /* ==================================================
-   CRÉER COMPTE
-================================================== */
-
-document
-    .getElementById("registerBtn")
-    .addEventListener(
-        "click",
-        function() {
-
-            const username =
-                document
-                    .getElementById(
-                        "registerUsername"
-                    )
-                    .value
-                    .trim();
-
-            const email =
-                document
-                    .getElementById(
-                        "registerEmail"
-                    )
-                    .value
-                    .trim();
-
-            const password =
-                document
-                    .getElementById(
-                        "registerPassword"
-                    )
-                    .value;
-
-            const confirmation =
-                document
-                    .getElementById(
-                        "registerPasswordConfirmation"
-                    )
-                    .value;
-
-            if (!username) {
-
-                showAccountMessage(
-                    "Veuillez entrer un pseudo.",
-                    false
-                );
-
-                return;
-            }
-
-            if (!email) {
-
-                showAccountMessage(
-                    "Veuillez entrer votre email.",
-                    false
-                );
-
-                return;
-            }
-
-            if (!password) {
-
-                showAccountMessage(
-                    "Veuillez entrer un mot de passe.",
-                    false
-                );
-
-                return;
-            }
-
-            if (password !== confirmation) {
-
-                showAccountMessage(
-                    "Les mots de passe ne correspondent pas.",
-                    false
-                );
-
-                return;
-            }
-
-            showAccountMessage(
-                "⏳ Création du compte...",
-                true
-            );
-
-            connectServer(
-                function() {
-
-                    if (
-                        !socket ||
-                        socket.readyState !==
-                        WebSocket.OPEN
-                    ) {
-
-                        showAccountMessage(
-                            "Impossible de se connecter au serveur.",
-                            false
-                        );
-
-                        return;
-                    }
-
-                    socket.send(
-                        JSON.stringify({
-                            type:
-                                "register",
-                            username:
-                                username,
-                            email:
-                                email,
-                            password:
-                                password,
-                            password_confirmation:
-                                confirmation
-                        })
-                    );
-                }
-            );
-        }
-    );
-
-/* ==================================================
-   CONNEXION
-================================================== */
-
-document
-    .getElementById("loginBtn")
-    .addEventListener(
-        "click",
-        function() {
-
-            const login =
-                document
-                    .getElementById(
-                        "loginInput"
-                    )
-                    .value
-                    .trim();
-
-            const password =
-                document
-                    .getElementById(
-                        "loginPassword"
-                    )
-                    .value;
-
-            if (!login) {
-
-                showAccountMessage(
-                    "Veuillez entrer votre pseudo ou votre email.",
-                    false
-                );
-
-                return;
-            }
-
-            if (!password) {
-
-                showAccountMessage(
-                    "Veuillez entrer votre mot de passe.",
-                    false
-                );
-
-                return;
-            }
-
-            showAccountMessage(
-                "⏳ Connexion...",
-                true
-            );
-
-            connectServer(
-                function() {
-
-                    if (
-                        !socket ||
-                        socket.readyState !==
-                        WebSocket.OPEN
-                    ) {
-
-                        showAccountMessage(
-                            "Impossible de se connecter au serveur.",
-                            false
-                        );
-
-                        return;
-                    }
-
-                    socket.send(
-                        JSON.stringify({
-                            type:
-                                "login",
-                            login:
-                                login,
-                            password:
-                                password
-                        })
-                    );
-                }
-            );
-        }
-    );
-
-/* ==================================================
    TROUVER ADVERSAIRE
 ================================================== */
 
@@ -2934,20 +2848,6 @@ document
     .addEventListener(
         "click",
         function() {
-
-            if (!accountConnected) {
-
-                showScreen(
-                    "accountScreen"
-                );
-
-                showAccountMessage(
-                    "Vous devez être connecté.",
-                    false
-                );
-
-                return;
-            }
 
             searchingForOpponent = true;
 
@@ -3047,20 +2947,6 @@ document
     .addEventListener(
         "click",
         function() {
-
-            if (!accountConnected) {
-
-                showScreen(
-                    "accountScreen"
-                );
-
-                showAccountMessage(
-                    "Vous devez être connecté.",
-                    false
-                );
-
-                return;
-            }
 
             document
                 .getElementById(
@@ -3252,15 +3138,10 @@ function convertServerBoard(board) {
 
 /* ==================================================
    CONNECTER SERVEUR
-   VERSION CORRIGÉE
 ================================================== */
 
 function connectServer(callback) {
 
-    /*
-       Si le serveur est déjà connecté,
-       on exécute immédiatement l'action.
-    */
     if (
         socket &&
         socket.readyState ===
@@ -3274,33 +3155,13 @@ function connectServer(callback) {
         return;
     }
 
-    /*
-       Si la connexion est déjà en cours,
-       on garde le callback au lieu de le perdre.
-    */
     if (
         socket &&
         socket.readyState ===
         WebSocket.CONNECTING
     ) {
 
-        if (callback) {
-            pendingServerCallbacks.push(
-                callback
-            );
-        }
-
         return;
-    }
-
-    /*
-       Nouvelle connexion.
-    */
-    if (callback) {
-
-        pendingServerCallbacks.push(
-            callback
-        );
     }
 
     socket =
@@ -3327,53 +3188,15 @@ function connectServer(callback) {
                 reconnectTimer = null;
             }
 
-            /*
-               On récupère toutes les actions
-               qui attendaient la connexion.
-            */
-            const callbacks =
-                pendingServerCallbacks.slice();
-
-            pendingServerCallbacks = [];
-
-            callbacks.forEach(
-                function(savedCallback) {
-
-                    try {
-
-                        savedCallback();
-
-                    } catch(error) {
-
-                        console.error(
-                            "Erreur callback serveur:",
-                            error
-                        );
-                    }
-                }
-            );
+            if (callback) {
+                callback();
+            }
         };
 
     socket.onclose =
         function() {
 
             stopOnlineDisplayTimer();
-
-            /*
-               Si une action attendait encore
-               la connexion, on prévient l'utilisateur.
-            */
-            if (
-                pendingServerCallbacks.length > 0
-            ) {
-
-                pendingServerCallbacks = [];
-
-                showAccountMessage(
-                    "❌ Impossible de se connecter au serveur. Vérifiez votre connexion Internet puis réessayez.",
-                    false
-                );
-            }
 
             if (
                 onlineRoom &&
@@ -3411,30 +3234,6 @@ function connectServer(callback) {
                     "gameOnlineError"
                 );
 
-            /*
-               NOUVEAU :
-               L'erreur apparaît aussi
-               directement dans la page Compte.
-            */
-            const accountStatus =
-                document.getElementById(
-                    "accountStatus"
-                );
-
-            if (accountStatus) {
-
-                accountStatus.textContent =
-                    "❌ Erreur de connexion au serveur.";
-
-                accountStatus.classList.remove(
-                    "account-success"
-                );
-
-                accountStatus.classList.add(
-                    "account-error"
-                );
-            }
-
             if (onlineError) {
 
                 onlineError.textContent =
@@ -3459,107 +3258,30 @@ function connectServer(callback) {
                     );
 
                 /* ==================================
-                   REGISTER
+                   COMPTE
                 ================================== */
 
-                if (
-                    data.type ===
-                    "register_result"
-                ) {
+                if (data.type === "register_result" || data.type === "login_result") {
+
+                    accountRequestInProgress = false;
 
                     if (data.success) {
-
-                        currentPlayerId =
-                            data.player_id;
-
-                        currentUsername =
-                            data.username;
-
-                        currentEmail =
-                            data.email;
-
-                        accountToken =
-                            data.account_token ||
-                            null;
-
-                        accountConnected =
-                            true;
-
+                        currentPlayerId = data.player_id;
+                        currentUsername = data.username;
+                        currentEmail = data.email;
+                        accountToken = data.account_token || null;
+                        accountConnected = true;
                         updateAccountDisplay();
-
                         showAccountMessage(
-                            "✅ Compte créé avec succès. Vous êtes connecté.",
+                            data.type === "register_result"
+                                ? "✅ Compte créé avec succès. Vous êtes connecté."
+                                : "✅ Connexion réussie.",
                             true
                         );
-
+                        showAccountMenu();
                     } else {
-
                         showAccountMessage(
-                            data.message ||
-                            "Impossible de créer le compte.",
-                            false
-                        );
-                    }
-
-                    return;
-                }
-
-                /* ==================================
-                   LOGIN
-                ================================== */
-
-                if (
-                    data.type ===
-                    "login_result"
-                ) {
-
-                    if (data.success) {
-
-                        currentPlayerId =
-                            data.player_id;
-
-                        currentUsername =
-                            data.username;
-
-                        currentEmail =
-                            data.email;
-
-                        accountToken =
-                            data.account_token ||
-                            null;
-
-                        accountConnected =
-                            true;
-
-                        updateAccountDisplay();
-
-                        showAccountMessage(
-                            "✅ Connexion réussie.",
-                            true
-                        );
-
-                    } else {
-
-                        accountConnected =
-                            false;
-
-                        currentPlayerId =
-                            null;
-
-                        currentUsername =
-                            null;
-
-                        currentEmail =
-                            null;
-
-                        accountToken =
-                            null;
-
-                        updateAccountDisplay();
-
-                        showAccountMessage(
-                            data.message ||
-                            "Identifiants incorrects.",
+                            data.message || "Identifiants invalides.",
                             false
                         );
                     }
@@ -3873,6 +3595,32 @@ function connectServer(callback) {
                 }
 
                 /* ==================================
+                   SPECTATEUR / SALLE D'ATTENTE
+                ================================== */
+
+                if (data.type === "spectator_joined") {
+                    onlineConnectionMode = "spectator";
+                    onlineRoom = data.room || onlineRoom;
+                    onlinePlayer = 0;
+                    document.getElementById("gameRoomCode").textContent = onlineRoom || "---";
+                    document.getElementById("spectatorError").textContent = "";
+                    showScreen("onlineGameScreen");
+                    createBoard(document.getElementById("onlineBoard"), onlineClick);
+                    startOnlineDisplayTimer();
+                    return;
+                }
+
+                if (data.type === "waiting_room") {
+                    document.getElementById("waitingRoomCode").textContent = data.room || onlineRoom || "---";
+                    document.getElementById("waitingPlayer1").textContent = data.player1 || "En attente...";
+                    document.getElementById("waitingPlayer2").textContent = data.player2 || "En attente...";
+                    document.getElementById("waitingSpectatorCount").textContent = Number(data.spectators || 0);
+                    document.getElementById("waitingStatus").textContent = data.message || "⏳ En attente...";
+                    showScreen("waitingRoomScreen");
+                    return;
+                }
+
+                /* ==================================
                    ÉTAT DU JEU
                 ================================== */
 
@@ -3945,6 +3693,12 @@ function connectServer(callback) {
                         data.last_move ||
                         null;
 
+                    /*
+                       IMPORTANT:
+                       Le serveur envoie ici
+                       directement 1 ou 2.
+                    */
+
                     onlineRematchRequest =
                         data.rematch_request !==
                         undefined &&
@@ -3958,6 +3712,16 @@ function connectServer(callback) {
                     onlineWinningLine =
                         data.winning_line ||
                         null;
+
+                    const spectatorCount = Number(data.spectators || data.spectator_count || 0);
+                    const spectatorCountElement = document.getElementById("onlineSpectatorCount");
+                    if (spectatorCountElement) {
+                        spectatorCountElement.textContent = "👁️ Spectateurs : " + spectatorCount;
+                    }
+                    const waitingCount = document.getElementById("waitingSpectatorCount");
+                    if (waitingCount) {
+                        waitingCount.textContent = spectatorCount;
+                    }
 
                     renderOnlineState();
 
@@ -3996,29 +3760,6 @@ function connectServer(callback) {
                             "gameOnlineError"
                         );
 
-                    /*
-                       Si erreur pandan Register/Login,
-                       li parèt nan accountStatus.
-                    */
-                    const accountStatus =
-                        document.getElementById(
-                            "accountStatus"
-                        );
-
-                    if (accountStatus) {
-
-                        accountStatus.textContent =
-                            message;
-
-                        accountStatus.classList.remove(
-                            "account-success"
-                        );
-
-                        accountStatus.classList.add(
-                            "account-error"
-                        );
-                    }
-
                     if (onlineError) {
 
                         onlineError.textContent =
@@ -4039,11 +3780,6 @@ function connectServer(callback) {
                 console.error(
                     "Erreur message serveur:",
                     error
-                );
-
-                showAccountMessage(
-                    "❌ Réponse invalide du serveur.",
-                    false
                 );
             }
         };
@@ -4071,7 +3807,7 @@ function updateOnlineScoreDisplay() {
 }
 
 /* ==================================================
-   STATUS ONLINE
+   STATUS ONLINE CORRIGÉ
 ================================================== */
 
 function updateOnlineStatus() {
@@ -4084,6 +3820,10 @@ function updateOnlineStatus() {
     if (!status) {
         return;
     }
+
+    /*
+       DEMANDE REJWE
+    */
 
     if (
         onlineRematchRequest !== null
@@ -4110,6 +3850,10 @@ function updateOnlineStatus() {
 
         return;
     }
+
+    /*
+       MATCH FINI
+    */
 
     if (onlineGameOver) {
 
@@ -4181,7 +3925,7 @@ function updateOnlineStatus() {
 }
 
 /* ==================================================
-   RESULTAT ONLINE
+   RESULTAT ONLINE CORRIGÉ
 ================================================== */
 
 function updateOnlineResult() {
@@ -4351,7 +4095,7 @@ function renderOnlineState() {
 }
 
 /* ==================================================
-   REJWE
+   REJWE CORRIGÉ
 ================================================== */
 
 function updateRematchUI() {
@@ -4384,9 +4128,17 @@ function updateRematchUI() {
     actions.innerHTML =
         "";
 
+    /*
+       Pa gen dènye kou
+    */
+
     if (!onlineLastMove) {
         return;
     }
+
+    /*
+       GEN DEMANN REJWE
+    */
 
     if (
         onlineRematchRequest !== null
@@ -4400,6 +4152,10 @@ function updateRematchUI() {
                 onlineRematchRequest
             );
 
+        /*
+           Se nou menm ki mande rejwe.
+        */
+
         if (
             requester ===
             Number(onlinePlayer)
@@ -4410,6 +4166,10 @@ function updateRematchUI() {
 
             return;
         }
+
+        /*
+           Se advèsè a ki mande rejwe.
+        */
 
         message.textContent =
             "🔄 Advèsè a mande pou rejwe dènye kou a.";
@@ -4472,6 +4232,11 @@ function updateRematchUI() {
 
         return;
     }
+
+    /*
+       PA GEN DEMANN.
+       Dènye kou a se nou menm ki fè li.
+    */
 
     if (
         Number(
@@ -4586,6 +4351,11 @@ function onlineClick(
     cell
 ) {
 
+    if (onlineConnectionMode === "spectator" || Number(onlinePlayer) === 0) {
+        document.getElementById("gameOnlineError").textContent = "👁️ Mode spectateur : vous ne pouvez pas jouer.";
+        return;
+    }
+
     if (onlineGameOver) {
         return;
     }
@@ -4669,6 +4439,66 @@ function onlineClick(
 }
 
 /* ==================================================
+   SALLE D'ATTENTE / SPECTATEUR - INTERFACE
+================================================== */
+
+document.getElementById("waitingRoomBtn").addEventListener("click", function() {
+    if (!accountConnected) {
+        showScreen("accountScreen");
+        showAccountMessage("🔐 Connectez-vous pour accéder à la salle d'attente.", false);
+        return;
+    }
+    document.getElementById("waitingStatus").textContent = "⏳ En attente des joueurs...";
+    document.getElementById("waitingRoomCode").textContent = onlineRoom || "---";
+    showScreen("waitingRoomScreen");
+});
+
+document.getElementById("waitingBack").addEventListener("click", function() {
+    showScreen("onlineScreen");
+});
+
+document.getElementById("spectatorModeBtn").addEventListener("click", function() {
+    if (!accountConnected) {
+        showScreen("accountScreen");
+        showAccountMessage("🔐 Connectez-vous pour regarder un match.", false);
+        return;
+    }
+    document.getElementById("spectatorError").textContent = "";
+    showScreen("spectatorScreen");
+});
+
+document.getElementById("spectatorBack").addEventListener("click", function() {
+    showScreen("onlineScreen");
+});
+
+document.getElementById("spectatorJoinBtn").addEventListener("click", function() {
+    const code = document.getElementById("spectatorRoomInput").value.trim().toUpperCase();
+    if (code.length !== 6) {
+        document.getElementById("spectatorError").textContent = "Le code doit contenir 6 caractères.";
+        return;
+    }
+
+    document.getElementById("spectatorError").textContent = "⏳ Connexion au match...";
+
+    /* Le serveur sera modifié juste après l'index.html pour accepter
+       plusieurs spectateurs dans la même salle. */
+    onlineConnectionMode = "spectator";
+    onlineRoom = code;
+    onlinePlayer = 0;
+
+    connectServer(function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            document.getElementById("spectatorError").textContent = "❌ Serveur non disponible.";
+            return;
+        }
+        socket.send(JSON.stringify({
+            type: "spectate",
+            room: code
+        }));
+    });
+});
+
+/* ==================================================
    CRÉER AVEC UN AMI
 ================================================== */
 
@@ -4677,20 +4507,6 @@ document
     .addEventListener(
         "click",
         function() {
-
-            if (!accountConnected) {
-
-                showScreen(
-                    "accountScreen"
-                );
-
-                showAccountMessage(
-                    "Vous devez être connecté.",
-                    false
-                );
-
-                return;
-            }
 
             document
                 .getElementById(
@@ -4736,14 +4552,6 @@ document
             connectServer(
                 function() {
 
-                    if (
-                        !socket ||
-                        socket.readyState !==
-                        WebSocket.OPEN
-                    ) {
-                        return;
-                    }
-
                     socket.send(
                         JSON.stringify({
                             type:
@@ -4764,20 +4572,6 @@ document
     .addEventListener(
         "click",
         function() {
-
-            if (!accountConnected) {
-
-                showScreen(
-                    "accountScreen"
-                );
-
-                showAccountMessage(
-                    "Vous devez être connecté.",
-                    false
-                );
-
-                return;
-            }
 
             const code =
                 document
@@ -4845,14 +4639,6 @@ document
 
             connectServer(
                 function() {
-
-                    if (
-                        !socket ||
-                        socket.readyState !==
-                        WebSocket.OPEN
-                    ) {
-                        return;
-                    }
 
                     socket.send(
                         JSON.stringify({
@@ -5008,14 +4794,6 @@ function reconnectToRoom() {
     connectServer(
         function() {
 
-            if (
-                !socket ||
-                socket.readyState !==
-                WebSocket.OPEN
-            ) {
-                return;
-            }
-
             socket.send(
                 JSON.stringify({
                     type:
@@ -5044,9 +4822,11 @@ document
 
             closeOnlineConnection();
 
-            showScreen(
-                "homeScreen"
-            );
+            if (onlineOpenedFromAccountMenu && accountConnected) {
+                showAccountMenu();
+            } else {
+                showScreen("homeScreen");
+            }
         }
     );
 
@@ -5058,9 +4838,11 @@ document
 
             closeOnlineConnection();
 
-            showScreen(
-                "homeScreen"
-            );
+            if (onlineOpenedFromAccountMenu && accountConnected) {
+                showAccountMenu();
+            } else {
+                showScreen("homeScreen");
+            }
         }
     );
 
@@ -5086,12 +4868,6 @@ function closeOnlineConnection() {
 
     reconnecting = false;
     reconnectAttempts = 0;
-
-    /*
-       Si une connexion était encore en cours,
-       on annule aussi les callbacks en attente.
-    */
-    pendingServerCallbacks = [];
 
     if (
         socket &&
@@ -5184,6 +4960,11 @@ function closeOnlineConnection() {
         )
         .textContent =
         "0";
+
+    const spectatorCountElement = document.getElementById("onlineSpectatorCount");
+    if (spectatorCountElement) {
+        spectatorCountElement.textContent = "👁️ Spectateurs : 0";
+    }
 
     document
         .getElementById(
