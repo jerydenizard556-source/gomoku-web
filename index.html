@@ -39,30 +39,131 @@ h1 {
     display: block;
 }
 
-/* MENU */
+/* MENU PRINCIPAL - NOUVEAU DESIGN */
 
 .main-menu {
-    max-width: 380px;
-    margin: 45px auto;
+    max-width: 460px;
+    margin: 22px auto;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 11px;
 }
 
 .menu-button {
     width: 100%;
-    padding: 16px;
-    border: 1px solid #374151;
-    border-radius: 10px;
-    background: #273449;
+    padding: 16px 18px;
+    border: 1px solid #3b4d63;
+    border-radius: 15px;
+    background: #1d2b3d;
     color: white;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
+    text-align: left;
+    transition: background .18s, transform .18s, border-color .18s;
 }
 
 .menu-button:hover {
-    background: #374151;
+    background: #263b54;
+    border-color: #4d6785;
+    transform: translateY(-1px);
+}
+
+.home-hero {
+    max-width: 700px;
+    margin: 12px auto 18px;
+    padding: 28px 18px 22px;
+    border-radius: 24px;
+    background: linear-gradient(145deg,#0b1d32,#102d4c);
+    border: 1px solid #294563;
+}
+
+.home-hero h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+
+.home-subtitle {
+    margin: 8px 0 0;
+    color: #9db4c9;
+    font-size: 14px;
+}
+
+.home-user {
+    margin: 16px auto 0;
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.07);
+    color: #dce9f5;
+    font-size: 13px;
+}
+
+.home-stats {
+    max-width: 700px;
+    margin: 0 auto 18px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+
+.home-stat {
+    padding: 13px 8px;
+    border-radius: 15px;
+    background: #182638;
+    border: 1px solid #2c3e54;
+}
+
+.home-stat strong {
+    display: block;
+    font-size: 19px;
+}
+
+.home-stat span {
+    display: block;
+    margin-top: 4px;
+    color: #91a8bd;
+    font-size: 11px;
+}
+
+.home-section-title {
+    max-width: 460px;
+    margin: 17px auto 8px;
+    text-align: left;
+    color: #8eabc4;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.home-button-grid {
+    max-width: 460px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.home-button-grid .menu-button {
+    margin: 0;
+}
+
+.home-primary {
+    background: #2563a9;
+    border-color: #3981cb;
+}
+
+.home-primary:hover {
+    background: #2d73bd;
+}
+
+.home-footer {
+    margin: 20px 0 5px;
+    color: #7189a0;
+    font-size: 12px;
 }
 
 .back-button,
@@ -822,7 +923,16 @@ h1 {
     .room-list { max-width:600px; margin:15px auto; display:flex; flex-direction:column; gap:9px; }
     .room-card { padding:12px; border:1px solid #374151; border-radius:10px; background:#1F2937; text-align:left; }
     .room-card button { margin-top:8px; padding:9px 12px; border-radius:8px; border:1px solid #D4AF37; background:#111827; color:white; cursor:pointer; }
-    @media (max-width:520px){ .player-stats-grid{grid-template-columns:repeat(2,1fr);} .chat-form{flex-wrap:wrap;} .chat-form button{width:100%;} }
+    @media (max-width:520px){
+    .home-hero h1{font-size:28px;}
+    .home-stats{grid-template-columns:1fr 1fr;}
+    .home-stat:last-child{grid-column:1 / -1;}
+    .home-button-grid{grid-template-columns:1fr;}
+    .home-button-grid .menu-button{width:100%;}
+    .player-stats-grid{grid-template-columns:repeat(2,1fr);}
+    .chat-form{flex-wrap:wrap;}
+    .chat-form button{width:100%;}
+}
 </style>
 </head>
 
@@ -834,27 +944,40 @@ h1 {
 
 <section id="homeScreen" class="screen active">
 
-    <h1>MR JERY MOPION</h1>
-
-    <div class="main-menu">
-
-        <button class="menu-button" id="robotMode">
-            🤖 Jouer avec Robot
-        </button>
-
-        <button class="menu-button" id="localMode">
-            👥 2 Utilisateurs
-        </button>
-
-        <button class="menu-button" id="onlineMode">
-            🌐 Jouer en Ligne
-        </button>
-
-        <button class="menu-button" id="accountMode">
-            👤 Compte joueur
-        </button>
-
+    <div class="home-hero">
+        <h1>🎮 MR JERY MOPION</h1>
+        <div class="home-subtitle">Le jeu de stratégie à 5 en ligne</div>
+        <div class="home-user" id="homeUser">👤 Invité</div>
     </div>
+
+    <div class="home-stats">
+        <div class="home-stat"><strong id="homeLevel">🏆 1</strong><span>NIVEAU</span></div>
+        <div class="home-stat"><strong id="homePoints">⭐ 0</strong><span>POINTS</span></div>
+        <div class="home-stat"><strong id="homeRecord">🏆 0 / ❌ 0</strong><span>VICTOIRES / DÉFAITES</span></div>
+    </div>
+
+    <div class="home-section-title">Jouer</div>
+    <div class="main-menu">
+        <button class="menu-button home-primary" id="onlineMode">⚡ Trouver un adversaire / Jouer en Ligne</button>
+        <div class="home-button-grid">
+            <button class="menu-button" id="localMode">👥 2 Utilisateurs</button>
+            <button class="menu-button" id="robotMode">🤖 Jouer avec Robot</button>
+        </div>
+    </div>
+
+    <div class="home-section-title">Salles & spectateurs</div>
+    <div class="home-button-grid">
+        <button class="menu-button" id="homeRoomsBtn">🏠 Salles de joueurs</button>
+        <button class="menu-button" id="homeSpectatorBtn">👁️ Regarder un match</button>
+    </div>
+
+    <div class="home-section-title">Mon espace</div>
+    <div class="home-button-grid">
+        <button class="menu-button" id="accountMode">👤 Compte joueur</button>
+        <button class="menu-button" id="homeProfileBtn">🏆 Mon profil</button>
+    </div>
+
+    <div class="home-footer">💬 Chat • Joueurs en ligne • Revanche • Classement</div>
 
 </section>
 
@@ -1341,6 +1464,7 @@ function updateAccountDisplay() {
             ? "👤 Connecté : " + currentUsername
             : "";
     }
+    updateHomeDisplay();
 }
 
 function updateProfileStats(stats) {
@@ -1354,6 +1478,18 @@ function updateProfileStats(stats) {
     };
     const map = {profileLevel:currentStats.level,profilePoints:currentStats.points,profileWins:currentStats.wins,profileLosses:currentStats.losses};
     Object.keys(map).forEach(function(id){ const el=document.getElementById(id); if(el) el.textContent=map[id]; });
+    updateHomeDisplay();
+}
+
+function updateHomeDisplay() {
+    const level = document.getElementById("homeLevel");
+    const points = document.getElementById("homePoints");
+    const record = document.getElementById("homeRecord");
+    const user = document.getElementById("homeUser");
+    if (level) level.textContent = "🏆 " + Number(currentStats.level || 1);
+    if (points) points.textContent = "⭐ " + Number(currentStats.points || 0);
+    if (record) record.textContent = "🏆 " + Number(currentStats.wins || 0) + " / ❌ " + Number(currentStats.losses || 0);
+    if (user) user.textContent = accountConnected && currentUsername ? "👤 " + currentUsername : "👤 Invité";
 }
 
 function showAccountMenu() {
@@ -2954,7 +3090,32 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
 });
 
 document.getElementById("accountMenuBack").addEventListener("click", function() {
-    showScreen("homeScreen");
+    const homeRoomsBtn = document.getElementById("homeRoomsBtn");
+if (homeRoomsBtn) homeRoomsBtn.addEventListener("click", function(){
+    showScreen("playerRoomsScreen");
+});
+
+const homeSpectatorBtn = document.getElementById("homeSpectatorBtn");
+if (homeSpectatorBtn) homeSpectatorBtn.addEventListener("click", function(){
+    showScreen("spectatorScreen");
+});
+
+const homeProfileBtn = document.getElementById("homeProfileBtn");
+if (homeProfileBtn) homeProfileBtn.addEventListener("click", function(){
+    if (accountConnected) {
+        const u=document.getElementById("profileUsername");
+        const e=document.getElementById("profileEmail");
+        const id=document.getElementById("profilePlayerId");
+        if(u) u.textContent=currentUsername || "---";
+        if(e) e.textContent=currentEmail || "---";
+        if(id) id.textContent=currentPlayerId || "---";
+        showScreen("profileScreen");
+    } else {
+        showScreen("accountScreen");
+    }
+});
+
+showScreen("homeScreen");
 });
 
 document.getElementById("profileBack").addEventListener("click", function() {
