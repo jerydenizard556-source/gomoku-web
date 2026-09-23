@@ -2670,6 +2670,15 @@ document
 
 let socket = null;
 
+/*
+   NOUVEAU :
+   Lè WebSocket la poko fini konekte,
+   nou mete aksyon yo nan lis sa a.
+   Konsa callback Register/Login/Online
+   pa pèdi.
+*/
+let pendingServerCallbacks = [];
+
 let onlinePlayer = null;
 let onlineRoom = null;
 
@@ -3243,10 +3252,15 @@ function convertServerBoard(board) {
 
 /* ==================================================
    CONNECTER SERVEUR
+   VERSION CORRIGÉE
 ================================================== */
 
 function connectServer(callback) {
 
+    /*
+       Si le serveur est déjà connecté,
+       on exécute immédiatement l'action.
+    */
     if (
         socket &&
         socket.readyState ===
@@ -3260,13 +3274,33 @@ function connectServer(callback) {
         return;
     }
 
+    /*
+       Si la connexion est déjà en cours,
+       on garde le callback au lieu de le perdre.
+    */
     if (
         socket &&
         socket.readyState ===
         WebSocket.CONNECTING
     ) {
 
+        if (callback) {
+            pendingServerCallbacks.push(
+                callback
+            );
+        }
+
         return;
+    }
+
+    /*
+       Nouvelle connexion.
+    */
+    if (callback) {
+
+        pendingServerCallbacks.push(
+            callback
+        );
     }
 
     socket =
@@ -3293,15 +3327,53 @@ function connectServer(callback) {
                 reconnectTimer = null;
             }
 
-            if (callback) {
-                callback();
-            }
+            /*
+               On récupère toutes les actions
+               qui attendaient la connexion.
+            */
+            const callbacks =
+                pendingServerCallbacks.slice();
+
+            pendingServerCallbacks = [];
+
+            callbacks.forEach(
+                function(savedCallback) {
+
+                    try {
+
+                        savedCallback();
+
+                    } catch(error) {
+
+                        console.error(
+                            "Erreur callback serveur:",
+                            error
+                        );
+                    }
+                }
+            );
         };
 
     socket.onclose =
         function() {
 
             stopOnlineDisplayTimer();
+
+            /*
+               Si une action attendait encore
+               la connexion, on prévient l'utilisateur.
+            */
+            if (
+                pendingServerCallbacks.length > 0
+            ) {
+
+                pendingServerCallbacks = [];
+
+                showAccountMessage(
+                    "❌ Impossible de se connecter au serveur. Vérifiez votre connexion Internet puis réessayez.",
+                    false
+                );
+            }
 
             if (
                 onlineRoom &&
@@ -3338,6 +3410,30 @@ function connectServer(callback) {
                 document.getElementById(
                     "gameOnlineError"
                 );
+
+            /*
+               NOUVEAU :
+               L'erreur apparaît aussi
+               directement dans la page Compte.
+            */
+            const accountStatus =
+                document.getElementById(
+                    "accountStatus"
+                );
+
+            if (accountStatus) {
+
+                accountStatus.textContent =
+                    "❌ Erreur de connexion au serveur.";
+
+                accountStatus.classList.remove(
+                    "account-success"
+                );
+
+                accountStatus.classList.add(
+                    "account-error"
+                );
+            }
 
             if (onlineError) {
 
@@ -3900,6 +3996,29 @@ function connectServer(callback) {
                             "gameOnlineError"
                         );
 
+                    /*
+                       Si erreur pandan Register/Login,
+                       li parèt nan accountStatus.
+                    */
+                    const accountStatus =
+                        document.getElementById(
+                            "accountStatus"
+                        );
+
+                    if (accountStatus) {
+
+                        accountStatus.textContent =
+                            message;
+
+                        accountStatus.classList.remove(
+                            "account-success"
+                        );
+
+                        accountStatus.classList.add(
+                            "account-error"
+                        );
+                    }
+
                     if (onlineError) {
 
                         onlineError.textContent =
@@ -3920,6 +4039,11 @@ function connectServer(callback) {
                 console.error(
                     "Erreur message serveur:",
                     error
+                );
+
+                showAccountMessage(
+                    "❌ Réponse invalide du serveur.",
+                    false
                 );
             }
         };
@@ -4612,6 +4736,14 @@ document
             connectServer(
                 function() {
 
+                    if (
+                        !socket ||
+                        socket.readyState !==
+                        WebSocket.OPEN
+                    ) {
+                        return;
+                    }
+
                     socket.send(
                         JSON.stringify({
                             type:
@@ -4713,6 +4845,14 @@ document
 
             connectServer(
                 function() {
+
+                    if (
+                        !socket ||
+                        socket.readyState !==
+                        WebSocket.OPEN
+                    ) {
+                        return;
+                    }
 
                     socket.send(
                         JSON.stringify({
@@ -4868,6 +5008,14 @@ function reconnectToRoom() {
     connectServer(
         function() {
 
+            if (
+                !socket ||
+                socket.readyState !==
+                WebSocket.OPEN
+            ) {
+                return;
+            }
+
             socket.send(
                 JSON.stringify({
                     type:
@@ -4938,6 +5086,12 @@ function closeOnlineConnection() {
 
     reconnecting = false;
     reconnectAttempts = 0;
+
+    /*
+       Si une connexion était encore en cours,
+       on annule aussi les callbacks en attente.
+    */
+    pendingServerCallbacks = [];
 
     if (
         socket &&
