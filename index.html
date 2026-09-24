@@ -678,10 +678,7 @@ h1 {
         box-sizing: border-box;
     }
 
-    .auth-form { display: none; }
-.auth-form.active { display: block; }
-
-.account-box h2 {
+    .account-box h2 {
         margin: 8px 0 14px;
         color: #D4AF37;
     }
@@ -807,62 +804,25 @@ h1 {
     }
 
 
-/* ==================================================
-   ÉCRAN D'ACCUEIL AVANT CONNEXION
-================================================== */
-.auth-gate {
-    min-height: 78vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px 12px;
-}
-.auth-gate-card {
-    width: 100%;
-    max-width: 520px;
-    padding: 42px 28px;
-    border: 1px solid #374151;
-    border-radius: 24px;
-    background: linear-gradient(145deg, #1f2937, #111827);
-    box-shadow: 0 18px 50px rgba(0,0,0,.28);
-}
-.auth-gate-brand {
-    font-size: 34px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #D4AF37;
-    margin: 0 0 10px;
-}
-.auth-gate-subtitle {
-    color: #9CA3AF;
-    margin: 0 0 30px;
-    font-size: 15px;
-}
-.auth-gate-button {
-    width: 100%;
-    min-height: 54px;
-    margin: 9px 0;
-    border: 1px solid #4B5563;
-    border-radius: 12px;
-    background: #111827;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-}
-.auth-gate-button.primary {
-    background: #D4AF37;
-    color: #111827;
-    border-color: #D4AF37;
-}
-.auth-gate-button:hover {
-    filter: brightness(1.08);
-}
-@media (max-width: 520px) {
-    .auth-gate-card { padding: 34px 20px; }
-    .auth-gate-brand { font-size: 28px; }
-}
-
+    .player-stats-box { max-width: 600px; width: 100%; margin: 12px auto; padding: 12px; border: 1px solid #374151; border-radius: 10px; background: #1F2937; box-sizing: border-box; }
+    .player-stats-title { color: #D4AF37; font-weight: bold; margin-bottom: 10px; text-align:center; }
+    .player-stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+    .player-stat { text-align:center; padding:8px 4px; border-radius:8px; background:#111827; border:1px solid #374151; }
+    .player-stat strong { display:block; color:#D4AF37; font-size:19px; }
+    .player-stat span { font-size:12px; color:#D1D5DB; }
+    .chat-box { max-width:600px; width:100%; margin:12px auto; padding:10px; border:1px solid #374151; border-radius:10px; background:#1F2937; box-sizing:border-box; }
+    .chat-title { font-weight:bold; color:#D4AF37; margin-bottom:8px; }
+    .chat-messages { height:180px; overflow-y:auto; text-align:left; padding:8px; background:#111827; border-radius:8px; border:1px solid #374151; }
+    .chat-message { margin:5px 0; line-height:1.35; word-break:break-word; }
+    .chat-message .chat-sender { font-weight:bold; color:#D4AF37; }
+    .chat-message.spectator .chat-sender { color:#93C5FD; }
+    .chat-form { display:flex; gap:7px; margin-top:8px; }
+    .chat-form input { flex:1; min-width:0; padding:11px; border-radius:8px; border:1px solid #374151; background:#111827; color:white; font-size:16px; }
+    .chat-form button { padding:10px 14px; border-radius:8px; border:1px solid #D4AF37; background:#D4AF37; color:#111827; font-weight:bold; cursor:pointer; }
+    .room-list { max-width:600px; margin:15px auto; display:flex; flex-direction:column; gap:9px; }
+    .room-card { padding:12px; border:1px solid #374151; border-radius:10px; background:#1F2937; text-align:left; }
+    .room-card button { margin-top:8px; padding:9px 12px; border-radius:8px; border:1px solid #D4AF37; background:#111827; color:white; cursor:pointer; }
+    @media (max-width:520px){ .player-stats-grid{grid-template-columns:repeat(2,1fr);} .chat-form{flex-wrap:wrap;} .chat-form button{width:100%;} }
 </style>
 </head>
 
@@ -872,21 +832,7 @@ h1 {
 
 <!-- MENU PRINCIPAL -->
 
-<section id="authGateScreen" class="screen active">
-
-    <div class="auth-gate">
-        <div class="auth-gate-card">
-            <div class="auth-gate-brand">MR JERY MOPION</div>
-            <p class="auth-gate-subtitle">Le jeu de stratégie à 5 en ligne</p>
-            <button class="auth-gate-button primary" id="gateAccountBtn" type="button">👤 Compte</button>
-            <button class="auth-gate-button" id="gateCreateBtn" type="button">✦ Créer un compte</button>
-        </div>
-    </div>
-
-</section>
-
-<!-- MENU PRINCIPAL APRÈS CONNEXION -->
-<section id="homeScreen" class="screen">
+<section id="homeScreen" class="screen active">
 
     <h1>MR JERY MOPION</h1>
 
@@ -916,25 +862,22 @@ h1 {
 <!-- COMPTE -->
 <section id="accountScreen" class="screen">
 
-    <h1 id="accountScreenTitle">👤 Connexion</h1>
+    <h1>👤 Compte joueur</h1>
 
     <div class="account-box">
-        <div id="loginForm" class="auth-form">
-            <h2>Se connecter</h2>
-            <input id="loginInput" type="text" placeholder="Pseudo ou email">
-            <input id="loginPassword" type="password" placeholder="Mot de passe">
-            <button class="account-button" id="loginBtn" type="button">Se connecter</button>
-        </div>
+        <h2>Créer un compte</h2>
+        <input id="registerUsername" type="text" maxlength="50" placeholder="Pseudo">
+        <input id="registerEmail" type="email" maxlength="255" placeholder="Email">
+        <input id="registerPassword" type="password" placeholder="Mot de passe">
+        <input id="registerPasswordConfirmation" type="password" placeholder="Confirmer le mot de passe">
+        <button class="account-button" id="registerBtn" type="button">Créer mon compte</button>
 
-        <div id="registerForm" class="auth-form">
-            <h2>Créer un compte</h2>
-            <input id="registerUsername" type="text" maxlength="50" placeholder="Pseudo">
-            <input id="registerEmail" type="email" maxlength="255" placeholder="Email">
-            <input id="registerPassword" type="password" placeholder="Mot de passe">
-            <input id="registerPasswordConfirmation" type="password" placeholder="Confirmer le mot de passe">
-            <button class="account-button" id="registerBtn" type="button">Créer mon compte</button>
-        </div>
+        <div class="account-separator"></div>
 
+        <h2>Connexion</h2>
+        <input id="loginInput" type="text" placeholder="Pseudo ou email">
+        <input id="loginPassword" type="password" placeholder="Mot de passe">
+        <button class="account-button" id="loginBtn" type="button">Se connecter</button>
         <div id="accountStatus" class="account-status"></div>
         <div id="accountUser" class="account-user"></div>
     </div>
@@ -965,6 +908,15 @@ h1 {
         <div class="profile-row"><span class="profile-label">Pseudo</span><span id="profileUsername" class="profile-value">---</span></div>
         <div class="profile-row"><span class="profile-label">Email</span><span id="profileEmail" class="profile-value">---</span></div>
         <div class="profile-row"><span class="profile-label">ID joueur</span><span id="profilePlayerId" class="profile-value">---</span></div>
+    </div>
+    <div class="player-stats-box">
+        <div class="player-stats-title">🏆 Mes statistiques</div>
+        <div class="player-stats-grid">
+            <div class="player-stat"><strong id="profileLevel">1</strong><span>Niveau</span></div>
+            <div class="player-stat"><strong id="profilePoints">0</strong><span>Points</span></div>
+            <div class="player-stat"><strong id="profileWins">0</strong><span>Victoires</span></div>
+            <div class="player-stat"><strong id="profileLosses">0</strong><span>Défaites</span></div>
+        </div>
     </div>
     <button class="back-button" id="profileBack">← Retour</button>
 </section>
@@ -1096,6 +1048,10 @@ h1 {
             ⏳ Salle d'attente
         </button>
 
+        <button class="online-choice" id="playerRoomsBtn">
+            🏠 Salles de joueurs
+        </button>
+
         <button class="online-choice" id="spectatorModeBtn">
             👁️ Regarder un match
         </button>
@@ -1169,6 +1125,16 @@ h1 {
     <button class="back-button" id="waitingBack">← Retour</button>
 </section>
 
+
+<!-- SALLES DE JOUEURS -->
+<section id="playerRoomsScreen" class="screen">
+    <h1>🏠 Salles de joueurs</h1>
+    <div class="status">Salles actuellement ouvertes :</div>
+    <div id="playerRoomList" class="room-list"></div>
+    <div id="playerRoomsError" class="error"></div>
+    <button class="account-button" id="refreshPlayerRoomsBtn" type="button">🔄 Actualiser</button>
+    <button class="back-button" id="playerRoomsBack">← Retour</button>
+</section>
 
 <!-- SPECTATEUR -->
 
@@ -1271,6 +1237,15 @@ h1 {
 
         </div>
 
+        <div class="chat-box">
+            <div class="chat-title">💬 Chat — joueurs & spectateurs</div>
+            <div id="onlineChatMessages" class="chat-messages" aria-live="polite"></div>
+            <form id="onlineChatForm" class="chat-form">
+                <input id="onlineChatInput" type="text" maxlength="300" placeholder="Écrire un message..." autocomplete="off">
+                <button type="submit">Envoyer</button>
+            </form>
+        </div>
+
     </div>
 
     <div id="onlineBoard" class="board-area"></div>
@@ -1350,6 +1325,7 @@ let accountToken = null;
 let accountConnected = false;
 let accountRequestInProgress = false;
 let onlineOpenedFromAccountMenu = false;
+let currentStats = {points:0,wins:0,losses:0,draws:0,level:1};
 
 function showAccountMessage(message, success) {
     const box = document.getElementById("accountStatus");
@@ -1365,6 +1341,19 @@ function updateAccountDisplay() {
             ? "👤 Connecté : " + currentUsername
             : "";
     }
+}
+
+function updateProfileStats(stats) {
+    if (!stats) return;
+    currentStats = {
+        points: Number(stats.points || 0),
+        wins: Number(stats.wins || 0),
+        losses: Number(stats.losses || 0),
+        draws: Number(stats.draws || 0),
+        level: Number(stats.level || (1 + Math.floor(Number(stats.points || 0) / 30)))
+    };
+    const map = {profileLevel:currentStats.level,profilePoints:currentStats.points,profileWins:currentStats.wins,profileLosses:currentStats.losses};
+    Object.keys(map).forEach(function(id){ const el=document.getElementById(id); if(el) el.textContent=map[id]; });
 }
 
 function showAccountMenu() {
@@ -1386,11 +1375,6 @@ const screens =
     document.querySelectorAll(".screen");
 
 function showScreen(id) {
-
-    /* Avant connexion, seul l'écran Compte est accessible. */
-    if (!accountConnected && id !== "authGateScreen" && id !== "accountScreen") {
-        id = "authGateScreen";
-    }
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
@@ -2843,33 +2827,6 @@ document
     );
 
 /* ==================================================
-   ACCUEIL AVANT CONNEXION
-================================================== */
-
-function openAccountForm(mode) {
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-    const title = document.getElementById("accountScreenTitle");
-    if (loginForm) loginForm.classList.toggle("active", mode === "login");
-    if (registerForm) registerForm.classList.toggle("active", mode === "register");
-    if (title) title.textContent = mode === "login" ? "👤 Connexion" : "✦ Créer un compte";
-    showAccountMessage("", true);
-    showScreen("accountScreen");
-    const field = document.getElementById(mode === "login" ? "loginInput" : "registerUsername");
-    if (field) field.focus();
-}
-
-document.getElementById("gateAccountBtn").addEventListener("click", function() {
-    updateAccountDisplay();
-    openAccountForm("login");
-});
-
-document.getElementById("gateCreateBtn").addEventListener("click", function() {
-    updateAccountDisplay();
-    openAccountForm("register");
-});
-
-/* ==================================================
    COMPTE - ACTIONS
 ================================================== */
 
@@ -2879,11 +2836,12 @@ document.getElementById("accountMode").addEventListener("click", function() {
         return;
     }
     updateAccountDisplay();
-    openAccountForm("login");
+    showAccountMessage("", true);
+    showScreen("accountScreen");
 });
 
 document.getElementById("accountBack").addEventListener("click", function() {
-    showScreen(accountConnected ? "homeScreen" : "authGateScreen");
+    showScreen("homeScreen");
 });
 
 document.getElementById("registerBtn").addEventListener("click", function() {
@@ -2951,6 +2909,7 @@ document.getElementById("accountPlayBtn").addEventListener("click", function() {
 });
 
 document.getElementById("profileBtn").addEventListener("click", function() {
+    updateProfileStats(currentStats);
     document.getElementById("profileUsername").textContent = currentUsername || "---";
     document.getElementById("profileEmail").textContent = currentEmail || "---";
     document.getElementById("profilePlayerId").textContent = currentPlayerId || "---";
@@ -2982,6 +2941,8 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
     currentEmail = null;
     accountToken = null;
     accountRequestInProgress = false;
+    currentStats = {points:0,wins:0,losses:0,draws:0,level:1};
+    updateProfileStats(currentStats);
     document.getElementById("registerUsername").value = "";
     document.getElementById("registerEmail").value = "";
     document.getElementById("registerPassword").value = "";
@@ -2989,7 +2950,7 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
     document.getElementById("loginInput").value = "";
     document.getElementById("loginPassword").value = "";
     updateAccountDisplay();
-    showScreen("authGateScreen");
+    showScreen("homeScreen");
 });
 
 document.getElementById("accountMenuBack").addEventListener("click", function() {
@@ -3004,6 +2965,9 @@ document.getElementById("settingsBack").addEventListener("click", function() {
     showAccountMenu();
 });
 
+
+const onlineChatForm=document.getElementById("onlineChatForm");
+if(onlineChatForm){ onlineChatForm.addEventListener("submit",function(e){ e.preventDefault(); sendOnlineChatMessage(); }); }
 
 /* ==================================================
    ONLINE VARIABLES
@@ -3266,6 +3230,13 @@ document.getElementById("waitingBack").addEventListener("click", function() {
     showScreen("onlineScreen");
 });
 
+const playerRoomsBtn=document.getElementById("playerRoomsBtn");
+if(playerRoomsBtn) playerRoomsBtn.addEventListener("click",function(){ onlineConnectionMode="rooms-list"; showScreen("playerRoomsScreen"); requestPlayerRooms(); });
+const refreshPlayerRoomsBtn=document.getElementById("refreshPlayerRoomsBtn");
+if(refreshPlayerRoomsBtn) refreshPlayerRoomsBtn.addEventListener("click",requestPlayerRooms);
+const playerRoomsBack=document.getElementById("playerRoomsBack");
+if(playerRoomsBack) playerRoomsBack.addEventListener("click",function(){showScreen("onlineScreen");});
+
 document.getElementById("refreshSpectatorBtn").addEventListener("click", function() {
     if (onlineConnectionMode !== "spectator") {
         onlineConnectionMode = "spectator-list";
@@ -3280,6 +3251,28 @@ document.getElementById("refreshSpectatorBtn").addEventListener("click", functio
         });
     }
 });
+
+function requestPlayerRooms(){
+    const list=document.getElementById("playerRoomList"); if(list) list.innerHTML="<div class='live-empty'>Chargement...</div>";
+    if(socket && socket.readyState===WebSocket.OPEN){ socket.send(JSON.stringify({type:"rooms_list"})); }
+    else { connectServer(function(){ if(socket && socket.readyState===WebSocket.OPEN) socket.send(JSON.stringify({type:"rooms_list"})); }); }
+}
+
+function renderPlayerRooms(roomsList){
+    const list=document.getElementById("playerRoomList"); if(!list) return; list.innerHTML="";
+    if(!roomsList || !roomsList.length){ list.innerHTML="<div class='live-empty'>Aucune salle ouverte pour le moment.</div>"; return; }
+    roomsList.forEach(function(room){
+        const card=document.createElement("div"); card.className="room-card";
+        const title=document.createElement("div"); title.innerHTML="<strong>🏠 Salle "+room.room+"</strong>"; card.appendChild(title);
+        const info=document.createElement("div"); info.style.marginTop="6px"; info.textContent=(room.player1||"Joueur 1")+(room.player2?" ⚔️ "+room.player2:" ⏳ en attente"); card.appendChild(info);
+        const count=document.createElement("div"); count.style.marginTop="5px"; count.textContent="👁️ "+Number(room.spectator_count||0)+" spectateur(s)"; card.appendChild(count);
+        const btn=document.createElement("button"); btn.type="button"; btn.textContent=room.players>=2?"👁️ Regarder":"🎮 Rejoindre";
+        btn.addEventListener("click",function(){
+            if(room.players>=2){ onlineConnectionMode="spectator-list"; if(socket&&socket.readyState===WebSocket.OPEN) socket.send(JSON.stringify({type:"watch",room:room.room})); else connectServer(function(){socket.send(JSON.stringify({type:"watch",room:room.room}));}); }
+            else { document.getElementById("roomInput").value=room.room; showScreen("onlineScreen"); }
+        }); card.appendChild(btn); list.appendChild(card);
+    });
+}
 
 /* ==================================================
    TIMER ONLINE
@@ -3579,6 +3572,7 @@ function connectServer(callback) {
                         currentEmail = data.email || null;
                         accountToken = data.account_token || null;
                         accountConnected = true;
+                        updateProfileStats(data);
 
                         updateAccountDisplay();
                         showAccountMessage(
@@ -3587,7 +3581,7 @@ function connectServer(callback) {
                         );
 
                         setTimeout(function() {
-                            showScreen("homeScreen");
+                            showAccountMenu();
                         }, 500);
                     } else {
                         showAccountMessage(
@@ -3613,6 +3607,7 @@ function connectServer(callback) {
                         currentEmail = data.email || null;
                         accountToken = data.account_token || null;
                         accountConnected = true;
+                        updateProfileStats(data);
 
                         updateAccountDisplay();
                         showAccountMessage(
@@ -3621,7 +3616,7 @@ function connectServer(callback) {
                         );
 
                         setTimeout(function() {
-                            showScreen("homeScreen");
+                            showAccountMenu();
                         }, 500);
                     } else {
                         showAccountMessage(
@@ -4038,6 +4033,8 @@ function connectServer(callback) {
                     return;
                 }
 
+                if (data.type === "rooms_list") { renderPlayerRooms(data.rooms || []); return; }
+
                 /* ==================================
                    ÉTAT DU JEU
                 ================================== */
@@ -4054,6 +4051,12 @@ function connectServer(callback) {
 
                     onlinePlayersState =
                         data.players || {};
+
+                    if (data.stats && onlinePlayer) {
+                        const myStats = data.stats[String(onlinePlayer)] || data.stats[onlinePlayer];
+                        if (myStats) updateProfileStats(myStats);
+                    }
+                    renderOnlineChat(data.chat || []);
 
                     const spectatorCount = document.getElementById("onlineSpectatorCount");
                     if (spectatorCount) {
@@ -4217,26 +4220,65 @@ function connectServer(callback) {
    SCORE
 ================================================== */
 
+function renderOnlineChat(messages) {
+    const box=document.getElementById("onlineChatMessages");
+    if(!box) return;
+    box.innerHTML="";
+    (Array.isArray(messages)?messages:[]).forEach(function(m){
+        const row=document.createElement("div"); row.className="chat-message"+(m.role==="spectator"?" spectator":"");
+        const sender=document.createElement("span"); sender.className="chat-sender"; sender.textContent=(m.sender||"Joueur")+": ";
+        const text=document.createElement("span"); text.textContent=m.text||"";
+        row.appendChild(sender); row.appendChild(text); box.appendChild(row);
+    });
+    box.scrollTop=box.scrollHeight;
+}
+
+function sendOnlineChatMessage(){
+    const input=document.getElementById("onlineChatInput");
+    if(!input || !socket || socket.readyState!==WebSocket.OPEN || !onlineRoom) return;
+    const message=input.value.trim(); if(!message) return;
+    socket.send(JSON.stringify({type:"chat",room:onlineRoom,message:message})); input.value=""; input.focus();
+}
+
 function updateOnlineScoreDisplay() {
 
-    const p1 = onlinePlayersState["1"] || {};
-    const p2 = onlinePlayersState["2"] || {};
+    const p1 = onlinePlayersState["1"] || onlinePlayersState[1] || {};
+    const p2 = onlinePlayersState["2"] || onlinePlayersState[2] || {};
+
+    /*
+       NOMS DES JOUEURS :
+       Le serveur envoie le pseudo dans players.
+       On accepte name ou username et on garde le pseudo
+       du compte local comme secours pour le joueur connecté.
+    */
+    let name1 = p1.name || p1.username || "";
+    let name2 = p2.name || p2.username || "";
+
+    if ((!name1 || name1 === "Joueur 1") && Number(onlinePlayer) === 1 && currentUsername) {
+        name1 = currentUsername;
+    }
+    if ((!name2 || name2 === "Joueur 2") && Number(onlinePlayer) === 2 && currentUsername) {
+        name2 = currentUsername;
+    }
+
+    name1 = name1 || "Joueur 1";
+    name2 = name2 || "Joueur 2";
 
     const blackName = document.getElementById("onlineBlackName");
     const redName = document.getElementById("onlineRedName");
 
     if (blackName) {
-        blackName.textContent = p1.name || p1.username || "Joueur 1";
+        blackName.textContent = name1;
     }
 
     if (redName) {
-        redName.textContent = p2.name || p2.username || "Joueur 2";
+        redName.textContent = name2;
     }
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
     const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
-    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + (p1.name || p1.username || "Joueur 1");
-    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + (p2.name || p2.username || "Joueur 2");
+    if (blackTimerLabel) blackTimerLabel.textContent = "⚫ " + name1;
+    if (redTimerLabel) redTimerLabel.textContent = "🔴 " + name2;
 
     document
         .getElementById(
