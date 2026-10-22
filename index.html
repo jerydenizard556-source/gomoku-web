@@ -805,6 +805,75 @@ h1 {
 
 
 .online-players-box{max-width:600px;margin:16px auto;padding:16px;border:1px solid #374151;border-radius:12px;background:#1F2937}.online-players-title{color:#D4AF37;font-weight:bold;text-align:center;margin-bottom:10px}.online-players-list{display:flex;flex-direction:column;gap:8px}.online-player-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:9px;background:#111827;border:1px solid #374151}.online-player-name{min-width:0;color:#F9FAFB;font-weight:bold;overflow-wrap:anywhere}.online-player-state{color:#86EFAC;font-size:12px;margin-left:6px}.online-player-invite{padding:8px 12px;border-radius:8px;border:1px solid #D4AF37;background:#273449;color:#F9FAFB;font-weight:bold;cursor:pointer}.online-player-invite:disabled{opacity:.5;cursor:not-allowed}.online-players-status{color:#9CA3AF;text-align:center;font-size:13px;margin-top:9px}.game-invite-box{display:none;max-width:600px;margin:12px auto;padding:14px;border:1px solid #D4AF37;border-radius:12px;background:#1F2937;text-align:center}.game-invite-message{color:#D4AF37;font-weight:bold;margin-bottom:10px}.game-invite-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.game-invite-actions button{padding:10px 18px;border-radius:8px;border:1px solid #4B5563;color:white;font-weight:bold;cursor:pointer}.invite-accept{background:#166534}.invite-refuse{background:#991B1B}
+
+/* ==================================================
+   WALLET / DEFIS — PREPARATION
+   Mode test: aucune vraie transaction n'est exécutée
+================================================== */
+.wallet-box,.bet-box,.admin-box{max-width:650px;margin:16px auto;padding:18px;border:1px solid #374151;border-radius:14px;background:#1F2937;text-align:left}.wallet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.wallet-card{padding:16px;border-radius:12px;background:#111827;border:1px solid #374151}.wallet-card small{display:block;color:#9CA3AF}.wallet-card strong{display:block;font-size:25px;margin-top:6px;color:#D4AF37}.wallet-actions,.bet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.wallet-actions button,.bet-actions button{flex:1;min-width:150px;padding:11px;border-radius:9px;border:1px solid #4B5563;color:white;background:#273449;font-weight:bold;cursor:pointer}.primary-pay{background:#166534!important;border-color:#22C55E!important}.danger-pay{background:#7F1D1D!important}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-row input,.form-row select,.bet-box input,.bet-box select{width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white}.notice-test{padding:12px;border-radius:10px;background:#422006;border:1px solid #D97706;color:#FED7AA;margin-bottom:12px;font-size:13px}.calc-box{margin-top:14px;padding:14px;border-radius:10px;background:#111827;border:1px solid #374151;line-height:1.8}.history-item{padding:10px;border-bottom:1px solid #374151;color:#D1D5DB}.history-item:last-child{border-bottom:0}.admin-stat{font-size:28px;color:#D4AF37;font-weight:bold}.@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+
+
+/* ==================================================
+   MR_JERY LANDING / AUTH REDESIGN
+================================================== */
+body{background:#030916;color:#fff;font-family:Inter,Segoe UI,Arial,sans-serif;overflow-x:hidden}.app{max-width:none;padding:0}.screen{min-height:100vh}.landing-shell{min-height:100vh;background:radial-gradient(circle at 50% 35%,rgba(0,91,180,.25),transparent 38%),linear-gradient(135deg,#020711,#071426 55%,#020711);position:relative;overflow:hidden}.landing-shell:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0 38%,rgba(240,174,31,.12) 39%,transparent 41% 62%,rgba(0,128,255,.12) 63%,transparent 66%);pointer-events:none}.landing-header{height:76px;border-bottom:1px solid rgba(91,157,224,.3);display:flex;align-items:center;padding:0 34px;gap:28px;position:relative;z-index:5;background:rgba(2,7,17,.72);backdrop-filter:blur(14px)}.brand-mini{font-weight:800;font-size:22px;display:flex;align-items:center;gap:9px;white-space:nowrap}.brand-mini b{color:#f5b92e}.brand-crown{color:#f5b92e;font-size:30px;text-shadow:0 0 18px rgba(245,185,46,.35)}.landing-nav{display:flex;gap:8px;margin:auto}.nav-link{background:none;border:0;color:#c9d4e8;padding:13px 17px;border-bottom:2px solid transparent;cursor:pointer;font-weight:700}.nav-link.active,.nav-link:hover{color:#f5c13a;border-bottom-color:#f5c13a}.language-wrap{position:relative}.language-button{height:45px;padding:0 16px;border:1px solid #2494ed;border-radius:10px;background:#07172b;color:#fff;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:9px}.language-menu{display:none;position:absolute;right:0;top:52px;width:190px;background:#07172b;border:1px solid #238ddd;border-radius:10px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45);z-index:20}.language-menu.show{display:block}.language-menu button{display:block;width:100%;padding:12px 14px;border:0;background:transparent;color:#fff;text-align:left;cursor:pointer}.language-menu button:hover{background:#0c65b6}.landing-hero{min-height:calc(100vh - 76px);display:grid;grid-template-columns:minmax(330px,1fr) minmax(420px,1fr);align-items:center;gap:20px;padding:55px 8%;position:relative;z-index:1}.world-map{position:absolute;inset:0;opacity:.2;background-image:radial-gradient(circle,#1684e8 1.4px,transparent 1.4px);background-size:12px 12px;mask-image:radial-gradient(ellipse at 50% 42%,#000 0 42%,transparent 70%)}.hero-logo{text-align:center;position:relative;z-index:1;filter:drop-shadow(0 20px 35px rgba(0,0,0,.55))}.logo-crown{font-size:92px;line-height:.8;color:#f7bf37;text-shadow:0 0 25px rgba(247,191,55,.45)}.logo-ring{width:280px;height:190px;margin:-5px auto -30px;border:9px solid #e9a927;border-radius:50% 50% 42% 42%;background:radial-gradient(circle,#172337,#03070e 70%);box-shadow:inset 0 0 0 3px #7d5a16,0 0 35px rgba(241,174,30,.25);display:flex;align-items:center;justify-content:center}.logo-board-mini{width:130px;height:105px;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:linear-gradient(90deg,transparent 48%,#d9a52e 49% 51%,transparent 52%),linear-gradient(0deg,transparent 48%,#d9a52e 49% 51%,transparent 52%);border:2px solid #d9a52e}.logo-board-mini i{width:22px;height:22px;border-radius:50%;background:#f3f5f8;box-shadow:0 3px 8px #000}.logo-board-mini i:nth-child(even){background:#101820}.logo-title{margin-top:0;font-size:54px;font-weight:900;line-height:.88;letter-spacing:-2px;text-transform:uppercase}.logo-title span{display:block;color:#f1f3f7;text-shadow:4px 4px 0 #111,0 0 20px rgba(255,255,255,.15)}.logo-title strong{display:block;color:#f5b92e;text-shadow:3px 4px 0 #111}.hero-copy{position:relative;z-index:2;max-width:650px}.hero-copy h1{font-size:44px;line-height:1.08;margin:0 0 18px}.hero-copy h1 em{color:#f5bb31;font-style:normal}.hero-copy p{font-size:20px;line-height:1.6;color:#d5deec;max-width:610px}.hero-features{display:flex;flex-wrap:wrap;gap:14px 20px;margin:26px 0;color:#dbe5f2}.hero-features span{display:flex;gap:7px;align-items:center}.hero-features b{font-size:14px}.hero-actions{display:flex;gap:15px;flex-wrap:wrap;margin-top:26px}.hero-btn{border-radius:34px;padding:16px 28px;font-size:16px;font-weight:900;cursor:pointer;min-width:220px;border:1px solid #6d88a8;display:flex;justify-content:center;align-items:center;gap:10px}.hero-btn.gold{background:linear-gradient(180deg,#ffd34e,#e8a90e);color:#10151d;border:0;box-shadow:0 10px 30px rgba(240,176,28,.2)}.hero-btn.outline{background:rgba(2,10,22,.7);color:#fff;border-color:#e4edf9}.hero-btn:hover{transform:translateY(-2px)}.about-pill{margin:18px auto 0;display:flex;gap:10px;align-items:center;justify-content:center;padding:11px 25px;border-radius:25px;background:rgba(2,8,18,.5);color:#fff;border:1px solid #91a8c9;cursor:pointer}.landing-features{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(91,157,224,.22);background:#030914;padding:32px 5%;position:relative;z-index:2}.landing-features>div{text-align:center;padding:10px 22px;border-right:1px solid rgba(91,157,224,.18)}.landing-features>div:last-child{border:0}.landing-features span{font-size:32px;color:#f5b92e}.landing-features h3{margin:10px 0 7px;color:#fff}.landing-features p{margin:0;color:#aebbd0;font-size:13px;line-height:1.5}.landing-footer{height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#020711;border-top:1px solid rgba(245,185,46,.18);gap:5px}.landing-footer span{color:#f5b92e;font-weight:800;font-size:18px}.landing-footer small{color:#8e9db6}.inner-page-head,.auth-top{height:76px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(91,157,224,.25);background:rgba(2,7,17,.85)}.back-icon{border:1px solid #49627e;background:#08182c;color:#fff;border-radius:10px;width:42px;height:42px;font-size:20px;cursor:pointer}.about-page{max-width:900px;margin:0 auto;padding:70px 20px;text-align:center}.about-logo{margin-bottom:25px}.about-logo .logo-crown{font-size:58px}.about-logo .logo-title{font-size:45px}.about-page h1{font-size:38px}.about-page h1 em{color:#f5b92e;font-style:normal}.about-page>p{color:#c3cfdf;font-size:18px;line-height:1.7}.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:40px 0}.about-grid>div{background:rgba(8,24,44,.72);border:1px solid #1c6aa7;border-radius:16px;padding:25px;text-align:left}.about-grid b{color:#f5b92e}.about-grid p{color:#aebbd0;line-height:1.6}.hero-btn.small{min-width:210px;margin:auto}.auth-page{min-height:100vh;background:radial-gradient(circle at 50% 20%,rgba(8,90,174,.25),transparent 35%),#030916}.auth-card{width:min(470px,92vw);margin:50px auto;padding:34px;border:1px solid #1e69a5;border-radius:20px;background:rgba(5,17,32,.94);box-shadow:0 25px 80px rgba(0,0,0,.45)}.auth-mark{width:58px;height:58px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#f5b92e;color:#10151d;font-size:30px}.auth-card h1{text-align:center;margin:18px 0 5px}.auth-card>p{text-align:center;color:#8fa0b8;margin-top:0}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#071225;border-radius:10px;padding:4px;margin:25px 0}.auth-tab{padding:11px;border:0;border-radius:8px;background:transparent;color:#9fb0c8;cursor:pointer;font-weight:800}.auth-tab.active{background:#123a61;color:#fff}.auth-card label{display:block;color:#cbd7e6;font-size:13px;margin:14px 0 7px}.auth-card input,.auth-card select{width:100%;padding:13px 14px;border-radius:9px;border:1px solid #294a6b;background:#07182d;color:#fff;outline:none}.auth-card input:focus,.auth-card select:focus{border-color:#f5b92e}.auth-options{display:flex;justify-content:space-between;align-items:center;margin:12px 0}.check{display:flex!important;align-items:center;gap:7px;font-size:12px!important;margin:0!important}.check input{width:auto}.link-btn{border:0;background:none;color:#f5bd37;cursor:pointer;padding:0}.auth-main-btn{width:100%;padding:14px;border:0;border-radius:25px;background:linear-gradient(180deg,#ffd24c,#e6a80c);font-weight:900;font-size:16px;cursor:pointer;margin-top:15px}.auth-or{display:flex;align-items:center;gap:12px;color:#6d7d92;margin:20px 0}.auth-or:before,.auth-or:after{content:"";height:1px;background:#24394f;flex:1}.google-btn{width:100%;padding:12px;border:1px solid #34506d;border-radius:24px;background:#0a1c31;color:#fff;font-weight:800;cursor:pointer}.switch-line{text-align:center!important;margin-top:20px!important;font-size:13px}.terms{margin:16px 0!important;line-height:1.4}.account-status{text-align:center}.account-user{text-align:center}.compact .language-button{height:40px}@media(max-width:900px){.landing-hero{grid-template-columns:1fr;padding:35px 6%;text-align:center}.hero-logo{order:0}.hero-copy{margin:auto}.hero-features{justify-content:center}.landing-features{grid-template-columns:repeat(2,1fr)}.landing-features>div{border-bottom:1px solid rgba(91,157,224,.18)}.landing-nav{display:none}.hero-copy h1{font-size:34px}.logo-title{font-size:42px}.about-grid{grid-template-columns:1fr}}@media(max-width:560px){.landing-header{padding:0 15px}.brand-mini{font-size:16px}.brand-crown{font-size:24px}.language-button{padding:0 10px}.hero-actions{justify-content:center}.hero-btn{width:100%}.landing-features{grid-template-columns:1fr}.landing-features>div{border-right:0}.auth-card{margin:25px auto;padding:23px}.auth-top{padding:0 15px}}
+
+
+/* ===== DASHBOARD APRÈ CONNEXION ===== */
+.dashboard-shell{min-height:100vh;background:radial-gradient(circle at 70% 15%,rgba(0,100,210,.20),transparent 30%),linear-gradient(135deg,#020711,#071426 58%,#020711);color:#fff;font-family:Inter,Segoe UI,Arial,sans-serif}
+.dashboard-header{height:76px;border-bottom:1px solid rgba(212,175,55,.25);display:flex;align-items:center;gap:26px;padding:0 28px;background:rgba(2,7,17,.88);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)}
+.dashboard-brand{font-size:20px;font-weight:800;white-space:nowrap}.dashboard-brand b{color:#f5bd32}.dashboard-crown{color:#f5bd32;font-size:30px;margin-right:8px}
+.dashboard-nav{display:flex;align-items:center;gap:5px;flex:1;justify-content:center}.dash-nav{border:0;background:transparent;color:#dbe5f5;padding:19px 14px;cursor:pointer;font-weight:700;font-size:13px;border-bottom:2px solid transparent}.dash-nav:hover,.dash-nav.active{color:#f5bd32;border-bottom-color:#f5bd32}.dash-nav span{margin-left:4px}
+.dashboard-user{display:flex;align-items:center;gap:9px;min-width:150px}.dash-avatar,.dash-big-avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#233a60,#0a1426);border:1px solid #d4af37;color:#f5bd32}.dash-avatar{width:38px;height:38px}.dashboard-user strong,.dashboard-user small{display:block}.dashboard-user small{font-size:10px;color:#7fd2ff;margin-top:2px}.dash-user-more{background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
+.dashboard-main{max-width:1180px;margin:0 auto;padding:30px 24px 28px}.welcome-card{min-height:190px;border:1px solid rgba(31,145,255,.35);border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:space-between;padding:30px 42px;background:radial-gradient(circle at 85% 50%,rgba(0,112,255,.30),transparent 35%),linear-gradient(110deg,#07111f,#0a1d35);box-shadow:0 15px 45px rgba(0,0,0,.25)}.welcome-kicker{font-size:12px;letter-spacing:3px;color:#83bfff;font-weight:800}.welcome-copy h1{font-size:35px;margin:8px 0 2px}.welcome-copy h1 span{color:#f5bd32}.welcome-copy p{margin:0;color:#c8d4e8;font-size:18px}.welcome-copy>strong{font-size:14px}.welcome-line{width:180px;height:2px;background:linear-gradient(90deg,#f5bd32,transparent);margin:18px 0}.welcome-world{font-size:110px;opacity:.9;filter:drop-shadow(0 0 20px rgba(0,130,255,.35))}
+.dashboard-balance-row{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:14px;margin:18px 0}.dash-balance-card,.dash-profile-card{background:#081322;border:1px solid #12385f;border-radius:14px;padding:16px 18px;position:relative}.dash-balance-card small,.dash-profile-card small{display:block;color:#8da1bc;font-size:12px}.dash-balance-card strong{display:block;font-size:25px;color:#f5bd32;margin-top:5px}.dash-balance-card button{position:absolute;right:15px;top:25px;width:28px;height:28px;border-radius:50%;border:1px solid #1b9cff;background:#062442;color:#7dc9ff;cursor:pointer}.dash-profile-card{display:flex;align-items:center;gap:14px}.dash-profile-card strong{display:block;font-size:16px}.dash-big-avatar{width:55px;height:55px;font-size:24px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.dashboard-card{min-height:155px;text-align:left;border:1px solid #0f4a7d;border-radius:15px;background:linear-gradient(145deg,#081727,#06101d);color:#fff;padding:20px;cursor:pointer;transition:.18s;display:flex;flex-direction:column;align-items:flex-start}.dashboard-card:hover{transform:translateY(-3px);border-color:#f5bd32;box-shadow:0 10px 28px rgba(0,0,0,.25)}.dashboard-card.gold-card{border-color:#9d7820;background:linear-gradient(145deg,#111a22,#1a160b)}.dash-card-icon{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:#061d33;border:1px solid #f5bd32;font-size:22px;margin-bottom:13px}.dashboard-card strong{font-size:18px;margin-bottom:7px}.dashboard-card small{color:#91a5c1;line-height:1.35}.dashboard-footer-banner{margin-top:18px;padding:14px 18px;border-radius:12px;border:1px solid rgba(212,175,55,.35);background:linear-gradient(90deg,#0a1422,#111b28,#0a1422);display:flex;align-items:center;gap:12px}.dashboard-footer-banner span{font-size:25px;color:#f5bd32}.dashboard-footer-banner strong{flex:1;color:#f5bd32}.dashboard-footer-banner button{border:1px solid #7f1d1d;background:#4a1010;color:#fff;border-radius:8px;padding:8px 13px;font-weight:700;cursor:pointer}
+@media(max-width:900px){.dashboard-header{padding:0 15px;gap:10px}.dashboard-nav{gap:0}.dash-nav{padding:18px 7px;font-size:11px}.dashboard-user{min-width:auto}.dashboard-user>div:nth-child(2){display:none}.dashboard-grid{grid-template-columns:repeat(2,1fr)}.dashboard-balance-row{grid-template-columns:1fr}.welcome-card{padding:25px}.welcome-world{font-size:75px}}
+@media(max-width:600px){.dashboard-brand{font-size:15px}.dashboard-crown{font-size:23px}.dash-nav span{display:none}.dashboard-main{padding:18px 12px}.welcome-card{min-height:175px;padding:22px}.welcome-copy h1{font-size:27px}.welcome-world{font-size:55px}.dashboard-grid{gap:9px}.dashboard-card{min-height:145px;padding:14px}.dashboard-card strong{font-size:15px}.dashboard-footer-banner{align-items:flex-start;flex-wrap:wrap}.dashboard-footer-banner strong{min-width:70%}}
+
+
+/* ===== NOUVELLE IDENTITE VISUELLE : MR_JERY MORPION ===== */
+:root{--neo-bg:#080b16;--neo-panel:#11182a;--neo-panel2:#171f35;--neo-border:#293650;--neo-text:#f5f7ff;--neo-muted:#a7b3cc;--neo-cyan:#43e0d0;--neo-purple:#8b70ff;--neo-blue:#438cff}
+body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transparent 45%),#080b16!important;color:var(--neo-text)!important;font-family:Inter,"Segoe UI",Arial,sans-serif!important}
+#onlineScreen,#spectatorScreen,#waitingRoomScreen{max-width:1120px;margin:0 auto;padding:30px 22px 40px;min-height:calc(100vh - 30px);position:relative}
+#onlineScreen h1,#spectatorScreen h1,#waitingRoomScreen h1{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1.2px;margin:16px 0 10px;background:linear-gradient(100deg,#fff 15%,#b4b9ff 55%,#43e0d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+#onlineScreen h1:after,#spectatorScreen h1:after,#waitingRoomScreen h1:after{content:"";display:block;width:74px;height:4px;border-radius:8px;background:linear-gradient(90deg,var(--neo-purple),var(--neo-cyan));margin:14px auto 0}
+#onlineScreen:before,#spectatorScreen:before,#waitingRoomScreen:before{content:"MR_JERY  /  ARENA";display:block;text-align:left;color:#7e8da9;font-size:11px;font-weight:900;letter-spacing:3px;padding:6px 0 18px;border-bottom:1px solid rgba(130,153,200,.15)}
+#onlineScreen .online-box{max-width:900px;margin:30px auto 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#onlineScreen .online-choice{position:relative;min-height:145px;padding:26px 22px 24px;border:1px solid var(--neo-border);border-radius:20px;background:linear-gradient(145deg,rgba(25,35,59,.98),rgba(14,20,37,.98));color:#f7f8ff;font-size:19px;font-weight:800;text-align:left;box-shadow:0 12px 28px rgba(0,0,0,.18);transition:transform .18s,border-color .18s,background .18s;overflow:hidden}
+#onlineScreen .online-choice:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--neo-purple),var(--neo-cyan));opacity:.85}
+#onlineScreen .online-choice:after{content:"↗";position:absolute;right:20px;top:18px;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:rgba(129,112,255,.13);border:1px solid rgba(139,112,255,.3);color:#a99aff;font-size:18px}
+#onlineScreen .online-choice:hover{transform:translateY(-4px);border-color:var(--neo-purple);background:linear-gradient(145deg,#202c4c,#121a30)}
+#onlineScreen .online-choice:focus-visible,#spectatorScreen button:focus-visible{outline:3px solid var(--neo-cyan);outline-offset:3px}
+#onlineScreen .online-choice:nth-child(1){background:radial-gradient(circle at 100% 0,rgba(67,140,255,.19),transparent 45%),linear-gradient(145deg,#192742,#101729)}
+#onlineScreen .online-choice:nth-child(2){background:radial-gradient(circle at 100% 0,rgba(67,224,208,.14),transparent 45%),linear-gradient(145deg,#192b3a,#101729)}
+#onlineScreen .online-choice:nth-child(3){background:radial-gradient(circle at 100% 0,rgba(139,112,255,.16),transparent 45%),linear-gradient(145deg,#242341,#101729)}
+#onlineScreen .online-choice:nth-child(4){background:radial-gradient(circle at 100% 0,rgba(255,184,91,.13),transparent 45%),linear-gradient(145deg,#30283c,#101729)}
+#onlineScreen .friend-box,#onlineScreen .searching-box,#onlineScreen .online-players-box,#onlineScreen .game-invite-box,#onlineScreen .room{max-width:900px;border:1px solid var(--neo-border);border-radius:18px;background:linear-gradient(145deg,rgba(20,29,49,.98),rgba(12,17,31,.98));box-shadow:0 14px 34px rgba(0,0,0,.18);color:var(--neo-text)}
+#onlineScreen .friend-box{padding:22px;gap:12px}
+#onlineScreen .friend-box input,#spectatorScreen input{background:#090f1f!important;color:#fff!important;border:1px solid #35435f!important;border-radius:12px!important;padding:15px!important;letter-spacing:2px}
+#onlineScreen .friend-box button,#onlineScreen .searching-box button,#onlineScreen .game-invite-actions button,#spectatorScreen button{border:1px solid rgba(139,112,255,.45);border-radius:11px;background:linear-gradient(120deg,#6d5be7,#398edb);color:white;font-weight:800;padding:12px 18px;cursor:pointer;transition:transform .18s,filter .18s}
+#onlineScreen .friend-box button:hover,#onlineScreen .searching-box button:hover,#spectatorScreen button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+#onlineScreen .online-players-box{padding:20px;text-align:left}
+#onlineScreen .online-players-title{color:var(--neo-cyan);text-align:left;font-size:15px;letter-spacing:.5px}
+#onlineScreen .online-player-row{background:#0a1020;border:1px solid #26334d;border-radius:12px;padding:13px}
+#onlineScreen .online-player-invite{background:#192642;color:#fff;border-color:#4a5c80}
+#onlineScreen .room{padding:18px;margin:18px auto;color:var(--neo-muted)}
+#onlineScreen .room span{color:var(--neo-cyan);font-weight:900;letter-spacing:2px}
+#onlineScreen .back-button,#spectatorScreen .back-button,#waitingRoomScreen .back-button{border:1px solid #33415d;border-radius:12px;background:#141d31;color:#dce5fa;padding:12px 22px;font-weight:800;cursor:pointer}
+#onlineScreen .back-button:hover,#spectatorScreen .back-button:hover,#waitingRoomScreen .back-button:hover{border-color:var(--neo-cyan);color:var(--neo-cyan)}
+#onlineScreen .error,#spectatorScreen .error{color:#ff8c9a}
+#spectatorScreen .spectator-box,#waitingRoomScreen .waiting-box{max-width:900px;margin:28px auto;padding:25px;border:1px solid var(--neo-border);border-radius:20px;background:linear-gradient(145deg,rgba(20,29,49,.98),rgba(12,17,31,.98));box-shadow:0 18px 45px rgba(0,0,0,.22);text-align:left}
+#spectatorScreen .spectator-box .status{font-size:17px;font-weight:800;color:#e9edff;margin-bottom:18px}
+#spectatorScreen .live-match-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0}
+#spectatorScreen .live-match-list:empty:before{content:"Pa gen match ki parèt isit la pou kounye a. Peze Actualiser pou tcheke ankò.";display:block;grid-column:1/-1;border:1px dashed #35415b;border-radius:14px;padding:24px;text-align:center;color:var(--neo-muted);line-height:1.6}
+#spectatorScreen .live-match-list>div,#spectatorScreen .live-match-list>button{min-width:0;border-radius:14px!important;background:#0c1427!important;border:1px solid #2a3855!important;color:#f6f7ff!important;padding:17px!important}
+#spectatorScreen #refreshSpectatorBtn{margin-top:12px}
+#waitingRoomScreen .waiting-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}
+#waitingRoomScreen .waiting-player{background:#0b1222;border:1px solid #293651;border-radius:12px;padding:16px;color:#dce5fa}
+#waitingRoomScreen .waiting-status,#waitingRoomScreen .status{color:var(--neo-cyan)}
+@media(max-width:650px){#onlineScreen,#spectatorScreen,#waitingRoomScreen{padding:18px 12px 30px}#onlineScreen .online-box{grid-template-columns:1fr;gap:12px;margin-top:22px}#onlineScreen .online-choice{min-height:105px;padding:22px 18px;font-size:17px}#spectatorScreen .live-match-list,#waitingRoomScreen .waiting-list{grid-template-columns:1fr}#spectatorScreen .spectator-box,#waitingRoomScreen .waiting-box{padding:16px}}
+
 </style>
 </head>
 
@@ -814,7 +883,68 @@ h1 {
 
 <!-- MENU PRINCIPAL -->
 
-<section id="homeScreen" class="screen active">
+<section id="landingScreen" class="screen active">
+
+    <div class="landing-shell">
+        <header class="landing-header">
+            <div class="brand-mini" aria-label="MR Jery Morpion"><span class="brand-crown">♛</span><span>MR_Jery <b>Morpion</b></span></div>
+            <nav class="landing-nav">
+                <button type="button" class="nav-link active" id="landingHomeBtn">⌂ <span data-i18n="navHome">Accueil</span></button>
+                <button type="button" class="nav-link" id="landingGameBtn">🎮 <span data-i18n="navGame">Jeu</span></button>
+                <button type="button" class="nav-link" id="landingAboutBtn">ⓘ <span data-i18n="navAbout">À propos</span></button>
+            </nav>
+            <div class="language-wrap">
+                <button type="button" class="language-button" id="languageButton">🌐 <span id="currentLanguage">Français</span> <span>⌄</span></button>
+                <div class="language-menu" id="languageMenu">
+                    <button data-lang="fr">🇫🇷 Français</button>
+                    <button data-lang="en">🇺🇸 English</button>
+                    <button data-lang="es">🇪🇸 Español</button>
+                    <button data-lang="ht">🇭🇹 Kreyòl Ayisyen</button>
+                    <button data-lang="pt">🇧🇷 Português</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="landing-hero">
+            <div class="world-map" aria-hidden="true"></div>
+            <div class="hero-logo">
+                <div class="logo-crown">♛</div>
+                <div class="logo-ring">
+                    <div class="logo-board-mini"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+                <div class="logo-title"><span>MR_Jery</span><strong>MORPION</strong></div>
+            </div>
+            <div class="hero-copy">
+                <h1 data-i18n="heroTitle">Plis pase yon jwèt... <em>yon kominote!</em></h1>
+                <p data-i18n="heroText">Jwe ak moun ki soti nan tout mond lan, leve defi, fè konpetisyon epi monte nan klasman MR_Jery Morpion.</p>
+                <div class="hero-features">
+                    <span>🌍 <b data-i18n="fGlobal">Jwè nan tout mond lan</b></span>
+                    <span>🛡️ <b data-i18n="fSecure">Sekirize &amp; serye</b></span>
+                    <span>⚡ <b data-i18n="fFast">Rapid &amp; fluid</b></span>
+                    <span>♛ <b data-i18n="fRewards">Defi &amp; rekonpans</b></span>
+                </div>
+                <div class="hero-actions">
+                    <button class="hero-btn gold" id="landingLoginBtn">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
+                    <button class="hero-btn outline" id="landingRegisterBtn">👥 <span data-i18n="register">Créer un compte</span> <b>›</b></button>
+                </div>
+                <button class="about-pill" id="landingAboutPill">ⓘ <span data-i18n="about">À propos</span> <b>›</b></button>
+            </div>
+        </main>
+
+        <section class="landing-features">
+            <div><span>🌐</span><h3 data-i18n="cardOnline">Jwe Anliy</h3><p data-i18n="cardOnlineText">Defi e jwè nan tout peyi.</p></div>
+            <div><span>🛡️</span><h3 data-i18n="cardSecurity">Sekirite</h3><p data-i18n="cardSecurityText">Pwoteksyon pou kont ou ak jwèt yo.</p></div>
+            <div><span>👥</span><h3 data-i18n="cardCommunity">Kominote</h3><p data-i18n="cardCommunityText">Rankontre jwè ak nouvo advèsè.</p></div>
+            <div><span>⚡</span><h3 data-i18n="cardFast">Rapid</h3><p data-i18n="cardFastText">Match vit, san konplikasyon.</p></div>
+            <div><span>🏆</span><h3 data-i18n="cardChallenge">Defi</h3><p data-i18n="cardChallengeText">Montre kapasite w sou tablo a.</p></div>
+        </section>
+
+        <footer class="landing-footer"><span>MR_Jery Morpion</span><small data-i18n="footer">Jwe • Defi • Gagne</small></footer>
+    </div>
+
+</section>
+
+<section id="homeScreen" class="screen">
 
     <h1>MR JERY MOPION</h1>
 
@@ -841,46 +971,125 @@ h1 {
 </section>
 
 
+<!-- À PROPOS -->
+<section id="aboutScreen" class="screen">
+    <div class="inner-page-head">
+        <button class="back-icon" id="aboutBack">←</button>
+        <div class="brand-mini"><span class="brand-crown">♛</span><span>MR_Jery <b>Morpion</b></span></div>
+        <div class="language-wrap compact"><button type="button" class="language-button" id="aboutLanguageButton">🌐 <span id="aboutCurrentLanguage">Français</span> ⌄</button></div>
+    </div>
+    <div class="about-page">
+        <div class="about-logo"><div class="logo-crown">♛</div><div class="logo-title"><span>MR_Jery</span><strong>MORPION</strong></div></div>
+        <h1 data-i18n="aboutTitle">Plis pase yon jwèt... <em>yon kominote!</em></h1>
+        <p data-i18n="aboutText">MR_Jery Morpion se yon platfòm pou jwe, rankontre jwè, leve defi epi suiv pwogrè ou.</p>
+        <div class="about-grid">
+            <div><b>🎯 <span data-i18n="vision">Vizyon</span></b><p data-i18n="visionText">Rasanble jwè morpion atravè mond lan.</p></div>
+            <div><b>🚀 <span data-i18n="mission">Misyon</span></b><p data-i18n="missionText">Bay yon eksperyans rapid, senp ak agreyab.</p></div>
+            <div><b>🤝 <span data-i18n="values">Valè</span></b><p data-i18n="valuesText">Respè, fair-play, kominote ak evolisyon.</p></div>
+        </div>
+        <button class="hero-btn gold small" id="aboutJoinBtn">👥 <span data-i18n="register">Créer un compte</span> ›</button>
+    </div>
+</section>
+
 <!-- COMPTE -->
 <section id="accountScreen" class="screen">
+    <div class="auth-page">
+        <div class="auth-top"><button class="back-icon" id="accountBack">←</button><div class="brand-mini"><span class="brand-crown">♛</span><span>MR_Jery <b>Morpion</b></span></div><div></div></div>
+        <div class="auth-card">
+            <div class="auth-mark">♛</div>
+            <h1 id="authTitle">Connexion</h1>
+            <p id="authSubtitle">Connecte-toi à ton compte</p>
+            <div class="auth-tabs">
+                <button id="authLoginTab" class="auth-tab active">Connexion</button>
+                <button id="authRegisterTab" class="auth-tab">Créer un compte</button>
+            </div>
 
-    <h1>👤 Compte joueur</h1>
+            <div id="loginPanel">
+                <label>Nom d'utilisateur ou e-mail</label>
+                <input id="loginInput" type="text" placeholder="Nom d'utilisateur ou e-mail">
+                <label>Mot de passe</label>
+                <input id="loginPassword" type="password" placeholder="Mot de passe">
+                <div class="auth-options"><label class="check"><input type="checkbox"> <span>Se souvenir de moi</span></label><button type="button" class="link-btn">Mot de passe oublié ?</button></div>
+                <button class="auth-main-btn" id="loginBtn" type="button">Se connecter <b>›</b></button>
+                <div class="auth-or"><span>OU</span></div>
+                <button class="google-btn" type="button">G <span>Se connecter avec Google</span></button>
+                <p class="switch-line">Vous n'avez pas de compte ? <button type="button" id="goRegisterBtn" class="link-btn">Créer un compte</button></p>
+            </div>
 
-    <div class="account-box">
-        <h2>Créer un compte</h2>
-        <input id="registerUsername" type="text" maxlength="50" placeholder="Pseudo">
-        <input id="registerEmail" type="email" maxlength="255" placeholder="Email">
-        <input id="registerPassword" type="password" placeholder="Mot de passe">
-        <input id="registerPasswordConfirmation" type="password" placeholder="Confirmer le mot de passe">
-        <button class="account-button" id="registerBtn" type="button">Créer mon compte</button>
-
-        <div class="account-separator"></div>
-
-        <h2>Connexion</h2>
-        <input id="loginInput" type="text" placeholder="Pseudo ou email">
-        <input id="loginPassword" type="password" placeholder="Mot de passe">
-        <button class="account-button" id="loginBtn" type="button">Se connecter</button>
-        <div id="accountStatus" class="account-status"></div>
-        <div id="accountUser" class="account-user"></div>
+            <div id="registerPanel" style="display:none">
+                <label>Nom d'utilisateur</label>
+                <input id="registerUsername" type="text" maxlength="50" placeholder="Nom d'utilisateur">
+                <label>E-mail</label>
+                <input id="registerEmail" type="email" maxlength="255" placeholder="E-mail">
+                <label>Mot de passe</label>
+                <input id="registerPassword" type="password" placeholder="Mot de passe">
+                <label>Confirmer le mot de passe</label>
+                <input id="registerPasswordConfirmation" type="password" placeholder="Confirmer le mot de passe">
+                <label>Pays de résidence</label>
+                <select id="registerCountry"><option>Haiti</option><option>United States</option><option>Canada</option><option>France</option><option>Dominican Republic</option><option>Other</option></select>
+                <label>Langue préférée</label>
+                <select id="registerLanguage"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="ht">Kreyòl Ayisyen</option><option value="pt">Português</option></select>
+                <label class="check terms"><input type="checkbox" id="registerTerms"> <span>J'accepte les conditions d'utilisation et la politique de confidentialité.</span></label>
+                <button class="auth-main-btn" id="registerBtn" type="button">Créer mon compte <b>›</b></button>
+                <p class="switch-line">Vous avez déjà un compte ? <button type="button" id="goLoginBtn" class="link-btn">Se connecter</button></p>
+            </div>
+            <div id="accountStatus" class="account-status"></div>
+            <div id="accountUser" class="account-user"></div>
+        </div>
     </div>
-
-    <button class="back-button" id="accountBack">← Retour</button>
 </section>
 
 <!-- MENU APRÈS CONNEXION -->
 <section id="accountMenuScreen" class="screen">
-    <h1>👤 Espace joueur</h1>
-    <div class="account-user-menu" id="accountMenuUser"></div>
+  <div class="dashboard-shell">
+    <header class="dashboard-header">
+      <div class="dashboard-brand"><span class="dashboard-crown">♛</span><span>MR_Jery <b>Morpion</b></span></div>
+      <nav class="dashboard-nav">
+        <button type="button" class="dash-nav active" id="accountPlayBtn">⌂ <span>Accueil</span></button>
+        <button type="button" class="dash-nav" id="accountOnlineBtn">🎮 <span>Jeu</span></button>
+        <button type="button" class="dash-nav" id="dashboardRankingBtn">🏆 <span>Classement</span></button>
+        <button type="button" class="dash-nav" id="profileBtn">ⓘ <span>Profil</span></button>
+        <button type="button" class="dash-nav" id="walletTopBtn">💰 <span>Wallet</span></button>
+      </nav>
+      <div class="dashboard-user">
+        <div class="dash-avatar">♟</div>
+        <div><strong id="dashboardUsername">Joueur</strong><small id="dashboardLevel">Niveau 1</small></div>
+        <button type="button" id="dashboardUserMenu" class="dash-user-more">⌄</button>
+      </div>
+    </header>
 
-    <div class="main-menu account-menu-list">
-        <button class="menu-button" id="accountPlayBtn">🎮 Jouer</button>
-        <button class="menu-button" id="profileBtn">👤 Mon profil</button>
-        <button class="menu-button" id="accountOnlineBtn">🌐 Jouer en Ligne</button>
-        <button class="menu-button" id="settingsBtn">⚙️ Paramètres</button>
-        <button class="menu-button logout-button" id="logoutBtn">🚪 Déconnexion</button>
-    </div>
+    <main class="dashboard-main">
+      <section class="welcome-card">
+        <div class="welcome-copy">
+          <div class="welcome-kicker">BIENVENUE SUR</div>
+          <h1>MR_Jery <span>Morpion</span></h1>
+          <p>Joue • Défi • Gagne</p>
+          <div class="welcome-line"></div>
+          <strong>Prêt pour ton prochain match ?</strong>
+        </div>
+        <div class="welcome-world">🌍</div>
+      </section>
 
-    <button class="back-button" id="accountMenuBack">← Retour</button>
+      <section class="dashboard-balance-row">
+        <div class="dash-balance-card"><small>Solde USD</small><strong id="dashboardUsd">$0.00</strong><button type="button" id="dashboardDepositUsd">＋</button></div>
+        <div class="dash-balance-card"><small>Solde HTG</small><strong id="dashboardHtg">0 HTG</strong><button type="button" id="dashboardDepositHtg">＋</button></div>
+        <div class="dash-profile-card"><div class="dash-big-avatar">♟</div><div><strong id="accountMenuUser">👤 Connecté</strong><small>Joueur MR_Jery</small></div></div>
+      </section>
+
+      <section class="dashboard-grid">
+        <button class="dashboard-card" id="dashboardOnlineCard"><span class="dash-card-icon">👥</span><strong>Jwe Anliy</strong><small>Affronte des joueurs du monde entier.</small></button>
+        <button class="dashboard-card" id="dashboardFriendCard"><span class="dash-card-icon">🤝</span><strong>Jwe ak yon zanmi</strong><small>Envite yon zanmi epi jwe ansanm.</small></button>
+        <button class="dashboard-card" id="dashboardChallengeCard"><span class="dash-card-icon">🛡️</span><strong>Defi</strong><small>Kreye oswa aksepte defi.</small></button>
+        <button class="dashboard-card gold-card" id="dashboardBetCard"><span class="dash-card-icon">💰</span><strong>Paryaj</strong><small>Mise, jwe epi suiv rekonpans yo.</small></button>
+        <button class="dashboard-card" id="dashboardSpectatorCard"><span class="dash-card-icon">👁️</span><strong>Spectateur</strong><small>Gade match yo an dirèk.</small></button>
+        <button class="dashboard-card" id="dashboardRobotCard"><span class="dash-card-icon">🤖</span><strong>Robot</strong><small>Jwe kont IA a pou antrene.</small></button>
+        <button class="dashboard-card" id="dashboardRankingCard"><span class="dash-card-icon">🏆</span><strong>Classement</strong><small>Gade pi bon jwè yo.</small></button>
+        <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
+      </section>
+
+      <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
+    </main>
+  </div>
 </section>
 
 <!-- PROFIL -->
@@ -904,6 +1113,82 @@ h1 {
     <button class="back-button" id="settingsBack">← Retour</button>
 </section>
 
+
+
+<!-- PORTEFEUILLE / DEFIS -->
+<section id="walletScreen" class="screen">
+    <h1>💰 Portefeuille & Défis</h1>
+    <div class="wallet-box">
+        <div class="notice-test">⚠️ Paiements en mode test. N'effectuez aucun dépôt réel avant validation complète de l'authentification, du webhook et des tests Tranzak.</div>
+        <div class="wallet-card" style="margin:12px 0">
+          <h2>➕ Déposer des fonds</h2>
+          <div class="form-row">
+            <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Montant">
+            <select id="depositCurrency"><option value="HTG">HTG</option><option value="USD">USD</option></select>
+          </div>
+          <div style="margin-top:10px"><select id="depositMethod" style="width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white"><option value="moncash">MonCash</option><option value="natcash">NatCash</option><option value="card">Carte bancaire</option></select></div>
+          <div style="margin-top:10px"><input id="depositPhone" type="tel" placeholder="Téléphone (si nécessaire)" style="width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white"></div>
+          <div class="wallet-actions"><button id="startDepositBtn" class="primary-pay">Continuer vers Tranzak (test)</button></div>
+          <p style="color:#9CA3AF;font-size:12px">Le solde n'est crédité qu'après confirmation vérifiée par le serveur. Ne partagez jamais vos clés API dans cette page.</p>
+        </div>
+        <div class="wallet-grid">
+            <div class="wallet-card"><small>Solde USD</small><strong id="demoUsd">$0.00</strong></div>
+            <div class="wallet-card"><small>Solde HTG</small><strong id="demoHtg">0 HTG</strong></div>
+            <div class="wallet-card"><small>Commissions plateforme</small><strong id="demoFees">$0.00</strong></div>
+        </div>
+        <div class="wallet-actions">
+            <button id="createBetBtn" class="primary-pay">⚔️ Créer un défi</button>
+            <button id="withdrawBtn">💸 Demander un retrait</button>
+            <button id="refreshWalletBtn">🔄 Actualiser</button>
+        </div>
+        <div id="walletMessage" class="account-status"></div>
+    </div>
+
+    <div class="bet-box" id="betCreatorBox" style="display:none">
+        <h2>⚔️ Nouveau défi</h2>
+        <div class="form-row">
+            <input id="betOpponent" placeholder="Pseudo de l'adversaire">
+            <select id="betCurrency"><option value="USD">USD</option><option value="HTG">HTG</option></select>
+        </div>
+        <div style="margin-top:10px"><input id="betAmount" type="number" min="0.01" step="0.01" placeholder="Montant de la mise"></div>
+        <div class="calc-box">
+            <div>Mise joueur 1 : <strong id="calcA">0</strong></div>
+            <div>Mise joueur 2 : <strong id="calcB">0</strong></div>
+            <div>Total : <strong id="calcTotal">0</strong></div>
+            <div>Commission plateforme : <strong id="calcFee">0</strong></div>
+            <div>Montant net du gagnant : <strong id="calcWinner">0</strong></div>
+        </div>
+        <div class="bet-actions">
+            <button id="confirmBetBtn" class="primary-pay">Créer le défi</button>
+            <button id="cancelBetBtn">Annuler</button>
+        </div>
+    </div>
+
+    <div class="wallet-box">
+        <h2>📜 Historique</h2>
+        <div id="walletHistory"><div class="history-item">Aucune transaction en mode test.</div></div>
+    </div>
+    <button class="back-button" id="walletBack">← Retour</button>
+</section>
+
+<!-- ADMIN -->
+<section id="adminScreen" class="screen">
+    <h1>👑 Administration</h1>
+    <div class="admin-box">
+        <div class="notice-test">⚠️ Écran de préparation uniquement. Les valeurs réelles doivent être protégées côté serveur, jamais dans le navigateur.</div>
+        <div class="wallet-grid">
+            <div class="wallet-card"><small>Commission</small><div class="admin-stat" id="adminFee">10%</div></div>
+            <div class="wallet-card"><small>Matchs avec mise</small><div class="admin-stat" id="adminMatches">0</div></div>
+            <div class="wallet-card"><small>Revenus plateforme</small><div class="admin-stat" id="adminRevenue">$0.00</div></div>
+        </div>
+        <h2>Paramètres de calcul</h2>
+        <div class="form-row">
+            <input id="adminCommission" type="number" min="0" max="100" step="0.1" value="10" placeholder="Commission %">
+            <button id="saveAdminBtn" class="primary-pay">Enregistrer</button>
+        </div>
+    </div>
+    <button class="back-button" id="adminBack">← Retour</button>
+</section>
 
 <!-- ROBOT -->
 
@@ -1313,9 +1598,31 @@ function showAccountMenu() {
             ? "👤 Connecté : " + currentUsername
             : "";
     }
+    refreshDashboardUser();
     showScreen("accountMenuScreen");
 }
 
+
+/* ==================================================
+   DASHBOARD APRÈS CONNEXION
+================================================== */
+function refreshDashboardUser(){
+  const u=document.getElementById('dashboardUsername'); if(u) u.textContent=currentUsername||'Joueur';
+  const au=document.getElementById('accountMenuUser'); if(au) au.textContent='👤 '+(currentUsername||'Connecté');
+}
+
+function openWalletFromDashboard(){ showScreen('walletScreen'); }
+document.getElementById('walletTopBtn')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardBetCard')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardChallengeCard')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardOnlineCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
+document.getElementById('dashboardFriendCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
+document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('dashboardSpectatorCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
+document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>alert('🏆 Classement : cette section sera ajoutée dans la prochaine étape.'));
+document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
+document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
 
 /* ==================================================
    ÉCRANS
@@ -2790,10 +3097,11 @@ document.getElementById("accountMode").addEventListener("click", function() {
     updateAccountDisplay();
     showAccountMessage("", true);
     showScreen("accountScreen");
+    if (typeof setAuthMode === "function") setAuthMode("login");
 });
 
 document.getElementById("accountBack").addEventListener("click", function() {
-    showScreen("homeScreen");
+    showScreen("landingScreen");
 });
 
 document.getElementById("registerBtn").addEventListener("click", function() {
@@ -2881,7 +3189,7 @@ document.getElementById("accountOnlineBtn").addEventListener("click", function()
     connectServer(function() { requestOnlinePlayers(); });
 });
 
-document.getElementById("settingsBtn").addEventListener("click", function() {
+document.getElementById("settingsBtn")?.addEventListener("click", function() {
     showScreen("settingsScreen");
 });
 
@@ -2903,7 +3211,7 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
     showScreen("homeScreen");
 });
 
-document.getElementById("accountMenuBack").addEventListener("click", function() {
+document.getElementById("accountMenuBack")?.addEventListener("click", function() {
     showScreen("homeScreen");
 });
 
@@ -5323,6 +5631,91 @@ function stopAllTimers() {
     stopRobotTimer();
     stopOnlineDisplayTimer();
 }
+
+
+
+/* ==================================================
+   PORTEFEUILLE / DEFIS — API WALLET (MODE TEST)
+   Les secrets Tranzak restent exclusivement côté serveur.
+================================================== */
+const WALLET_API_BASE = "https://mr-jery-wallet.onrender.com";
+const DEMO_KEY = "mrjery_wallet_demo_v1";
+const defaultDemo = {usd:0,htg:0,fees:0,matches:0,commission:10,history:[]};
+function demoState(){try{return Object.assign({},defaultDemo,JSON.parse(localStorage.getItem(DEMO_KEY)||"{}"));}catch(e){return {...defaultDemo};}}
+function saveDemoState(s){localStorage.setItem(DEMO_KEY,JSON.stringify(s));}
+function money(v,c){return c === "HTG" ? Number(v).toFixed(2)+" HTG" : "$"+Number(v).toFixed(2)+" USD";}
+function renderWallet(){const s=demoState(); document.getElementById("demoUsd").textContent=money(s.usd,"USD"); document.getElementById("demoHtg").textContent=money(s.htg,"HTG"); document.getElementById("demoFees").textContent=money(s.fees,"USD"); document.getElementById("adminFee").textContent=Number(s.commission).toFixed(1)+"%"; document.getElementById("adminMatches").textContent=s.matches; document.getElementById("adminRevenue").textContent=money(s.fees,"USD"); const h=document.getElementById("walletHistory"); h.innerHTML=s.history.length?s.history.slice().reverse().map(x=>`<div class="history-item">${x}</div>`).join(""): '<div class="history-item">Aucune transaction en mode test.</div>';}
+function calcBet(){const amount=Math.max(0,Number(document.getElementById("betAmount").value)||0), c=document.getElementById("betCurrency").value, feePct=demoState().commission, total=amount*2, fee=total*feePct/100, winner=total-fee; document.getElementById("calcA").textContent=money(amount,c);document.getElementById("calcB").textContent=money(amount,c);document.getElementById("calcTotal").textContent=money(total,c);document.getElementById("calcFee").textContent=money(fee,c);document.getElementById("calcWinner").textContent=money(winner,c);}
+document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connectez-vous pour accéder au portefeuille.",false);return;}renderWallet();showScreen("walletScreen");});
+document.getElementById("walletBack")?.addEventListener("click",()=>showAccountMenu());
+document.getElementById("createBetBtn")?.addEventListener("click",()=>{document.getElementById("betCreatorBox").style.display="block";calcBet();});
+document.getElementById("cancelBetBtn")?.addEventListener("click",()=>document.getElementById("betCreatorBox").style.display="none");
+document.getElementById("betAmount")?.addEventListener("input",calcBet);
+document.getElementById("betCurrency")?.addEventListener("change",calcBet);
+document.getElementById("confirmBetBtn")?.addEventListener("click",()=>{const s=demoState(), opp=document.getElementById("betOpponent").value.trim(), amount=Number(document.getElementById("betAmount").value)||0, c=document.getElementById("betCurrency").value;if(!opp||amount<=0){document.getElementById("walletMessage").textContent="Indiquez un adversaire et un montant valide.";return;}const total=amount*2,fee=total*s.commission/100;s.matches++;s.fees += c==="USD"?fee:0;s.history.push(`Défi TEST créé contre ${opp} — ${money(amount,c)} chacun — commission prévue ${money(fee,c)}`);saveDemoState(s);renderWallet();document.getElementById("betCreatorBox").style.display="none";document.getElementById("walletMessage").textContent="Défi enregistré en mode test. Aucun paiement réel n'a été effectué.";});
+document.getElementById("refreshWalletBtn")?.addEventListener("click",renderWallet);
+
+async function startWalletDeposit(){
+  const message=document.getElementById("walletMessage");
+  const amount=Number(document.getElementById("depositAmount").value);
+  const currency=document.getElementById("depositCurrency").value;
+  const method=document.getElementById("depositMethod").value;
+  const phone=document.getElementById("depositPhone").value.trim();
+  if(!accountConnected || !accountToken){message.textContent="Connectez-vous d'abord à votre compte.";return;}
+  if(!Number.isFinite(amount)||amount<=0){message.textContent="Entrez un montant valide.";return;}
+  if(method==="natcash" && currency==="HTG" && amount<20){message.textContent="Le montant minimum NatCash est de 20 HTG.";return;}
+  const button=document.getElementById("startDepositBtn"); button.disabled=true; message.textContent="Connexion sécurisée au portefeuille…";
+  try{
+    const response=await fetch(WALLET_API_BASE+"/deposits",{
+      method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+accountToken},
+      body:JSON.stringify({amount,currency,payment_method:method,phone:phone||undefined,customer_name:currentUsername||"MR_Jery user",email:currentEmail||undefined})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){
+      if(response.status===503) message.textContent="Le serveur wallet doit encore être relié au système de connexion sécurisé (AUTH_SHARED_SECRET). Aucun paiement n'a été lancé.";
+      else message.textContent=data.detail||data.message||("Le serveur a répondu avec le code "+response.status+". Aucun paiement confirmé.");
+      return;
+    }
+    const paymentUrl=data.payment_url||data.checkout_url;
+    if(paymentUrl){message.textContent="Redirection vers la page de paiement Tranzak en mode test…";window.location.assign(paymentUrl);}
+    else message.textContent="Demande reçue, mais le serveur n'a pas retourné de lien de paiement. Vérifiez les logs backend.";
+  }catch(e){message.textContent="Impossible de joindre le serveur wallet. Vérifiez que le service Render est disponible.";}
+  finally{button.disabled=false;}
+}
+document.getElementById("startDepositBtn")?.addEventListener("click",startWalletDeposit);
+
+document.getElementById("withdrawBtn")?.addEventListener("click",()=>{document.getElementById("walletMessage").textContent="Le retrait réel sera activé uniquement après connexion à un prestataire de paiement autorisé et au backend sécurisé.";});
+document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=demoState();s.commission=Math.min(100,Math.max(0,Number(document.getElementById("adminCommission").value)||0));saveDemoState(s);renderWallet();});
+
+
+/* ==================================================
+   LANDING / LANGUAGE / AUTH NAVIGATION
+================================================== */
+const landingTranslations={
+ fr:{navHome:'Accueil',navGame:'Jeu',navAbout:'À propos',heroTitle:'Plus qu’un jeu... une communauté !',heroText:'Affronte des joueurs du monde entier, relève des défis, progresse et deviens le meilleur sur MR_Jery Morpion.',fGlobal:'Joueurs du monde entier',fSecure:'Sécurisé & fiable',fFast:'Rapide & fluide',fRewards:'Défis & récompenses',login:'Connexion',register:'Créer un compte',about:'À propos',cardOnline:'Jwe Anliy',cardOnlineText:'Defi e jwè nan tout peyi.',cardSecurity:'Sécurité',cardSecurityText:'Protection pour ton compte et tes parties.',cardCommunity:'Communauté',cardCommunityText:'Rencontre de nouveaux joueurs.',cardFast:'Rapide',cardFastText:'Des matchs fluides, sans complication.',cardChallenge:'Défis',cardChallengeText:'Montre ta valeur sur le plateau.',footer:'Joue • Défie • Gagne',aboutTitle:'Plus qu’un jeu... une communauté !',aboutText:'MR_Jery Morpion est une plateforme pour jouer, rencontrer des joueurs, relever des défis et suivre ta progression.',vision:'Vision',visionText:'Rassembler les joueurs de morpion du monde entier.',mission:'Mission',missionText:'Offrir une expérience rapide, simple et agréable.',values:'Valeurs',valuesText:'Respect, fair-play, communauté et évolution.'},
+ en:{navHome:'Home',navGame:'Game',navAbout:'About',heroTitle:'More than a game... a community!',heroText:'Face players from around the world, take on challenges, compete and climb MR_Jery Morpion.',fGlobal:'Players worldwide',fSecure:'Secure & reliable',fFast:'Fast & fluid',fRewards:'Challenges & rewards',login:'Login',register:'Create an account',about:'About',cardOnline:'Play Online',cardOnlineText:'Challenge players worldwide.',cardSecurity:'Security',cardSecurityText:'Protection for your account and games.',cardCommunity:'Community',cardCommunityText:'Meet new players and opponents.',cardFast:'Fast',cardFastText:'Smooth matches, no hassle.',cardChallenge:'Challenges',cardChallengeText:'Show your skills on the board.',footer:'Play • Challenge • Win',aboutTitle:'More than a game... a community!',aboutText:'MR_Jery Morpion is a platform to play, meet players, take on challenges and track your progress.',vision:'Vision',visionText:'Bring morpion players together worldwide.',mission:'Mission',missionText:'Offer a fast, simple and enjoyable experience.',values:'Values',valuesText:'Respect, fair play, community and growth.'},
+ es:{navHome:'Inicio',navGame:'Juego',navAbout:'Acerca de',heroTitle:'Más que un juego... ¡una comunidad!',heroText:'Enfréntate a jugadores de todo el mundo, acepta desafíos y progresa en MR_Jery Morpion.',fGlobal:'Jugadores de todo el mundo',fSecure:'Seguro y fiable',fFast:'Rápido y fluido',fRewards:'Desafíos y recompensas',login:'Iniciar sesión',register:'Crear una cuenta',about:'Acerca de',cardOnline:'Jugar en línea',cardOnlineText:'Desafía a jugadores de todo el mundo.',cardSecurity:'Seguridad',cardSecurityText:'Protección para tu cuenta y partidas.',cardCommunity:'Comunidad',cardCommunityText:'Conoce nuevos jugadores.',cardFast:'Rápido',cardFastText:'Partidas fluidas y sencillas.',cardChallenge:'Desafíos',cardChallengeText:'Demuestra tus habilidades.',footer:'Juega • Desafía • Gana',aboutTitle:'Más que un juego... ¡una comunidad!',aboutText:'MR_Jery Morpion es una plataforma para jugar, conocer jugadores, aceptar desafíos y seguir tu progreso.',vision:'Visión',visionText:'Reunir a jugadores de todo el mundo.',mission:'Misión',missionText:'Ofrecer una experiencia rápida, sencilla y divertida.',values:'Valores',valuesText:'Respeto, juego limpio, comunidad y evolución.'},
+ ht:{navHome:'Akèy',navGame:'Jwèt',navAbout:'A Pwopo',heroTitle:'Plis pase yon jwèt... yon kominote!',heroText:'Jwe ak moun ki soti nan tout mond lan, leve defi, fè konpetisyon epi monte nan MR_Jery Morpion.',fGlobal:'Jwè nan tout mond lan',fSecure:'Sekirize & serye',fFast:'Rapid & fluid',fRewards:'Defi & rekonpans',login:'Connexion',register:'Kreye yon kont',about:'A pwopo',cardOnline:'Jwe Anliy',cardOnlineText:'Defi e jwè nan tout peyi.',cardSecurity:'Sekirite',cardSecurityText:'Pwoteksyon pou kont ou ak jwèt yo.',cardCommunity:'Kominote',cardCommunityText:'Rankontre nouvo jwè ak advèsè.',cardFast:'Rapid',cardFastText:'Match fluid, san konplikasyon.',cardChallenge:'Defi',cardChallengeText:'Montre kapasite w sou tablo a.',footer:'Jwe • Defi • Gagne',aboutTitle:'Plis pase yon jwèt... yon kominote!',aboutText:'MR_Jery Morpion se yon platfòm pou jwe, rankontre jwè, leve defi epi suiv pwogrè ou.',vision:'Vizyon',visionText:'Rasanble jwè morpion atravè mond lan.',mission:'Misyon',missionText:'Bay yon eksperyans rapid, senp ak agreyab.',values:'Valè',valuesText:'Respè, fair-play, kominote ak evolisyon.'},
+ pt:{navHome:'Início',navGame:'Jogo',navAbout:'Sobre',heroTitle:'Mais que um jogo... uma comunidade!',heroText:'Enfrente jogadores do mundo inteiro, aceite desafios e avance no MR_Jery Morpion.',fGlobal:'Jogadores do mundo inteiro',fSecure:'Seguro e confiável',fFast:'Rápido e fluido',fRewards:'Desafios e recompensas',login:'Entrar',register:'Criar uma conta',about:'Sobre',cardOnline:'Jogar online',cardOnlineText:'Desafie jogadores do mundo inteiro.',cardSecurity:'Segurança',cardSecurityText:'Proteção para sua conta e partidas.',cardCommunity:'Comunidade',cardCommunityText:'Conheça novos jogadores.',cardFast:'Rápido',cardFastText:'Partidas fluidas e simples.',cardChallenge:'Desafios',cardChallengeText:'Mostre suas habilidades.',footer:'Jogue • Desafie • Vença',aboutTitle:'Mais que um jogo... uma comunidade!',aboutText:'MR_Jery Morpion é uma plataforma para jogar, conhecer jogadores, aceitar desafios e acompanhar seu progresso.',vision:'Visão',visionText:'Reunir jogadores de morpion do mundo inteiro.',mission:'Missão',missionText:'Oferecer uma experiência rápida, simples e agradável.',values:'Valores',valuesText:'Respeito, fair play, comunidade e evolução.'}
+};
+function setLanguage(lang){const t=landingTranslations[lang]||landingTranslations.fr;document.documentElement.lang=lang;localStorage.setItem('mrjery_language',lang);document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(t[key])el.textContent=t[key]});const names={fr:'Français',en:'English',es:'Español',ht:'Kreyòl Ayisyen',pt:'Português'};const n=names[lang]||names.fr;['currentLanguage','aboutCurrentLanguage'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});document.getElementById('languageMenu')?.classList.remove('show');}
+function openAuth(mode){showScreen('accountScreen');setAuthMode(mode);}
+function setAuthMode(mode){const login=mode==='login';document.getElementById('loginPanel').style.display=login?'block':'none';document.getElementById('registerPanel').style.display=login?'none':'block';document.getElementById('authLoginTab').classList.toggle('active',login);document.getElementById('authRegisterTab').classList.toggle('active',!login);document.getElementById('authTitle').textContent=login?'Connexion':'Créer un compte';document.getElementById('authSubtitle').textContent=login?'Connecte-toi à ton compte':'Rejoins la communauté MR_Jery Morpion';}
+const savedLang=localStorage.getItem('mrjery_language')||'fr';setLanguage(savedLang);
+document.getElementById('languageButton')?.addEventListener('click',()=>document.getElementById('languageMenu').classList.toggle('show'));
+document.querySelectorAll('#languageMenu [data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
+document.getElementById('landingLoginBtn')?.addEventListener('click',()=>openAuth('login'));
+document.getElementById('landingRegisterBtn')?.addEventListener('click',()=>openAuth('register'));
+document.getElementById('landingAboutBtn')?.addEventListener('click',()=>showScreen('aboutScreen'));
+document.getElementById('landingAboutPill')?.addEventListener('click',()=>showScreen('aboutScreen'));
+document.getElementById('landingGameBtn')?.addEventListener('click',()=>showScreen('homeScreen'));
+document.getElementById('aboutLanguageButton')?.addEventListener('click',()=>{showScreen('landingScreen');document.getElementById('languageMenu')?.classList.add('show');});
+document.getElementById('aboutBack')?.addEventListener('click',()=>showScreen('landingScreen'));
+document.getElementById('aboutJoinBtn')?.addEventListener('click',()=>openAuth('register'));
+document.getElementById('authLoginTab')?.addEventListener('click',()=>setAuthMode('login'));
+document.getElementById('authRegisterTab')?.addEventListener('click',()=>setAuthMode('register'));
+document.getElementById('goRegisterBtn')?.addEventListener('click',()=>setAuthMode('register'));
+document.getElementById('goLoginBtn')?.addEventListener('click',()=>setAuthMode('login'));
 
 </script>
 
