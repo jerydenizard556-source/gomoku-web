@@ -469,8 +469,8 @@ h1 {
     grid-row: 2;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(20, minmax(0, 1fr));
-    grid-template-rows: repeat(20, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--board-size, 20), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--board-size, 20), minmax(0, 1fr));
     width: 100%;
     aspect-ratio: 1 / 1;
     min-width: 0;
@@ -1794,6 +1794,7 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     board.className = "board";
+    board.style.setProperty("--board-size", String(BOARD_SIZE));
 
     // Draw one continuous, precise grid behind all intersections.
     const gridSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -5740,7 +5741,10 @@ document.getElementById("leaveOnlineMatchBtn")?.addEventListener("click", functi
     showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
     if (accountConnected) {
         connectServer(function(){
-            if (socket && socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({type:"online_players"}));
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({type:"online_players"}));
+                setTimeout(function(){ if(socket && socket.readyState===WebSocket.OPEN) socket.send(JSON.stringify({type:"online_players"})); }, 700);
+            }
         });
     }
 });
