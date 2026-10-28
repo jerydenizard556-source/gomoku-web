@@ -3523,8 +3523,24 @@ function requestOnlinePlayers(){
     if(status) status.textContent="Connexion au serveur de jeu…";
     if(err) err.textContent="Le serveur est en cours de connexion. La liste se chargera dès que la session sera rétablie.";
 }
-function showGameInvite(id,from,duration,size){pendingGameInviteId=id||null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b&&m){m.textContent="🎮 "+(from||"Un joueur")+" vous invite à jouer — "+(duration||5)+" min · tableau "+(size||15)+"×"+(size||15)+".";b.style.display="block";}}
-function hideGameInvite(){pendingGameInviteId=null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b)b.style.display="none";if(m)m.textContent="";}
+function showGameInvite(id,from,duration,size){
+    pendingGameInviteId=id||null;
+    const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");
+    const message="🎮 "+(from||"Un joueur")+" vous invite à jouer — "+(duration||5)+" min · tableau "+(size||15)+"×"+(size||15)+".";
+    if(b&&m){
+        m.textContent=message;
+        /* Garde la demande visible au-dessus de tous les écrans, sans changer le reste du site. */
+        if(b.parentElement!==document.body) document.body.appendChild(b);
+        b.style.setProperty("display","block","important");
+        b.style.setProperty("visibility","visible","important");
+        b.style.setProperty("opacity","1","important");
+        b.style.setProperty("z-index","2147483647","important");
+        b.setAttribute("aria-modal","true");
+        try { if(document.hidden && "Notification" in window && Notification.permission==="granted") new Notification("MR_Jery Morpion",{body:message}); } catch(e) {}
+        document.title="🎮 Invitation ! MR_Jery Morpion";
+    }
+}
+function hideGameInvite(){pendingGameInviteId=null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b){b.style.setProperty("display","none","important");b.removeAttribute("aria-modal");}if(m)m.textContent="";document.title=document.title.replace("🎮 Invitation ! ","");}
 function sendGameInvite(id){if(!accountConnected)return;if(!socket||socket.readyState!==WebSocket.OPEN){document.getElementById("onlineError").textContent="Connexion au serveur en cours...";return;}const duration=Number(document.getElementById("inviteDuration")?.value||5);const boardSize=Number(document.getElementById("inviteBoardSize")?.value||15);socket.send(JSON.stringify({type:"invite_player",target_player_id:Number(id),duration_minutes:Math.max(1,Math.min(30,duration)),board_size:Math.max(13,Math.min(20,boardSize))}));}
 function answerGameInvite(ok){if(!pendingGameInviteId||!socket||socket.readyState!==WebSocket.OPEN)return;socket.send(JSON.stringify({type:"invite_response",invitation_id:pendingGameInviteId,accepted:Boolean(ok)}));hideGameInvite();}
 document.getElementById("acceptGameInviteBtn").addEventListener("click",function(){answerGameInvite(true);});
