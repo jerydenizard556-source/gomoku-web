@@ -1087,7 +1087,7 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
       </section>
 
-      <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
+      <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="previewAdminBtn">👑 Admin aperçu</button><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
     </main>
   </div>
 </section>
@@ -1115,79 +1115,81 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
 
 
 
-<!-- PORTEFEUILLE / DEFIS -->
+<!-- PORTEFEUILLE / DEFIS — PROTOTYPE COMPLET, MODE TEST -->
 <section id="walletScreen" class="screen">
-    <h1>💰 Portefeuille & Défis</h1>
+    <h1>💰 Wallet, Paryaj & Tranzak</h1>
     <div class="wallet-box">
-        <div class="notice-test">⚠️ Paiements en mode test. N'effectuez aucun dépôt réel avant validation complète de l'authentification, du webhook et des tests Tranzak.</div>
-        <div class="wallet-card" style="margin:12px 0">
-          <h2>➕ Déposer des fonds</h2>
-          <div class="form-row">
-            <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Montant">
-            <select id="depositCurrency"><option value="HTG">HTG</option><option value="USD">USD</option></select>
-          </div>
-          <div style="margin-top:10px"><select id="depositMethod" style="width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white"><option value="moncash">MonCash</option><option value="natcash">NatCash</option><option value="card">Carte bancaire</option></select></div>
-          <div style="margin-top:10px"><input id="depositPhone" type="tel" placeholder="Téléphone (si nécessaire)" style="width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white"></div>
-          <div class="wallet-actions"><button id="startDepositBtn" class="primary-pay">Continuer vers Tranzak (test)</button></div>
-          <p style="color:#9CA3AF;font-size:12px">Le solde n'est crédité qu'après confirmation vérifiée par le serveur. Ne partagez jamais vos clés API dans cette page.</p>
-        </div>
+        <div class="notice-test">🧪 MODE APERÇU / TEST UNIQUEMENT — Balans ak tranzaksyon yo se done demonstrasyon nan navigatè sa a. Pa gen lajan reyèl k ap antre oswa soti. Depo/retrè reyèl bezwen backend Render, PostgreSQL ak yon founisè peman verifye.</div>
         <div class="wallet-grid">
-            <div class="wallet-card"><small>Solde USD</small><strong id="demoUsd">$0.00</strong></div>
-            <div class="wallet-card"><small>Solde HTG</small><strong id="demoHtg">0 HTG</strong></div>
-            <div class="wallet-card"><small>Commissions plateforme</small><strong id="demoFees">$0.00</strong></div>
+            <div class="wallet-card"><small>Balans USD jwè</small><strong id="demoUsd">$0.00 USD</strong></div>
+            <div class="wallet-card"><small>Balans HTG jwè</small><strong id="demoHtg">0.00 HTG</strong></div>
+            <div class="wallet-card"><small>Komisyon platfòm (USD)</small><strong id="demoFees">$0.00 USD</strong></div>
         </div>
         <div class="wallet-actions">
-            <button id="createBetBtn" class="primary-pay">⚔️ Créer un défi</button>
-            <button id="withdrawBtn">💸 Demander un retrait</button>
-            <button id="refreshWalletBtn">🔄 Actualiser</button>
+            <button id="createBetBtn" class="primary-pay">⚔️ Kreye yon defi ak paryaj</button>
+            <button id="openDepositBtn">💳 Depo TEST</button>
+            <button id="withdrawBtn">💸 Demann retrè TEST</button>
+            <button id="refreshWalletBtn">🔄 Rafrechi</button>
         </div>
-        <div id="walletMessage" class="account-status"></div>
+        <div id="walletMessage" class="account-status" aria-live="polite"></div>
+    </div>
+
+    <div class="bet-box" id="depositBox">
+        <h2>💳 Depo / Metòd peman</h2>
+        <div class="notice-test">Tout bouton peman yo se demonstrasyon. Yo pa konekte ak Tranzak, MonCash, NatCash, Visa oswa Mastercard pou pran lajan reyèl.</div>
+        <div class="form-row">
+            <select id="depositCurrency" aria-label="Lajan depo"><option value="HTG">HTG — Goud</option><option value="USD">USD — Dola</option></select>
+            <select id="depositMethod" aria-label="Metòd peman"><option value="Tranzak">Tranzak (TEST)</option><option value="MonCash">MonCash (preparasyon)</option><option value="NatCash">NatCash (preparasyon)</option><option value="Visa">Visa (preparasyon)</option><option value="Mastercard">Mastercard (preparasyon)</option></select>
+        </div>
+        <div style="margin-top:10px"><input id="depositAmount" type="number" min="1" step="0.01" value="100" placeholder="Montan depo TEST"></div>
+        <div class="bet-actions"><button id="simulateDepositBtn" class="primary-pay">Ajoute kredi DEMO sèlman</button></div>
+    </div>
+
+    <div class="bet-box" id="withdrawBox">
+        <h2>💸 Demann retrè</h2>
+        <div class="form-row"><select id="withdrawCurrency"><option value="HTG">HTG — Goud</option><option value="USD">USD — Dola</option></select><select id="withdrawMethod"><option value="Tranzak">Tranzak (TEST)</option><option value="MonCash">MonCash (preparasyon)</option><option value="NatCash">NatCash (preparasyon)</option><option value="Visa">Visa (preparasyon)</option><option value="Mastercard">Mastercard (preparasyon)</option></select></div>
+        <div style="margin-top:10px"><input id="withdrawAmount" type="number" min="1" step="0.01" value="25" placeholder="Montan retrè TEST"></div>
+        <div class="bet-actions"><button id="simulateWithdrawBtn" class="danger-pay">Kreye demann retrè TEST</button></div>
+        <small>Nan pwodiksyon, retrè a dwe verifye sou backend epi pase nan workflow peman ki apwouve.</small>
     </div>
 
     <div class="bet-box" id="betCreatorBox" style="display:none">
-        <h2>⚔️ Nouveau défi</h2>
-        <div class="form-row">
-            <input id="betOpponent" placeholder="Pseudo de l'adversaire">
-            <select id="betCurrency"><option value="USD">USD</option><option value="HTG">HTG</option></select>
-        </div>
-        <div style="margin-top:10px"><input id="betAmount" type="number" min="0.01" step="0.01" placeholder="Montant de la mise"></div>
-        <div class="calc-box">
-            <div>Mise joueur 1 : <strong id="calcA">0</strong></div>
-            <div>Mise joueur 2 : <strong id="calcB">0</strong></div>
-            <div>Total : <strong id="calcTotal">0</strong></div>
-            <div>Commission plateforme : <strong id="calcFee">0</strong></div>
-            <div>Montant net du gagnant : <strong id="calcWinner">0</strong></div>
-        </div>
-        <div class="bet-actions">
-            <button id="confirmBetBtn" class="primary-pay">Créer le défi</button>
-            <button id="cancelBetBtn">Annuler</button>
-        </div>
+        <h2>⚔️ Nouvo defi ak paryaj</h2>
+        <div class="form-row"><input id="betOpponent" placeholder="Pseudo advèsè a"><select id="betCurrency"><option value="USD">USD</option><option value="HTG">HTG</option></select></div>
+        <div style="margin-top:10px"><input id="betAmount" type="number" min="0.01" step="0.01" placeholder="Miz ou"></div>
+        <div class="calc-box"><div>Miz ou: <strong id="calcA">$0.00 USD</strong></div><div>Miz advèsè (simile): <strong id="calcB">$0.00 USD</strong></div><div>Total pot la: <strong id="calcTotal">$0.00 USD</strong></div><div>Komisyon platfòm (15%): <strong id="calcFee">$0.00 USD</strong></div><div>Net pou gayan an (85%): <strong id="calcWinner">$0.00 USD</strong></div><div>Frè si anile (8% miz ou): <strong id="calcCancelFee">$0.00 USD</strong></div></div>
+        <div class="bet-actions"><button id="confirmBetBtn" class="primary-pay">Kreye defi TEST</button><button id="cancelBetBtn">Fèmen</button></div>
     </div>
 
-    <div class="wallet-box">
-        <h2>📜 Historique</h2>
-        <div id="walletHistory"><div class="history-item">Aucune transaction en mode test.</div></div>
+    <div class="bet-box">
+        <h2>💱 Konvètisè USD ↔ HTG</h2>
+        <div class="notice-test">To a se demonstrasyon: to baz Tranzak la dwe antre/verifye sou backend; sit la ajoute 2 HTG pou chak USD. Pa sèvi ak to sa a pou tranzaksyon reyèl.</div>
+        <div class="form-row"><input id="convertAmount" type="number" min="0" step="0.01" value="1" aria-label="Montan pou konvèti"><select id="convertDirection"><option value="USD_HTG">USD → HTG</option><option value="HTG_USD">HTG → USD</option></select></div>
+        <div class="calc-box"><div>To baz demo: <strong id="exchangeBaseLabel">135.00 HTG / USD</strong></div><div>Ajout fiks: <strong>+2.00 HTG / USD</strong></div><div>To itilizatè demo: <strong id="exchangeUserLabel">137.00 HTG / USD</strong></div><div>Rezilta: <strong id="convertResult">137.00 HTG</strong></div></div>
     </div>
-    <button class="back-button" id="walletBack">← Retour</button>
+
+    <div class="wallet-box"><h2>📜 Istwa tout tranzaksyon DEMO</h2><div id="walletHistory"><div class="history-item">Pa gen tranzaksyon nan mòd tès.</div></div></div>
+    <button class="back-button" id="walletBack">← Retounen</button>
 </section>
 
-<!-- ADMIN -->
+<!-- ADMIN / VIZYON DEMO — pa reprezante otantifikasyon admin backend -->
 <section id="adminScreen" class="screen">
-    <h1>👑 Administration</h1>
-    <div class="admin-box">
-        <div class="notice-test">⚠️ Écran de préparation uniquement. Les valeurs réelles doivent être protégées côté serveur, jamais dans le navigateur.</div>
-        <div class="wallet-grid">
-            <div class="wallet-card"><small>Commission</small><div class="admin-stat" id="adminFee">10%</div></div>
-            <div class="wallet-card"><small>Matchs avec mise</small><div class="admin-stat" id="adminMatches">0</div></div>
-            <div class="wallet-card"><small>Revenus plateforme</small><div class="admin-stat" id="adminRevenue">$0.00</div></div>
-        </div>
-        <h2>Paramètres de calcul</h2>
-        <div class="form-row">
-            <input id="adminCommission" type="number" min="0" max="100" step="0.1" value="10" placeholder="Commission %">
-            <button id="saveAdminBtn" class="primary-pay">Enregistrer</button>
-        </div>
+    <h1>👑 Admin Panel — Aperçu</h1>
+    <div class="admin-box"><div class="notice-test">🔐 VIZYON DEMO sèlman. Bouton ki nan HTML pa bay dwa admin reyèl. Pwodiksyon dwe verifye wòl admin sou backend Render.</div>
+      <div class="wallet-grid">
+        <div class="wallet-card"><small>Komisyon match</small><div class="admin-stat" id="adminFee">15%</div></div>
+        <div class="wallet-card"><small>Frè anilasyon</small><div class="admin-stat" id="adminCancellationLabel">8%</div></div>
+        <div class="wallet-card"><small>Match ak paryaj TEST</small><div class="admin-stat" id="adminMatches">0</div></div>
+        <div class="wallet-card"><small>Revenu admin USD (demo)</small><div class="admin-stat" id="adminRevenue">$0.00 USD</div></div>
+      </div>
+      <h2>👛 Admin Wallet prive — demo</h2><div class="wallet-grid"><div class="wallet-card"><small>Komisyon USD</small><strong id="adminWalletUsd">$0.00 USD</strong></div><div class="wallet-card"><small>Komisyon HTG</small><strong id="adminWalletHtg">0.00 HTG</strong></div></div>
+      <h2>⚙️ Paramèt kalkil TEST</h2>
+      <div class="form-row"><label>Komisyon match %<input id="adminCommission" type="number" min="0" max="100" step="0.1" value="15"></label><label>Frè anilasyon %<input id="adminCancellation" type="number" min="0" max="100" step="0.1" value="8"></label></div>
+      <div class="form-row" style="margin-top:10px"><label>To baz Tranzak demo (HTG/USD)<input id="adminExchangeBase" type="number" min="0.01" step="0.01" value="135"></label><label>Ajout HTG/USD<input id="adminExchangePlus" type="number" min="0" step="0.01" value="2"></label></div>
+      <div class="wallet-actions"><button id="saveAdminBtn" class="primary-pay">Sove paramèt DEMO</button><button id="adminCompleteBetBtn">Simile match fini</button><button id="adminCancelBetBtn">Simile anilasyon defi</button></div>
+      <div id="adminMessage" class="account-status" aria-live="polite"></div>
     </div>
-    <button class="back-button" id="adminBack">← Retour</button>
+    <button class="back-button" id="adminBack">← Retounen</button>
 </section>
 
 <!-- ROBOT -->
@@ -1611,18 +1613,26 @@ function refreshDashboardUser(){
   const au=document.getElementById('accountMenuUser'); if(au) au.textContent='👤 '+(currentUsername||'Connecté');
 }
 
-function openWalletFromDashboard(){ showScreen('walletScreen'); }
-document.getElementById('walletTopBtn')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardBetCard')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardChallengeCard')?.addEventListener('click',openWalletFromDashboard);
+function openWalletFromDashboard(openBet=false,openDeposit=false){
+  if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connecte-toi pour accéder au Wallet et aux paryaj.",false);return;}
+  if(typeof renderWallet==="function")renderWallet();
+  showScreen("walletScreen");
+  const bet=document.getElementById("betCreatorBox"),dep=document.getElementById("depositBox"),wd=document.getElementById("withdrawBox");
+  if(bet)bet.style.display=openBet?"block":"none";
+  if(dep)dep.style.display=openDeposit?"block":"none";
+  if(wd)wd.style.display="none";
+}
+document.getElementById('walletTopBtn')?.addEventListener('click',()=>openWalletFromDashboard());
+document.getElementById('dashboardBetCard')?.addEventListener('click',()=>openWalletFromDashboard(true,false));
+document.getElementById('dashboardChallengeCard')?.addEventListener('click',()=>openWalletFromDashboard(true,false));
 document.getElementById('dashboardOnlineCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardFriendCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>showScreen('homeScreen'));
 document.getElementById('dashboardSpectatorCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>alert('🏆 Classement : cette section sera ajoutée dans la prochaine étape.'));
 document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
-document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardDepositUsd')?.addEventListener('click',()=>openWalletFromDashboard(false,true));
+document.getElementById('dashboardDepositHtg')?.addEventListener('click',()=>openWalletFromDashboard(false,true));
 
 /* ==================================================
    ÉCRANS
@@ -5635,57 +5645,64 @@ function stopAllTimers() {
 
 
 /* ==================================================
-   PORTEFEUILLE / DEFIS — API WALLET (MODE TEST)
-   Les secrets Tranzak restent exclusivement côté serveur.
+   MR_JERY WALLET + PARI — MODE DEMO UNIQUEMENT
+   Aucun paiement réel, aucune requête au fournisseur depuis le navigateur.
 ================================================== */
-const WALLET_API_BASE = "https://mr-jery-wallet.onrender.com";
-const DEMO_KEY = "mrjery_wallet_demo_v1";
-const defaultDemo = {usd:0,htg:0,fees:0,matches:0,commission:10,history:[]};
+const DEMO_KEY = "mrjery_wallet_demo_v2";
+const defaultDemo = {usd:0,htg:0,adminUsd:0,adminHtg:0,matches:0,commission:15,cancellationFee:8,exchangeBase:135,exchangePlus:2,history:[],activeBet:null};
 function demoState(){try{return Object.assign({},defaultDemo,JSON.parse(localStorage.getItem(DEMO_KEY)||"{}"));}catch(e){return {...defaultDemo};}}
 function saveDemoState(s){localStorage.setItem(DEMO_KEY,JSON.stringify(s));}
 function money(v,c){return c === "HTG" ? Number(v).toFixed(2)+" HTG" : "$"+Number(v).toFixed(2)+" USD";}
-function renderWallet(){const s=demoState(); document.getElementById("demoUsd").textContent=money(s.usd,"USD"); document.getElementById("demoHtg").textContent=money(s.htg,"HTG"); document.getElementById("demoFees").textContent=money(s.fees,"USD"); document.getElementById("adminFee").textContent=Number(s.commission).toFixed(1)+"%"; document.getElementById("adminMatches").textContent=s.matches; document.getElementById("adminRevenue").textContent=money(s.fees,"USD"); const h=document.getElementById("walletHistory"); h.innerHTML=s.history.length?s.history.slice().reverse().map(x=>`<div class="history-item">${x}</div>`).join(""): '<div class="history-item">Aucune transaction en mode test.</div>';}
-function calcBet(){const amount=Math.max(0,Number(document.getElementById("betAmount").value)||0), c=document.getElementById("betCurrency").value, feePct=demoState().commission, total=amount*2, fee=total*feePct/100, winner=total-fee; document.getElementById("calcA").textContent=money(amount,c);document.getElementById("calcB").textContent=money(amount,c);document.getElementById("calcTotal").textContent=money(total,c);document.getElementById("calcFee").textContent=money(fee,c);document.getElementById("calcWinner").textContent=money(winner,c);}
-document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connectez-vous pour accéder au portefeuille.",false);return;}renderWallet();showScreen("walletScreen");});
+function escapeDemoText(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function addDemoHistory(s,type,amount,currency,status,description,reference="DEMO_ONLY"){
+  s.history.push({id:"demo_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7),type,amount:Number(amount),currency,status,description,reference,createdAt:new Date().toLocaleString()});
+  if(s.history.length>150)s.history=s.history.slice(-150);
+}
+function renderWallet(){
+  const s=demoState();
+  document.getElementById("demoUsd").textContent=money(s.usd,"USD");
+  document.getElementById("demoHtg").textContent=money(s.htg,"HTG");
+  const feeTotalUsd=Number(s.adminUsd)||0;
+  document.getElementById("demoFees").textContent=money(feeTotalUsd,"USD");
+  document.getElementById("adminFee").textContent=Number(s.commission).toFixed(1)+"%";
+  document.getElementById("adminCancellationLabel").textContent=Number(s.cancellationFee).toFixed(1)+"%";
+  document.getElementById("adminMatches").textContent=s.matches;
+  document.getElementById("adminRevenue").textContent=money(s.adminUsd,"USD");
+  document.getElementById("adminWalletUsd").textContent=money(s.adminUsd,"USD");
+  document.getElementById("adminWalletHtg").textContent=money(s.adminHtg,"HTG");
+  document.getElementById("adminCommission").value=s.commission;
+  document.getElementById("adminCancellation").value=s.cancellationFee;
+  document.getElementById("adminExchangeBase").value=s.exchangeBase;
+  document.getElementById("adminExchangePlus").value=s.exchangePlus;
+  const h=document.getElementById("walletHistory");
+  h.innerHTML=s.history.length?s.history.slice().reverse().map(x=>`<div class="history-item"><strong>${escapeDemoText(x.type.toUpperCase())}</strong> — ${escapeDemoText(money(x.amount,x.currency))} — ${escapeDemoText(x.status)}<br><small>${escapeDemoText(x.description)} · ${escapeDemoText(x.createdAt)} · ${escapeDemoText(x.reference)}</small></div>`).join(""):'<div class="history-item">Pa gen tranzaksyon nan mòd tès.</div>';
+  updateDashboardBalances();updateDemoConversion();calcBet();
+}
+function updateDashboardBalances(){const s=demoState();const u=document.getElementById("dashboardUsd"),h=document.getElementById("dashboardHtg");if(u)u.textContent=money(s.usd,"USD");if(h)h.textContent=money(s.htg,"HTG");}
+function getRate(){const s=demoState();return Math.max(.01,Number(s.exchangeBase)||135)+Math.max(0,Number(s.exchangePlus)||2);}
+function updateDemoConversion(){const s=demoState(),amt=Math.max(0,Number(document.getElementById("convertAmount")?.value)||0),dir=document.getElementById("convertDirection")?.value||"USD_HTG",rate=getRate();const base=document.getElementById("exchangeBaseLabel"),user=document.getElementById("exchangeUserLabel"),out=document.getElementById("convertResult");if(base)base.textContent=Number(s.exchangeBase).toFixed(2)+" HTG / USD";if(user)user.textContent=rate.toFixed(2)+" HTG / USD";if(out)out.textContent=dir==="USD_HTG"?money(amt*rate,"HTG"):money(amt/rate,"USD");}
+function calcBet(){const amount=Math.max(0,Number(document.getElementById("betAmount")?.value)||0),c=document.getElementById("betCurrency")?.value||"USD",s=demoState(),total=amount*2,fee=total*Number(s.commission)/100,winner=total-fee,cancelFee=amount*Number(s.cancellationFee)/100;const put=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};put("calcA",money(amount,c));put("calcB",money(amount,c));put("calcTotal",money(total,c));put("calcFee",money(fee,c));put("calcWinner",money(winner,c));put("calcCancelFee",money(cancelFee,c));}
+function setWalletMessage(msg){const el=document.getElementById("walletMessage");if(el)el.textContent=msg;}
+document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connecte-toi pour accéder au portefeuille.",false);return;}renderWallet();showScreen("walletScreen");});
 document.getElementById("walletBack")?.addEventListener("click",()=>showAccountMenu());
-document.getElementById("createBetBtn")?.addEventListener("click",()=>{document.getElementById("betCreatorBox").style.display="block";calcBet();});
+document.getElementById("createBetBtn")?.addEventListener("click",()=>{document.getElementById("betCreatorBox").style.display="block";document.getElementById("depositBox").style.display="none";document.getElementById("withdrawBox").style.display="none";calcBet();});
+document.getElementById("openDepositBtn")?.addEventListener("click",()=>{document.getElementById("depositBox").style.display="block";document.getElementById("withdrawBox").style.display="none";document.getElementById("betCreatorBox").style.display="none";});
+document.getElementById("withdrawBtn")?.addEventListener("click",()=>{document.getElementById("withdrawBox").style.display="block";document.getElementById("depositBox").style.display="none";document.getElementById("betCreatorBox").style.display="none";setWalletMessage("Demann retrè DEMO sèlman. Pa gen lajan reyèl k ap voye.");});
 document.getElementById("cancelBetBtn")?.addEventListener("click",()=>document.getElementById("betCreatorBox").style.display="none");
 document.getElementById("betAmount")?.addEventListener("input",calcBet);
 document.getElementById("betCurrency")?.addEventListener("change",calcBet);
-document.getElementById("confirmBetBtn")?.addEventListener("click",()=>{const s=demoState(), opp=document.getElementById("betOpponent").value.trim(), amount=Number(document.getElementById("betAmount").value)||0, c=document.getElementById("betCurrency").value;if(!opp||amount<=0){document.getElementById("walletMessage").textContent="Indiquez un adversaire et un montant valide.";return;}const total=amount*2,fee=total*s.commission/100;s.matches++;s.fees += c==="USD"?fee:0;s.history.push(`Défi TEST créé contre ${opp} — ${money(amount,c)} chacun — commission prévue ${money(fee,c)}`);saveDemoState(s);renderWallet();document.getElementById("betCreatorBox").style.display="none";document.getElementById("walletMessage").textContent="Défi enregistré en mode test. Aucun paiement réel n'a été effectué.";});
-document.getElementById("refreshWalletBtn")?.addEventListener("click",renderWallet);
-
-async function startWalletDeposit(){
-  const message=document.getElementById("walletMessage");
-  const amount=Number(document.getElementById("depositAmount").value);
-  const currency=document.getElementById("depositCurrency").value;
-  const method=document.getElementById("depositMethod").value;
-  const phone=document.getElementById("depositPhone").value.trim();
-  if(!accountConnected || !accountToken){message.textContent="Connectez-vous d'abord à votre compte.";return;}
-  if(!Number.isFinite(amount)||amount<=0){message.textContent="Entrez un montant valide.";return;}
-  if(method==="natcash" && currency==="HTG" && amount<20){message.textContent="Le montant minimum NatCash est de 20 HTG.";return;}
-  const button=document.getElementById("startDepositBtn"); button.disabled=true; message.textContent="Connexion sécurisée au portefeuille…";
-  try{
-    const response=await fetch(WALLET_API_BASE+"/deposits",{
-      method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+accountToken},
-      body:JSON.stringify({amount,currency,payment_method:method,phone:phone||undefined,customer_name:currentUsername||"MR_Jery user",email:currentEmail||undefined})
-    });
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok){
-      if(response.status===503) message.textContent="Le serveur wallet doit encore être relié au système de connexion sécurisé (AUTH_SHARED_SECRET). Aucun paiement n'a été lancé.";
-      else message.textContent=data.detail||data.message||("Le serveur a répondu avec le code "+response.status+". Aucun paiement confirmé.");
-      return;
-    }
-    const paymentUrl=data.payment_url||data.checkout_url;
-    if(paymentUrl){message.textContent="Redirection vers la page de paiement Tranzak en mode test…";window.location.assign(paymentUrl);}
-    else message.textContent="Demande reçue, mais le serveur n'a pas retourné de lien de paiement. Vérifiez les logs backend.";
-  }catch(e){message.textContent="Impossible de joindre le serveur wallet. Vérifiez que le service Render est disponible.";}
-  finally{button.disabled=false;}
-}
-document.getElementById("startDepositBtn")?.addEventListener("click",startWalletDeposit);
-
-document.getElementById("withdrawBtn")?.addEventListener("click",()=>{document.getElementById("walletMessage").textContent="Le retrait réel sera activé uniquement après connexion à un prestataire de paiement autorisé et au backend sécurisé.";});
-document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=demoState();s.commission=Math.min(100,Math.max(0,Number(document.getElementById("adminCommission").value)||0));saveDemoState(s);renderWallet();});
+document.getElementById("convertAmount")?.addEventListener("input",updateDemoConversion);
+document.getElementById("convertDirection")?.addEventListener("change",updateDemoConversion);
+document.getElementById("simulateDepositBtn")?.addEventListener("click",()=>{const s=demoState(),amount=Number(document.getElementById("depositAmount").value)||0,c=document.getElementById("depositCurrency").value,method=document.getElementById("depositMethod").value;if(!Number.isFinite(amount)||amount<=0){setWalletMessage("Antre yon montan DEMO ki pi gran pase zewo.");return;}if(c==="USD")s.usd+=amount;else s.htg+=amount;addDemoHistory(s,"deposit_demo",amount,c,"simulated_only",`Kredi lokal demonstrasyon — ${method}`);saveDemoState(s);renderWallet();setWalletMessage("Kredi DEMO ajoute lokalman. Pa gen peman reyèl ki fèt.");});
+document.getElementById("simulateWithdrawBtn")?.addEventListener("click",()=>{const s=demoState(),amount=Number(document.getElementById("withdrawAmount").value)||0,c=document.getElementById("withdrawCurrency").value,method=document.getElementById("withdrawMethod").value,key=c==="USD"?"usd":"htg";if(!Number.isFinite(amount)||amount<=0){setWalletMessage("Antre yon montan retrè DEMO ki valab.");return;}if(s[key]<amount){setWalletMessage("Balans DEMO a pa sifi pou demann sa a.");return;}s[key]-=amount;addDemoHistory(s,"withdrawal_demo",amount,c,"simulated_only",`Demann retrè lokal — ${method}; pa gen payout reyèl`);saveDemoState(s);renderWallet();setWalletMessage("Demann retrè DEMO anrejistre; okenn lajan reyèl pa voye.");});
+document.getElementById("confirmBetBtn")?.addEventListener("click",()=>{const s=demoState(),opp=document.getElementById("betOpponent").value.trim(),amount=Number(document.getElementById("betAmount").value)||0,c=document.getElementById("betCurrency").value,key=c==="USD"?"usd":"htg";if(!opp||amount<=0){setWalletMessage("Antre non advèsè a ak yon montan valab.");return;}if(s[key]<amount){setWalletMessage(`Balans ${c} ou pa sifi. Itilize bouton Depo TEST pou ajoute kredi DEMO.`);return;}s[key]-=amount;s.activeBet={opponent:opp,amount,currency:c,createdAt:new Date().toISOString()};addDemoHistory(s,"bet_reservation_demo",amount,c,"simulated_only",`Miz DEMO rezève pou defi kont ${opp}`);saveDemoState(s);renderWallet();document.getElementById("betCreatorBox").style.display="none";setWalletMessage("Defi DEMO kreye. Miz ou a rezève nan demo a; match la poko konekte ak sèvis online backend.");});
+document.getElementById("refreshWalletBtn")?.addEventListener("click",()=>{renderWallet();setWalletMessage("Done DEMO yo rafrechi.");});
+document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=demoState();s.commission=Math.min(100,Math.max(0,Number(document.getElementById("adminCommission").value)||0));s.cancellationFee=Math.min(100,Math.max(0,Number(document.getElementById("adminCancellation").value)||0));s.exchangeBase=Math.max(.01,Number(document.getElementById("adminExchangeBase").value)||135);s.exchangePlus=Math.max(0,Number(document.getElementById("adminExchangePlus").value)||0);saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent="Paramèt DEMO sove nan navigatè sa a. Sa pa modifye backend ni to Tranzak reyèl.";});
+document.getElementById("adminCompleteBetBtn")?.addEventListener("click",()=>{const s=demoState(),b=s.activeBet;if(!b){const m=document.getElementById("adminMessage");if(m)m.textContent="Pa gen defi DEMO aktif pou fini.";return;}const key=b.currency==="USD"?"usd":"htg",pot=b.amount*2,fee=pot*Number(s.commission)/100,net=pot-fee;s[key]+=net;if(b.currency==="USD")s.adminUsd+=fee;else s.adminHtg+=fee;s.matches+=1;addDemoHistory(s,"match_complete_demo",net,b.currency,"simulated_only",`Match DEMO fini: pot ${money(pot,b.currency)}, komisyon ${money(fee,b.currency)}, gayan demo resevwa ${money(net,b.currency)}`);s.activeBet=null;saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent=`Match DEMO fini. Komisyon ${money(fee,b.currency)}; gayan demo resevwa ${money(net,b.currency)}.`;});
+document.getElementById("adminCancelBetBtn")?.addEventListener("click",()=>{const s=demoState(),b=s.activeBet;if(!b){const m=document.getElementById("adminMessage");if(m)m.textContent="Pa gen defi DEMO aktif pou anile.";return;}const key=b.currency==="USD"?"usd":"htg",fee=b.amount*Number(s.cancellationFee)/100,refund=b.amount-fee;s[key]+=refund;if(b.currency==="USD")s.adminUsd+=fee;else s.adminHtg+=fee;addDemoHistory(s,"bet_cancel_demo",b.amount,b.currency,"simulated_only",`Defi anile: frè ${money(fee,b.currency)}, ranbousman ${money(refund,b.currency)}`);s.activeBet=null;saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent=`Anilasyon DEMO fèt. Frè ${money(fee,b.currency)}; ranbousman ${money(refund,b.currency)}.`;});
+document.getElementById("adminBack")?.addEventListener("click",()=>showAccountMenu());
+document.getElementById("previewAdminBtn")?.addEventListener("click",()=>{renderWallet();showScreen("adminScreen");});
+renderWallet();
 
 
 /* ==================================================
