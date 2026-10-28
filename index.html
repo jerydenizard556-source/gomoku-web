@@ -472,19 +472,10 @@ h1 {
     grid-template-columns: repeat(20, minmax(0, 1fr));
     grid-template-rows: repeat(20, minmax(0, 1fr));
     width: 100%;
-    height: 100%;
     aspect-ratio: 1 / 1;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
-    box-sizing: border-box;
-    border: 1px solid #8b95a5;
-    background-color: #f8fafc;
-    background-image:
-        linear-gradient(to right, #8b95a5 1px, transparent 1px),
-        linear-gradient(to bottom, #8b95a5 1px, transparent 1px);
-    background-size: 5% 5%;
-    background-position: 0 0;
 }
 
 .cell {
@@ -498,61 +489,12 @@ h1 {
     min-height: 0;
     cursor: pointer;
     overflow: hidden;
-    background: transparent;
-    border: 0;
-    box-sizing: border-box;
 }
 
-/* Dernier pion joué + curseur de prévisualisation en ligne */
-.cell.online-last-move::marker { content: ""; }
-.cell.online-last-move {
-    background: rgba(250, 204, 21, 0.22);
-}
-.cell .online-last-move-ring {
-    position: absolute;
-    z-index: 4;
-    width: 72%;
-    height: 72%;
-    border: 3px solid #facc15;
-    border-radius: 50%;
-    box-sizing: border-box;
-    pointer-events: none;
-    box-shadow: 0 0 0 2px rgba(15, 23, 42, .7), 0 0 10px rgba(250, 204, 21, .65);
-}
-.cell .online-placement-cursor {
-    position: absolute;
-    z-index: 5;
-    width: 22%;
-    height: 22%;
-    min-width: 7px;
-    min-height: 7px;
-    border: 2px solid #38bdf8;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, .45);
-    box-shadow: 0 0 0 2px rgba(2, 6, 23, .7), 0 0 9px rgba(56, 189, 248, .9);
-    pointer-events: none;
-}
-.cell.online-cursor-target { background-color: rgba(56, 189, 248, .2); }
-
-.cell::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background: #aab3bf;
-}
-
-.cell::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    background: #aab3bf;
-}
+.cell::before, .cell::after { content: none !important; }
+.board-grid-svg { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; overflow:visible; }
+.board-grid-svg line { stroke:#8f99a8; stroke-width:.22; vector-effect:non-scaling-stroke; }
+.board .cell { z-index:2; background:transparent; }
 
 /* PIONS */
 
@@ -981,128 +923,6 @@ td, th { overflow-wrap: anywhere; }
   .wallet-box, .bet-box, .admin-box { padding: 12px; }
   .board-area { margin-left: auto; margin-right: auto; }
 }
-
-
-/* =========================================================
-   CORRECTION VISUELLE DU TABLEAU GOMOKU EN LIGNE
-   Garder 20 x 20 intersections complètes et une grille carrée.
-========================================================= */
-#onlineBoard.board-area {
-    display: grid !important;
-    grid-template-columns: clamp(18px, 3.5vw, 30px) minmax(0, 1fr) !important;
-    grid-template-rows: clamp(18px, 3.5vw, 30px) minmax(0, 1fr) !important;
-    width: min(96vw, 760px) !important;
-    max-width: 100% !important;
-    aspect-ratio: 1 / 1 !important;
-    height: auto !important;
-    box-sizing: border-box !important;
-    padding: clamp(2px, 0.35vw, 4px) !important;
-    margin: 18px auto !important;
-    overflow: visible !important;
-    background: #f8fafc !important;
-    border: 2px solid #8b95a5 !important;
-    border-radius: 6px !important;
-}
-#onlineBoard.board-area > :first-child { grid-column: 1; grid-row: 1; }
-#onlineBoard.board-area > .letters { grid-column: 2; grid-row: 1; }
-#onlineBoard.board-area > .numbers { grid-column: 1; grid-row: 2; }
-#onlineBoard.board-area > .board {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-    position: relative !important;
-    display: grid !important;
-    grid-template-columns: repeat(20, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(20, minmax(0, 1fr)) !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    aspect-ratio: 1 / 1 !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    border: 1px solid #64748b !important;
-    background-color: #ffffff !important;
-}
-#onlineBoard.board-area > .board > .cell {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    box-sizing: border-box !important;
-    overflow: visible !important;
-    cursor: pointer;
-}
-#onlineBoard.board-area > .board > .cell::before {
-    content: "" !important;
-    position: absolute !important;
-    left: 0 !important;
-    right: 0 !important;
-    top: 50% !important;
-    height: 1px !important;
-    background: #9ca3af !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
-}
-#onlineBoard.board-area > .board > .cell::after {
-    content: "" !important;
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 50% !important;
-    width: 1px !important;
-    background: #9ca3af !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
-}
-#onlineBoard.board-area > .board .stone {
-    position: relative !important;
-    z-index: 5 !important;
-    width: 74% !important;
-    height: 74% !important;
-    flex: 0 0 74% !important;
-    border-radius: 50% !important;
-}
-#onlineBoard .letters, #onlineBoard .numbers {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-}
-#onlineBoard .letters span, #onlineBoard .numbers span {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-    font-size: clamp(7px, 1.25vw, 12px) !important;
-    color: #172033 !important;
-    font-weight: 800 !important;
-}
-@media (max-width: 500px) {
-    #onlineBoard.board-area {
-        width: min(calc(100vw - 18px), 760px) !important;
-        grid-template-columns: 18px minmax(0, 1fr) !important;
-        grid-template-rows: 18px minmax(0, 1fr) !important;
-        padding: 2px !important;
-        margin: 12px auto !important;
-        border-width: 2px !important;
-    }
-    #onlineBoard .letters span, #onlineBoard .numbers span {
-        font-size: clamp(6px, 1.8vw, 8px) !important;
-    }
-    #onlineBoard.board-area > .board .stone {
-        width: 68% !important;
-        height: 68% !important;
-        flex-basis: 68% !important;
-    }
-}
-
 </style>
 </head>
 
@@ -1967,6 +1787,24 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     board.className = "board";
+
+    // Draw one continuous, precise grid behind all intersections.
+    const gridSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    gridSvg.classList.add("board-grid-svg");
+    gridSvg.setAttribute("viewBox", "0 0 100 100");
+    gridSvg.setAttribute("preserveAspectRatio", "none");
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        const pos = 2.5 + (95 / (BOARD_SIZE - 1)) * i;
+        const v = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        v.setAttribute("x1", pos); v.setAttribute("y1", "2.5");
+        v.setAttribute("x2", pos); v.setAttribute("y2", "97.5");
+        gridSvg.appendChild(v);
+        const h = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        h.setAttribute("x1", "2.5"); h.setAttribute("y1", pos);
+        h.setAttribute("x2", "97.5"); h.setAttribute("y2", pos);
+        gridSvg.appendChild(h);
+    }
+    board.appendChild(gridSvg);
 
     for (let row = 0; row < BOARD_SIZE; row++) {
 
@@ -3631,7 +3469,6 @@ let onlineStarter = 1;
 let onlineWinningLine = null;
 
 let onlineLastMove = null;
-let onlinePendingPlacement = null; // premier clic : affiche un curseur, second clic : joue le pion
 let onlineRematchRequest = null;
 let onlineUndoRequest = null;
 
@@ -3845,7 +3682,6 @@ document
             onlinePlayersState = {};
             onlineRematchRequest = null;
             onlineLastMove = null;
-                    onlinePendingPlacement = null;
 
             const list = document.getElementById("liveMatchList");
             const error = document.getElementById("spectatorError");
@@ -4448,7 +4284,6 @@ function connectServer(callback) {
                     }
 
                     onlineLastMove = null;
-                    onlinePendingPlacement = null;
                     onlineRematchRequest =
                         null;
                     onlineUndoRequest = null;
@@ -4537,7 +4372,6 @@ function connectServer(callback) {
                         "create";
 
                     onlineLastMove = null;
-                    onlinePendingPlacement = null;
                     onlineRematchRequest =
                         null;
 
@@ -4612,7 +4446,6 @@ function connectServer(callback) {
                         "join";
 
                     onlineLastMove = null;
-                    onlinePendingPlacement = null;
                     onlineRematchRequest =
                         null;
 
@@ -4739,7 +4572,6 @@ function connectServer(callback) {
                     "state"
                 ) {
 
-                    onlinePendingPlacement = null;
                     onlineBoardState =
                         convertServerBoard(
                             data.board
@@ -5168,24 +5000,9 @@ function updateOnlineResult() {
 
 function updateOnlineNewGameButton() {
     const button = document.getElementById("onlineNewGame");
-    if (!button) return;
-    const canStartAnother = Boolean(onlineGameOver) && onlineConnectionMode !== "spectator";
-    button.style.display = canStartAnother ? "inline-flex" : "none";
-    button.textContent = "🔄 Jwe yon lòt pati";
-    button.setAttribute("aria-label", "Quitter cette partie et retourner au menu pour jouer une autre partie");
-}
-
-// Après la fin d'une partie, le joueur peut facilement revenir au menu en ligne
-// et lancer une nouvelle recherche ou créer/rejoindre une partie avec un ami.
-const onlineNewGameButton = document.getElementById("onlineNewGame");
-if (onlineNewGameButton) {
-    onlineNewGameButton.addEventListener("click", function () {
-        if (!onlineGameOver || onlineConnectionMode === "spectator") return;
-        closeOnlineConnection();
-        showScreen("onlineScreen");
-        const notice = document.getElementById("onlineError");
-        if (notice) notice.textContent = "Ou ka chwazi yon lòt pati kounye a.";
-    });
+    if (button) {
+        button.style.display = "none";
+    }
 }
 
 /* ==================================================
@@ -5251,40 +5068,15 @@ function renderOnlineState() {
                 row + "," + col;
 
             cell.innerHTML = "";
-            cell.classList.remove("online-last-move", "online-cursor-target");
 
-            if (onlineBoardState[key]) {
-                drawStone(cell, onlineBoardState[key]);
-            }
+            if (
+                onlineBoardState[key]
+            ) {
 
-            // Entoure en jaune le dernier pion joué pour que les deux joueurs le repèrent.
-            const lm = onlineLastMove;
-            if (lm) {
-                let lr = null, lc = null;
-                if (Array.isArray(lm)) {
-                    lr = Number(lm[0]); lc = Number(lm[1]);
-                } else if (typeof lm === "object") {
-                    lr = Number(lm.row ?? lm.r ?? lm["0"]);
-                    lc = Number(lm.col ?? lm.column ?? lm.c ?? lm["1"]);
-                    if ((lm.position || lm.move) && !Number.isFinite(lr)) {
-                        const pos = lm.position || lm.move;
-                        if (Array.isArray(pos)) { lr = Number(pos[0]); lc = Number(pos[1]); }
-                    }
-                }
-                if (lr === row && lc === col) {
-                    cell.classList.add("online-last-move");
-                    const ring = document.createElement("span");
-                    ring.className = "online-last-move-ring";
-                    cell.appendChild(ring);
-                }
-            }
-
-            // Premier clic : montre un petit curseur bleu sans encore jouer le pion.
-            if (onlinePendingPlacement && onlinePendingPlacement.row === row && onlinePendingPlacement.col === col && !onlineBoardState[key]) {
-                cell.classList.add("online-cursor-target");
-                const cursor = document.createElement("span");
-                cursor.className = "online-placement-cursor";
-                cell.appendChild(cursor);
+                drawStone(
+                    cell,
+                    onlineBoardState[key]
+                );
             }
         }
     }
@@ -5460,13 +5252,12 @@ function updateUndoUI() {
     }
 
     box.style.display = "block";
-    box.style.visibility = "visible";
-    message.textContent = "Ton dernier pion est joué. Tu peux demander à l'adversaire de te laisser le rejwe.";
+    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
 
     const request = document.createElement("button");
     request.type = "button";
     request.className = "undo-button undo-request";
-    request.textContent = "↩️ Rejwe mon dernier pion";
+    request.textContent = "🔄 Demande rejwe";
     request.addEventListener("click", requestUndo);
     actions.appendChild(request);
 }
@@ -5563,24 +5354,15 @@ function onlineClick(
         return;
     }
 
-    const key = row + "," + col;
+    const key =
+        row + "," + col;
 
-    if (onlineBoardState[key]) {
-        onlinePendingPlacement = null;
-        renderOnlineState();
+    if (
+        onlineBoardState[key]
+    ) {
         return;
     }
 
-    // Premier clic : positionner un petit curseur. Deuxième clic sur la même case : jouer.
-    if (!onlinePendingPlacement || onlinePendingPlacement.row !== row || onlinePendingPlacement.col !== col) {
-        onlinePendingPlacement = { row: row, col: col };
-        document.getElementById("gameOnlineError").textContent = "🎯 Pion prêt à être placé : clique une deuxième fois au même endroit pour jouer.";
-        renderOnlineState();
-        return;
-    }
-
-    onlinePendingPlacement = null;
-    renderOnlineState();
     document
         .getElementById(
             "gameOnlineError"
@@ -5646,7 +5428,6 @@ document
                 START_TIME;
 
             onlineLastMove = null;
-                    onlinePendingPlacement = null;
             onlineRematchRequest =
                 null;
             onlineUndoRequest = null;
@@ -5736,7 +5517,6 @@ document
                 START_TIME;
 
             onlineLastMove = null;
-                    onlinePendingPlacement = null;
             onlineRematchRequest =
                 null;
             onlineUndoRequest = null;
@@ -6016,7 +5796,6 @@ function closeOnlineConnection() {
         null;
 
     onlineLastMove = null;
-                    onlinePendingPlacement = null;
     onlineRematchRequest =
         null;
 
