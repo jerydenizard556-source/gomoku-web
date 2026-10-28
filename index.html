@@ -1640,6 +1640,9 @@ td, th { overflow-wrap: anywhere; }
 </div>
 
 <script>
+// Compteur de reconnexion initialisé avant toute fonction susceptible d’ouvrir le WebSocket.
+let reconnectAttempts = 0;
+
 
 /* ==================================================
    SERVEUR
@@ -3495,7 +3498,8 @@ let onlineSessionToken = null;
 let onlineConnectionMode = null;
 
 let reconnectTimer = null;
-let reconnectAttempts = 0;
+// Déclaré dès le début du script pour éviter toute utilisation avant initialisation.
+
 let reconnecting = false;
 
 let onlineDisplayInterval = null;
