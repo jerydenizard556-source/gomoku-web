@@ -426,17 +426,21 @@ h1 {
     box-sizing: border-box;
     margin: 20px auto;
     display: grid;
-    grid-template-columns: clamp(20px, 4vw, 30px) minmax(0, 1fr);
-    grid-template-rows: clamp(20px, 4vw, 30px) minmax(0, 1fr);
-    background: #D4AF37;
-    border: clamp(3px, 0.8vw, 7px) solid #8B6F1D;
-    padding: clamp(2px, 0.5vw, 4px);
+    grid-template-columns: clamp(18px, 4vw, 30px) minmax(0, 1fr);
+    grid-template-rows: clamp(18px, 4vw, 30px) minmax(0, 1fr);
+    aspect-ratio: 1 / 1;
+    background: #f8fafc;
+    border: clamp(2px, 0.45vw, 5px) solid #b7bec8;
+    border-radius: 8px;
+    padding: clamp(2px, 0.35vw, 4px);
     overflow: hidden;
 }
 .board-area > * { min-width: 0; min-height: 0; }
-.board-area .board { width: 100%; max-width: 100%; aspect-ratio: 1 / 1; }
+.board-area .board { width: 100%; height: 100%; max-width: 100%; aspect-ratio: 1 / 1; }
 .board-area .letters, .board-area .numbers { min-width: 0; min-height: 0; overflow: hidden; }
-.board-area .letters span, .board-area .numbers span { min-width: 0; text-align: center; font-size: clamp(7px, 1.4vw, 12px); }
+.board-area .letters span, .board-area .numbers span { min-width: 0; text-align: center; font-size: clamp(7px, 1.3vw, 12px); line-height: 1; color: #172033; }
+.board-area .letters span { font-weight: 800; }
+.board-area .numbers span { font-weight: 700; }
 
 .letters {
     grid-column: 2;
@@ -494,7 +498,7 @@ h1 {
     right: 0;
     top: 50%;
     height: 1px;
-    background: #5B4510;
+    background: #aab3bf;
 }
 
 .cell::after {
@@ -504,15 +508,15 @@ h1 {
     bottom: 0;
     left: 50%;
     width: 1px;
-    background: #5B4510;
+    background: #aab3bf;
 }
 
 /* PIONS */
 
 .stone {
-    width: 68%;
-    height: 68%;
-    flex: 0 0 68%;
+    width: 74%;
+    height: 74%;
+    flex: 0 0 74%;
     border-radius: 50%;
     position: relative;
     z-index: 5;
@@ -617,13 +621,14 @@ h1 {
     }
 
     .board-area {
-        width: min(98vw, 760px);
-        grid-template-columns: 20px minmax(0, 1fr);
-        grid-template-rows: 20px minmax(0, 1fr);
-        border-width: 3px;
+        width: min(calc(100vw - 18px), 760px);
+        grid-template-columns: 18px minmax(0, 1fr);
+        grid-template-rows: 18px minmax(0, 1fr);
+        border-width: 2px;
         padding: 2px;
+        margin: 12px auto;
     }
-    .board-area .letters span, .board-area .numbers span { font-size: 7px; }
+    .board-area .letters span, .board-area .numbers span { font-size: clamp(6px, 1.8vw, 8px); }
 
     .letters,
     .numbers {
@@ -1243,12 +1248,12 @@ td, th { overflow-wrap: anywhere; }
 
 <section id="robotScreen" class="screen">
 
-    <h1>🤖 Jouer avec Robot</h1>
+    <h1>🤖 Jouer avec Robot — Niveau MASTER</h1>
 
     <div class="game-info">
 
         <div id="robotStatus" class="status">
-            À ton tour
+            À ton tour — le robot analyse les attaques et bloque les menaces.
         </div>
 
         <div class="timers">
@@ -1639,6 +1644,7 @@ let accountConnected = false;
 let accountRequestInProgress = false;
 let onlineOpenedFromAccountMenu = false;
 let pendingRestoreCallback = null;
+let restoreSessionTimeout = null;
 let restoringAccountSession = false;
 
 function showAccountMessage(message, success) {
@@ -2627,62 +2633,53 @@ function robotMove() {
 }
 
 function findBestRobotMove() {
-    // Niveau MASTER : gagne si possible, bloque les menaces immédiates,
-    // puis privilégie les attaques et défenses qui créent des menaces multiples.
-    const winningMove = findWinningMove("red");
-    if (winningMove) return winningMove;
+    // Niveau MASTER : priorité absolue à une victoire immédiate, puis au blocage
+    // d'une victoire adverse. Ensuite, évalue les attaques ET les défenses/fourches.
+    const winNow = findWinningMove("red");
+    if (winNow) return winNow;
 
-    const blockingMove = findWinningMove("black");
-    if (blockingMove) return blockingMove;
+    const mustBlock = findWinningMove("black");
+    if (mustBlock) return mustBlock;
 
-    const candidates = [];
     const occupied = Object.keys(robotBoard);
-    if (occupied.length === 0) {
-        return { row: Math.floor(BOARD_SIZE / 2), col: Math.floor(BOARD_SIZE / 2) };
-    }
+    const center = Math.floor(BOARD_SIZE / 2);
+    if (!occupied.length) return { row: center, col: center };
 
-    // Analyse surtout les cases proches des pions déjà posés pour rester rapide.
-    const seen = new Set();
+    const candidates = new Map();
     for (const item of occupied) {
-        const [r0, c0] = item.split(',').map(Number);
+        const [r0, c0] = item.split(",").map(Number);
         for (let dr = -2; dr <= 2; dr++) {
             for (let dc = -2; dc <= 2; dc++) {
                 const row = r0 + dr, col = c0 + dc;
                 if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) continue;
-                const key = row + ',' + col;
-                if (!robotBoard[key] && !seen.has(key)) {
-                    seen.add(key);
-                    candidates.push({ row, col });
-                }
+                const key = row + "," + col;
+                if (!robotBoard[key]) candidates.set(key, { row, col });
             }
         }
     }
 
-    let bestMove = candidates[0] || { row: Math.floor(BOARD_SIZE / 2), col: Math.floor(BOARD_SIZE / 2) };
+    let best = null;
     let bestScore = -Infinity;
-
-    for (const move of candidates) {
-        const key = move.row + ',' + move.col;
-        // L'attaque du robot et la défense contre les menaces du joueur sont évaluées.
-        robotBoard[key] = 'red';
-        const attack = scoreMasterPosition(move.row, move.col, 'red');
-        const robotWinsNext = countWinningMoves('red', 2);
+    for (const move of candidates.values()) {
+        const key = move.row + "," + move.col;
+        // Simule une attaque du robot puis une défense du joueur : les menaces
+        // ouvertes et les alignements de 3/4 pions reçoivent un poids élevé.
+        robotBoard[key] = "red";
+        const attack = scoreMasterPosition(move.row, move.col, "red");
+        const redForks = countWinningMoves("red", 2);
         delete robotBoard[key];
 
-        robotBoard[key] = 'black';
-        const defense = scoreMasterPosition(move.row, move.col, 'black');
-        const playerWinsNext = countWinningMoves('black', 2);
+        robotBoard[key] = "black";
+        const defense = scoreMasterPosition(move.row, move.col, "black");
+        const blackForks = countWinningMoves("black", 2);
         delete robotBoard[key];
 
-        const center = (BOARD_SIZE - 1) / 2;
-        const centerBonus = Math.max(0, 12 - (Math.abs(move.row-center) + Math.abs(move.col-center)) * 0.5);
-        const score = attack * 1.12 + defense * 1.08 + robotWinsNext * 18000 - playerWinsNext * 22000 + centerBonus;
-        if (score > bestScore) {
-            bestScore = score;
-            bestMove = move;
-        }
+        const distance = Math.abs(move.row - center) + Math.abs(move.col - center);
+        const centerBonus = Math.max(0, 16 - distance * 0.45);
+        const score = attack * 1.15 + defense * 1.10 + redForks * 24000 - blackForks * 30000 + centerBonus;
+        if (score > bestScore) { bestScore = score; best = move; }
     }
-    return bestMove;
+    return best || { row: center, col: center };
 }
 
 function countWinningMoves(color, stopAt = 2) {
@@ -3186,9 +3183,9 @@ document
 
             stopAllTimers();
 
-            showScreen(
-                "homeScreen"
-            );
+            // Retourner au menu du compte (paris, défis, jeu en ligne, profil),
+            // pas à une page différente ni à l'accueil public si la session est active.
+            showScreen(accountConnected ? "accountMenuScreen" : "homeScreen");
         }
     );
 
@@ -3304,8 +3301,8 @@ document.getElementById("accountOnlineBtn").addEventListener("click", function()
     document.getElementById("searchingBox").classList.remove("show");
     const openOnline = function() {
         if (!accountConnected) {
-            showScreen("accountScreen");
-            showAccountMessage("Ta session n'a pas pu être restaurée. Connecte-toi, ou vérifie la connexion au serveur.", false);
+            openAuth("login");
+            showAccountMessage("Connecte-toi pour jouer en ligne.", false);
             return;
         }
         showScreen("onlineScreen");
@@ -3315,7 +3312,7 @@ document.getElementById("accountOnlineBtn").addEventListener("click", function()
         showScreen("onlineScreen"); requestOnlinePlayers();
     } else {
         showScreen("onlineScreen");
-        const err = document.getElementById("onlineError"); if(err) err.textContent = "Restauration de ta session...";
+        const err = document.getElementById("onlineError"); if(err) err.textContent = "Vérification de la connexion…";
         connectServer(openOnline);
     }
 });
@@ -3324,23 +3321,44 @@ document.getElementById("settingsBtn")?.addEventListener("click", function() {
     showScreen("settingsScreen");
 });
 
-document.getElementById("logoutBtn").addEventListener("click", function() {
-    try { if(socket && socket.readyState===WebSocket.OPEN && accountToken) socket.send(JSON.stringify({type:"logout_session", account_token:accountToken})); localStorage.removeItem("mrjery_account_token"); } catch(e) {}
-    closeOnlineConnection();
+document.getElementById("logoutBtn").addEventListener("click", function(event) {
+    // Déconnexion explicite : effacer la session locale et afficher UNIQUEMENT Connexion.
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    const tokenToRevoke = accountToken;
+    try {
+        if (socket && socket.readyState === WebSocket.OPEN && tokenToRevoke) {
+            socket.send(JSON.stringify({type:"logout_session", account_token:tokenToRevoke}));
+        }
+    } catch(e) {}
+    try {
+        localStorage.removeItem("mrjery_account_token");
+        localStorage.removeItem("accountToken");
+        sessionStorage.removeItem("mrjery_account_token");
+        sessionStorage.removeItem("accountToken");
+    } catch(e) {}
+    try { closeOnlineConnection(); } catch(e) {}
     accountConnected = false;
     currentPlayerId = null;
     currentUsername = null;
     currentEmail = null;
     accountToken = null;
     accountRequestInProgress = false;
-    document.getElementById("registerUsername").value = "";
-    document.getElementById("registerEmail").value = "";
-    document.getElementById("registerPassword").value = "";
-    document.getElementById("registerPasswordConfirmation").value = "";
-    document.getElementById("loginInput").value = "";
-    document.getElementById("loginPassword").value = "";
-    updateAccountDisplay();
-    showScreen("localScreen");
+
+    ["registerUsername","registerEmail","registerPassword","registerPasswordConfirmation","loginInput","loginPassword"].forEach(function(id) {
+        const field = document.getElementById(id);
+        if (field) field.value = "";
+    });
+    try { updateAccountDisplay(); } catch(e) {}
+    try { setAuthMode("login"); } catch(e) {}
+    // Force the auth screen as the sole visible page; don't show the dashboard or landing page.
+    showScreen("accountScreen");
+    const authTitle = document.getElementById("authTitle");
+    if (authTitle) authTitle.textContent = "Connexion";
+    const loginPanel = document.getElementById("loginPanel");
+    if (loginPanel) loginPanel.style.display = "block";
+    const registerPanel = document.getElementById("registerPanel");
+    if (registerPanel) registerPanel.style.display = "none";
+    window.scrollTo(0, 0);
 });
 
 document.getElementById("accountMenuBack")?.addEventListener("click", function() {
@@ -3808,11 +3826,13 @@ function connectServer(callback) {
         socket.readyState ===
         WebSocket.OPEN
     ) {
-
-        if (callback) {
-            callback();
+        // Si la restauration est en cours, attendre l'identification du serveur.
+        // Cela évite de lancer un jeu avant que le compte soit reconnu.
+        if (restoringAccountSession) {
+            if (callback) pendingRestoreCallback = callback;
+            return;
         }
-
+        if (callback) callback();
         return;
     }
 
@@ -3847,6 +3867,23 @@ function connectServer(callback) {
             if (savedToken && !accountRequestInProgress) {
                 restoringAccountSession = true;
                 pendingRestoreCallback = callback || null;
+                if (restoreSessionTimeout) clearTimeout(restoreSessionTimeout);
+                restoreSessionTimeout = setTimeout(function(){
+                    if (!restoringAccountSession) return;
+                    // Un délai réseau n'est PAS une déconnexion : conserver le jeton.
+                    // Ne pas envoyer le joueur à Connexion tant que le serveur n'a pas
+                    // répondu que le jeton est réellement invalide.
+                    restoringAccountSession = false;
+                    const err = document.getElementById("onlineError");
+                    if (err) err.textContent = "Le serveur tarde à répondre. Ton compte reste mémorisé : vérifie la connexion puis réessaie, sans te reconnecter.";
+                    const status = document.getElementById("onlineStatus");
+                    if (status) status.textContent = "Session conservée — serveur en attente";
+                    try {
+                        const oldSocket = socket;
+                        socket = null;
+                        if (oldSocket && oldSocket.readyState < WebSocket.CLOSING) oldSocket.close();
+                    } catch(e) {}
+                }, 15000);
                 socket.send(JSON.stringify({type:"restore_session", account_token:savedToken}));
             } else if (callback) {
                 callback();
@@ -4000,6 +4037,7 @@ function connectServer(callback) {
 
                 if (data.type === "restore_session_result") {
                     restoringAccountSession = false;
+                    if (restoreSessionTimeout) { clearTimeout(restoreSessionTimeout); restoreSessionTimeout = null; }
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
                         currentUsername = data.username || null;
@@ -4009,10 +4047,12 @@ function connectServer(callback) {
                         updateAccountDisplay();
                         refreshDashboardUser();
                     } else {
-                        // Ne pas effacer le jeton automatiquement en cas d'échec réseau/serveur.
-                        // L'utilisateur choisit lui-même Déconnexion pour terminer sa session.
+                        // Session non valide : demander une connexion explicite.
                         accountConnected = false;
                         accountToken = null;
+                        try { localStorage.removeItem("mrjery_account_token"); } catch(e) {}
+                        openAuth("login");
+                        showAccountMessage("Ta session a expiré ou n'est plus valide. Connecte-toi à nouveau.", false);
                     }
                     const cb = pendingRestoreCallback;
                     pendingRestoreCallback = null;
@@ -5858,6 +5898,8 @@ document.getElementById('goRegisterBtn')?.addEventListener('click',()=>setAuthMo
 document.getElementById('goLoginBtn')?.addEventListener('click',()=>setAuthMode('login'));
 
 
+// Le compte reste mémorisé dans localStorage et est restauré au démarrage.
+// Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
 // Au chargement, tenter de restaurer le compte sauvegardé sans exiger une nouvelle connexion.
 (function restoreSavedAccountAtStartup(){
   let token = null;
