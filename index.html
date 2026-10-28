@@ -813,7 +813,7 @@ h1 {
     }
 
 
-.online-players-box{max-width:600px;margin:16px auto;padding:16px;border:1px solid #374151;border-radius:12px;background:#1F2937}.online-players-title{color:#D4AF37;font-weight:bold;text-align:center;margin-bottom:10px}.online-players-list{display:flex;flex-direction:column;gap:8px}.online-player-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:9px;background:#111827;border:1px solid #374151}.online-player-name{min-width:0;color:#F9FAFB;font-weight:bold;overflow-wrap:anywhere}.online-player-state{color:#86EFAC;font-size:12px;margin-left:6px}.online-player-invite{padding:8px 12px;border-radius:8px;border:1px solid #D4AF37;background:#273449;color:#F9FAFB;font-weight:bold;cursor:pointer}.online-player-invite:disabled{opacity:.5;cursor:not-allowed}.online-players-status{color:#9CA3AF;text-align:center;font-size:13px;margin-top:9px}.game-invite-box{display:none;max-width:600px;margin:12px auto;padding:14px;border:1px solid #D4AF37;border-radius:12px;background:#1F2937;text-align:center}.game-invite-message{color:#D4AF37;font-weight:bold;margin-bottom:10px}.game-invite-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.game-invite-actions button{padding:10px 18px;border-radius:8px;border:1px solid #4B5563;color:white;font-weight:bold;cursor:pointer}.invite-accept{background:#166534}.invite-refuse{background:#991B1B}
+.online-players-box{max-width:600px;margin:16px auto;padding:16px;border:1px solid #374151;border-radius:12px;background:#1F2937}.online-players-title{color:#D4AF37;font-weight:bold;text-align:center;margin-bottom:10px}.online-players-list{display:flex;flex-direction:column;gap:8px}.online-player-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:9px;background:#111827;border:1px solid #374151}.online-player-name{min-width:0;color:#F9FAFB;font-weight:bold;overflow-wrap:anywhere}.online-player-state{color:#86EFAC;font-size:12px;margin-left:6px}.online-player-invite{padding:8px 12px;border-radius:8px;border:1px solid #D4AF37;background:#273449;color:#F9FAFB;font-weight:bold;cursor:pointer}.online-player-invite:disabled{opacity:.5;cursor:not-allowed}.online-players-status{color:#9CA3AF;text-align:center;font-size:13px;margin-top:9px}.game-invite-box{display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 28px);max-width:600px;margin:0;padding:14px;border:1px solid #D4AF37;border-radius:12px;background:#1F2937;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,.45)}.game-invite-message{color:#D4AF37;font-weight:bold;margin-bottom:10px}.game-invite-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.game-invite-actions button{padding:10px 18px;border-radius:8px;border:1px solid #4B5563;color:white;font-weight:bold;cursor:pointer}.invite-accept{background:#166534}.invite-refuse{background:#991B1B}
 
 /* ==================================================
    WALLET / DEFIS — PREPARATION
@@ -1404,13 +1404,7 @@ td, th { overflow-wrap: anywhere; }
         <div id="onlinePlayersStatus" class="online-players-status">Chargement des joueurs...</div>
     </div>
 
-    <div id="gameInviteBox" class="game-invite-box">
-        <div id="gameInviteMessage" class="game-invite-message"></div>
-        <div class="game-invite-actions">
-            <button id="acceptGameInviteBtn" class="invite-accept" type="button">✅ Accepter</button>
-            <button id="refuseGameInviteBtn" class="invite-refuse" type="button">❌ Refuser</button>
-        </div>
-    </div>
+
 
     <div class="room">
 
@@ -1566,11 +1560,24 @@ td, th { overflow-wrap: anywhere; }
 
     <div id="gameOnlineError" class="error"></div>
 
+    <div class="game-actions" style="margin-top:10px">
+        <button class="back-button" id="leaveOnlineMatchBtn" type="button" style="background:#991b1b;border-color:#ef4444">🚪 Kite match la</button>
+    </div>
+
     <button class="back-button" id="onlineGameBack">
         ← Retour au menu
     </button>
 
 </section>
+
+<!-- Invitation rete vizib menm lè jwè a kite ekran match la -->
+<div id="gameInviteBox" class="game-invite-box" role="dialog" aria-live="polite" aria-label="Invitation match">
+    <div id="gameInviteMessage" class="game-invite-message"></div>
+    <div class="game-invite-actions">
+        <button id="acceptGameInviteBtn" class="invite-accept" type="button">✅ Accepter</button>
+        <button id="refuseGameInviteBtn" class="invite-refuse" type="button">❌ Refuser</button>
+    </div>
+</div>
 
 <!-- ÉCRAN VICTOIRE LOCAL / ROBOT -->
 
@@ -5251,7 +5258,8 @@ function updateUndoUI() {
         return;
     }
 
-    box.style.display = "block";
+    box.style.display = "flex";
+    box.style.visibility = "visible";
     message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
 
     const request = document.createElement("button");
@@ -5713,6 +5721,29 @@ document
             showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
         }
     );
+
+document.getElementById("leaveOnlineMatchBtn")?.addEventListener("click", function() {
+    if (!onlineRoom || onlineConnectionMode === "spectator") {
+        // Spectatè a kite sèlman match la; li rete konekte pou l ka resevwa envitasyon.
+        if (socket && socket.readyState === WebSocket.OPEN && onlineRoom) {
+            socket.send(JSON.stringify({type:"stop_watching", room:onlineRoom}));
+        }
+    } else if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({type:"leave_match", room:onlineRoom}));
+    }
+    stopOnlineDisplayTimer();
+    if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+    reconnecting = false; reconnectAttempts = 0;
+    onlinePlayer = null; onlineRoom = null; onlineSessionToken = null;
+    onlineConnectionMode = null; onlineLastMove = null; onlineRematchRequest = null; onlineUndoRequest = null;
+    onlineBoardState = {}; onlinePlayersState = {}; onlineWinner = null; onlineGameOver = false; onlineDraw = false;
+    showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
+    if (accountConnected) {
+        connectServer(function(){
+            if (socket && socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({type:"online_players"}));
+        });
+    }
+});
 
 document
     .getElementById("onlineGameBack")
