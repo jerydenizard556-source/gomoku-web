@@ -1664,6 +1664,8 @@ let currentEmail = null;
 let accountToken = null;
 let accountConnected = false;
 let accountRequestInProgress = false;
+let accountRequestTimeout = null;
+let loginButtonOriginalText = null;
 let onlineOpenedFromAccountMenu = false;
 let pendingRestoreCallback = null;
 // Garde les actions demandées pendant que le WebSocket est encore en cours d'ouverture.
@@ -1684,6 +1686,18 @@ function showAccountMessage(message, success) {
     if (!box) return;
     box.textContent = message || "";
     box.style.color = success ? "#86EFAC" : "#FCA5A5";
+}
+
+function finishAccountRequest() {
+    accountRequestInProgress = false;
+    if (accountRequestTimeout) { clearTimeout(accountRequestTimeout); accountRequestTimeout = null; }
+    const button = document.getElementById("loginBtn");
+    if (button) {
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+        button.innerHTML = loginButtonOriginalText || 'Se connecter <b>›</b>';
+    }
 }
 
 function updateAccountDisplay() {
@@ -1756,21 +1770,48 @@ document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWal
 const screens =
     document.querySelectorAll(".screen");
 
-function showScreen(id) {
+// Navigation interne : les écrans restent dans la même page et le bouton
+// Retour du navigateur peut revenir à l'écran précédent sans recharger le site.
+const mrjeryScreenHistory = [];
+let mrjeryChangingHistory = false;
+let mrjeryCurrentScreen = null;
+
+function showScreen(id, options) {
+    options = options || {};
+    const target = document.getElementById(id);
+    if (!target) {
+        console.warn("Écran introuvable :", id);
+        return;
+    }
+
+    const active = document.querySelector(".screen.active");
+    const previousId = active ? active.id : mrjeryCurrentScreen;
+    if (!options.fromHistory && previousId && previousId !== id) {
+        mrjeryScreenHistory.push(previousId);
+        if (mrjeryScreenHistory.length > 80) mrjeryScreenHistory.shift();
+        try {
+            history.pushState({ mrjeryScreen: id }, "", "#" + encodeURIComponent(id));
+        } catch (e) {}
+    }
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
     });
-
-    const target =
-        document.getElementById(id);
-
-    if (target) {
-        target.classList.add("active");
-    }
-
-    window.scrollTo(0, 0);
+    target.classList.add("active");
+    mrjeryCurrentScreen = id;
+    window.scrollTo({ top: 0, behavior: "auto" });
 }
+
+window.addEventListener("popstate", function() {
+    const previousId = mrjeryScreenHistory.pop();
+    if (previousId && document.getElementById(previousId)) {
+        showScreen(previousId, { fromHistory: true });
+    } else {
+        // Si l'historique ne contient pas d'écran, ne pas laisser la page vide.
+        const active = document.querySelector(".screen.active");
+        if (!active) showScreen(accountConnected ? "accountMenuScreen" : "landingScreen", { fromHistory: true });
+    }
+});
 
 /* ==================================================
    TABLEAU
@@ -3324,30 +3365,57 @@ document.getElementById("registerBtn").addEventListener("click", function() {
     });
 });
 
-document.getElementById("loginBtn").addEventListener("click", function() {
+document.getElementById("loginBtn").addEventListener("click", function(event) {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    // Empêcher les doubles clics et les demandes concurrentes.
+    if (accountRequestInProgress) return;
+
     const login = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("loginPassword").value;
-
     if (!login || !password) {
         showAccountMessage("⚠️ Entrez votre pseudo/email et votre mot de passe.", false);
         return;
     }
 
+    const button = document.getElementById("loginBtn");
+    if (button) {
+        if (!loginButtonOriginalText) loginButtonOriginalText = button.innerHTML;
+        button.disabled = true;
+        button.style.opacity = "0.7";
+        button.style.cursor = "wait";
+        button.textContent = "Connexion en cours…";
+    }
     accountRequestInProgress = true;
-    showAccountMessage("⏳ Connexion...", true);
+    showAccountMessage("⏳ Connexion au serveur…", true);
 
-    connectServer(function() {
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
-            accountRequestInProgress = false;
-            showAccountMessage("❌ Serveur non disponible.", false);
-            return;
-        }
-        socket.send(JSON.stringify({
-            type: "login",
-            login: login,
-            password: password
-        }));
-    });
+    // Ne jamais laisser le bouton bloqué indéfiniment si le serveur ne répond pas.
+    if (accountRequestTimeout) clearTimeout(accountRequestTimeout);
+    accountRequestTimeout = setTimeout(function() {
+        finishAccountRequest();
+        showAccountMessage("⚠️ Le serveur tarde à répondre. Vérifie la connexion puis réessaie.", false);
+    }, 15000);
+
+    try {
+        connectServer(function() {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                finishAccountRequest();
+                showAccountMessage("❌ Impossible de joindre le serveur. Réessaie.", false);
+                return;
+            }
+            try {
+                socket.send(JSON.stringify({ type: "login", login: login, password: password }));
+                showAccountMessage("⏳ Vérification du compte…", true);
+            } catch (err) {
+                finishAccountRequest();
+                showAccountMessage("❌ Envoi impossible. Vérifie la connexion puis réessaie.", false);
+                console.error("Échec de l'envoi login", err);
+            }
+        });
+    } catch (err) {
+        finishAccountRequest();
+        showAccountMessage("❌ Erreur de connexion au serveur. Réessaie.", false);
+        console.error("Échec connexion login", err);
+    }
 });
 
 document.getElementById("accountPlayBtn").addEventListener("click", function() {
@@ -4075,7 +4143,7 @@ function connectServer(callback) {
 
                 if (data.type === "register_result") {
 
-                    accountRequestInProgress = false;
+                    finishAccountRequest();
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
@@ -4110,7 +4178,7 @@ function connectServer(callback) {
 
                 if (data.type === "login_result") {
 
-                    accountRequestInProgress = false;
+                    finishAccountRequest();
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
