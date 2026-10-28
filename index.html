@@ -469,8 +469,8 @@ h1 {
     grid-row: 2;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(var(--board-size, 20), minmax(0, 1fr));
-    grid-template-rows: repeat(var(--board-size, 20), minmax(0, 1fr));
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+    grid-template-rows: repeat(20, minmax(0, 1fr));
     width: 100%;
     aspect-ratio: 1 / 1;
     min-width: 0;
@@ -491,10 +491,22 @@ h1 {
     overflow: hidden;
 }
 
-.cell::before, .cell::after { content: none !important; }
-.board-grid-svg { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; overflow:visible; }
-.board-grid-svg line { stroke:#8f99a8; stroke-width:.22; vector-effect:non-scaling-stroke; }
-.board .cell { z-index:2; background:transparent; }
+/* Grille robuste: chaque case dessine deux demi-lignes qui se rejoignent
+   exactement au centre de l'intersection. Fonctionne aussi sur mobile. */
+.board {
+    background-color: #f8fafc !important;
+    background-image: none !important;
+}
+.board .cell {
+    position: relative;
+    z-index: 1;
+    background-color: transparent !important;
+    background-image:
+      linear-gradient(to right, transparent calc(50% - 0.8px), #334155 calc(50% - 0.8px), #334155 calc(50% + 0.8px), transparent calc(50% + 0.8px)),
+      linear-gradient(to bottom, transparent calc(50% - 0.8px), #334155 calc(50% - 0.8px), #334155 calc(50% + 0.8px), transparent calc(50% + 0.8px));
+    background-repeat: no-repeat;
+}
+.board .stone { position: relative; z-index: 5; }
 
 /* PIONS */
 
@@ -1759,6 +1771,7 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     letters.className = "letters";
+    letters.style.gridTemplateColumns = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
 
     for (let i = 0; i < BOARD_SIZE; i++) {
 
@@ -1777,6 +1790,7 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     numbers.className = "numbers";
+    numbers.style.gridTemplateRows = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
 
     for (let i = 1; i <= BOARD_SIZE; i++) {
 
@@ -1794,25 +1808,9 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     board.className = "board";
-    board.style.setProperty("--board-size", String(BOARD_SIZE));
-
-    // Draw one continuous, precise grid behind all intersections.
-    const gridSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    gridSvg.classList.add("board-grid-svg");
-    gridSvg.setAttribute("viewBox", "0 0 100 100");
-    gridSvg.setAttribute("preserveAspectRatio", "none");
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        const pos = 2.5 + (95 / (BOARD_SIZE - 1)) * i;
-        const v = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        v.setAttribute("x1", pos); v.setAttribute("y1", "2.5");
-        v.setAttribute("x2", pos); v.setAttribute("y2", "97.5");
-        gridSvg.appendChild(v);
-        const h = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        h.setAttribute("x1", "2.5"); h.setAttribute("y1", pos);
-        h.setAttribute("x2", "97.5"); h.setAttribute("y2", pos);
-        gridSvg.appendChild(h);
-    }
-    board.appendChild(gridSvg);
+    // The selected board size controls the exact number of playable intersections.
+    board.style.gridTemplateColumns = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
+    board.style.gridTemplateRows = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
 
     for (let row = 0; row < BOARD_SIZE; row++) {
 
@@ -5066,7 +5064,7 @@ function renderOnlineState() {
                 row * BOARD_SIZE + col;
 
             const cell =
-                boardElement.children[index];
+                boardElement.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
 
             if (!cell) {
                 continue;
@@ -5741,10 +5739,7 @@ document.getElementById("leaveOnlineMatchBtn")?.addEventListener("click", functi
     showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
     if (accountConnected) {
         connectServer(function(){
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({type:"online_players"}));
-                setTimeout(function(){ if(socket && socket.readyState===WebSocket.OPEN) socket.send(JSON.stringify({type:"online_players"})); }, 700);
-            }
+            if (socket && socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({type:"online_players"}));
         });
     }
 });
