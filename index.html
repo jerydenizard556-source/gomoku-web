@@ -289,29 +289,18 @@ h1 {
 .rematch-box {
     max-width: 600px;
     width: 100%;
-    min-height: 94px;
-    height: 94px;
+    min-height: 64px;
+    height: auto;
     margin: 12px auto;
     padding: 8px 12px;
     border: 1px solid #D4AF37;
     border-radius: 9px;
     background: #1F2937;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    visibility: hidden;
-    overflow: hidden;
+    display: block;
+    visibility: visible;
+    overflow: visible;
     box-sizing: border-box;
 }
-
-/* Rezève menm espas la pou mesaj rejwe a pa fè tablo a deplase. */
-#rematchBox, #undoBox { min-height: 94px; height: 94px; }
-#rematchBox.show, #undoBox.show { visibility: visible; }
-#onlineStatus { min-height: 34px; display: flex; align-items: center; justify-content: center; }
-#onlineStatus.opponent-turn { font-size: 22px; font-weight: 900; color: #FBBF24; }
-#onlineMatchNotice { min-height: 28px; }
-#onlineBoard { contain: layout paint; }
-#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 46px; padding: 11px 18px; font-size: 16px; }
 
 .rematch-box.show {
     visibility: visible;
@@ -885,23 +874,6 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
 #waitingRoomScreen .waiting-status,#waitingRoomScreen .status{color:var(--neo-cyan)}
 @media(max-width:650px){#onlineScreen,#spectatorScreen,#waitingRoomScreen{padding:18px 12px 30px}#onlineScreen .online-box{grid-template-columns:1fr;gap:12px;margin-top:22px}#onlineScreen .online-choice{min-height:105px;padding:22px 18px;font-size:17px}#spectatorScreen .live-match-list,#waitingRoomScreen .waiting-list{grid-template-columns:1fr}#spectatorScreen .spectator-box,#waitingRoomScreen .waiting-box{padding:16px}}
 
-
-/* Paramètres d'invitation et styles locaux du tableau */
-.invite-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;text-align:left;margin:10px 0}
-.invite-settings-grid label,.board-style-label{display:flex;flex-direction:column;gap:6px;color:#E5E7EB;font-size:14px;font-weight:700}
-.invite-settings-grid select,.board-style-label select{width:100%;min-height:44px;padding:9px 10px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:#fff;font-size:15px}
-.board-style-label{max-width:100%;text-align:left}
-.board-style-midnight .board{background:#172033!important;border-color:#64748b!important}
-.board-style-midnight .cell{border-color:#64748b!important}
-.board-style-mint .board{background:#d9fbe8!important;border-color:#4d8d70!important}
-.board-style-mint .cell{border-color:#8bbda1!important}
-.board-style-rose .board{background:#fff0f5!important;border-color:#d68aa8!important}
-.board-style-rose .cell{border-color:#e3a9be!important}
-.board-style-sand .board{background:#f4e7c5!important;border-color:#c5a96b!important}
-.board-style-sand .cell{border-color:#cbb783!important}
-@media(max-width:480px){.invite-settings-grid{grid-template-columns:1fr}}
-
-/* Keep the original landing page visible so players can choose Connexion or Créer un compte. */
 </style>
 </head>
 
@@ -1077,7 +1049,6 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
         <button type="button" class="dash-nav" id="accountOnlineBtn">🎮 <span>Jeu</span></button>
         <button type="button" class="dash-nav" id="dashboardRankingBtn">🏆 <span>Classement</span></button>
         <button type="button" class="dash-nav" id="profileBtn">ⓘ <span>Profil</span></button>
-         <button type="button" class="dash-nav" id="dashboardAdminBtn">👑 <span>Admin</span></button>
         <button type="button" class="dash-nav" id="walletTopBtn">💰 <span>Wallet</span></button>
       </nav>
       <div class="dashboard-user">
@@ -1116,7 +1087,7 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
       </section>
 
-      <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
+      <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="previewAdminBtn">👑 Admin aperçu</button><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
     </main>
   </div>
 </section>
@@ -1144,86 +1115,88 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
 
 
 
-<!-- PORTEFEUILLE / DEFIS -->
+<!-- PORTEFEUILLE / DEFIS — PROTOTYPE COMPLET, MODE TEST -->
 <section id="walletScreen" class="screen">
-    <h1>💰 Portefeuille & Défis</h1>
+    <h1>💰 Wallet, Paryaj & Tranzak</h1>
     <div class="wallet-box">
-        <div class="notice-test">⚠️ MODE PRÉPARATION : cette version prépare l'interface et les calculs. Aucun argent réel n'est encaissé ou envoyé depuis ce fichier. Le backend et le prestataire de paiement doivent être configurés avant toute activation réelle.</div>
+        <div class="notice-test">🧪 MODE APERÇU / TEST UNIQUEMENT — Balans ak tranzaksyon yo se done demonstrasyon nan navigatè sa a. Pa gen lajan reyèl k ap antre oswa soti. Depo/retrè reyèl bezwen backend Render, PostgreSQL ak yon founisè peman verifye.</div>
         <div class="wallet-grid">
-            <div class="wallet-card"><small>Solde USD</small><strong id="demoUsd">$0.00</strong></div>
-            <div class="wallet-card"><small>Solde HTG</small><strong id="demoHtg">0 HTG</strong></div>
-            <div class="wallet-card"><small>Commissions plateforme</small><strong id="demoFees">$0.00</strong></div>
+            <div class="wallet-card"><small>Balans USD jwè</small><strong id="demoUsd">$0.00 USD</strong></div>
+            <div class="wallet-card"><small>Balans HTG jwè</small><strong id="demoHtg">0.00 HTG</strong></div>
+            <div class="wallet-card"><small>Komisyon platfòm (USD)</small><strong id="demoFees">$0.00 USD</strong></div>
         </div>
         <div class="wallet-actions">
-            <button id="createBetBtn" class="primary-pay">⚔️ Créer un défi</button>
-            <button id="withdrawBtn">💸 Demander un retrait</button>
-            <button id="refreshWalletBtn">🔄 Actualiser</button>
+            <button id="createBetBtn" class="primary-pay">⚔️ Kreye yon defi ak paryaj</button>
+            <button id="openDepositBtn">💳 Depo TEST</button>
+            <button id="withdrawBtn">💸 Demann retrè TEST</button>
+            <button id="refreshWalletBtn">🔄 Rafrechi</button>
         </div>
-        <div id="walletMessage" class="account-status"></div>
+        <div id="walletMessage" class="account-status" aria-live="polite"></div>
+    </div>
+
+    <div class="bet-box" id="depositBox">
+        <h2>💳 Depo / Metòd peman</h2>
+        <div class="notice-test">Tout bouton peman yo se demonstrasyon. Yo pa konekte ak Tranzak, MonCash, NatCash, Visa oswa Mastercard pou pran lajan reyèl.</div>
+        <div class="form-row">
+            <select id="depositCurrency" aria-label="Lajan depo"><option value="HTG">HTG — Goud</option><option value="USD">USD — Dola</option></select>
+            <select id="depositMethod" aria-label="Metòd peman"><option value="Tranzak">Tranzak (TEST)</option><option value="MonCash">MonCash (preparasyon)</option><option value="NatCash">NatCash (preparasyon)</option><option value="Visa">Visa (preparasyon)</option><option value="Mastercard">Mastercard (preparasyon)</option></select>
+        </div>
+        <div style="margin-top:10px"><input id="depositAmount" type="number" min="1" step="0.01" value="100" placeholder="Montan depo TEST"></div>
+        <div class="bet-actions"><button id="simulateDepositBtn" class="primary-pay">Ajoute kredi DEMO sèlman</button></div>
+    </div>
+
+    <div class="bet-box" id="withdrawBox">
+        <h2>💸 Demann retrè</h2>
+        <div class="form-row"><select id="withdrawCurrency"><option value="HTG">HTG — Goud</option><option value="USD">USD — Dola</option></select><select id="withdrawMethod"><option value="Tranzak">Tranzak (TEST)</option><option value="MonCash">MonCash (preparasyon)</option><option value="NatCash">NatCash (preparasyon)</option><option value="Visa">Visa (preparasyon)</option><option value="Mastercard">Mastercard (preparasyon)</option></select></div>
+        <div style="margin-top:10px"><input id="withdrawAmount" type="number" min="1" step="0.01" value="25" placeholder="Montan retrè TEST"></div>
+        <div class="bet-actions"><button id="simulateWithdrawBtn" class="danger-pay">Kreye demann retrè TEST</button></div>
+        <small>Nan pwodiksyon, retrè a dwe verifye sou backend epi pase nan workflow peman ki apwouve.</small>
     </div>
 
     <div class="bet-box" id="betCreatorBox" style="display:none">
-        <h2>⚔️ Nouveau défi</h2>
-        <div class="form-row">
-            <input id="betOpponent" placeholder="Pseudo de l'adversaire">
-            <select id="betCurrency"><option value="USD">USD</option><option value="HTG">HTG</option></select>
-        </div>
-        <div style="margin-top:10px"><input id="betAmount" type="number" min="0.01" step="0.01" placeholder="Montant de la mise"></div>
-        <div class="calc-box">
-            <div>Mise joueur 1 : <strong id="calcA">0</strong></div>
-            <div>Mise joueur 2 : <strong id="calcB">0</strong></div>
-            <div>Total : <strong id="calcTotal">0</strong></div>
-            <div>Commission plateforme : <strong id="calcFee">0</strong></div>
-            <div>Montant net du gagnant : <strong id="calcWinner">0</strong></div>
-        </div>
-        <div class="bet-actions">
-            <button id="confirmBetBtn" class="primary-pay">Créer le défi</button>
-            <button id="cancelBetBtn">Annuler</button>
-        </div>
+        <h2>⚔️ Nouvo defi ak paryaj</h2>
+        <div class="form-row"><input id="betOpponent" placeholder="Pseudo advèsè a"><select id="betCurrency"><option value="USD">USD</option><option value="HTG">HTG</option></select></div>
+        <div style="margin-top:10px"><input id="betAmount" type="number" min="0.01" step="0.01" placeholder="Miz ou"></div>
+        <div class="calc-box"><div>Miz ou: <strong id="calcA">$0.00 USD</strong></div><div>Miz advèsè (simile): <strong id="calcB">$0.00 USD</strong></div><div>Total pot la: <strong id="calcTotal">$0.00 USD</strong></div><div>Komisyon platfòm (15%): <strong id="calcFee">$0.00 USD</strong></div><div>Net pou gayan an (85%): <strong id="calcWinner">$0.00 USD</strong></div><div>Frè si anile (8% miz ou): <strong id="calcCancelFee">$0.00 USD</strong></div></div>
+        <div class="bet-actions"><button id="confirmBetBtn" class="primary-pay">Kreye defi TEST</button><button id="cancelBetBtn">Fèmen</button></div>
     </div>
 
-    <div class="wallet-box">
-        <h2>📜 Historique</h2>
-        <div id="walletHistory"><div class="history-item">Aucune transaction en mode test.</div></div>
+    <div class="bet-box">
+        <h2>💱 Konvètisè USD ↔ HTG</h2>
+        <div class="notice-test">To a se demonstrasyon: to baz Tranzak la dwe antre/verifye sou backend; sit la ajoute 2 HTG pou chak USD. Pa sèvi ak to sa a pou tranzaksyon reyèl.</div>
+        <div class="form-row"><input id="convertAmount" type="number" min="0" step="0.01" value="1" aria-label="Montan pou konvèti"><select id="convertDirection"><option value="USD_HTG">USD → HTG</option><option value="HTG_USD">HTG → USD</option></select></div>
+        <div class="calc-box"><div>To baz demo: <strong id="exchangeBaseLabel">135.00 HTG / USD</strong></div><div>Ajout fiks: <strong>+2.00 HTG / USD</strong></div><div>To itilizatè demo: <strong id="exchangeUserLabel">137.00 HTG / USD</strong></div><div>Rezilta: <strong id="convertResult">137.00 HTG</strong></div></div>
     </div>
-    <button class="back-button" id="walletBack">← Retour</button>
+
+    <div class="wallet-box"><h2>📜 Istwa tout tranzaksyon DEMO</h2><div id="walletHistory"><div class="history-item">Pa gen tranzaksyon nan mòd tès.</div></div></div>
+    <button class="back-button" id="walletBack">← Retounen</button>
 </section>
 
-<!-- ADMIN -->
+<!-- ADMIN / VIZYON DEMO — pa reprezante otantifikasyon admin backend -->
 <section id="adminScreen" class="screen">
-    <h1>👑 Administration</h1>
-    <div class="admin-box">
-        <div class="notice-test">⚠️ Espace de préparation : seuils de niveau enregistrés localement. Pour une administration sécurisée en ligne, le serveur doit vérifier le rôle admin.</div>
-        <div class="wallet-grid">
-            <div class="wallet-card"><small>Commission</small><div class="admin-stat" id="adminFee">10%</div></div>
-            <div class="wallet-card"><small>Matchs avec mise</small><div class="admin-stat" id="adminMatches">0</div></div>
-            <div class="wallet-card"><small>Revenus plateforme</small><div class="admin-stat" id="adminRevenue">$0.00</div></div>
-        </div>
-        <h2>🎖️ Niveaux selon les victoires</h2>
-        <p class="rank-admin-help">Modifie le nombre de victoires nécessaire pour chaque niveau. Ces réglages sont enregistrés dans ce navigateur pour cette version de préparation.</p>
-        <div class="rank-settings-grid">
-          <div><label for="rankWinsIntermediate">INTERMÉDIAIRE — INT</label><input id="rankWinsIntermediate" type="number" min="1" max="100000" value="5"></div>
-          <div><label for="rankWinsAdvanced">AVANCÉ — AV</label><input id="rankWinsAdvanced" type="number" min="2" max="100000" value="15"></div>
-          <div><label for="rankWinsExpert">EXPERT — EXP</label><input id="rankWinsExpert" type="number" min="3" max="100000" value="30"></div>
-          <div><label for="rankWinsMaster">MASTER — MST</label><input id="rankWinsMaster" type="number" min="4" max="100000" value="60"></div>
-        </div>
-        <button id="saveRankSettingsBtn" class="primary-pay" type="button">Enregistrer les niveaux</button>
-        <div id="rankSettingsStatus" class="rank-admin-help" aria-live="polite"></div>
-        <h2>Paramètres de calcul</h2>
-        <div class="form-row">
-            <input id="adminCommission" type="number" min="0" max="100" step="0.1" value="10" placeholder="Commission %">
-            <button id="saveAdminBtn" class="primary-pay">Enregistrer</button>
-        </div>
+    <h1>👑 Admin Panel — Aperçu</h1>
+    <div class="admin-box"><div class="notice-test">🔐 VIZYON DEMO sèlman. Bouton ki nan HTML pa bay dwa admin reyèl. Pwodiksyon dwe verifye wòl admin sou backend Render.</div>
+      <div class="wallet-grid">
+        <div class="wallet-card"><small>Komisyon match</small><div class="admin-stat" id="adminFee">15%</div></div>
+        <div class="wallet-card"><small>Frè anilasyon</small><div class="admin-stat" id="adminCancellationLabel">8%</div></div>
+        <div class="wallet-card"><small>Match ak paryaj TEST</small><div class="admin-stat" id="adminMatches">0</div></div>
+        <div class="wallet-card"><small>Revenu admin USD (demo)</small><div class="admin-stat" id="adminRevenue">$0.00 USD</div></div>
+      </div>
+      <h2>👛 Admin Wallet prive — demo</h2><div class="wallet-grid"><div class="wallet-card"><small>Komisyon USD</small><strong id="adminWalletUsd">$0.00 USD</strong></div><div class="wallet-card"><small>Komisyon HTG</small><strong id="adminWalletHtg">0.00 HTG</strong></div></div>
+      <h2>⚙️ Paramèt kalkil TEST</h2>
+      <div class="form-row"><label>Komisyon match %<input id="adminCommission" type="number" min="0" max="100" step="0.1" value="15"></label><label>Frè anilasyon %<input id="adminCancellation" type="number" min="0" max="100" step="0.1" value="8"></label></div>
+      <div class="form-row" style="margin-top:10px"><label>To baz Tranzak demo (HTG/USD)<input id="adminExchangeBase" type="number" min="0.01" step="0.01" value="135"></label><label>Ajout HTG/USD<input id="adminExchangePlus" type="number" min="0" step="0.01" value="2"></label></div>
+      <div class="wallet-actions"><button id="saveAdminBtn" class="primary-pay">Sove paramèt DEMO</button><button id="adminCompleteBetBtn">Simile match fini</button><button id="adminCancelBetBtn">Simile anilasyon defi</button></div>
+      <div id="adminMessage" class="account-status" aria-live="polite"></div>
     </div>
-    <button class="back-button" id="adminBack">← Retour</button>
+    <button class="back-button" id="adminBack">← Retounen</button>
 </section>
 
 <!-- ROBOT -->
 
 <section id="robotScreen" class="screen">
 
-    <h1>🤖 Jouer avec Robot <span class="rank-badge rank-master" title="Robot niveau MASTER">[MST]</span></h1>
-    <div class="rank-admin-help">Ou menm: <span id="robotUserRank"></span> · Robot: <span class="rank-badge rank-master">[MST]</span></div>
+    <h1>🤖 Jouer avec Robot</h1>
 
     <div class="game-info">
 
@@ -1371,21 +1344,6 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
             Rejoindre une partie
         </button>
 
-    </div>
-
-    <div id="inviteSettings" class="online-players-box" style="margin-bottom:12px">
-        <div class="online-players-title">⚙️ Paramètres de l’invitation</div>
-        <div class="invite-settings-grid">
-            <label>Durée du match
-                <select id="inviteDuration"><option value="1">1 minute</option><option value="2">2 minutes</option><option value="3">3 minutes</option><option value="4">4 minutes</option><option value="5" selected>5 minutes</option><option value="6">6 minutes</option><option value="7">7 minutes</option><option value="8">8 minutes</option><option value="9">9 minutes</option><option value="10">10 minutes</option><option value="11">11 minutes</option><option value="12">12 minutes</option><option value="13">13 minutes</option><option value="14">14 minutes</option><option value="15">15 minutes</option><option value="16">16 minutes</option><option value="17">17 minutes</option><option value="18">18 minutes</option><option value="19">19 minutes</option><option value="20">20 minutes</option><option value="21">21 minutes</option><option value="22">22 minutes</option><option value="23">23 minutes</option><option value="24">24 minutes</option><option value="25">25 minutes</option><option value="26">26 minutes</option><option value="27">27 minutes</option><option value="28">28 minutes</option><option value="29">29 minutes</option><option value="30">30 minutes</option></select>
-            </label>
-            <label>Gwosè tablo
-                <select id="inviteBoardSize"><option value="13">13 × 13</option><option value="14">14 × 14</option><option value="15" selected>15 × 15</option><option value="16">16 × 16</option><option value="17">17 × 17</option><option value="18">18 × 18</option><option value="19">19 × 19</option><option value="20">20 × 20</option></select>
-            </label>
-        </div>
-        <label class="board-style-label">Koulè tablo sou telefòn pa w
-            <select id="boardStyleSelect"><option value="classic">Klasik blan</option><option value="midnight">Nuit ble</option><option value="mint">Vèt mant</option><option value="rose">Woz dous</option><option value="sand">Sab klè</option></select>
-        </label>
     </div>
 
     <div id="onlinePlayersBox" class="online-players-box">
@@ -1604,7 +1562,7 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
 const SERVER_URL =
     "wss://gomoku-server-5h60.onrender.com";
 
-let BOARD_SIZE = 20;
+const BOARD_SIZE = 20;
 const START_TIME = 10 * 60;
 
 /* ==================================================
@@ -1650,38 +1608,31 @@ function showAccountMenu() {
 /* ==================================================
    DASHBOARD APRÈS CONNEXION
 ================================================== */
-function applyBoardStyle(style){
-  const allowed=["classic","midnight","mint","rose","sand"];
-  const chosen=allowed.includes(style)?style:"classic";
-  document.body.classList.remove(...allowed.map(x=>"board-style-"+x));
-  if(chosen!=="classic") document.body.classList.add("board-style-"+chosen);
-  const select=document.getElementById("boardStyleSelect"); if(select) select.value=chosen;
-  try{localStorage.setItem("mrjery_board_style",chosen);}catch(e){}
-}
-try{applyBoardStyle(localStorage.getItem("mrjery_board_style")||"classic");}catch(e){applyBoardStyle("classic");}
-document.getElementById("boardStyleSelect")?.addEventListener("change",e=>applyBoardStyle(e.target.value));
-
 function refreshDashboardUser(){
-  const u=document.getElementById('dashboardUsername');
-  if(u) u.innerHTML=escapeRankText(currentUsername||'Joueur')+rankBadgeHTML(getMyVictoryCount());
-  const level=document.getElementById('dashboardLevel');
-  if(level){const r=rankForWins(getMyVictoryCount());level.textContent=r.name+' · '+getMyVictoryCount()+' viktwa';}
+  const u=document.getElementById('dashboardUsername'); if(u) u.textContent=currentUsername||'Joueur';
   const au=document.getElementById('accountMenuUser'); if(au) au.textContent='👤 '+(currentUsername||'Connecté');
-  const ab=document.getElementById('dashboardAdminBtn'); if(ab) ab.style.display='inline-flex';
 }
 
-function openWalletFromDashboard(){ showScreen('walletScreen'); }
-document.getElementById('walletTopBtn')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardBetCard')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardChallengeCard')?.addEventListener('click',openWalletFromDashboard);
+function openWalletFromDashboard(openBet=false,openDeposit=false){
+  if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connecte-toi pour accéder au Wallet et aux paryaj.",false);return;}
+  if(typeof renderWallet==="function")renderWallet();
+  showScreen("walletScreen");
+  const bet=document.getElementById("betCreatorBox"),dep=document.getElementById("depositBox"),wd=document.getElementById("withdrawBox");
+  if(bet)bet.style.display=openBet?"block":"none";
+  if(dep)dep.style.display=openDeposit?"block":"none";
+  if(wd)wd.style.display="none";
+}
+document.getElementById('walletTopBtn')?.addEventListener('click',()=>openWalletFromDashboard());
+document.getElementById('dashboardBetCard')?.addEventListener('click',()=>openWalletFromDashboard(true,false));
+document.getElementById('dashboardChallengeCard')?.addEventListener('click',()=>openWalletFromDashboard(true,false));
 document.getElementById('dashboardOnlineCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardFriendCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
-document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>showScreen('localScreen'));
+document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>showScreen('homeScreen'));
 document.getElementById('dashboardSpectatorCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>alert('🏆 Classement : cette section sera ajoutée dans la prochaine étape.'));
 document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
-document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
-document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('dashboardDepositUsd')?.addEventListener('click',()=>openWalletFromDashboard(false,true));
+document.getElementById('dashboardDepositHtg')?.addEventListener('click',()=>openWalletFromDashboard(false,true));
 
 /* ==================================================
    ÉCRANS
@@ -2425,8 +2376,6 @@ function stopRobotTimer() {
 
 function resetRobotGame() {
 
-    const robotRankLabel=document.getElementById("robotUserRank");
-    if(robotRankLabel) robotRankLabel.innerHTML=rankBadgeHTML(getMyVictoryCount());
     stopRobotTimer();
 
     robotBoard = {};
@@ -2606,102 +2555,63 @@ function robotMove() {
 }
 
 function findBestRobotMove() {
-    // Niveau MASTER : gagne si possible, bloque les menaces immédiates,
-    // puis privilégie les attaques et défenses qui créent des menaces multiples.
-    const winningMove = findWinningMove("red");
-    if (winningMove) return winningMove;
 
-    const blockingMove = findWinningMove("black");
-    if (blockingMove) return blockingMove;
+    const winningMove =
+        findWinningMove("red");
 
-    const candidates = [];
-    const occupied = Object.keys(robotBoard);
-    if (occupied.length === 0) {
-        return { row: Math.floor(BOARD_SIZE / 2), col: Math.floor(BOARD_SIZE / 2) };
+    if (winningMove) {
+        return winningMove;
     }
 
-    // Analyse surtout les cases proches des pions déjà posés pour rester rapide.
-    const seen = new Set();
-    for (const item of occupied) {
-        const [r0, c0] = item.split(',').map(Number);
-        for (let dr = -2; dr <= 2; dr++) {
-            for (let dc = -2; dc <= 2; dc++) {
-                const row = r0 + dr, col = c0 + dc;
-                if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) continue;
-                const key = row + ',' + col;
-                if (!robotBoard[key] && !seen.has(key)) {
-                    seen.add(key);
-                    candidates.push({ row, col });
-                }
-            }
-        }
+    const blockingMove =
+        findWinningMove("black");
+
+    if (blockingMove) {
+        return blockingMove;
     }
 
-    let bestMove = candidates[0] || { row: Math.floor(BOARD_SIZE / 2), col: Math.floor(BOARD_SIZE / 2) };
+    let bestMove = null;
     let bestScore = -Infinity;
 
-    for (const move of candidates) {
-        const key = move.row + ',' + move.col;
-        // L'attaque du robot et la défense contre les menaces du joueur sont évaluées.
-        robotBoard[key] = 'red';
-        const attack = scoreMasterPosition(move.row, move.col, 'red');
-        const robotWinsNext = countWinningMoves('red', 2);
-        delete robotBoard[key];
+    for (
+        let row = 0;
+        row < BOARD_SIZE;
+        row++
+    ) {
 
-        robotBoard[key] = 'black';
-        const defense = scoreMasterPosition(move.row, move.col, 'black');
-        const playerWinsNext = countWinningMoves('black', 2);
-        delete robotBoard[key];
+        for (
+            let col = 0;
+            col < BOARD_SIZE;
+            col++
+        ) {
 
-        const center = (BOARD_SIZE - 1) / 2;
-        const centerBonus = Math.max(0, 12 - (Math.abs(move.row-center) + Math.abs(move.col-center)) * 0.5);
-        const score = attack * 1.12 + defense * 1.08 + robotWinsNext * 18000 - playerWinsNext * 22000 + centerBonus;
-        if (score > bestScore) {
-            bestScore = score;
-            bestMove = move;
-        }
-    }
-    return bestMove;
-}
+            const key =
+                row + "," + col;
 
-function countWinningMoves(color, stopAt = 2) {
-    let count = 0;
-    for (let row = 0; row < BOARD_SIZE; row++) {
-        for (let col = 0; col < BOARD_SIZE; col++) {
-            const key = row + ',' + col;
-            if (robotBoard[key]) continue;
-            robotBoard[key] = color;
-            const wins = checkWin(robotBoard, row, col, color);
-            delete robotBoard[key];
-            if (wins && ++count >= stopAt) return count;
-        }
-    }
-    return count;
-}
-
-function scoreMasterPosition(row, col, color) {
-    const directions = [[1,0],[0,1],[1,1],[1,-1]];
-    let total = 0;
-    for (const [dr, dc] of directions) {
-        let count = 1, open = 0;
-        for (const sign of [-1, 1]) {
-            let r = row + dr * sign, c = col + dc * sign;
-            while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && robotBoard[r + ',' + c] === color) {
-                count++; r += dr * sign; c += dc * sign;
+            if (robotBoard[key]) {
+                continue;
             }
-            if (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && !robotBoard[r + ',' + c]) open++;
+
+            const score =
+                evaluatePosition(
+                    row,
+                    col,
+                    "red"
+                );
+
+            if (score > bestScore) {
+
+                bestScore = score;
+
+                bestMove = {
+                    row: row,
+                    col: col
+                };
+            }
         }
-        // 4+ : urgence; 3 ouverts : menace à bloquer/créer; 2 : préparation.
-        if (count >= 5) total += 100000;
-        else if (count === 4 && open === 2) total += 18000;
-        else if (count === 4 && open === 1) total += 9000;
-        else if (count === 3 && open === 2) total += 2400;
-        else if (count === 3 && open === 1) total += 650;
-        else if (count === 2 && open === 2) total += 180;
-        else if (count === 2 && open === 1) total += 45;
-        else total += count * 4;
     }
-    return total;
+
+    return bestMove;
 }
 
 function findWinningMove(color) {
@@ -3201,7 +3111,7 @@ document.getElementById("accountMode").addEventListener("click", function() {
 });
 
 document.getElementById("accountBack").addEventListener("click", function() {
-    showScreen("localScreen");
+    showScreen("landingScreen");
 });
 
 document.getElementById("registerBtn").addEventListener("click", function() {
@@ -3265,8 +3175,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
 });
 
 document.getElementById("accountPlayBtn").addEventListener("click", function() {
-    // Accueil du compte : garder le tableau de bord avec Jwe Anliy, ami, Defi, Paryaj, etc.
-    showScreen("accountMenuScreen");
+    showScreen("homeScreen");
 });
 
 document.getElementById("profileBtn").addEventListener("click", function() {
@@ -3295,7 +3204,6 @@ document.getElementById("settingsBtn")?.addEventListener("click", function() {
 });
 
 document.getElementById("logoutBtn").addEventListener("click", function() {
-    try { if(socket && socket.readyState===WebSocket.OPEN && accountToken) socket.send(JSON.stringify({type:"logout_session", account_token:accountToken})); localStorage.removeItem("mrjery_account_token"); } catch(e) {}
     closeOnlineConnection();
     accountConnected = false;
     currentPlayerId = null;
@@ -3310,11 +3218,11 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
     document.getElementById("loginInput").value = "";
     document.getElementById("loginPassword").value = "";
     updateAccountDisplay();
-    showScreen("localScreen");
+    showScreen("homeScreen");
 });
 
 document.getElementById("accountMenuBack")?.addEventListener("click", function() {
-    showScreen("localScreen");
+    showScreen("homeScreen");
 });
 
 document.getElementById("profileBack").addEventListener("click", function() {
@@ -3391,9 +3299,9 @@ function renderOnlinePlayers(list) {
     });
 }
 function requestOnlinePlayers(){if(socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:"online_players"}));}
-function showGameInvite(id,from,duration,size){pendingGameInviteId=id||null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b&&m){m.textContent="🎮 "+(from||"Un joueur")+" vous invite à jouer — "+(duration||5)+" min · tableau "+(size||15)+"×"+(size||15)+".";b.style.display="block";}}
+function showGameInvite(id,from){pendingGameInviteId=id||null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b&&m){m.textContent="🎮 "+(from||"Un joueur")+" vous invite à jouer.";b.style.display="block";}}
 function hideGameInvite(){pendingGameInviteId=null;const b=document.getElementById("gameInviteBox"),m=document.getElementById("gameInviteMessage");if(b)b.style.display="none";if(m)m.textContent="";}
-function sendGameInvite(id){if(!accountConnected)return;if(!socket||socket.readyState!==WebSocket.OPEN){document.getElementById("onlineError").textContent="Connexion au serveur en cours...";return;}const duration=Number(document.getElementById("inviteDuration")?.value||5);const boardSize=Number(document.getElementById("inviteBoardSize")?.value||15);socket.send(JSON.stringify({type:"invite_player",target_player_id:Number(id),duration_minutes:Math.max(1,Math.min(30,duration)),board_size:Math.max(13,Math.min(20,boardSize))}));}
+function sendGameInvite(id){if(!accountConnected)return;if(!socket||socket.readyState!==WebSocket.OPEN){document.getElementById("onlineError").textContent="Connexion au serveur en cours...";return;}socket.send(JSON.stringify({type:"invite_player",target_player_id:Number(id)}));}
 function answerGameInvite(ok){if(!pendingGameInviteId||!socket||socket.readyState!==WebSocket.OPEN)return;socket.send(JSON.stringify({type:"invite_response",invitation_id:pendingGameInviteId,accepted:Boolean(ok)}));hideGameInvite();}
 document.getElementById("acceptGameInviteBtn").addEventListener("click",function(){answerGameInvite(true);});
 document.getElementById("refuseGameInviteBtn").addEventListener("click",function(){answerGameInvite(false);});
@@ -3809,12 +3717,6 @@ function connectServer(callback) {
 
             reconnectAttempts = 0;
             reconnecting = false;
-            if (!accountConnected && !accountRequestInProgress) {
-                try {
-                    const savedToken = localStorage.getItem("mrjery_account_token");
-                    if (savedToken) socket.send(JSON.stringify({type:"restore_session", account_token:savedToken}));
-                } catch(e) {}
-            }
 
             if (reconnectTimer) {
 
@@ -3908,7 +3810,6 @@ function connectServer(callback) {
                         currentEmail = data.email || null;
                         accountToken = data.account_token || null;
                         accountConnected = true;
-                        try { if(accountToken) localStorage.setItem("mrjery_account_token", accountToken); } catch(e) {}
 
                         updateAccountDisplay();
                         showAccountMessage(
@@ -3943,7 +3844,6 @@ function connectServer(callback) {
                         currentEmail = data.email || null;
                         accountToken = data.account_token || null;
                         accountConnected = true;
-                        try { if(accountToken) localStorage.setItem("mrjery_account_token", accountToken); } catch(e) {}
 
                         updateAccountDisplay();
                         showAccountMessage(
@@ -3964,28 +3864,12 @@ function connectServer(callback) {
                     return;
                 }
 
-                if (data.type === "restore_session_result") {
-                    if (data.success) {
-                        currentPlayerId = data.player_id || null;
-                        currentUsername = data.username || null;
-                        currentEmail = data.email || null;
-                        accountToken = data.account_token || localStorage.getItem("mrjery_account_token") || null;
-                        accountConnected = true;
-                        updateAccountDisplay();
-                        refreshDashboardUser();
-                    } else {
-                        try { localStorage.removeItem("mrjery_account_token"); } catch(e) {}
-                        accountConnected = false; accountToken = null;
-                    }
-                    return;
-                }
-
                 /* ==================================
                    JOUEURS EN LIGNE / INVITATIONS
                 ================================== */
 
                 if (data.type === "online_players") { renderOnlinePlayers(data.players || []); return; }
-                if (data.type === "game_invite") { showGameInvite(data.invitation_id, data.from_username, data.duration_minutes, data.board_size); return; }
+                if (data.type === "game_invite") { showGameInvite(data.invitation_id, data.from_username); return; }
                 if (data.type === "invite_result") { const b=document.getElementById("onlineError"); if(b)b.textContent=data.message||""; return; }
                 if (data.type === "direct_match") {
                     onlineRoom=data.room; onlinePlayer=Number(data.player); onlineSessionToken=data.session_token||null; onlineConnectionMode="direct_invite"; onlineLastMove=null; onlineRematchRequest=null; onlineUndoRequest=null;
@@ -4481,12 +4365,6 @@ function connectServer(callback) {
                     onlineLastMove =
                         data.last_move ||
                         null;
-                    const incomingSize = Array.isArray(data.board) && data.board.length ? data.board.length : BOARD_SIZE;
-                    if (incomingSize >= 13 && incomingSize <= 20 && incomingSize !== BOARD_SIZE) {
-                        BOARD_SIZE = incomingSize;
-                        const liveBoard = document.getElementById("onlineBoard");
-                        if (liveBoard) createBoard(liveBoard, onlineClick);
-                    }
 
                     /*
                        IMPORTANT:
@@ -4583,59 +4461,6 @@ function connectServer(callback) {
    SCORE
 ================================================== */
 
-const DEFAULT_RANK_SETTINGS = { intermediate: 5, advanced: 15, expert: 30, master: 60 };
-let rankSettings = loadRankSettings();
-function loadRankSettings(){
-  try { const v=JSON.parse(localStorage.getItem("mrjery_rank_settings")||"null"); return v && typeof v==="object" ? {...DEFAULT_RANK_SETTINGS,...v} : {...DEFAULT_RANK_SETTINGS}; }
-  catch(e){ return {...DEFAULT_RANK_SETTINGS}; }
-}
-function rankThresholds(){
-  return [
-    {key:"master",name:"MASTER",sigle:"MST",wins:Number(rankSettings.master)||60,cls:"rank-master"},
-    {key:"expert",name:"EXPERT",sigle:"EXP",wins:Number(rankSettings.expert)||30,cls:"rank-expert"},
-    {key:"advanced",name:"AVANCÉ",sigle:"AV",wins:Number(rankSettings.advanced)||15,cls:"rank-avance"},
-    {key:"intermediate",name:"INTERMÉDIAIRE",sigle:"INT",wins:Number(rankSettings.intermediate)||5,cls:"rank-intermediaire"}
-  ];
-}
-function getPlayerVictoryCount(player, name){
-  for(const k of ["wins","victories","total_wins","win_count","victory_count"]) if(Number.isFinite(Number(player?.[k])) && Number(player[k])>=0) return Number(player[k]);
-  if(name && currentUsername && name.toLowerCase()===currentUsername.toLowerCase()) return getMyVictoryCount();
-  try { const v=JSON.parse(localStorage.getItem("mrjery_public_wins")||"{}"); if(name && Number.isFinite(Number(v[name]))) return Number(v[name]); } catch(e){}
-  return 0;
-}
-function getMyVictoryCount(){try{return Math.max(0,Number(localStorage.getItem("mrjery_wins_"+(currentUsername||"guest").toLowerCase())||0));}catch(e){return 0;}}
-function rankForWins(wins, explicit){
-  const normalized=String(explicit||"").toUpperCase();
-  if(normalized.includes("MASTER")||normalized==="MST") return {name:"MASTER",sigle:"MST",cls:"rank-master"};
-  if(normalized.includes("EXPERT")||normalized==="EXP") return {name:"EXPERT",sigle:"EXP",cls:"rank-expert"};
-  if(normalized.includes("AVANC")||normalized==="AV") return {name:"AVANCÉ",sigle:"AV",cls:"rank-avance"};
-  if(normalized.includes("INTER")||normalized==="INT") return {name:"INTERMÉDIAIRE",sigle:"INT",cls:"rank-intermediaire"};
-  for(const r of rankThresholds()) if(wins>=r.wins) return r;
-  return {name:"DÉBUTANT",sigle:"DÉB",cls:"rank-debutant"};
-}
-function rankBadgeHTML(wins, explicit){const r=rankForWins(wins,explicit);return ' <span class="rank-badge '+r.cls+'" title="'+r.name+' — '+wins+' victoire(s)">['+r.sigle+']</span>';}
-function escapeRankText(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function recordMyOnlineVictoryIfNeeded(){
-  if(!onlineGameOver || onlineDraw || onlineAbandonment || !onlineWinner || !currentUsername || !currentPlayerId) return;
-  const winner=onlinePlayersState[String(onlineWinner)]||{};
-  const winnerId=Number(winner.player_id||winner.id||0);
-  if(winnerId!==Number(currentPlayerId)) return;
-  const key="mrjery_counted_match_"+(onlineRoom||"room")+"_"+onlineGameNumber;
-  try {if(localStorage.getItem(key)) return; localStorage.setItem(key,"1"); const wins=getMyVictoryCount()+1; localStorage.setItem("mrjery_wins_"+currentUsername.toLowerCase(),String(wins));}catch(e){}
-}
-function renderAdminRankSettings(){
-  const map={intermediate:"rankWinsIntermediate",advanced:"rankWinsAdvanced",expert:"rankWinsExpert",master:"rankWinsMaster"};
-  Object.keys(map).forEach(k=>{const el=document.getElementById(map[k]);if(el)el.value=rankSettings[k];});
-}
-function saveAdminRankSettings(){
-  const ids={intermediate:"rankWinsIntermediate",advanced:"rankWinsAdvanced",expert:"rankWinsExpert",master:"rankWinsMaster"};
-  const v={}; for(const k of Object.keys(ids)){const el=document.getElementById(ids[k]);const n=Number(el?.value);if(!Number.isInteger(n)||n<1||n>100000){const st=document.getElementById("rankSettingsStatus");if(st)st.textContent="Mete yon nonb antye ant 1 ak 100000 pou chak nivo.";return;}v[k]=n;}
-  if(!(v.intermediate<v.advanced&&v.advanced<v.expert&&v.expert<v.master)){const st=document.getElementById("rankSettingsStatus");if(st)st.textContent="Lòd la dwe respekte: INT < AV < EXP < MST.";return;}
-  rankSettings=v;try{localStorage.setItem("mrjery_rank_settings",JSON.stringify(v));}catch(e){}
-  const st=document.getElementById("rankSettingsStatus");if(st)st.textContent="✅ Nivo yo anrejistre sou navigatè sa a.";
-  updateOnlineScoreDisplay(); refreshDashboardUser();
-}
-
 function updateOnlineScoreDisplay() {
 
     const p1 = onlinePlayersState["1"] || {};
@@ -4645,15 +4470,11 @@ function updateOnlineScoreDisplay() {
     const redName = document.getElementById("onlineRedName");
 
     if (blackName) {
-        const n1 = p1.username || p1.name || "Joueur 1";
-        const w1 = getPlayerVictoryCount(p1, n1);
-        blackName.innerHTML = escapeRankText(n1) + rankBadgeHTML(w1, p1.rank || p1.title || p1.level_title);
+        blackName.textContent = p1.username || p1.name || "Joueur 1";
     }
 
     if (redName) {
-        const n2 = p2.username || p2.name || "Joueur 2";
-        const w2 = getPlayerVictoryCount(p2, n2);
-        redName.innerHTML = escapeRankText(n2) + rankBadgeHTML(w2, p2.rank || p2.title || p2.level_title);
+        redName.textContent = p2.username || p2.name || "Joueur 2";
     }
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
@@ -4690,7 +4511,6 @@ function updateOnlineStatus() {
     if (!status) {
         return;
     }
-    status.classList.remove("opponent-turn");
 
     if (onlineConnectionMode === "spectator") {
         if (onlineGameOver) {
@@ -4816,8 +4636,7 @@ function updateOnlineStatus() {
     } else {
 
         status.textContent =
-            "ADVERSAIRE À JOUER";
-        status.classList.add("opponent-turn");
+            "Tour de l'autre joueur";
     }
 }
 
@@ -4826,7 +4645,6 @@ function updateOnlineStatus() {
 ================================================== */
 
 function updateOnlineResult() {
-    recordMyOnlineVictoryIfNeeded();
 
     const result =
         document.getElementById(
@@ -5006,7 +4824,7 @@ function updateRematchUI() {
 
     if (!box || !message || !actions) return;
 
-    box.style.visibility = "hidden";
+    box.style.display = "none";
     message.textContent = "";
     actions.innerHTML = "";
 
@@ -5015,7 +4833,7 @@ function updateRematchUI() {
     }
 
     if (onlineRematchRequest !== null) {
-        box.style.visibility = "visible";
+        box.style.display = "block";
         const requester = Number(onlineRematchRequest);
 
         if (requester === Number(onlinePlayer)) {
@@ -5043,7 +4861,7 @@ function updateRematchUI() {
     }
 
     if (Number(onlineWinner) !== Number(onlinePlayer)) {
-        box.style.visibility = "visible";
+        box.style.display = "block";
         message.textContent = "Vous avez perdu. Demandez une revanche à votre adversaire.";
 
         const request = document.createElement("button");
@@ -5106,7 +4924,7 @@ function updateUndoUI() {
 
     if (!box || !message || !actions) return;
 
-    box.style.visibility = "hidden";
+    box.style.display = "none";
     message.textContent = "";
     actions.innerHTML = "";
 
@@ -5115,7 +4933,7 @@ function updateUndoUI() {
     }
 
     if (onlineUndoRequest !== null) {
-        box.style.visibility = "visible";
+        box.style.display = "block";
 
         if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
             message.textContent = "⏳ Demande de rejwe envoyée. En attente de l'adversaire.";
@@ -5603,8 +5421,9 @@ document
 
             closeOnlineConnection();
 
-            // Quand le joueur est connecté, Retour ramène au vrai accueil du compte.
-            showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
+            showScreen(
+                "homeScreen"
+            );
         }
     );
 
@@ -5616,8 +5435,9 @@ document
 
             closeOnlineConnection();
 
-            // Quand le joueur est connecté, Retour ramène au vrai accueil du compte.
-            showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
+            showScreen(
+                "homeScreen"
+            );
         }
     );
 
@@ -5825,30 +5645,64 @@ function stopAllTimers() {
 
 
 /* ==================================================
-   PORTEFEUILLE / DEFIS — MODE TEST
+   MR_JERY WALLET + PARI — MODE DEMO UNIQUEMENT
+   Aucun paiement réel, aucune requête au fournisseur depuis le navigateur.
 ================================================== */
-const DEMO_KEY = "mrjery_wallet_demo_v1";
-const defaultDemo = {usd:0,htg:0,fees:0,matches:0,commission:10,history:[]};
+const DEMO_KEY = "mrjery_wallet_demo_v2";
+const defaultDemo = {usd:0,htg:0,adminUsd:0,adminHtg:0,matches:0,commission:15,cancellationFee:8,exchangeBase:135,exchangePlus:2,history:[],activeBet:null};
 function demoState(){try{return Object.assign({},defaultDemo,JSON.parse(localStorage.getItem(DEMO_KEY)||"{}"));}catch(e){return {...defaultDemo};}}
 function saveDemoState(s){localStorage.setItem(DEMO_KEY,JSON.stringify(s));}
 function money(v,c){return c === "HTG" ? Number(v).toFixed(2)+" HTG" : "$"+Number(v).toFixed(2)+" USD";}
-function renderWallet(){const s=demoState(); document.getElementById("demoUsd").textContent=money(s.usd,"USD"); document.getElementById("demoHtg").textContent=money(s.htg,"HTG"); document.getElementById("demoFees").textContent=money(s.fees,"USD"); document.getElementById("adminFee").textContent=Number(s.commission).toFixed(1)+"%"; document.getElementById("adminMatches").textContent=s.matches; document.getElementById("adminRevenue").textContent=money(s.fees,"USD"); const h=document.getElementById("walletHistory"); h.innerHTML=s.history.length?s.history.slice().reverse().map(x=>`<div class="history-item">${x}</div>`).join(""): '<div class="history-item">Aucune transaction en mode test.</div>';}
-function calcBet(){const amount=Math.max(0,Number(document.getElementById("betAmount").value)||0), c=document.getElementById("betCurrency").value, feePct=demoState().commission, total=amount*2, fee=total*feePct/100, winner=total-fee; document.getElementById("calcA").textContent=money(amount,c);document.getElementById("calcB").textContent=money(amount,c);document.getElementById("calcTotal").textContent=money(total,c);document.getElementById("calcFee").textContent=money(fee,c);document.getElementById("calcWinner").textContent=money(winner,c);}
-document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connectez-vous pour accéder au portefeuille.",false);return;}renderWallet();showScreen("walletScreen");});
+function escapeDemoText(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function addDemoHistory(s,type,amount,currency,status,description,reference="DEMO_ONLY"){
+  s.history.push({id:"demo_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7),type,amount:Number(amount),currency,status,description,reference,createdAt:new Date().toLocaleString()});
+  if(s.history.length>150)s.history=s.history.slice(-150);
+}
+function renderWallet(){
+  const s=demoState();
+  document.getElementById("demoUsd").textContent=money(s.usd,"USD");
+  document.getElementById("demoHtg").textContent=money(s.htg,"HTG");
+  const feeTotalUsd=Number(s.adminUsd)||0;
+  document.getElementById("demoFees").textContent=money(feeTotalUsd,"USD");
+  document.getElementById("adminFee").textContent=Number(s.commission).toFixed(1)+"%";
+  document.getElementById("adminCancellationLabel").textContent=Number(s.cancellationFee).toFixed(1)+"%";
+  document.getElementById("adminMatches").textContent=s.matches;
+  document.getElementById("adminRevenue").textContent=money(s.adminUsd,"USD");
+  document.getElementById("adminWalletUsd").textContent=money(s.adminUsd,"USD");
+  document.getElementById("adminWalletHtg").textContent=money(s.adminHtg,"HTG");
+  document.getElementById("adminCommission").value=s.commission;
+  document.getElementById("adminCancellation").value=s.cancellationFee;
+  document.getElementById("adminExchangeBase").value=s.exchangeBase;
+  document.getElementById("adminExchangePlus").value=s.exchangePlus;
+  const h=document.getElementById("walletHistory");
+  h.innerHTML=s.history.length?s.history.slice().reverse().map(x=>`<div class="history-item"><strong>${escapeDemoText(x.type.toUpperCase())}</strong> — ${escapeDemoText(money(x.amount,x.currency))} — ${escapeDemoText(x.status)}<br><small>${escapeDemoText(x.description)} · ${escapeDemoText(x.createdAt)} · ${escapeDemoText(x.reference)}</small></div>`).join(""):'<div class="history-item">Pa gen tranzaksyon nan mòd tès.</div>';
+  updateDashboardBalances();updateDemoConversion();calcBet();
+}
+function updateDashboardBalances(){const s=demoState();const u=document.getElementById("dashboardUsd"),h=document.getElementById("dashboardHtg");if(u)u.textContent=money(s.usd,"USD");if(h)h.textContent=money(s.htg,"HTG");}
+function getRate(){const s=demoState();return Math.max(.01,Number(s.exchangeBase)||135)+Math.max(0,Number(s.exchangePlus)||2);}
+function updateDemoConversion(){const s=demoState(),amt=Math.max(0,Number(document.getElementById("convertAmount")?.value)||0),dir=document.getElementById("convertDirection")?.value||"USD_HTG",rate=getRate();const base=document.getElementById("exchangeBaseLabel"),user=document.getElementById("exchangeUserLabel"),out=document.getElementById("convertResult");if(base)base.textContent=Number(s.exchangeBase).toFixed(2)+" HTG / USD";if(user)user.textContent=rate.toFixed(2)+" HTG / USD";if(out)out.textContent=dir==="USD_HTG"?money(amt*rate,"HTG"):money(amt/rate,"USD");}
+function calcBet(){const amount=Math.max(0,Number(document.getElementById("betAmount")?.value)||0),c=document.getElementById("betCurrency")?.value||"USD",s=demoState(),total=amount*2,fee=total*Number(s.commission)/100,winner=total-fee,cancelFee=amount*Number(s.cancellationFee)/100;const put=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};put("calcA",money(amount,c));put("calcB",money(amount,c));put("calcTotal",money(total,c));put("calcFee",money(fee,c));put("calcWinner",money(winner,c));put("calcCancelFee",money(cancelFee,c));}
+function setWalletMessage(msg){const el=document.getElementById("walletMessage");if(el)el.textContent=msg;}
+document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Connecte-toi pour accéder au portefeuille.",false);return;}renderWallet();showScreen("walletScreen");});
 document.getElementById("walletBack")?.addEventListener("click",()=>showAccountMenu());
-document.getElementById("createBetBtn")?.addEventListener("click",()=>{document.getElementById("betCreatorBox").style.display="block";calcBet();});
+document.getElementById("createBetBtn")?.addEventListener("click",()=>{document.getElementById("betCreatorBox").style.display="block";document.getElementById("depositBox").style.display="none";document.getElementById("withdrawBox").style.display="none";calcBet();});
+document.getElementById("openDepositBtn")?.addEventListener("click",()=>{document.getElementById("depositBox").style.display="block";document.getElementById("withdrawBox").style.display="none";document.getElementById("betCreatorBox").style.display="none";});
+document.getElementById("withdrawBtn")?.addEventListener("click",()=>{document.getElementById("withdrawBox").style.display="block";document.getElementById("depositBox").style.display="none";document.getElementById("betCreatorBox").style.display="none";setWalletMessage("Demann retrè DEMO sèlman. Pa gen lajan reyèl k ap voye.");});
 document.getElementById("cancelBetBtn")?.addEventListener("click",()=>document.getElementById("betCreatorBox").style.display="none");
 document.getElementById("betAmount")?.addEventListener("input",calcBet);
 document.getElementById("betCurrency")?.addEventListener("change",calcBet);
-document.getElementById("confirmBetBtn")?.addEventListener("click",()=>{const s=demoState(), opp=document.getElementById("betOpponent").value.trim(), amount=Number(document.getElementById("betAmount").value)||0, c=document.getElementById("betCurrency").value;if(!opp||amount<=0){document.getElementById("walletMessage").textContent="Indiquez un adversaire et un montant valide.";return;}const total=amount*2,fee=total*s.commission/100;s.matches++;s.fees += c==="USD"?fee:0;s.history.push(`Défi TEST créé contre ${opp} — ${money(amount,c)} chacun — commission prévue ${money(fee,c)}`);saveDemoState(s);renderWallet();document.getElementById("betCreatorBox").style.display="none";document.getElementById("walletMessage").textContent="Défi enregistré en mode test. Aucun paiement réel n'a été effectué.";});
-document.getElementById("refreshWalletBtn")?.addEventListener("click",renderWallet);
-document.getElementById("withdrawBtn")?.addEventListener("click",()=>{document.getElementById("walletMessage").textContent="Le retrait réel sera activé uniquement après connexion à un prestataire de paiement autorisé et au backend sécurisé.";});
-document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=demoState();
-if(document.getElementById("saveRankSettingsBtn")) document.getElementById("saveRankSettingsBtn").addEventListener("click",saveAdminRankSettings);
-renderAdminRankSettings();
-const adminNav=document.getElementById("dashboardAdminBtn"); if(adminNav) adminNav.addEventListener("click",()=>{renderAdminRankSettings();showScreen("adminScreen");});
-const adminBackBtn=document.getElementById("adminBack"); if(adminBackBtn) adminBackBtn.addEventListener("click",()=>showAccountMenu());
-s.commission=Math.min(100,Math.max(0,Number(document.getElementById("adminCommission").value)||0));saveDemoState(s);renderWallet();});
+document.getElementById("convertAmount")?.addEventListener("input",updateDemoConversion);
+document.getElementById("convertDirection")?.addEventListener("change",updateDemoConversion);
+document.getElementById("simulateDepositBtn")?.addEventListener("click",()=>{const s=demoState(),amount=Number(document.getElementById("depositAmount").value)||0,c=document.getElementById("depositCurrency").value,method=document.getElementById("depositMethod").value;if(!Number.isFinite(amount)||amount<=0){setWalletMessage("Antre yon montan DEMO ki pi gran pase zewo.");return;}if(c==="USD")s.usd+=amount;else s.htg+=amount;addDemoHistory(s,"deposit_demo",amount,c,"simulated_only",`Kredi lokal demonstrasyon — ${method}`);saveDemoState(s);renderWallet();setWalletMessage("Kredi DEMO ajoute lokalman. Pa gen peman reyèl ki fèt.");});
+document.getElementById("simulateWithdrawBtn")?.addEventListener("click",()=>{const s=demoState(),amount=Number(document.getElementById("withdrawAmount").value)||0,c=document.getElementById("withdrawCurrency").value,method=document.getElementById("withdrawMethod").value,key=c==="USD"?"usd":"htg";if(!Number.isFinite(amount)||amount<=0){setWalletMessage("Antre yon montan retrè DEMO ki valab.");return;}if(s[key]<amount){setWalletMessage("Balans DEMO a pa sifi pou demann sa a.");return;}s[key]-=amount;addDemoHistory(s,"withdrawal_demo",amount,c,"simulated_only",`Demann retrè lokal — ${method}; pa gen payout reyèl`);saveDemoState(s);renderWallet();setWalletMessage("Demann retrè DEMO anrejistre; okenn lajan reyèl pa voye.");});
+document.getElementById("confirmBetBtn")?.addEventListener("click",()=>{const s=demoState(),opp=document.getElementById("betOpponent").value.trim(),amount=Number(document.getElementById("betAmount").value)||0,c=document.getElementById("betCurrency").value,key=c==="USD"?"usd":"htg";if(!opp||amount<=0){setWalletMessage("Antre non advèsè a ak yon montan valab.");return;}if(s[key]<amount){setWalletMessage(`Balans ${c} ou pa sifi. Itilize bouton Depo TEST pou ajoute kredi DEMO.`);return;}s[key]-=amount;s.activeBet={opponent:opp,amount,currency:c,createdAt:new Date().toISOString()};addDemoHistory(s,"bet_reservation_demo",amount,c,"simulated_only",`Miz DEMO rezève pou defi kont ${opp}`);saveDemoState(s);renderWallet();document.getElementById("betCreatorBox").style.display="none";setWalletMessage("Defi DEMO kreye. Miz ou a rezève nan demo a; match la poko konekte ak sèvis online backend.");});
+document.getElementById("refreshWalletBtn")?.addEventListener("click",()=>{renderWallet();setWalletMessage("Done DEMO yo rafrechi.");});
+document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=demoState();s.commission=Math.min(100,Math.max(0,Number(document.getElementById("adminCommission").value)||0));s.cancellationFee=Math.min(100,Math.max(0,Number(document.getElementById("adminCancellation").value)||0));s.exchangeBase=Math.max(.01,Number(document.getElementById("adminExchangeBase").value)||135);s.exchangePlus=Math.max(0,Number(document.getElementById("adminExchangePlus").value)||0);saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent="Paramèt DEMO sove nan navigatè sa a. Sa pa modifye backend ni to Tranzak reyèl.";});
+document.getElementById("adminCompleteBetBtn")?.addEventListener("click",()=>{const s=demoState(),b=s.activeBet;if(!b){const m=document.getElementById("adminMessage");if(m)m.textContent="Pa gen defi DEMO aktif pou fini.";return;}const key=b.currency==="USD"?"usd":"htg",pot=b.amount*2,fee=pot*Number(s.commission)/100,net=pot-fee;s[key]+=net;if(b.currency==="USD")s.adminUsd+=fee;else s.adminHtg+=fee;s.matches+=1;addDemoHistory(s,"match_complete_demo",net,b.currency,"simulated_only",`Match DEMO fini: pot ${money(pot,b.currency)}, komisyon ${money(fee,b.currency)}, gayan demo resevwa ${money(net,b.currency)}`);s.activeBet=null;saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent=`Match DEMO fini. Komisyon ${money(fee,b.currency)}; gayan demo resevwa ${money(net,b.currency)}.`;});
+document.getElementById("adminCancelBetBtn")?.addEventListener("click",()=>{const s=demoState(),b=s.activeBet;if(!b){const m=document.getElementById("adminMessage");if(m)m.textContent="Pa gen defi DEMO aktif pou anile.";return;}const key=b.currency==="USD"?"usd":"htg",fee=b.amount*Number(s.cancellationFee)/100,refund=b.amount-fee;s[key]+=refund;if(b.currency==="USD")s.adminUsd+=fee;else s.adminHtg+=fee;addDemoHistory(s,"bet_cancel_demo",b.amount,b.currency,"simulated_only",`Defi anile: frè ${money(fee,b.currency)}, ranbousman ${money(refund,b.currency)}`);s.activeBet=null;saveDemoState(s);renderWallet();const m=document.getElementById("adminMessage");if(m)m.textContent=`Anilasyon DEMO fèt. Frè ${money(fee,b.currency)}; ranbousman ${money(refund,b.currency)}.`;});
+document.getElementById("adminBack")?.addEventListener("click",()=>showAccountMenu());
+document.getElementById("previewAdminBtn")?.addEventListener("click",()=>{renderWallet();showScreen("adminScreen");});
+renderWallet();
 
 
 /* ==================================================
@@ -5871,7 +5725,7 @@ document.getElementById('landingLoginBtn')?.addEventListener('click',()=>openAut
 document.getElementById('landingRegisterBtn')?.addEventListener('click',()=>openAuth('register'));
 document.getElementById('landingAboutBtn')?.addEventListener('click',()=>showScreen('aboutScreen'));
 document.getElementById('landingAboutPill')?.addEventListener('click',()=>showScreen('aboutScreen'));
-document.getElementById('landingGameBtn')?.addEventListener('click',()=>showScreen('localScreen'));
+document.getElementById('landingGameBtn')?.addEventListener('click',()=>showScreen('homeScreen'));
 document.getElementById('aboutLanguageButton')?.addEventListener('click',()=>{showScreen('landingScreen');document.getElementById('languageMenu')?.classList.add('show');});
 document.getElementById('aboutBack')?.addEventListener('click',()=>showScreen('landingScreen'));
 document.getElementById('aboutJoinBtn')?.addEventListener('click',()=>openAuth('register'));
