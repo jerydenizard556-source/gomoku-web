@@ -936,6 +936,12 @@ td, th { overflow-wrap: anywhere; }
   .board-area { margin-left: auto; margin-right: auto; }
 }
 </style>
+<style>
+.match-communication{max-width:850px;margin:18px auto;padding:16px;border:1px solid #33415d;border-radius:16px;background:#10192b;color:#edf2ff;text-align:left;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.match-comm-header{display:flex;align-items:center;justify-content:space-between;gap:10px}.match-comm-header h3{margin:0;font-size:18px}.match-comm-toggle,.match-chat-form button,.match-voice-controls button{border:0;border-radius:10px;padding:10px 14px;background:#5145cd;color:white;font-weight:800;cursor:pointer}
+.match-chat-messages{height:190px;overflow-y:auto;padding:10px;margin:12px 0;background:#080f1e;border:1px solid #2b3852;border-radius:12px;display:flex;flex-direction:column;gap:8px}.match-chat-message{padding:8px 10px;border-radius:10px;background:#1a2941;overflow-wrap:anywhere}.match-chat-message strong{color:#8dd9ff}.match-chat-message small{opacity:.65;margin-left:8px}.match-chat-form{display:flex;gap:8px}.match-chat-form input{flex:1;min-width:0;border-radius:10px;border:1px solid #35435f;background:#080f1e;color:white;padding:12px}.match-voice-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}.match-comm-note{font-size:12px;opacity:.72;margin-top:9px}.match-communication audio{display:none}
+@media(max-width:600px){.match-communication{margin:12px 8px;padding:12px}.match-chat-messages{height:150px}}
+</style>
 </head>
 
 <body>
@@ -1558,6 +1564,27 @@ td, th { overflow-wrap: anywhere; }
     </div>
 
     <div id="onlineBoard" class="board-area"></div>
+
+    <!-- Chat en direct + communication vocale -->
+    <section id="matchCommunication" class="match-communication" aria-label="Chat du match">
+      <div class="match-comm-header">
+        <h3>💬 Chat du match</h3>
+        <button type="button" id="toggleMatchChat" class="match-comm-toggle">Masquer</button>
+      </div>
+      <div id="matchChatBody">
+        <div id="matchChatMessages" class="match-chat-messages" aria-live="polite"></div>
+        <form id="matchChatForm" class="match-chat-form">
+          <input id="matchChatInput" type="text" maxlength="300" placeholder="Ekri mesaj ou..." autocomplete="off" aria-label="Mesaj chat" />
+          <button type="submit">Voye</button>
+        </form>
+      </div>
+      <div class="match-voice-controls">
+        <button type="button" id="matchMicButton">🎤 Aktive mikwo</button>
+        <span id="matchVoiceStatus" role="status">Mikwo fèmen</span>
+      </div>
+      <audio id="matchRemoteAudio" autoplay playsinline></audio>
+      <div class="match-comm-note">Vwa a disponib ant jwè yo. Spektatè yo ka tande, men yo pa ka pale.</div>
+    </section>
 
     <div class="game-actions">
 
@@ -3489,6 +3516,11 @@ let reconnecting = false;
 let onlineDisplayInterval = null;
 let onlinePlayersList = [];
 let pendingGameInviteId = null;
+let matchMicStream = null;
+let matchVoicePeers = new Map();
+let voiceJoinedRoom = null;
+let matchMicEnabled = false;
+let renderedChatSignature = "";
 
 /* ==================================================
    JOUEURS EN LIGNE + INVITATION DIRECTE
@@ -4172,6 +4204,9 @@ function connectServer(callback) {
 
                 if (data.type === "online_players") { renderOnlinePlayers(data.players || []); return; }
                 if (data.type === "game_invite") { showGameInvite(data.invitation_id, data.from_username, data.duration_minutes, data.board_size); return; }
+                if (data.type === "voice_peer_join") { handleVoicePeerJoin(data); return; }
+                if (data.type === "voice_peer_list") { handleVoicePeerList(data.peers || []); return; }
+                if (data.type === "voice_signal") { handleVoiceSignal(data); return; }
                 if (data.type === "invite_result") { const b=document.getElementById("onlineError"); if(b)b.textContent=data.message||""; return; }
                 if (data.type === "direct_match") {
                     onlineRoom=data.room; onlinePlayer=Number(data.player); onlineSessionToken=data.session_token||null; onlineConnectionMode="direct_invite"; onlineLastMove=null; onlineRematchRequest=null; onlineUndoRequest=null;
@@ -4606,6 +4641,8 @@ function connectServer(callback) {
                         onlinePlayersState.forEach(function(player){ if(player && player.player) normalizedPlayers[String(player.player)]=player; });
                         onlinePlayersState=normalizedPlayers;
                     }
+                    renderMatchChat(data.chat || []);
+                    ensureVoiceJoined();
 
                     const spectatorCount = document.getElementById("onlineSpectatorCount");
                     if (spectatorCount) {
@@ -6015,6 +6052,9 @@ const savedLang=localStorage.getItem('mrjery_language')||'fr';setLanguage(savedL
 document.getElementById('languageButton')?.addEventListener('click',()=>document.getElementById('languageMenu').classList.toggle('show'));
 document.querySelectorAll('#languageMenu [data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
 document.getElementById('landingLoginBtn')?.addEventListener('click',()=>openAuth('login'));
+document.getElementById('leaveOnlineMatchBtn')?.addEventListener('click',cleanupMatchVoice);
+document.getElementById('onlineGameBack')?.addEventListener('click',cleanupMatchVoice);
+window.addEventListener('beforeunload',cleanupMatchVoice);
 document.getElementById('landingRegisterBtn')?.addEventListener('click',()=>openAuth('register'));
 document.getElementById('landingAboutBtn')?.addEventListener('click',()=>showScreen('aboutScreen'));
 document.getElementById('landingAboutPill')?.addEventListener('click',()=>showScreen('aboutScreen'));
@@ -6027,6 +6067,54 @@ document.getElementById('authRegisterTab')?.addEventListener('click',()=>setAuth
 document.getElementById('goRegisterBtn')?.addEventListener('click',()=>setAuthMode('register'));
 document.getElementById('goLoginBtn')?.addEventListener('click',()=>setAuthMode('login'));
 
+
+/* ==================================================
+   CHAT DU MATCH + VOIX WEBRTC
+================================================== */
+function matchSend(payload){if(socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify(payload));}
+function renderMatchChat(items){
+  const box=document.getElementById('matchChatMessages'); if(!box)return;
+  const signature=JSON.stringify((items||[]).slice(-80)); if(signature===renderedChatSignature)return; renderedChatSignature=signature;
+  box.innerHTML=''; (items||[]).slice(-80).forEach(function(item){
+    const row=document.createElement('div');row.className='match-chat-message';
+    const name=document.createElement('strong');name.textContent=(item.sender||'Joueur')+': ';
+    const msg=document.createElement('span');msg.textContent=item.text||'';
+    const time=document.createElement('small');if(item.time){try{time.textContent=new Date(Number(item.time)*1000).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}catch(e){}}
+    row.append(name,msg,time);box.appendChild(row);
+  }); box.scrollTop=box.scrollHeight;
+}
+document.getElementById('matchChatForm')?.addEventListener('submit',function(e){e.preventDefault();const input=document.getElementById('matchChatInput');const message=(input?.value||'').trim();if(!message||!onlineRoom)return;if(!socket||socket.readyState!==WebSocket.OPEN){document.getElementById('matchVoiceStatus').textContent='Koneksyon sèvè a pa disponib.';return;}matchSend({type:'chat',room:onlineRoom,message});input.value='';});
+document.getElementById('toggleMatchChat')?.addEventListener('click',function(){const body=document.getElementById('matchChatBody');if(!body)return;const hidden=body.style.display==='none';body.style.display=hidden?'':'none';this.textContent=hidden?'Masquer':'Afficher chat';});
+function voiceIsSpectator(){return onlineConnectionMode==='spectator'||Number(onlinePlayer||0)===0;}
+function voiceSend(to,type,payload){matchSend({type:'voice_signal',room:onlineRoom,to:to,signal_type:type,payload:payload});}
+function ensureVoiceJoined(){if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN||voiceJoinedRoom===String(onlineRoom))return;voiceJoinedRoom=String(onlineRoom);matchSend({type:'voice_join',room:onlineRoom});}
+async function getMatchMic(){if(voiceIsSpectator())throw new Error('Spektatè yo pa ka pale nan mikwo.');if(!matchMicStream){matchMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});}matchMicEnabled=true;matchMicStream.getAudioTracks().forEach(t=>t.enabled=true);return matchMicStream;}
+function closeVoicePeer(id){const pc=matchVoicePeers.get(String(id));if(pc){try{pc.close();}catch(e){}matchVoicePeers.delete(String(id));}}
+function createVoicePeer(id){id=String(id);let pc=matchVoicePeers.get(id);if(pc)return pc;pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});matchVoicePeers.set(id,pc);
+  if(matchMicStream&&!voiceIsSpectator())matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));
+  else if(voiceIsSpectator())pc.addTransceiver('audio',{direction:'recvonly'});
+  pc.onicecandidate=e=>{if(e.candidate)voiceSend(id,'ice',e.candidate.toJSON());};
+  pc.ontrack=e=>{const audio=document.getElementById('matchRemoteAudio');if(audio){if(e.streams&&e.streams[0])audio.srcObject=e.streams[0];audio.play().catch(()=>{});}};
+  pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState))closeVoicePeer(id);};return pc;
+}
+async function handleVoicePeerJoin(data){if(!onlineRoom||String(data.room)!==String(onlineRoom))return;const id=String(data.peer_id);if(!id||id==='undefined')return;
+  // Only player 1 creates offers, avoiding duplicate offer collisions. Spectators only receive audio.
+  if(!voiceIsSpectator()&&Number(onlinePlayer)===1){try{const pc=createVoicePeer(id);if(matchMicStream)matchMicStream.getAudioTracks().forEach(track=>{if(!pc.getSenders().some(s=>s.track===track))pc.addTrack(track,matchMicStream);});const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}catch(e){console.warn('Voice offer failed',e);}}
+}
+function handleVoicePeerList(peers){(peers||[]).forEach(p=>handleVoicePeerJoin({room:onlineRoom,peer_id:p.peer_id}));}
+async function handleVoiceSignal(data){if(String(data.room)!==String(onlineRoom))return;const from=String(data.from_id);if(!from||from==='undefined')return;try{const pc=createVoicePeer(from);const payload=data.payload||{};
+  if(data.signal_type==='description'){const desc=new RTCSessionDescription(payload);await pc.setRemoteDescription(desc);if(desc.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);voiceSend(from,'description',pc.localDescription.toJSON());}}
+  else if(data.signal_type==='ice'){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){console.debug('ICE candidate ignored',e);}}
+}catch(e){console.warn('Voice signal failed',e);}}
+document.getElementById('matchMicButton')?.addEventListener('click',async function(){const status=document.getElementById('matchVoiceStatus');try{
+  if(voiceIsSpectator()){status.textContent='Mòd spektatè: ou ka tande, men ou pa ka pale.';return;}
+  if(matchMicEnabled){matchMicEnabled=false;if(matchMicStream)matchMicStream.getAudioTracks().forEach(t=>t.enabled=false);this.textContent='🎤 Aktive mikwo';status.textContent='Mikwo fèmen';return;}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Navigatè a pa sipòte mikwo a. Itilize HTTPS.');
+  await getMatchMic();this.textContent='🔇 Koupe mikwo';status.textContent='Mikwo aktive';
+  // Re-negotiate existing connections after microphone permission is granted.
+  for(const [id,pc] of matchVoicePeers){if(!pc.getSenders().some(s=>s.track&&s.track.kind==='audio'))matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}
+}catch(e){status.textContent=e.message||'Pa kapab aktive mikwo a.';}});
+function cleanupMatchVoice(){matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
 // Le compte reste mémorisé dans localStorage et est restauré au démarrage.
 // Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
