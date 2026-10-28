@@ -491,6 +491,37 @@ h1 {
     overflow: hidden;
 }
 
+/* Dernier pion joué + curseur de prévisualisation en ligne */
+.cell.online-last-move::marker { content: ""; }
+.cell.online-last-move {
+    background: rgba(250, 204, 21, 0.22);
+}
+.cell .online-last-move-ring {
+    position: absolute;
+    z-index: 4;
+    width: 72%;
+    height: 72%;
+    border: 3px solid #facc15;
+    border-radius: 50%;
+    box-sizing: border-box;
+    pointer-events: none;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, .7), 0 0 10px rgba(250, 204, 21, .65);
+}
+.cell .online-placement-cursor {
+    position: absolute;
+    z-index: 5;
+    width: 22%;
+    height: 22%;
+    min-width: 7px;
+    min-height: 7px;
+    border: 2px solid #38bdf8;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, .45);
+    box-shadow: 0 0 0 2px rgba(2, 6, 23, .7), 0 0 9px rgba(56, 189, 248, .9);
+    pointer-events: none;
+}
+.cell.online-cursor-target { background-color: rgba(56, 189, 248, .2); }
+
 .cell::before {
     content: "";
     position: absolute;
@@ -528,25 +559,6 @@ h1 {
 
 .red {
     background: #DC2626;
-}
-
-/* Make the latest online move obvious to both players. */
-.cell.last-move .stone {
-    border: 3px solid #FACC15;
-    box-sizing: border-box;
-}
-
-/* First click previews a stone; the second click confirms it. */
-.cell .stone-preview {
-    opacity: .48;
-    border: 2px dashed #FACC15;
-    box-sizing: border-box;
-    pointer-events: none;
-}
-.cell.pending-placement::marker { content: ""; }
-.cell.pending-placement {
-    outline: 2px solid #FACC15;
-    outline-offset: -2px;
 }
 
 /* LIGNE VICTOIRE */
@@ -1007,7 +1019,7 @@ td, th { overflow-wrap: anywhere; }
                     <span>♛ <b data-i18n="fRewards">Defi &amp; rekonpans</b></span>
                 </div>
                 <div class="hero-actions">
-                    <button type="button" class="hero-btn gold" id="landingLoginBtn" onclick="if (typeof openAuth === 'function') { openAuth('login'); } else { const s=document.getElementById('accountScreen'); document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active')); if(s) s.classList.add('active'); }">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
+                    <button class="hero-btn gold" id="landingLoginBtn">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
                     <button class="hero-btn outline" id="landingRegisterBtn">👥 <span data-i18n="register">Créer un compte</span> <b>›</b></button>
                 </div>
                 <button class="about-pill" id="landingAboutPill">ⓘ <span data-i18n="about">À propos</span> <b>›</b></button>
@@ -1640,9 +1652,6 @@ td, th { overflow-wrap: anywhere; }
 </div>
 
 <script>
-// Compteur de reconnexion initialisé avant toute fonction susceptible d’ouvrir le WebSocket.
-let reconnectAttempts = 0;
-
 
 /* ==================================================
    SERVEUR
@@ -1664,8 +1673,6 @@ let currentEmail = null;
 let accountToken = null;
 let accountConnected = false;
 let accountRequestInProgress = false;
-let accountRequestTimeout = null;
-let loginButtonOriginalText = null;
 let onlineOpenedFromAccountMenu = false;
 let pendingRestoreCallback = null;
 // Garde les actions demandées pendant que le WebSocket est encore en cours d'ouverture.
@@ -1686,18 +1693,6 @@ function showAccountMessage(message, success) {
     if (!box) return;
     box.textContent = message || "";
     box.style.color = success ? "#86EFAC" : "#FCA5A5";
-}
-
-function finishAccountRequest() {
-    accountRequestInProgress = false;
-    if (accountRequestTimeout) { clearTimeout(accountRequestTimeout); accountRequestTimeout = null; }
-    const button = document.getElementById("loginBtn");
-    if (button) {
-        button.disabled = false;
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
-        button.innerHTML = loginButtonOriginalText || 'Se connecter <b>›</b>';
-    }
 }
 
 function updateAccountDisplay() {
@@ -1770,48 +1765,21 @@ document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWal
 const screens =
     document.querySelectorAll(".screen");
 
-// Navigation interne : les écrans restent dans la même page et le bouton
-// Retour du navigateur peut revenir à l'écran précédent sans recharger le site.
-const mrjeryScreenHistory = [];
-let mrjeryChangingHistory = false;
-let mrjeryCurrentScreen = null;
-
-function showScreen(id, options) {
-    options = options || {};
-    const target = document.getElementById(id);
-    if (!target) {
-        console.warn("Écran introuvable :", id);
-        return;
-    }
-
-    const active = document.querySelector(".screen.active");
-    const previousId = active ? active.id : mrjeryCurrentScreen;
-    if (!options.fromHistory && previousId && previousId !== id) {
-        mrjeryScreenHistory.push(previousId);
-        if (mrjeryScreenHistory.length > 80) mrjeryScreenHistory.shift();
-        try {
-            history.pushState({ mrjeryScreen: id }, "", "#" + encodeURIComponent(id));
-        } catch (e) {}
-    }
+function showScreen(id) {
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
     });
-    target.classList.add("active");
-    mrjeryCurrentScreen = id;
-    window.scrollTo({ top: 0, behavior: "auto" });
-}
 
-window.addEventListener("popstate", function() {
-    const previousId = mrjeryScreenHistory.pop();
-    if (previousId && document.getElementById(previousId)) {
-        showScreen(previousId, { fromHistory: true });
-    } else {
-        // Si l'historique ne contient pas d'écran, ne pas laisser la page vide.
-        const active = document.querySelector(".screen.active");
-        if (!active) showScreen(accountConnected ? "accountMenuScreen" : "landingScreen", { fromHistory: true });
+    const target =
+        document.getElementById(id);
+
+    if (target) {
+        target.classList.add("active");
     }
-});
+
+    window.scrollTo(0, 0);
+}
 
 /* ==================================================
    TABLEAU
@@ -3365,57 +3333,30 @@ document.getElementById("registerBtn").addEventListener("click", function() {
     });
 });
 
-document.getElementById("loginBtn").addEventListener("click", function(event) {
-    if (event) { event.preventDefault(); event.stopPropagation(); }
-    // Empêcher les doubles clics et les demandes concurrentes.
-    if (accountRequestInProgress) return;
-
+document.getElementById("loginBtn").addEventListener("click", function() {
     const login = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("loginPassword").value;
+
     if (!login || !password) {
         showAccountMessage("⚠️ Entrez votre pseudo/email et votre mot de passe.", false);
         return;
     }
 
-    const button = document.getElementById("loginBtn");
-    if (button) {
-        if (!loginButtonOriginalText) loginButtonOriginalText = button.innerHTML;
-        button.disabled = true;
-        button.style.opacity = "0.7";
-        button.style.cursor = "wait";
-        button.textContent = "Connexion en cours…";
-    }
     accountRequestInProgress = true;
-    showAccountMessage("⏳ Connexion au serveur…", true);
+    showAccountMessage("⏳ Connexion...", true);
 
-    // Ne jamais laisser le bouton bloqué indéfiniment si le serveur ne répond pas.
-    if (accountRequestTimeout) clearTimeout(accountRequestTimeout);
-    accountRequestTimeout = setTimeout(function() {
-        finishAccountRequest();
-        showAccountMessage("⚠️ Le serveur tarde à répondre. Vérifie la connexion puis réessaie.", false);
-    }, 15000);
-
-    try {
-        connectServer(function() {
-            if (!socket || socket.readyState !== WebSocket.OPEN) {
-                finishAccountRequest();
-                showAccountMessage("❌ Impossible de joindre le serveur. Réessaie.", false);
-                return;
-            }
-            try {
-                socket.send(JSON.stringify({ type: "login", login: login, password: password }));
-                showAccountMessage("⏳ Vérification du compte…", true);
-            } catch (err) {
-                finishAccountRequest();
-                showAccountMessage("❌ Envoi impossible. Vérifie la connexion puis réessaie.", false);
-                console.error("Échec de l'envoi login", err);
-            }
-        });
-    } catch (err) {
-        finishAccountRequest();
-        showAccountMessage("❌ Erreur de connexion au serveur. Réessaie.", false);
-        console.error("Échec connexion login", err);
-    }
+    connectServer(function() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            accountRequestInProgress = false;
+            showAccountMessage("❌ Serveur non disponible.", false);
+            return;
+        }
+        socket.send(JSON.stringify({
+            type: "login",
+            login: login,
+            password: password
+        }));
+    });
 });
 
 document.getElementById("accountPlayBtn").addEventListener("click", function() {
@@ -3557,7 +3498,7 @@ let onlineWinningLine = null;
 
 let onlineLastMove = null;
                     onlinePendingPlacement = null;
-let onlinePendingPlacement = null;
+let onlinePendingPlacement = null; // premier clic : affiche un curseur, second clic : joue le pion
 let onlineRematchRequest = null;
 let onlineUndoRequest = null;
 
@@ -3566,8 +3507,7 @@ let onlineSessionToken = null;
 let onlineConnectionMode = null;
 
 let reconnectTimer = null;
-// Déclaré dès le début du script pour éviter toute utilisation avant initialisation.
-
+let reconnectAttempts = 0;
 let reconnecting = false;
 
 let onlineDisplayInterval = null;
@@ -4143,7 +4083,7 @@ function connectServer(callback) {
 
                 if (data.type === "register_result") {
 
-                    finishAccountRequest();
+                    accountRequestInProgress = false;
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
@@ -4178,7 +4118,7 @@ function connectServer(callback) {
 
                 if (data.type === "login_result") {
 
-                    finishAccountRequest();
+                    accountRequestInProgress = false;
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
@@ -4666,6 +4606,7 @@ function connectServer(callback) {
                     "state"
                 ) {
 
+                    onlinePendingPlacement = null;
                     onlineBoardState =
                         convertServerBoard(
                             data.board
@@ -4739,8 +4680,6 @@ function connectServer(callback) {
                     onlineLastMove =
                         data.last_move ||
                         null;
-                    // A server state update confirms/rejects the pending placement.
-                    onlinePendingPlacement = null;
                     const incomingSize = Array.isArray(data.board) && data.board.length ? data.board.length : BOARD_SIZE;
                     if (incomingSize >= 13 && incomingSize <= 20 && incomingSize !== BOARD_SIZE) {
                         BOARD_SIZE = incomingSize;
@@ -5164,29 +5103,40 @@ function renderOnlineState() {
                 row + "," + col;
 
             cell.innerHTML = "";
-            cell.classList.remove("last-move", "pending-placement");
+            cell.classList.remove("online-last-move", "online-cursor-target");
 
             if (onlineBoardState[key]) {
                 drawStone(cell, onlineBoardState[key]);
             }
 
-            // Yellow outline shows the most recent move to both opponents.
-            if (onlineLastMove &&
-                Number(onlineLastMove.row) === row &&
-                Number(onlineLastMove.col) === col) {
-                cell.classList.add("last-move");
+            // Entoure en jaune le dernier pion joué pour que les deux joueurs le repèrent.
+            const lm = onlineLastMove;
+            if (lm) {
+                let lr = null, lc = null;
+                if (Array.isArray(lm)) {
+                    lr = Number(lm[0]); lc = Number(lm[1]);
+                } else if (typeof lm === "object") {
+                    lr = Number(lm.row ?? lm.r ?? lm["0"]);
+                    lc = Number(lm.col ?? lm.column ?? lm.c ?? lm["1"]);
+                    if ((lm.position || lm.move) && !Number.isFinite(lr)) {
+                        const pos = lm.position || lm.move;
+                        if (Array.isArray(pos)) { lr = Number(pos[0]); lc = Number(pos[1]); }
+                    }
+                }
+                if (lr === row && lc === col) {
+                    cell.classList.add("online-last-move");
+                    const ring = document.createElement("span");
+                    ring.className = "online-last-move-ring";
+                    cell.appendChild(ring);
+                }
             }
 
-            // Keep a temporary ghost stone visible until the player confirms.
-            if (onlinePendingPlacement &&
-                onlinePendingPlacement.row === row &&
-                onlinePendingPlacement.col === col &&
-                !onlineBoardState[key] &&
-                Number(onlineTurn) === Number(onlinePlayer)) {
-                cell.classList.add("pending-placement");
-                const preview = document.createElement("div");
-                preview.className = "stone " + (Number(onlinePlayer) === 1 ? "black" : "red") + " stone-preview";
-                cell.appendChild(preview);
+            // Premier clic : montre un petit curseur bleu sans encore jouer le pion.
+            if (onlinePendingPlacement && onlinePendingPlacement.row === row && onlinePendingPlacement.col === col && !onlineBoardState[key]) {
+                cell.classList.add("online-cursor-target");
+                const cursor = document.createElement("span");
+                cursor.className = "online-placement-cursor";
+                cell.appendChild(cursor);
             }
         }
     }
@@ -5363,12 +5313,12 @@ function updateUndoUI() {
 
     box.style.display = "block";
     box.style.visibility = "visible";
-    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
+    message.textContent = "Ton dernier pion est joué. Tu peux demander à l'adversaire de te laisser le rejwe.";
 
     const request = document.createElement("button");
     request.type = "button";
     request.className = "undo-button undo-request";
-    request.textContent = "🔄 Demande rejwe";
+    request.textContent = "↩️ Rejwe mon dernier pion";
     request.addEventListener("click", requestUndo);
     actions.appendChild(request);
 }
@@ -5405,56 +5355,102 @@ function onlineClick(
     col,
     cell
 ) {
+
     if (onlineConnectionMode === "spectator" || Number(onlinePlayer) === 0) {
         document.getElementById("gameOnlineError").textContent =
             "👁️ Mode spectateur : vous ne pouvez pas jouer.";
         return;
     }
-    if (onlineGameOver) return;
-    if (onlineRematchRequest !== null) {
-        document.getElementById("gameOnlineError").textContent =
+
+    if (onlineGameOver) {
+        return;
+    }
+
+    if (
+        onlineRematchRequest !== null
+    ) {
+
+        document
+            .getElementById(
+                "gameOnlineError"
+            )
+            .textContent =
             "⏳ Attendez la réponse au rejwe.";
+
         return;
     }
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-        document.getElementById("gameOnlineError").textContent = "Connexion en cours...";
+
+    if (
+        !socket ||
+        socket.readyState !==
+        WebSocket.OPEN
+    ) {
+
+        document
+            .getElementById(
+                "gameOnlineError"
+            )
+            .textContent =
+            "Connexion en cours...";
+
         return;
     }
-    if (!onlineRoom) return;
-    if (Number(onlineTurn) !== Number(onlinePlayer)) {
-        document.getElementById("gameOnlineError").textContent = "Ce n'est pas ton tour.";
+
+    if (!onlineRoom) {
+        return;
+    }
+
+    if (
+        Number(onlineTurn) !==
+        Number(onlinePlayer)
+    ) {
+
+        document
+            .getElementById(
+                "gameOnlineError"
+            )
+            .textContent =
+            "Ce n'est pas ton tour.";
+
         return;
     }
 
     const key = row + "," + col;
+
     if (onlineBoardState[key]) {
         onlinePendingPlacement = null;
         renderOnlineState();
         return;
     }
 
-    document.getElementById("gameOnlineError").textContent = "";
-
-    // First click: show a small ghost-stone cursor. Second click on the same
-    // intersection: send the move to the server for both players to see.
-    if (!onlinePendingPlacement ||
-        onlinePendingPlacement.row !== row ||
-        onlinePendingPlacement.col !== col) {
+    // Premier clic : positionner un petit curseur. Deuxième clic sur la même case : jouer.
+    if (!onlinePendingPlacement || onlinePendingPlacement.row !== row || onlinePendingPlacement.col !== col) {
         onlinePendingPlacement = { row: row, col: col };
+        document.getElementById("gameOnlineError").textContent = "🎯 Pion prêt à être placé : clique une deuxième fois au même endroit pour jouer.";
         renderOnlineState();
-        document.getElementById("gameOnlineError").textContent =
-            "Pion en aperçu : reclique sur le même emplacement pour le jouer.";
         return;
     }
 
-    socket.send(JSON.stringify({
-        type: "move",
-        room: onlineRoom,
-        row: row,
-        col: col
-    }));
-    // Keep the preview until the server broadcasts the accepted move.
-    document.getElementById("gameOnlineError").textContent = "Pion envoyé…";
+    onlinePendingPlacement = null;
+    renderOnlineState();
+    document
+        .getElementById(
+            "gameOnlineError"
+        )
+        .textContent = "";
+
+    socket.send(
+        JSON.stringify({
+            type:
+                "move",
+            room:
+                onlineRoom,
+            row:
+                row,
+            col:
+                col
+        })
+    );
 }
 
 /* ==================================================
