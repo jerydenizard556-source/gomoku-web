@@ -981,6 +981,128 @@ td, th { overflow-wrap: anywhere; }
   .wallet-box, .bet-box, .admin-box { padding: 12px; }
   .board-area { margin-left: auto; margin-right: auto; }
 }
+
+
+/* =========================================================
+   CORRECTION VISUELLE DU TABLEAU GOMOKU EN LIGNE
+   Garder 20 x 20 intersections complètes et une grille carrée.
+========================================================= */
+#onlineBoard.board-area {
+    display: grid !important;
+    grid-template-columns: clamp(18px, 3.5vw, 30px) minmax(0, 1fr) !important;
+    grid-template-rows: clamp(18px, 3.5vw, 30px) minmax(0, 1fr) !important;
+    width: min(96vw, 760px) !important;
+    max-width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    padding: clamp(2px, 0.35vw, 4px) !important;
+    margin: 18px auto !important;
+    overflow: visible !important;
+    background: #f8fafc !important;
+    border: 2px solid #8b95a5 !important;
+    border-radius: 6px !important;
+}
+#onlineBoard.board-area > :first-child { grid-column: 1; grid-row: 1; }
+#onlineBoard.board-area > .letters { grid-column: 2; grid-row: 1; }
+#onlineBoard.board-area > .numbers { grid-column: 1; grid-row: 2; }
+#onlineBoard.board-area > .board {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: repeat(20, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(20, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border: 1px solid #64748b !important;
+    background-color: #ffffff !important;
+}
+#onlineBoard.board-area > .board > .cell {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    cursor: pointer;
+}
+#onlineBoard.board-area > .board > .cell::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 50% !important;
+    height: 1px !important;
+    background: #9ca3af !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+#onlineBoard.board-area > .board > .cell::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    width: 1px !important;
+    background: #9ca3af !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+#onlineBoard.board-area > .board .stone {
+    position: relative !important;
+    z-index: 5 !important;
+    width: 74% !important;
+    height: 74% !important;
+    flex: 0 0 74% !important;
+    border-radius: 50% !important;
+}
+#onlineBoard .letters, #onlineBoard .numbers {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+#onlineBoard .letters span, #onlineBoard .numbers span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    font-size: clamp(7px, 1.25vw, 12px) !important;
+    color: #172033 !important;
+    font-weight: 800 !important;
+}
+@media (max-width: 500px) {
+    #onlineBoard.board-area {
+        width: min(calc(100vw - 18px), 760px) !important;
+        grid-template-columns: 18px minmax(0, 1fr) !important;
+        grid-template-rows: 18px minmax(0, 1fr) !important;
+        padding: 2px !important;
+        margin: 12px auto !important;
+        border-width: 2px !important;
+    }
+    #onlineBoard .letters span, #onlineBoard .numbers span {
+        font-size: clamp(6px, 1.8vw, 8px) !important;
+    }
+    #onlineBoard.board-area > .board .stone {
+        width: 68% !important;
+        height: 68% !important;
+        flex-basis: 68% !important;
+    }
+}
+
 </style>
 </head>
 
