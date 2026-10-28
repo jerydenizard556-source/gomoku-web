@@ -472,10 +472,19 @@ h1 {
     grid-template-columns: repeat(20, minmax(0, 1fr));
     grid-template-rows: repeat(20, minmax(0, 1fr));
     width: 100%;
+    height: 100%;
     aspect-ratio: 1 / 1;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #8b95a5;
+    background-color: #f8fafc;
+    background-image:
+        linear-gradient(to right, #8b95a5 1px, transparent 1px),
+        linear-gradient(to bottom, #8b95a5 1px, transparent 1px);
+    background-size: 5% 5%;
+    background-position: 0 0;
 }
 
 .cell {
@@ -489,6 +498,9 @@ h1 {
     min-height: 0;
     cursor: pointer;
     overflow: hidden;
+    background: transparent;
+    border: 0;
+    box-sizing: border-box;
 }
 
 /* Dernier pion joué + curseur de prévisualisation en ligne */
@@ -5034,9 +5046,24 @@ function updateOnlineResult() {
 
 function updateOnlineNewGameButton() {
     const button = document.getElementById("onlineNewGame");
-    if (button) {
-        button.style.display = "none";
-    }
+    if (!button) return;
+    const canStartAnother = Boolean(onlineGameOver) && onlineConnectionMode !== "spectator";
+    button.style.display = canStartAnother ? "inline-flex" : "none";
+    button.textContent = "🔄 Jwe yon lòt pati";
+    button.setAttribute("aria-label", "Quitter cette partie et retourner au menu pour jouer une autre partie");
+}
+
+// Après la fin d'une partie, le joueur peut facilement revenir au menu en ligne
+// et lancer une nouvelle recherche ou créer/rejoindre une partie avec un ami.
+const onlineNewGameButton = document.getElementById("onlineNewGame");
+if (onlineNewGameButton) {
+    onlineNewGameButton.addEventListener("click", function () {
+        if (!onlineGameOver || onlineConnectionMode === "spectator") return;
+        closeOnlineConnection();
+        showScreen("onlineScreen");
+        const notice = document.getElementById("onlineError");
+        if (notice) notice.textContent = "Ou ka chwazi yon lòt pati kounye a.";
+    });
 }
 
 /* ==================================================
