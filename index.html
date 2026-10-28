@@ -1007,7 +1007,7 @@ td, th { overflow-wrap: anywhere; }
                     <span>♛ <b data-i18n="fRewards">Defi &amp; rekonpans</b></span>
                 </div>
                 <div class="hero-actions">
-                    <button class="hero-btn gold" id="landingLoginBtn">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
+                    <button type="button" class="hero-btn gold" id="landingLoginBtn" onclick="if (typeof openAuth === 'function') { openAuth('login'); } else { const s=document.getElementById('accountScreen'); document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active')); if(s) s.classList.add('active'); }">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
                     <button class="hero-btn outline" id="landingRegisterBtn">👥 <span data-i18n="register">Créer un compte</span> <b>›</b></button>
                 </div>
                 <button class="about-pill" id="landingAboutPill">ⓘ <span data-i18n="about">À propos</span> <b>›</b></button>
