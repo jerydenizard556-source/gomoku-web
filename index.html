@@ -941,7 +941,60 @@ td, th { overflow-wrap: anywhere; }
 .match-comm-header{display:flex;align-items:center;justify-content:space-between;gap:10px}.match-comm-header h3{margin:0;font-size:18px}.match-comm-toggle,.match-chat-form button,.match-voice-controls button{border:0;border-radius:10px;padding:10px 14px;background:#5145cd;color:white;font-weight:800;cursor:pointer}
 .match-chat-messages{height:190px;overflow-y:auto;padding:10px;margin:12px 0;background:#080f1e;border:1px solid #2b3852;border-radius:12px;display:flex;flex-direction:column;gap:8px}.match-chat-message{padding:8px 10px;border-radius:10px;background:#1a2941;overflow-wrap:anywhere}.match-chat-message strong{color:#8dd9ff}.match-chat-message small{opacity:.65;margin-left:8px}.match-chat-form{display:flex;gap:8px}.match-chat-form input{flex:1;min-width:0;border-radius:10px;border:1px solid #35435f;background:#080f1e;color:white;padding:12px}.match-voice-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}.match-comm-note{font-size:12px;opacity:.72;margin-top:9px}.match-communication audio{display:none}
 @media(max-width:600px){.match-communication{margin:12px 8px;padding:12px}.match-chat-messages{height:150px}}
+
+/* JERY GAMES - menu addition only; existing game screens remain unchanged */
+.jery-games-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0}
+.jery-games-head h1{margin:0;color:#f5b92e}.jery-games-head p{color:#aebbd0;margin:7px 0 0}
+.jery-games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:14px;margin:20px 0 32px}
+.jery-game-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-height:155px;padding:18px;border-radius:16px;border:1px solid #254766;background:linear-gradient(145deg,#0b1c31,#07101f);color:#fff;text-align:left;cursor:pointer;transition:transform .15s,border-color .15s}
+.jery-game-card:hover{transform:translateY(-2px);border-color:#f5b92e}.jery-game-card .jery-game-icon{font-size:30px}.jery-game-card strong{font-size:16px}.jery-game-card small{color:#aebbd0;line-height:1.4}.jery-game-status{margin-top:auto;font-size:11px;font-weight:900;letter-spacing:.04em;color:#f5c13a;border:1px solid #715719;border-radius:20px;padding:5px 9px}
+.jery-game-card.available{border-color:#267c5b}.jery-game-card.available .jery-game-status{color:#75e5ad;border-color:#267c5b}
+.jery-games-note{padding:14px 16px;border-radius:12px;background:#0a1a2c;border:1px solid #254766;color:#c5d3e5;line-height:1.5}
 </style>
+
+<style>
+/* Domino Jery - isolated first playable game */
+.domino-wrap{max-width:1050px;margin:0 auto;padding:18px;color:#edf2ff}.domino-panel{background:#101b2d;border:1px solid #34445f;border-radius:16px;padding:16px;margin:14px 0}.domino-toolbar{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}.domino-toolbar select,.domino-toolbar button,.domino-actions button{border:1px solid #405477;border-radius:10px;padding:10px 13px;background:#202f48;color:#fff;font-weight:700;cursor:pointer}.domino-toolbar button.primary,.domino-actions button.primary{background:#b7791f;border-color:#f6c453;color:#111827}.domino-status{font-weight:800;color:#f6c453;min-height:26px}.domino-table{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;min-height:92px;padding:12px;background:#073d35;border:4px solid #8b6b3d;border-radius:18px}.domino-tile{display:inline-flex;align-items:stretch;background:#f8fafc;color:#111827;border:2px solid #cbd5e1;border-radius:7px;min-width:62px;height:32px;box-shadow:0 2px 3px #0004;overflow:hidden}.domino-tile span{flex:1;display:grid;place-items:center;font-size:17px;font-weight:900}.domino-tile span+span{border-left:2px solid #94a3b8}.domino-tile.playable{cursor:pointer;border-color:#f6c453;outline:2px solid #f6c453}.domino-tile.back{min-width:38px;width:38px;background:repeating-linear-gradient(45deg,#1d4ed8,#1d4ed8 5px,#1e40af 5px,#1e40af 10px);border-color:#bfdbfe}.domino-hand{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;min-height:55px}.domino-player{padding:10px;border-radius:10px;background:#1a2940;min-width:100px}.domino-player.active{outline:2px solid #f6c453}.domino-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}.domino-small{color:#aebbd0;font-size:13px;line-height:1.5}.domino-score{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* DOMINO JERY — finition visuelle professionnelle */
+.domino-wrap{max-width:1240px;padding:clamp(10px,2vw,24px);color:#f5f7fb}
+.domino-wrap .inner-page-head{margin-bottom:16px}
+.domino-wrap .domino-panel{background:linear-gradient(145deg,#111e30,#0d1727);border:1px solid #2b3c54;border-radius:20px;padding:clamp(14px,2vw,24px);box-shadow:0 14px 35px #0003}
+.domino-wrap .domino-panel:first-of-type{background:radial-gradient(ellipse at top,#20364a 0%,#101d2d 65%)}
+.domino-wrap h1{font-size:clamp(26px,4vw,40px);letter-spacing:.02em;margin:4px 0 8px}
+.domino-wrap h3{font-size:18px;letter-spacing:.04em;text-transform:uppercase;color:#dbe7f5}
+.domino-toolbar{margin-top:18px}
+.domino-toolbar select,.domino-toolbar button,.domino-actions button{min-height:44px;border-radius:12px;padding:11px 16px;transition:transform .15s ease,filter .15s ease,opacity .15s ease}
+.domino-toolbar button:hover,.domino-actions button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.domino-toolbar button.primary,.domino-actions button.primary{background:linear-gradient(135deg,#f6d365,#d49a27);box-shadow:0 4px 14px #d49a2733}
+.domino-status{font-size:clamp(15px,2vw,19px);padding:12px 15px;background:#081522;border:1px solid #2b4055;border-radius:12px;color:#ffe08a;margin-bottom:14px}
+.domino-score{gap:10px;margin:12px 0 20px}
+.domino-player{flex:1;max-width:230px;min-width:125px;padding:13px 16px;background:linear-gradient(145deg,#1b2b40,#132135);border:1px solid #2c4058;border-radius:14px;box-shadow:inset 0 1px #ffffff08}
+.domino-player strong{font-size:15px}.domino-player small{display:inline-block;margin-top:5px;color:#b7c6d9}
+.domino-player.active{outline:2px solid #f4c85a;border-color:#f4c85a;background:linear-gradient(145deg,#3a3422,#172437);box-shadow:0 0 20px #f4c85a22}
+.domino-table{position:relative;gap:7px;min-height:160px;align-content:center;justify-content:center;padding:22px 16px;background:radial-gradient(ellipse at center,#14634f 0%,#0c493d 58%,#07372f 100%);border:7px solid #60452d;border-radius:22px;box-shadow:inset 0 0 0 2px #c29b6044,inset 0 8px 24px #0004,0 8px 18px #0003;overflow:auto}
+.domino-table:before{content:"DOMINO JERY";position:absolute;inset:auto 0 9px;text-align:center;letter-spacing:.35em;font-size:10px;font-weight:900;color:#ffffff12;pointer-events:none}
+.domino-tile{appearance:none;position:relative;display:inline-flex;align-items:stretch;justify-content:stretch;flex:0 0 auto;width:74px;min-width:74px;height:37px;padding:2px;background:linear-gradient(145deg,#fffef8,#e5e2d7);color:#15202b;border:1px solid #fff;border-radius:5px;box-shadow:0 3px 0 #a8a69c,0 5px 9px #001b16aa;overflow:hidden;cursor:default}
+button.domino-tile{cursor:pointer}
+.domino-tile span.domino-half{position:relative;display:block;flex:1;min-width:0;border:0;padding:0;background:transparent}
+.domino-tile span.domino-half+span.domino-half{border-left:1px solid #7f8790}
+.domino-pips{position:absolute;inset:2px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);gap:0}
+.domino-pip{width:5px;height:5px;border-radius:50%;background:#18212b;align-self:center;justify-self:center;box-shadow:inset 0 1px 1px #0005}
+.domino-pip.p1{grid-area:1/1}.domino-pip.p2{grid-area:1/2}.domino-pip.p3{grid-area:1/3}.domino-pip.p4{grid-area:2/1}.domino-pip.p5{grid-area:2/2}.domino-pip.p6{grid-area:2/3}.domino-pip.p7{grid-area:3/1}.domino-pip.p8{grid-area:3/2}.domino-pip.p9{grid-area:3/3}
+.domino-tile.playable{border-color:#ffe08a;outline:2px solid #ffe08a;box-shadow:0 0 0 4px #f4c85a26,0 4px 0 #a8a69c,0 8px 14px #001b16aa;transform:translateY(-2px);cursor:pointer}
+.domino-tile.playable:hover{transform:translateY(-4px) scale(1.035)}
+.domino-tile.back{width:37px;min-width:37px;height:62px;border:2px solid #d6c29b;background:repeating-linear-gradient(45deg,#183e63,#183e63 5px,#24557d 5px,#24557d 10px);box-shadow:0 3px 0 #102a42}
+.domino-hand{gap:10px;min-height:68px;padding:8px 4px}
+.domino-hand .domino-tile{width:82px;min-width:82px;height:41px}
+.domino-hand .domino-pip{width:6px;height:6px}
+.domino-actions{gap:10px;margin-top:18px!important}
+.domino-actions button:disabled{opacity:.35;cursor:not-allowed;transform:none;filter:none}
+.domino-small{color:#aebfd2;font-size:13px;line-height:1.65}
+#dominoEnds{margin:14px 0 0;padding:10px;background:#091a27;border-radius:10px;color:#c9d7e7}
+@media(max-width:600px){.domino-table{justify-content:flex-start;min-height:130px;padding:16px 12px;border-width:5px}.domino-tile{width:62px;min-width:62px;height:32px}.domino-hand .domino-tile{width:70px;min-width:70px;height:36px}.domino-pip{width:4px;height:4px}.domino-hand .domino-pip{width:5px;height:5px}.domino-wrap .domino-panel{padding:12px}}
+
+</style>
+
 </head>
 
 <body>
@@ -1152,12 +1205,50 @@ td, th { overflow-wrap: anywhere; }
         <button class="dashboard-card" id="dashboardSpectatorCard"><span class="dash-card-icon">👁️</span><strong>Spectateur</strong><small>Gade match yo an dirèk.</small></button>
         <button class="dashboard-card" id="dashboardRobotCard"><span class="dash-card-icon">🤖</span><strong>Robot</strong><small>Jwe kont IA a pou antrene.</small></button>
         <button class="dashboard-card" id="dashboardRankingCard"><span class="dash-card-icon">🏆</span><strong>Classement</strong><small>Gade pi bon jwè yo.</small></button>
+        <button class="dashboard-card gold-card" id="dashboardGamesCard"><span class="dash-card-icon">🎮</span><strong>JERY GAMES</strong><small>Tout jwèt platfòm nan nan yon sèl meni.</small></button>
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
       </section>
 
       <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
     </main>
   </div>
+</section>
+
+<!-- JERY GAMES: menu added without replacing existing screens -->
+<section id="jeryGamesScreen" class="screen">
+  <div class="inner-page-head">
+    <button type="button" class="back-icon" id="jeryGamesBack" aria-label="Retour">←</button>
+    <div class="brand-mini"><span class="brand-crown">♛</span> MR_<b>Jery</b> GAMES</div>
+    <span></span>
+  </div>
+  <main style="max-width:1200px;margin:0 auto;padding:24px 18px 45px">
+    <div class="jery-games-head"><div><h1>🎮 JERY GAMES</h1><p>Yon sèl kont, plizyè jwèt. Chwazi jwèt ou vle jwe.</p></div></div>
+    <div class="jery-games-note">✅ <strong>MR_Jery Morpion</strong> rete jwèt ki disponib la. Lòt jwèt yo make <strong>Bientôt disponible</strong> jiskaske yo devlope epi teste. Sa pa chanje jwèt, kont, wallet oswa sistèm match ki te deja la.</div>
+    <div class="jery-games-grid" id="jeryGamesGrid">
+      <button class="jery-game-card available" data-game="morpion"><span class="jery-game-icon">⚫🔴</span><strong>MR_Jery Morpion</strong><small>Jwe anliy, ak zanmi oswa kont robot.</small><span class="jery-game-status">DISPONIB</span></button>
+      <button class="jery-game-card" data-game="domino"><span class="jery-game-icon">🁢</span><strong>Domino Jery</strong><small>2–4 jwè • estrateji</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="ludo"><span class="jery-game-icon">🎲</span><strong>Ludo Jery</strong><small>2–4 jwè • jwèt fanmi</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="chess"><span class="jery-game-icon">♟️</span><strong>Echek Jery</strong><small>Estrateji ak refleksyon</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="checkers"><span class="jery-game-icon">🔴⚫</span><strong>Dam Jery</strong><small>Defi 1 kont 1</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="connect4"><span class="jery-game-icon">🟡🔴</span><strong>Puissance 4 Jery</strong><small>Aliyen 4 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>Match rapid</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="battleship"><span class="jery-game-icon">⚓</span><strong>Bataille Navale</strong><small>Jwenn bato advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="reversi"><span class="jery-game-icon">⚫⚪</span><strong>Reversi / Othello</strong><small>Kontwole tablo a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="backgammon"><span class="jery-game-icon">🎲</span><strong>Backgammon</strong><small>Deplase pyès ak zo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="chinese-checkers"><span class="jery-game-icon">⭐</span><strong>Dames Chinoises</strong><small>Jiska 6 jwè, selon règ jwèt la</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="mills"><span class="jery-game-icon">⚙️</span><strong>Moulin</strong><small>Fòme liy 3 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="awale"><span class="jery-game-icon">🪵</span><strong>Awalé / Mancala</strong><small>Kolekte grenn ak estrateji</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="rps"><span class="jery-game-icon">✊📄✂️</span><strong>Wòch, Papye, Sizo</strong><small>Defi rapid</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="words"><span class="jery-game-icon">🔤</span><strong>Jery Mots</strong><small>Devine mo an Kreyòl, Franse oswa Anglè</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="hangman"><span class="jery-game-icon">🪢</span><strong>Jeu du Pendu</strong><small>Devine mo kache a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="memory"><span class="jery-game-icon">🧠</span><strong>Memory Jery</strong><small>Jwenn pè kat yo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="minesweeper"><span class="jery-game-icon">💣</span><strong>Démineur</strong><small>Jwenn kare ki an sekirite yo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="number"><span class="jery-game-icon">🔢</span><strong>Jery Number Challenge</strong><small>Devinèt nimewo ak tan limite</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="cards"><span class="jery-game-icon">🃏</span><strong>Bataille de Cartes</strong><small>Jwèt kat ak règ defini</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="puzzle"><span class="jery-game-icon">🧩</span><strong>Jery Puzzle Battle</strong><small>Rezoud devinèt anvan advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="quiz"><span class="jery-game-icon">🏆</span><strong>Jery Quiz Battle</strong><small>Kilti jeneral, syans, istwa ak espò</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+    </div>
+  </main>
 </section>
 
 <!-- PROFIL -->
@@ -1649,6 +1740,21 @@ td, th { overflow-wrap: anywhere; }
 
 </section>
 
+<!-- DOMINO JERY: local pass-and-play version -->
+<section id="dominoScreen" class="screen">
+  <div class="domino-wrap">
+    <div class="inner-page-head"><button type="button" class="back-icon" id="dominoBack">←</button><div class="brand-mini">🁢 <b>Domino Jery</b></div><span></span></div>
+    <div class="domino-panel">
+      <h1>🁢 Domino Jery</h1>
+      <p class="domino-small">Yon eksperyans domino klasik ak 28 pyès, tablo vèt, pwen reyèl sou chak pyès, ak mòd 2–4 jwè sou menm aparèy la. Pase aparèy la bay pwochen jwè a lè se tou pa li.</p>
+      <div class="domino-toolbar"><label for="dominoPlayerCount">Kantite jwè:</label><select id="dominoPlayerCount"><option value="2">2 jwè</option><option value="3">3 jwè</option><option value="4">4 jwè</option></select><button type="button" class="primary" id="dominoStart">Nouvo pati</button></div>
+    </div>
+    <div class="domino-panel"><div class="domino-status" id="dominoStatus">Peze “Nouvo pati” pou kòmanse.</div><div class="domino-score" id="dominoPlayers"></div><h3>Tablo domino</h3><div class="domino-table" id="dominoChain"><span class="domino-small">Domino yo ap parèt isit la.</span></div><p class="domino-small" id="dominoEnds"></p></div>
+    <div class="domino-panel"><h3 id="dominoHandTitle">Men jwè a</h3><div class="domino-hand" id="dominoHand"></div><div class="domino-actions" style="margin-top:14px"><button type="button" id="dominoDraw">Rale domino</button><button type="button" id="dominoPass">Pase tou</button><button type="button" id="dominoRestart">Rekòmanse</button></div><p class="domino-small" id="dominoHint">Chwazi yon domino ki matche ak youn nan de pwent tablo a.</p></div>
+    <button type="button" class="back-button" id="dominoMenuBack">← Retounen nan JERY GAMES</button>
+  </div>
+</section>
+
 </div>
 
 <script>
@@ -1757,6 +1863,24 @@ document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>ale
 document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
 document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
 document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
+
+
+// JERY GAMES menu: the existing Morpion flow is reused; other games are clearly marked as not yet released.
+document.getElementById('dashboardGamesCard')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));
+document.getElementById('jeryGamesBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
+document.getElementById('jeryGamesGrid')?.addEventListener('click',function(e){
+  const card=e.target.closest('[data-game]'); if(!card)return;
+  if(card.dataset.game==='morpion'){
+    showScreen('accountMenuScreen');
+    document.getElementById('dashboardOnlineCard')?.focus();
+    return;
+  }
+  if(card.dataset.game==='domino'){
+    dominoStartGame(); showScreen('dominoScreen'); return;
+  }
+  const label=card.querySelector('strong')?.textContent||'Jwèt sa a';
+  alert(label+' ap vini byento. Nou poko aktive jwèt sa a; jwèt ki deja la yo pa chanje.');
+});
 
 /* ==================================================
    ÉCRANS
@@ -6129,6 +6253,63 @@ function cleanupMatchVoice(){matchVoicePeers.forEach(pc=>{try{pc.close();}catch(
     });
   } catch(e) { console.warn("Restauration de session reportée", e); }
 })();
+
+
+/* ================= DOMINO JERY - LOCAL PASS AND PLAY ================= */
+let dominoState=null;
+function dominoStartGame(){
+  const n=Math.max(2,Math.min(4,Number(document.getElementById('dominoPlayerCount')?.value||2)));
+  const all=[]; for(let a=0;a<=6;a++) for(let b=a;b<=6;b++) all.push({a,b,id:`${a}-${b}`});
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  const players=Array.from({length:n},(_,i)=>({name:`Jwè ${i+1}`,hand:all.splice(0,7)}));
+  dominoState={players,stock:all,chain:[],left:null,right:null,turn:0,passes:0,over:false};
+  renderDomino();
+}
+function dominoHalfHTML(n){
+ const positions={0:[],1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
+ const dots=(positions[n]||[]).map(pos=>`<i class="domino-pip p${pos}"></i>`).join('');
+ return `<span class="domino-half" aria-label="${n} pwen"><span class="domino-pips">${dots}</span></span>`;
+}
+function dominoTileHTML(tile,clickable=false,side='hand'){
+ const cls='domino-tile'+(clickable?' playable':'')+(side==='back'?' back':'');
+ if(side==='back') return `<span class="${cls}" aria-label="Domino kache"></span>`;
+ return `<button type="button" class="${cls}" data-domino-id="${tile.id}" aria-label="${tile.a} ak ${tile.b}">${dominoHalfHTML(tile.a)}${dominoHalfHTML(tile.b)}</button>`;
+}
+function dominoCanPlay(t){if(!dominoState.chain.length)return true;return t.a===dominoState.left||t.b===dominoState.left||t.a===dominoState.right||t.b===dominoState.right;}
+function renderDomino(){
+ const s=dominoState;if(!s)return;
+ const status=document.getElementById('dominoStatus'),hand=document.getElementById('dominoHand'),chain=document.getElementById('dominoChain');
+ document.getElementById('dominoPlayers').innerHTML=s.players.map((p,i)=>`<div class="domino-player ${i===s.turn&&!s.over?'active':''}"><strong>${p.name}${i===s.turn&&!s.over?' ◀':''}</strong><br><small>${p.hand.length} pyès</small></div>`).join('');
+ chain.innerHTML=s.chain.length?s.chain.map((t,i)=>`<div class="domino-tile" title="${t.a}-${t.b}" aria-label="Domino ${t.a}-${t.b}">${dominoHalfHTML(t.a)}${dominoHalfHTML(t.b)}</div>`).join(''):'<span class="domino-small">Premye jwè a chwazi yon domino pou kòmanse.</span>';
+ document.getElementById('dominoEnds').textContent=s.chain.length?`Pwent agoch: ${s.left}  •  Pwent adwat: ${s.right}  •  Domino ki rete pou rale: ${s.stock.length}`:`Domino ki rete pou rale: ${s.stock.length}`;
+ const p=s.players[s.turn];document.getElementById('dominoHandTitle').textContent=s.over?'Pati fini':`Men ${p.name} — se tou pa li`;
+ hand.innerHTML=s.over?'<strong>Pati a fini.</strong>':p.hand.map(t=>dominoTileHTML(t,dominoCanPlay(t))).join('');
+ document.getElementById('dominoDraw').disabled=s.over||s.stock.length===0||p.hand.some(dominoCanPlay);
+ document.getElementById('dominoPass').disabled=s.over||p.hand.some(dominoCanPlay)||s.stock.length>0;
+ document.getElementById('dominoHint').textContent=s.over?'Peze Rekòmanse pou jwe ankò.':(p.hand.some(dominoCanPlay)?'Chwazi yon domino ki limen an jòn pou mete l sou tablo a.':(s.stock.length?'Pa gen domino ki mache: rale youn.':'Pa gen domino ki mache ni pou rale: pase tou.'));
+ status.textContent=s.over?status.textContent:`Tou pa ${p.name} • ${p.hand.length} domino nan men li.`;
+ const grid=document.getElementById('jeryGamesGrid');const card=grid?.querySelector('[data-game="domino"]');if(card){card.classList.add('available');const st=card.querySelector('.jery-game-status');if(st)st.textContent='DISPONIB • LOKAL';}
+}
+function dominoNext(){const s=dominoState;if(!s||s.over)return;s.turn=(s.turn+1)%s.players.length;renderDomino();}
+function dominoPlay(id){const s=dominoState;if(!s||s.over)return;const p=s.players[s.turn],idx=p.hand.findIndex(t=>t.id===id);if(idx<0)return;const t=p.hand[idx];if(!dominoCanPlay(t))return;
+ if(!s.chain.length){s.chain.push({...t});s.left=t.a;s.right=t.b;}
+ else if(t.b===s.left){s.chain.unshift({a:t.a,b:t.b});s.left=t.a;}
+ else if(t.a===s.left){s.chain.unshift({a:t.b,b:t.a});s.left=t.b;}
+ else if(t.a===s.right){s.chain.push({a:t.a,b:t.b});s.right=t.b;}
+ else if(t.b===s.right){s.chain.push({a:t.b,b:t.a});s.right=t.a;}
+ else return;
+ p.hand.splice(idx,1);s.passes=0;
+ if(!p.hand.length){s.over=true;document.getElementById('dominoStatus').textContent=`🏆 ${p.name} genyen! Li fini tout domino li yo.`;renderDomino();return;}
+ dominoNext();
+}
+document.getElementById('dominoHand')?.addEventListener('click',e=>{const b=e.target.closest('[data-domino-id]');if(b)dominoPlay(b.dataset.dominoId);});
+document.getElementById('dominoDraw')?.addEventListener('click',()=>{const s=dominoState;if(!s||s.over||!s.stock.length)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay))return;p.hand.push(s.stock.pop());document.getElementById('dominoStatus').textContent=`${p.name} rale yon domino.`;renderDomino();});
+document.getElementById('dominoPass')?.addEventListener('click',()=>{const s=dominoState;if(!s||s.over)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay)||s.stock.length)return;s.passes++;if(s.passes>=s.players.length){s.over=true;const totals=s.players.map(p=>p.hand.reduce((sum,t)=>sum+t.a+t.b,0));const min=Math.min(...totals);const winners=s.players.filter((p,i)=>totals[i]===min).map(p=>p.name).join(', ');document.getElementById('dominoStatus').textContent=`🤝 Pati bloke! Gayan dapre pwen ki rete: ${winners}.`;renderDomino();return;}document.getElementById('dominoStatus').textContent=`${p.name} pase tou li.`;dominoNext();});
+document.getElementById('dominoStart')?.addEventListener('click',dominoStartGame);
+document.getElementById('dominoRestart')?.addEventListener('click',dominoStartGame);
+document.getElementById('dominoBack')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));
+document.getElementById('dominoMenuBack')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));
+
 </script>
 
 </body>
