@@ -305,7 +305,7 @@ h1 {
 }
 
 /* Zòn revanche: vizib, klè, responsive, ak bouton ki sanble ak yon jwèt pwofesyonèl. */
-#rematchBox { min-height: 92px; height: auto; margin: 9px auto 10px; padding: 10px 12px; gap: 6px; border: 1px solid rgba(212,175,55,.9); border-radius: 14px; background: linear-gradient(135deg,#111827 0%,#243047 55%,#172033 100%); box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
+#rematchBox { min-height: 76px; height: auto; margin: 5px auto 4px; padding: 9px 12px; gap: 6px; border: 1px solid rgba(212,175,55,.9); border-radius: 14px; background: linear-gradient(135deg,#111827 0%,#243047 55%,#172033 100%); box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
 #undoBox { min-height: 58px; height: auto; margin: 5px auto 6px; padding: 6px 8px; }
 #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 42px; padding: 9px 15px; font-size: 14px; border-radius: 10px; font-weight: 800; transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
 #rematchBox .rematch-button:hover, #undoBox .rematch-button:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 5px 14px rgba(0,0,0,.24); }
@@ -316,13 +316,26 @@ h1 {
 #rematchBox .rematch-accept { background: linear-gradient(135deg,#16a34a,#22c55e); color: #fff; border: 1px solid #86efac; }
 #rematchBox .rematch-refuse { background: linear-gradient(135deg,#991b1b,#ef4444); color: #fff; border: 1px solid #fca5a5; }
 #onlineBlackTimer, #onlineRedTimer { margin: 3px 0; }
-#onlineBoard { margin-top: -5px !important; margin-bottom: 10px !important; }
+#onlineBoard { margin-top: 0 !important; margin-bottom: 10px !important; }
+/* Mare rezilta/revanch la kole ak tablo a pou li santi tankou yon sèl zòn jwèt. */
+#onlineScreen .game-info { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+#onlineResult { margin: 5px auto 4px; }
+#rematchBox:not(.show) { display: none; }
+#rematchBox.show { display: flex; }
+#undoBox:not(.show) { display: none; }
+#undoBox.show { display: flex; }
 #onlineBoard .cell.last-move-cell { z-index: 8; position: relative; }
 #onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: scale(1.17); transform-origin: center; border: 2px solid rgba(255,255,255,.95); outline: 3px solid #facc15; outline-offset: 1px; box-shadow: 0 0 0 5px rgba(250,204,21,.24), 0 0 16px rgba(250,204,21,.95); z-index: 12; animation: lastStoneReveal .28s ease-out; }
 @keyframes lastStoneReveal { from { transform: scale(.78); opacity:.6; } to { transform: scale(1.17); opacity:1; } }
 #onlineBoard .cell.last-move-cell::after { background: #facc15; opacity: .9; }
-#soundToggleButton { border: 1px solid #d4af37; background: linear-gradient(135deg,#202b42,#111827); color: #f9fafb; border-radius: 10px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
-#soundToggleButton[aria-pressed="true"] { border-color:#86efac; box-shadow: inset 0 0 0 1px rgba(134,239,172,.25); }
+#gameSoundPanel { width:min(100%,560px); margin:12px auto; padding:13px 15px; border:1px solid #34435f; border-radius:15px; background:linear-gradient(145deg,#111827,#1e293b); color:#edf2ff; box-sizing:border-box; text-align:left; }
+#gameSoundPanel .sound-panel-title { margin:0 0 8px; font-size:15px; font-weight:900; }
+#gameSoundPanel .sound-panel-row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+#soundToggleButton { border:1px solid #d4af37; background:linear-gradient(135deg,#202b42,#111827); color:#f9fafb; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer; min-height:42px; }
+#soundToggleButton[aria-pressed="true"] { border-color:#86efac; box-shadow:inset 0 0 0 1px rgba(134,239,172,.25); }
+#gameSoundVolume { width:min(220px,48vw); accent-color:#d4af37; }
+#gameSoundHelp { display:block; margin-top:8px; color:#bdc9dd; font-size:12px; line-height:1.5; }
+#gameSoundStatus { font-size:12px; font-weight:800; color:#86efac; }
 @media (max-width: 600px) {
   #rematchBox { min-height: 82px; height: auto; padding: 8px 7px; margin: 7px auto; }
   #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 40px; padding: 8px 10px; font-size: 12px; }
@@ -1713,7 +1726,15 @@ td, th { overflow-wrap: anywhere; }
             style="display:none;">
             🔄 Nouvelle partie
         </button>
-        <button type="button" id="soundToggleButton" aria-pressed="true" title="Aktive oswa fèmen son jwèt la">🔊 Son jwèt: ON</button>
+        <section id="gameSoundPanel" aria-label="Kontwòl son jwèt la">
+            <h3 class="sound-panel-title">🔊 Kontwòl son jwèt la</h3>
+            <div class="sound-panel-row">
+                <button type="button" id="soundToggleButton" aria-pressed="true" title="Klike pou limen oswa fèmen tout son jwèt la">🔊 Son aktive</button>
+                <label for="gameSoundVolume">Volim <input id="gameSoundVolume" type="range" min="0" max="100" value="65"></label>
+                <span id="gameSoundStatus" role="status">Son limen</span>
+            </div>
+            <small id="gameSoundHelp">Son pion: lè yon moun jwe · Son revanche: lè gen demann rejwe · Son viktwa: lè pati a fini. Bouton an limen/fèmen tout son; glisè a ajiste volim.</small>
+        </section>
 
     </div>
 
@@ -2049,6 +2070,7 @@ function createBoard(container, clickFunction) {
 ================================================== */
 let gameSoundsEnabled = true;
 let gameAudioContext = null;
+let gameSoundVolume = 0.65;
 function playGameSound(kind) {
     if (!gameSoundsEnabled) return;
     try {
@@ -2065,7 +2087,7 @@ function playGameSound(kind) {
             osc.type = kind === "move" ? "triangle" : "sine";
             osc.frequency.setValueAtTime(freq, now + i * 0.075);
             gain.gain.setValueAtTime(0.0001, now + i * 0.075);
-            gain.gain.exponentialRampToValueAtTime(kind === "move" ? 0.055 : 0.07, now + i * 0.075 + 0.012);
+            gain.gain.exponentialRampToValueAtTime((kind === "move" ? 0.055 : 0.07) * gameSoundVolume, now + i * 0.075 + 0.012);
             gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.075 + 0.13);
             osc.connect(gain); gain.connect(ctx.destination);
             osc.start(now + i * 0.075); osc.stop(now + i * 0.075 + 0.14);
@@ -2075,10 +2097,18 @@ function playGameSound(kind) {
 (function setupGameSoundToggle() {
     const button = document.getElementById("soundToggleButton");
     if (!button) return;
+    const status = document.getElementById("gameSoundStatus");
+    const volume = document.getElementById("gameSoundVolume");
+    if (volume) volume.addEventListener("input", function () {
+        gameSoundVolume = Math.max(0, Math.min(1, Number(volume.value) / 100));
+        if (status) status.textContent = gameSoundsEnabled ? "Son limen · " + volume.value + "%" : "Son fèmen";
+        if (gameSoundsEnabled && gameSoundVolume > 0) playGameSound("ui");
+    });
     button.addEventListener("click", function () {
         gameSoundsEnabled = !gameSoundsEnabled;
         button.setAttribute("aria-pressed", String(gameSoundsEnabled));
-        button.textContent = gameSoundsEnabled ? "🔊 Son jwèt: ON" : "🔇 Son jwèt: OFF";
+        button.textContent = gameSoundsEnabled ? "🔊 Son aktive" : "🔇 Son fèmen";
+        if (status) status.textContent = gameSoundsEnabled ? "Son limen · " + (volume ? volume.value : 65) + "%" : "Son fèmen";
         if (gameSoundsEnabled) playGameSound("ui");
     });
 })();
