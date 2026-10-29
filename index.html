@@ -304,26 +304,37 @@ h1 {
     box-sizing: border-box;
 }
 
-/* Zòn revanche a rete konpak pou revèy yo ak tablo a rete vizib ansanm. */
-#rematchBox { min-height: 58px; height: 58px; margin: 5px auto 6px; padding: 4px 8px; }
-#undoBox { min-height: 58px; height: 58px; margin: 5px auto 6px; padding: 4px 8px; }
-#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 36px; padding: 6px 12px; font-size: 14px; }
-#rematchBox .rematch-message, #undoBox .rematch-message { margin: 1px 0 4px; font-size: 13px; line-height: 1.2; }
+/* Zòn revanche: vizib, klè, responsive, ak bouton ki sanble ak yon jwèt pwofesyonèl. */
+#rematchBox { min-height: 92px; height: auto; margin: 9px auto 10px; padding: 10px 12px; gap: 6px; border: 1px solid rgba(212,175,55,.9); border-radius: 14px; background: linear-gradient(135deg,#111827 0%,#243047 55%,#172033 100%); box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
+#undoBox { min-height: 58px; height: auto; margin: 5px auto 6px; padding: 6px 8px; }
+#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 42px; padding: 9px 15px; font-size: 14px; border-radius: 10px; font-weight: 800; transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
+#rematchBox .rematch-button:hover, #undoBox .rematch-button:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 5px 14px rgba(0,0,0,.24); }
+#rematchBox .rematch-message, #undoBox .rematch-message { margin: 2px 0 5px; font-size: 14px; line-height: 1.35; font-weight: 750; }
+#rematchBox .rematch-message { color: #f8fafc; }
+#rematchBox .rematch-actions, #undoBox .rematch-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 9px; }
+#rematchBox .rematch-request { background: linear-gradient(135deg,#d4af37,#f5d76e); color: #171717; border: 1px solid #ffe79a; box-shadow: 0 4px 14px rgba(212,175,55,.22); }
+#rematchBox .rematch-accept { background: linear-gradient(135deg,#16a34a,#22c55e); color: #fff; border: 1px solid #86efac; }
+#rematchBox .rematch-refuse { background: linear-gradient(135deg,#991b1b,#ef4444); color: #fff; border: 1px solid #fca5a5; }
 #onlineBlackTimer, #onlineRedTimer { margin: 3px 0; }
-#onlineBoard { margin-top: -8px !important; margin-bottom: 10px !important; }
-#onlineBoard .cell.last-move-cell { z-index: 8; }
-#onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: scale(1.14); transform-origin: center; box-shadow: 0 0 0 3px #facc15, 0 0 10px rgba(250,204,21,1); z-index: 12; }
+#onlineBoard { margin-top: -5px !important; margin-bottom: 10px !important; }
+#onlineBoard .cell.last-move-cell { z-index: 8; position: relative; }
+#onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: scale(1.17); transform-origin: center; border: 2px solid rgba(255,255,255,.95); outline: 3px solid #facc15; outline-offset: 1px; box-shadow: 0 0 0 5px rgba(250,204,21,.24), 0 0 16px rgba(250,204,21,.95); z-index: 12; animation: lastStoneReveal .28s ease-out; }
+@keyframes lastStoneReveal { from { transform: scale(.78); opacity:.6; } to { transform: scale(1.17); opacity:1; } }
+#onlineBoard .cell.last-move-cell::after { background: #facc15; opacity: .9; }
+#soundToggleButton { border: 1px solid #d4af37; background: linear-gradient(135deg,#202b42,#111827); color: #f9fafb; border-radius: 10px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
+#soundToggleButton[aria-pressed="true"] { border-color:#86efac; box-shadow: inset 0 0 0 1px rgba(134,239,172,.25); }
 @media (max-width: 600px) {
-  #rematchBox, #undoBox { min-height: 50px; height: 50px; }
-  #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 32px; padding: 5px 9px; font-size: 12px; }
-  #onlineBoard { width: min(98vw, 760px); margin-top: -8px !important; }
+  #rematchBox { min-height: 82px; height: auto; padding: 8px 7px; margin: 7px auto; }
+  #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 40px; padding: 8px 10px; font-size: 12px; }
+  #rematchBox .rematch-message, #undoBox .rematch-message { font-size: 12px; }
+  #onlineBoard { width: min(98vw, 760px); margin-top: -4px !important; }
+  #onlineBoard .stone.last-move-stone { transform: scale(1.1); outline-width: 2px; box-shadow: 0 0 0 4px rgba(250,204,21,.25), 0 0 12px rgba(250,204,21,.9); }
 }
 #rematchBox.show, #undoBox.show { visibility: visible; }
 #onlineStatus { min-height: 34px; display: flex; align-items: center; justify-content: center; }
 #onlineStatus.opponent-turn { font-size: 22px; font-weight: 900; color: #FBBF24; }
 #onlineMatchNotice { min-height: 28px; }
 #onlineBoard { contain: layout paint; }
-#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 46px; padding: 11px 18px; font-size: 16px; }
 
 .rematch-box.show {
     visibility: visible;
@@ -1702,6 +1713,7 @@ td, th { overflow-wrap: anywhere; }
             style="display:none;">
             🔄 Nouvelle partie
         </button>
+        <button type="button" id="soundToggleButton" aria-pressed="true" title="Aktive oswa fèmen son jwèt la">🔊 Son jwèt: ON</button>
 
     </div>
 
@@ -2031,6 +2043,45 @@ function createBoard(container, clickFunction) {
 
     container.appendChild(board);
 }
+
+/* ==================================================
+   SON JWÈT — efè son lejè, san fichye ekstèn
+================================================== */
+let gameSoundsEnabled = true;
+let gameAudioContext = null;
+function playGameSound(kind) {
+    if (!gameSoundsEnabled) return;
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        if (!gameAudioContext) gameAudioContext = new AudioCtx();
+        if (gameAudioContext.state === "suspended") gameAudioContext.resume().catch(() => {});
+        const ctx = gameAudioContext;
+        const now = ctx.currentTime;
+        const tones = kind === "win" ? [660, 880, 1100] : kind === "rematch" ? [520, 760] : kind === "ui" ? [480] : [360, 520];
+        tones.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = kind === "move" ? "triangle" : "sine";
+            osc.frequency.setValueAtTime(freq, now + i * 0.075);
+            gain.gain.setValueAtTime(0.0001, now + i * 0.075);
+            gain.gain.exponentialRampToValueAtTime(kind === "move" ? 0.055 : 0.07, now + i * 0.075 + 0.012);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.075 + 0.13);
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(now + i * 0.075); osc.stop(now + i * 0.075 + 0.14);
+        });
+    } catch (err) { /* Son an pa dwe bloke yon mouvman nan jwèt la. */ }
+}
+(function setupGameSoundToggle() {
+    const button = document.getElementById("soundToggleButton");
+    if (!button) return;
+    button.addEventListener("click", function () {
+        gameSoundsEnabled = !gameSoundsEnabled;
+        button.setAttribute("aria-pressed", String(gameSoundsEnabled));
+        button.textContent = gameSoundsEnabled ? "🔊 Son jwèt: ON" : "🔇 Son jwèt: OFF";
+        if (gameSoundsEnabled) playGameSound("ui");
+    });
+})();
 
 /* ==================================================
    PION
@@ -4849,11 +4900,21 @@ function connectServer(callback) {
                     "state"
                 ) {
 
+                    const previousLastMoveSignature = onlineLastMove
+                        ? [onlineLastMove.row, onlineLastMove.col, onlineLastMove.player].join(":")
+                        : "";
+                    const incomingLastMove = data.last_move || null;
+                    const incomingLastMoveSignature = incomingLastMove
+                        ? [incomingLastMove.row, incomingLastMove.col, incomingLastMove.player].join(":")
+                        : "";
                     onlineBoardState =
                         convertServerBoard(
                             data.board
                         );
-                    onlineLastMove = data.last_move || null;
+                    onlineLastMove = incomingLastMove;
+                    if (incomingLastMoveSignature && incomingLastMoveSignature !== previousLastMoveSignature) {
+                        playGameSound("move");
+                    }
 
                     onlinePlayersState =
                         data.players || {};
@@ -5396,6 +5457,7 @@ function updateRematchUI() {
     if (!box || !message || !actions) return;
 
     box.style.visibility = "hidden";
+    box.classList.remove("show");
     message.textContent = "";
     actions.innerHTML = "";
 
@@ -5405,6 +5467,7 @@ function updateRematchUI() {
 
     if (onlineRematchRequest !== null) {
         box.style.visibility = "visible";
+        box.classList.add("show");
         const requester = Number(onlineRematchRequest);
 
         if (requester === Number(onlinePlayer)) {
@@ -5433,7 +5496,8 @@ function updateRematchUI() {
 
     if (Number(onlinePlayer) === 1 || Number(onlinePlayer) === 2) {
         box.style.visibility = "visible";
-        message.textContent = "Demandez une revanche à votre adversaire.";
+        box.classList.add("show");
+        message.textContent = "🏆 Partie terminée — voulez-vous rejouer ?";
 
         const request = document.createElement("button");
         request.type = "button";
@@ -5445,6 +5509,7 @@ function updateRematchUI() {
 }
 
 function requestRematch() {
+    playGameSound("rematch");
     if (!socket || socket.readyState !== WebSocket.OPEN || !onlineRoom) return;
     if (!onlineGameOver) return;
 
@@ -5457,6 +5522,7 @@ function requestRematch() {
 function sendRematchResponse(
     accepted
 ) {
+    playGameSound(accepted ? "rematch" : "ui");
 
     if (
         !socket ||
