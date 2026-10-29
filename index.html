@@ -1747,7 +1747,15 @@ button.domino-tile{cursor:pointer}
     <div class="domino-panel">
       <h1>🁢 Domino Jery</h1>
       <p class="domino-small">Yon eksperyans domino klasik ak 28 pyès, tablo vèt, pwen reyèl sou chak pyès, ak mòd 2–4 jwè sou menm aparèy la. Pase aparèy la bay pwochen jwè a lè se tou pa li.</p>
-      <div class="domino-toolbar"><label for="dominoPlayerCount">Kantite jwè:</label><select id="dominoPlayerCount"><option value="2">2 jwè</option><option value="3">3 jwè</option><option value="4">4 jwè</option></select><button type="button" class="primary" id="dominoStart">Nouvo pati</button></div>
+      <div class="domino-toolbar"><label for="dominoPlayerCount">Kantite jwè:</label><select id="dominoPlayerCount"><option value="2">2 jwè</option><option value="3">3 jwè</option><option value="4">4 jwè</option></select><button type="button" class="primary" id="dominoStart">Nouvo pati lokal</button><button type="button" id="dominoShowOnline">🌐 Jwe anliy</button></div>
+      <div id="dominoOnlinePanel" class="domino-online-panel" style="display:none;margin-top:16px;padding:14px;border:1px solid #405477;border-radius:14px;background:#081522">
+        <h3>🌐 Domino Jery Online</h3>
+        <p class="domino-small">Pou jwe ak zanmi sou aparèy diferan, mete URL sèvè Domino Render la. Egzanp: <b>wss://non-sèvis-ou.onrender.com/ws</b></p>
+        <div class="domino-toolbar"><input id="dominoWsUrl" type="url" placeholder="wss://non-sèvis-ou.onrender.com/ws" style="min-width:min(100%,320px);padding:12px;border-radius:10px;border:1px solid #405477;background:#0b1020;color:#fff"><input id="dominoOnlineName" maxlength="24" placeholder="Non jwè a" style="width:150px;padding:12px;border-radius:10px;border:1px solid #405477;background:#0b1020;color:#fff"><select id="dominoOnlineCount"><option value="2">2 jwè</option><option value="3">3 jwè</option><option value="4">4 jwè</option></select></div>
+        <div class="domino-toolbar" style="margin-top:10px"><button type="button" class="primary" id="dominoCreateRoom">Kreye chanm</button><input id="dominoRoomCode" maxlength="6" placeholder="Kòd chanm" style="width:120px;text-transform:uppercase;padding:12px;border-radius:10px;border:1px solid #405477;background:#0b1020;color:#fff"><button type="button" id="dominoJoinRoom">Antre nan chanm</button><button type="button" id="dominoOnlineStart">Kòmanse pati</button><button type="button" id="dominoLeaveRoom">Kite chanm</button></div>
+        <p class="domino-status" id="dominoOnlineStatus" role="status">Mòd anliy poko konekte.</p>
+        <div id="dominoOnlineChat" style="display:none"><div id="dominoChatLog" style="height:110px;overflow:auto;background:#050d16;padding:10px;border-radius:10px;margin-bottom:8px"></div><div class="domino-toolbar"><input id="dominoChatInput" maxlength="300" placeholder="Ekri mesaj..." style="flex:1;min-width:180px;padding:12px;border-radius:10px;border:1px solid #405477;background:#0b1020;color:#fff"><button type="button" id="dominoChatSend">Voye</button></div></div>
+      </div>
     </div>
     <div class="domino-panel"><div class="domino-status" id="dominoStatus">Peze “Nouvo pati” pou kòmanse.</div><div class="domino-score" id="dominoPlayers"></div><h3>Tablo domino</h3><div class="domino-table" id="dominoChain"><span class="domino-small">Domino yo ap parèt isit la.</span></div><p class="domino-small" id="dominoEnds"></p></div>
     <div class="domino-panel"><h3 id="dominoHandTitle">Men jwè a</h3><div class="domino-hand" id="dominoHand"></div><div class="domino-actions" style="margin-top:14px"><button type="button" id="dominoDraw">Rale domino</button><button type="button" id="dominoPass">Pase tou</button><button type="button" id="dominoRestart">Rekòmanse</button></div><p class="domino-small" id="dominoHint">Chwazi yon domino ki matche ak youn nan de pwent tablo a.</p></div>
@@ -6255,9 +6263,57 @@ function cleanupMatchVoice(){matchVoicePeers.forEach(pc=>{try{pc.close();}catch(
 })();
 
 
+/* ================= DOMINO JERY - ONLINE WEBSOCKET ================= */
+let dominoOnlineSocket=null, dominoOnlineActive=false, dominoOnlineRoom=null, dominoOnlinePlayerId=null, dominoOnlineState=null, dominoPendingOnlineAction=null;
+function dominoEscapeHtml(value){return String(value??'').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]));}
+function dominoOnlineStatus(msg){const el=document.getElementById('dominoOnlineStatus');if(el)el.textContent=msg;}
+function dominoOnlineConnect(){
+ const url=document.getElementById('dominoWsUrl').value.trim();
+ if(!url){dominoOnlineStatus('Mete URL WebSocket Render la anvan.');return false;}
+ if(!/^wss?:\/\//i.test(url)){dominoOnlineStatus('URL la dwe kòmanse ak wss:// oswa ws://.');return false;}
+ if(dominoOnlineSocket && dominoOnlineSocket.readyState===WebSocket.OPEN)return true;
+ try{dominoOnlineSocket=new WebSocket(url);}catch(e){dominoOnlineStatus('URL WebSocket la pa valab.');return false;}
+ dominoOnlineSocket.onopen=()=>{dominoOnlineStatus('Konekte ak sèvè a.');if(dominoPendingOnlineAction){const action=dominoPendingOnlineAction;dominoPendingOnlineAction=null;dominoOnlineSocket.send(JSON.stringify(action));}};
+ dominoOnlineSocket.onmessage=(ev)=>{let d;try{d=JSON.parse(ev.data)}catch{return}
+   if(d.type==='room_created'||d.type==='room_joined'){dominoOnlineRoom=d.room;dominoOnlinePlayerId=d.player_id;document.getElementById('dominoRoomCode').value=d.room;document.getElementById('dominoOnlineChat').style.display='block';dominoOnlineStatus((d.type==='room_created'?'Chanm kreye: ':'Ou antre nan chanm: ')+d.room+'. Voye kòd la bay zanmi ou.');}
+   else if(d.type==='state'){dominoOnlineState=d;dominoOnlineActive=true;dominoRenderOnline(d);}
+   else if(d.type==='notice'){dominoOnlineStatus(d.message||'Mizajou chanm.');}
+   else if(d.type==='error'){dominoOnlineStatus('⚠️ '+(d.message||'Erè sèvè.'));}
+   else if(d.type==='chat'){const log=document.getElementById('dominoChatLog');const line=document.createElement('div');line.textContent=(d.name||'Jwè')+': '+d.message;log.appendChild(line);log.scrollTop=log.scrollHeight;}
+   else if(d.type==='game_over'){dominoOnlineStatus('🏆 '+(d.message||'Pati a fini.'));}
+   else if(d.type==='left_room'){dominoOnlineRoom=null;dominoOnlinePlayerId=null;dominoOnlineState=null;dominoOnlineActive=false;dominoOnlineStatus('Ou kite chanm nan.');}
+ };
+ dominoOnlineSocket.onerror=()=>dominoOnlineStatus('Koneksyon an echwe. Verifye URL Render la ak si sèvè a deplwaye.');
+ dominoOnlineSocket.onclose=()=>{dominoOnlineStatus('Koneksyon fèmen. Klike yon bouton pou rekonekte.');};
+ return true;
+}
+function dominoOnlineSend(payload){if(!dominoOnlineSocket||dominoOnlineSocket.readyState!==WebSocket.OPEN){dominoOnlineConnect();dominoOnlineStatus('Ap konekte... apre koneksyon an, klike ankò.');return false;}dominoOnlineSocket.send(JSON.stringify(payload));return true;}
+function dominoRenderOnline(s){
+ const players=s.players||[];document.getElementById('dominoPlayers').innerHTML=players.map(p=>`<div class="domino-player ${p.id===s.turn_player_id&&!s.over?'active':''}"><strong>${dominoEscapeHtml(p.name||'Jwè')}${p.id===s.turn_player_id&&!s.over?' ◀':''}</strong><br><small>${p.tile_count} pyès${p.id===dominoOnlinePlayerId?' • OU':''}${!p.connected?' • dekonekte':''}</small></div>`).join('');
+ const chain=document.getElementById('dominoChain');chain.innerHTML=(s.chain&&s.chain.length)?s.chain.map(t=>`<div class="domino-tile" title="${t.a}-${t.b}">${dominoHalfHTML(t.a)}${dominoHalfHTML(t.b)}</div>`).join(''):'<span class="domino-small">Pati a poko kòmanse. Tann tout jwè yo, epi klike Kòmanse pati.</span>';
+ document.getElementById('dominoEnds').textContent=s.chain&&s.chain.length?`Pwent agoch: ${s.left} • Pwent adwat: ${s.right} • Stock: ${s.stock_count}`:`Domino ki rete nan stock: ${s.stock_count}`;
+ const me=players.find(p=>p.id===dominoOnlinePlayerId);const myTurn=s.turn_player_id===dominoOnlinePlayerId;
+ document.getElementById('dominoHandTitle').textContent=me?`Men ${me.name}${myTurn?' — SE TOU PA OU':''}`:'Men jwè a';
+ const hand=me&&Array.isArray(me.hand)?me.hand:[];
+ document.getElementById('dominoHand').innerHTML=hand.length?hand.map(t=>{const playable=!s.over&&myTurn&&(!s.chain.length||[s.left,s.right].includes(t.a)||[s.left,s.right].includes(t.b));return dominoTileHTML(t,playable)}).join(''):(s.started?'Ou pa gen pyès nan men ou.':'Tann pati a kòmanse.');
+ document.getElementById('dominoDraw').disabled=!s.started||s.over||!myTurn||s.stock_count===0||hand.some(t=>!s.chain.length||[s.left,s.right].includes(t.a)||[s.left,s.right].includes(t.b));
+ document.getElementById('dominoPass').disabled=!s.started||s.over||!myTurn||hand.some(t=>!s.chain.length||[s.left,s.right].includes(t.a)||[s.left,s.right].includes(t.b))||s.stock_count>0;
+ document.getElementById('dominoRestart').disabled=true;
+ dominoOnlineStatus(`Chanm ${s.room} • ${players.length}/${s.max_players} jwè • ${s.started?'Pati an kou':'Ap tann pou kòmanse'}${myTurn?' • Se tou pa ou':''}${s.over?' • Pati fini':''}`);
+}
+function dominoOnlinePlayTile(id){const s=dominoOnlineState,me=s?.players?.find(p=>p.id===dominoOnlinePlayerId);if(!s||!me||s.turn_player_id!==dominoOnlinePlayerId)return;const t=(me.hand||[]).find(x=>x.id===id);if(!t)return;let side='left';if(s.chain&&s.chain.length){const leftMatch=t.a===s.left||t.b===s.left;const rightMatch=t.a===s.right||t.b===s.right;if(!leftMatch&&rightMatch)side='right';}dominoOnlineSend({type:'play_tile',tile_id:id,side});}
+document.getElementById('dominoShowOnline')?.addEventListener('click',()=>{const p=document.getElementById('dominoOnlinePanel');p.style.display=p.style.display==='none'?'block':'none';});
+document.getElementById('dominoCreateRoom')?.addEventListener('click',()=>{const action={type:'create_room',name:document.getElementById('dominoOnlineName').value||'Jwè',max_players:Number(document.getElementById('dominoOnlineCount').value||2)};if(!dominoOnlineSocket||dominoOnlineSocket.readyState!==WebSocket.OPEN){dominoPendingOnlineAction=action;dominoOnlineConnect();return;}dominoOnlineSend(action);});
+document.getElementById('dominoJoinRoom')?.addEventListener('click',()=>{const room=document.getElementById('dominoRoomCode').value.trim().toUpperCase();if(room.length!==6){dominoOnlineStatus('Mete kòd chanm 6 karaktè a.');return;}const action={type:'join_room',room,name:document.getElementById('dominoOnlineName').value||'Jwè'};if(!dominoOnlineSocket||dominoOnlineSocket.readyState!==WebSocket.OPEN){dominoPendingOnlineAction=action;dominoOnlineConnect();return;}dominoOnlineSend(action);});
+document.getElementById('dominoOnlineStart')?.addEventListener('click',()=>dominoOnlineSend({type:'start_game'}));
+document.getElementById('dominoLeaveRoom')?.addEventListener('click',()=>dominoOnlineSend({type:'leave_room'}));
+document.getElementById('dominoChatSend')?.addEventListener('click',()=>{const el=document.getElementById('dominoChatInput'),message=el.value.trim();if(message&&dominoOnlineSend({type:'chat',message}))el.value='';});
+document.getElementById('dominoChatInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('dominoChatSend').click();});
+
 /* ================= DOMINO JERY - LOCAL PASS AND PLAY ================= */
 let dominoState=null;
 function dominoStartGame(){
+  if(dominoOnlineActive){dominoOnlineActive=false;dominoOnlineState=null;}
   const n=Math.max(2,Math.min(4,Number(document.getElementById('dominoPlayerCount')?.value||2)));
   const all=[]; for(let a=0;a<=6;a++) for(let b=a;b<=6;b++) all.push({a,b,id:`${a}-${b}`});
   for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
@@ -6302,9 +6358,9 @@ function dominoPlay(id){const s=dominoState;if(!s||s.over)return;const p=s.playe
  if(!p.hand.length){s.over=true;document.getElementById('dominoStatus').textContent=`🏆 ${p.name} genyen! Li fini tout domino li yo.`;renderDomino();return;}
  dominoNext();
 }
-document.getElementById('dominoHand')?.addEventListener('click',e=>{const b=e.target.closest('[data-domino-id]');if(b)dominoPlay(b.dataset.dominoId);});
-document.getElementById('dominoDraw')?.addEventListener('click',()=>{const s=dominoState;if(!s||s.over||!s.stock.length)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay))return;p.hand.push(s.stock.pop());document.getElementById('dominoStatus').textContent=`${p.name} rale yon domino.`;renderDomino();});
-document.getElementById('dominoPass')?.addEventListener('click',()=>{const s=dominoState;if(!s||s.over)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay)||s.stock.length)return;s.passes++;if(s.passes>=s.players.length){s.over=true;const totals=s.players.map(p=>p.hand.reduce((sum,t)=>sum+t.a+t.b,0));const min=Math.min(...totals);const winners=s.players.filter((p,i)=>totals[i]===min).map(p=>p.name).join(', ');document.getElementById('dominoStatus').textContent=`🤝 Pati bloke! Gayan dapre pwen ki rete: ${winners}.`;renderDomino();return;}document.getElementById('dominoStatus').textContent=`${p.name} pase tou li.`;dominoNext();});
+document.getElementById('dominoHand')?.addEventListener('click',e=>{const b=e.target.closest('[data-domino-id]');if(!b)return;if(dominoOnlineActive){dominoOnlinePlayTile(b.dataset.dominoId);return;}dominoPlay(b.dataset.dominoId);});
+document.getElementById('dominoDraw')?.addEventListener('click',()=>{if(dominoOnlineActive){dominoOnlineSend({type:'draw'});return;}const s=dominoState;if(!s||s.over||!s.stock.length)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay))return;p.hand.push(s.stock.pop());document.getElementById('dominoStatus').textContent=`${p.name} rale yon domino.`;renderDomino();});
+document.getElementById('dominoPass')?.addEventListener('click',()=>{if(dominoOnlineActive){dominoOnlineSend({type:'pass'});return;}const s=dominoState;if(!s||s.over)return;const p=s.players[s.turn];if(p.hand.some(dominoCanPlay)||s.stock.length)return;s.passes++;if(s.passes>=s.players.length){s.over=true;const totals=s.players.map(p=>p.hand.reduce((sum,t)=>sum+t.a+t.b,0));const min=Math.min(...totals);const winners=s.players.filter((p,i)=>totals[i]===min).map(p=>p.name).join(', ');document.getElementById('dominoStatus').textContent=`🤝 Pati bloke! Gayan dapre pwen ki rete: ${winners}.`;renderDomino();return;}document.getElementById('dominoStatus').textContent=`${p.name} pase tou li.`;dominoNext();});
 document.getElementById('dominoStart')?.addEventListener('click',dominoStartGame);
 document.getElementById('dominoRestart')?.addEventListener('click',dominoStartGame);
 document.getElementById('dominoBack')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));
