@@ -348,6 +348,18 @@ h1 {
 #onlineStatus.opponent-turn { font-size: 22px; font-weight: 900; color: #FBBF24; }
 #onlineMatchNotice { min-height: 28px; }
 #onlineBoard { contain: layout paint; }
+/* Rezève plas pou demande rejwe a depi kòmansman: tablo a pa janm monte/desann. */
+#rematchBox, #undoBox { display:flex !important; box-sizing:border-box; flex-shrink:0; }
+#rematchBox:not(.show), #undoBox:not(.show) { visibility:hidden !important; pointer-events:none; }
+#rematchBox.show, #undoBox.show { visibility:visible !important; pointer-events:auto; }
+#rematchBox { min-height:76px; }
+#undoBox { min-height:58px; }
+.match-voice-controls { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+#matchVoicePeerControls button { min-height:40px; padding:9px 12px; border:1px solid #40516f; border-radius:10px; background:#111b2e; color:#f5f7ff; font-weight:750; cursor:pointer; }
+#matchVoicePeerControls button:hover { border-color:#43e0d0; }
+.match-voice-note { color:#a7b3cc; font-size:12px; line-height:1.5; }
+@media(max-width:600px){#rematchBox{min-height:82px}#undoBox{min-height:58px}#onlineBoard{margin-top:0!important}}
+
 
 .rematch-box.show {
     visibility: visible;
@@ -1709,13 +1721,13 @@ td, th { overflow-wrap: anywhere; }
       </div>
       <div class="match-voice-controls">
         <button type="button" id="matchMicButton">🎤 Aktive mikwo</button>
-        <button type="button" id="muteAllSpectatorsButton">🔇 Mute tout spektatè</button>
+        <button type="button" id="muteAllSpectatorsButton">🔇 Mute tout O (spektatè)</button>
         <span id="matchVoiceStatus" role="status">Mikwo fèmen</span>
       </div>
       <div id="matchVoicePeerControls" class="match-voice-controls" aria-label="Kontwòl vwa chak moun"></div>
       <div id="matchRemoteAudios"></div>
       <audio id="matchRemoteAudio" autoplay playsinline></audio>
-      <div class="match-comm-note">Jwè ak spektatè ka pale. Kontwòl mute yo afekte aparèy pa w sèlman.</div>
+      <div class="match-voice-note">Chwazi non moun nan pou mute oswa ouvri son li sou aparèy pa w. Jwè yo ka tande youn lòt; espektatè yo ka tande, men yo pa pale.</div>
     </section>
 
     <div class="game-actions">
@@ -1733,7 +1745,7 @@ td, th { overflow-wrap: anywhere; }
                 <label for="gameSoundVolume">Volim <input id="gameSoundVolume" type="range" min="0" max="100" value="65"></label>
                 <span id="gameSoundStatus" role="status">Son limen</span>
             </div>
-            <small id="gameSoundHelp">Son pion: lè yon moun jwe · Son revanche: lè gen demann rejwe · Son viktwa: lè pati a fini. Bouton an limen/fèmen tout son; glisè a ajiste volim.</small>
+            <small id="gameSoundHelp">Son jwèt la sèlman: pion, revanche ak viktwa. Pou vwa moun yo, sèvi ak bouton ki gen non chak moun nan seksyon chat la.</small>
         </section>
 
     </div>
@@ -6654,14 +6666,14 @@ async function handleVoiceSignal(data){if(String(data.room)!==String(onlineRoom)
   if(data.signal_type==='description'){const desc=new RTCSessionDescription(payload);await pc.setRemoteDescription(desc);if(desc.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);voiceSend(from,'description',pc.localDescription.toJSON());}}
   else if(data.signal_type==='ice'){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){console.debug('ICE candidate ignored',e);}}
 }catch(e){console.warn('Voice signal failed',e);}}
-document.getElementById('matchMicButton')?.addEventListener('click',async function(){const status=document.getElementById('matchVoiceStatus');try{
+document.getElementById('matchMicButton')?.addEventListener('click',async function(){const status=document.getElementById('matchVoiceStatus');if(voiceIsSpectator()){status.textContent='Mòd espektatè: ou ka tande, men ou pa ka pale.';return;}try{
   if(matchMicEnabled){matchMicEnabled=false;if(matchMicStream)matchMicStream.getAudioTracks().forEach(t=>t.enabled=false);this.textContent='🎤 Aktive mikwo';status.textContent='Mikwo fèmen';return;}
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Navigatè a pa sipòte mikwo a. Itilize HTTPS.');
   await getMatchMic();this.textContent='🔇 Koupe mikwo';status.textContent='Mikwo aktive';ensureVoiceJoined();
   // Re-negotiate existing connections after microphone permission is granted.
   for(const [id,pc] of matchVoicePeers){if(!pc.getSenders().some(s=>s.track&&s.track.kind==='audio'))matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}
 }catch(e){status.textContent=e.message||'Pa kapab aktive mikwo a.';}});
-function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);b.textContent=(muted?'🔊 Ouvri son: ':'🔇 Mute: ')+(meta.username||'Jwè')+(meta.role==='spectator'?' (spektatè)':'');b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id)||(voiceMuteAllSpectators&&meta.role==='spectator');renderVoicePeerControls();});box.appendChild(b);}}
+function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);b.textContent=(muted?'🔊 Ouvri son — ':'🔇 Mute — ')+(meta.username||'Jwè')+(meta.role==='spectator'?' · O (spektatè)':'');b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id)||(voiceMuteAllSpectators&&meta.role==='spectator');renderVoicePeerControls();});box.appendChild(b);}}
 document.getElementById('muteAllSpectatorsButton')?.addEventListener('click',function(){voiceMuteAllSpectators=!voiceMuteAllSpectators;this.textContent=voiceMuteAllSpectators?'🔊 Tande spektatè yo':'🔇 Mute tout spektatè';for(const [id,meta] of voicePeerMeta){const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id)||(voiceMuteAllSpectators&&meta.role==='spectator');}});
 function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
