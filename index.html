@@ -1044,6 +1044,23 @@ td, th { overflow-wrap: anywhere; }
 @media(max-width:600px){#matchActionArea{min-height:76px;margin:5px auto 6px}#matchActionArea>#rematchBox,#matchActionArea>#undoBox{min-height:76px!important}#matchMicQuickButton{right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;min-width:146px}}
 
 </style>
+
+<style id="mrjery-stable-single-action-row">
+/* Yon sèl emplacement rezève pou demann pyon/revanche: pa gen okenn chanjman wotè tablo. */
+#matchActionArea{position:relative!important;display:block!important;width:100%;height:78px;min-height:78px;max-height:78px;box-sizing:border-box;overflow:visible!important;margin:5px auto 6px!important;padding:0!important;}
+#matchActionArea>#rematchBox,#matchActionArea>#undoBox{position:absolute!important;inset:0!important;width:100%!important;height:78px!important;min-height:78px!important;max-height:78px!important;margin:0!important;padding:6px 10px!important;box-sizing:border-box!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:nowrap!important;overflow:hidden!important;}
+#matchActionArea>#rematchBox:not(.show),#matchActionArea>#undoBox:not(.show){visibility:hidden!important;pointer-events:none!important;}
+#matchActionArea>#rematchBox.show,#matchActionArea>#undoBox.show{visibility:visible!important;pointer-events:auto!important;}
+#matchActionArea .rematch-message{flex:0 1 auto!important;min-width:0!important;margin:0!important;text-align:center!important;line-height:1.25!important;}
+#matchActionArea .rematch-actions{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:7px!important;}
+#matchActionArea .rematch-button{white-space:nowrap!important;min-height:38px!important;padding:7px 11px!important;}
+@media(max-width:600px){#matchActionArea{height:72px;min-height:72px;max-height:72px;}#matchActionArea>#rematchBox,#matchActionArea>#undoBox{height:72px!important;min-height:72px!important;max-height:72px!important;padding:4px 5px!important;gap:5px!important;}#matchActionArea .rematch-message{font-size:11px!important;}#matchActionArea .rematch-button{font-size:11px!important;min-height:34px!important;padding:5px 7px!important;}}
+</style>
+
+<style id="mrjery-match-player-rank-style">
+#onlineBlackName, #onlineRedName { display:inline-flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.match-player-rank { display:inline-flex; align-items:center; border:1px solid currentColor; border-radius:999px; padding:2px 6px; font-size:10px; line-height:1.25; font-weight:900; white-space:nowrap; vertical-align:middle; background:rgba(255,255,255,.06); }
+</style>
 </head>
 
 <body>
@@ -5163,13 +5180,32 @@ function updateOnlineScoreDisplay() {
     const blackName = document.getElementById("onlineBlackName");
     const redName = document.getElementById("onlineRedName");
 
-    if (blackName) {
-        blackName.textContent = p1.username || p1.name || "Joueur 1";
-    }
-
-    if (redName) {
-        redName.textContent = p2.username || p2.name || "Joueur 2";
-    }
+    // Montre le sigle du rang directement à côté du pseudo pendant la partie.
+    const rankForMatchPlayer = (player) => {
+        const username = String(player.username || player.name || '');
+        let wins = Number(player.wins);
+        if (!Number.isFinite(wins)) wins = 0;
+        // Pour le compte connecté, utilise aussi le compteur de victoires local déjà existant.
+        if (username && String(username).toLowerCase() === String(currentUsername || '').toLowerCase()) {
+            wins = Math.max(wins, mrjeryGetWins());
+        }
+        return mrjeryCurrentRank(Math.max(0, wins));
+    };
+    const setMatchPlayerName = (element, player, fallback) => {
+        if (!element) return;
+        const username = player.username || player.name || fallback;
+        const rank = rankForMatchPlayer(player);
+        element.textContent = String(username);
+        const badge = document.createElement('span');
+        badge.className = 'match-player-rank';
+        badge.textContent = '[' + rank.sig + ']';
+        badge.title = 'Nivo ' + rank.n + ' · ' + mrjeryRankLabel(rank);
+        badge.style.color = rank.color;
+        element.appendChild(document.createTextNode(' '));
+        element.appendChild(badge);
+    };
+    setMatchPlayerName(blackName, p1, 'Joueur 1');
+    setMatchPlayerName(redName, p2, 'Joueur 2');
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
     const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
@@ -5542,8 +5578,7 @@ function updateRematchUI() {
             message.textContent = "⏳ Demande de revanche envoyée. En attente de l'adversaire.";
             return;
         }
-        // Seul le perdant peut demander; le gagnant reçoit seulement accepter/refuser.
-        if (Number(onlinePlayer) !== Number(onlineWinner)) return;
+        // L'autre joueur, qu'il ait gagné ou perdu, reçoit la demande et peut répondre.
         box.classList.add("show");
         box.style.visibility = "visible";
         message.textContent = "🔄 Votre adversaire demande une revanche.";
@@ -5559,17 +5594,15 @@ function updateRematchUI() {
         return;
     }
 
-    // Bouton visible uniquement chez le joueur qui a perdu.
-    if (Number(onlineWinner) !== Number(onlinePlayer)) {
-        box.classList.add("show");
-        box.style.visibility = "visible";
-        message.textContent = "Vous avez perdu. Vous pouvez demander une revanche.";
-        const request = document.createElement("button");
-        request.type = "button"; request.className = "rematch-button rematch-request";
-        request.textContent = "🔄 Demander une revanche";
-        request.addEventListener("click", requestRematch);
-        actions.appendChild(request);
-    }
+    // Les deux joueurs (gagnant ou perdant) peuvent demander une revanche.
+    box.classList.add("show");
+    box.style.visibility = "visible";
+    message.textContent = "La partie est terminée. Vous pouvez demander une revanche.";
+    const request = document.createElement("button");
+    request.type = "button"; request.className = "rematch-button rematch-request";
+    request.textContent = "🔄 Demander une revanche";
+    request.addEventListener("click", requestRematch);
+    actions.appendChild(request);
 }
 
 function requestRematch() {
