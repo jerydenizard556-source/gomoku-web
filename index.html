@@ -1010,6 +1010,15 @@ td, th { overflow-wrap: anywhere; }
 @media(max-width:600px){.rank-panel{padding:12px}.rank-table th,.rank-table td{padding:8px 5px;font-size:12px}.rank-current{grid-template-columns:60px minmax(0,1fr)}.rank-emblem{width:56px;height:56px;font-size:24px}}
 </style>
 
+
+<style id="mrjery-inline-audio-shortcuts">
+.score-player{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.player-audio-shortcut{border:1px solid #40516f;border-radius:8px;background:#111b2e;color:#f5f7ff;padding:4px 7px;min-height:30px;font-size:12px;font-weight:800;cursor:pointer}
+.player-audio-shortcut[aria-pressed="false"]{border-color:#ef7676;background:#35191d}
+#matchMicButton.mic-off{background:#991b1b!important}
+#matchMicButton.mic-on{background:#087b58!important}
+</style>
+
 </head>
 
 <body>
@@ -1930,7 +1939,7 @@ const screens =
     document.querySelectorAll(".screen");
 
 function showScreen(id) {
-    if (id === "onlineGameScreen") { setTimeout(() => { autoStartMatchVoice(); }, 120); }
+    if (id === "onlineGameScreen") { setTimeout(() => { addPlayerAudioShortcuts(); autoStartMatchVoice(); }, 120); }
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
@@ -6656,7 +6665,7 @@ async function autoStartMatchVoice(){
   try {
     await getMatchMic();
     const btn=document.getElementById('matchMicButton');
-    if(btn){btn.textContent='🎙️ Mikwo aktif';btn.disabled=true;btn.title='Mikwo aktif pandan match la; mute moun ou pa vle tande nan lis jwè yo.';}
+    if(btn){btn.textContent='🎙️ Mikwo pa m: ON';btn.disabled=false;btn.classList.add('mic-on');btn.classList.remove('mic-off');btn.setAttribute('aria-pressed','true');btn.title='Klike pou fèmen oswa aktive pwòp mikwo pa w.';}
     const st=document.getElementById('matchVoiceStatus');
     if(st)st.textContent='Mikwo aktif. Pou pa tande yon moun, mute moun sa a nan lis la.';
     ensureVoiceJoined();
@@ -6687,14 +6696,38 @@ async function handleVoiceSignal(data){if(String(data.room)!==String(onlineRoom)
   if(data.signal_type==='description'){const desc=new RTCSessionDescription(payload);await pc.setRemoteDescription(desc);if(desc.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);voiceSend(from,'description',pc.localDescription.toJSON());}}
   else if(data.signal_type==='ice'){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){console.debug('ICE candidate ignored',e);}}
 }catch(e){console.warn('Voice signal failed',e);}}
-document.getElementById('matchMicButton')?.addEventListener('click',async function(){
+async function toggleOwnMatchMic(){
+  const btn=document.getElementById('matchMicButton');
   const status=document.getElementById('matchVoiceStatus');
-  await autoStartMatchVoice();
-  if(matchMicEnabled && status)status.textContent='Mikwo ou rete aktif. Sèvi ak bouton 🔊/🔇 bò non chak moun pou mute oswa tande moun sa a.';
-});
-function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou mute '+(meta.username||'moun sa a');b.textContent=(meta.speaking?'🎙️ ':'')+(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(meta.speaking?'Ap pale':(muted?'Mute':'Aktif'));
+  try{
+    if(!matchMicStream || !matchMicStream.getAudioTracks().length){await getMatchMic();ensureVoiceJoined();}
+    else {
+      matchMicEnabled=!matchMicEnabled;
+      matchMicStream.getAudioTracks().forEach(track=>track.enabled=matchMicEnabled);
+    }
+    if(btn){btn.textContent=matchMicEnabled?'🎙️ Mikwo pa m: ON':'🔇 Mikwo pa m: OFF';btn.classList.toggle('mic-on',matchMicEnabled);btn.classList.toggle('mic-off',!matchMicEnabled);btn.setAttribute('aria-pressed',String(matchMicEnabled));btn.disabled=false;}
+    if(status)status.textContent=matchMicEnabled?'Mikwo pa w aktive — lòt moun ka tande w.':'Mikwo pa w fèmen — ou toujou ka tande lòt moun.';
+  }catch(err){if(status)status.textContent='Pa kapab aktive mikwo a. Verifye pèmisyon navigatè a. '+(err.message||'');}
+}
+document.getElementById('matchMicButton')?.addEventListener('click',toggleOwnMatchMic);
+function addPlayerAudioShortcuts(){
+  [['onlineBlackName','black'],['onlineRedName','red']].forEach(([nameId,side])=>{
+    const name=document.getElementById(nameId);if(!name)return;const existing=name.parentElement.querySelector('.player-audio-shortcut');if(existing){const playerName=(name.textContent||'').trim();const match=[...voicePeerMeta.entries()].find(([id,meta])=>String(meta.username||'').trim()===playerName && meta.role!=='spectator');const muted=match?voiceMutedPeers.has(match[0]):false;existing.textContent=muted?'🔇 Audio':'🔊 Audio';existing.setAttribute('aria-pressed',String(!muted));return;}
+    const b=document.createElement('button');b.type='button';b.className='player-audio-shortcut';b.textContent='🔊 Audio';b.title='Mute oswa aktive son jwè sa a sou aparèy pa w';b.setAttribute('aria-pressed','true');b.dataset.side=side;
+    b.addEventListener('click',()=>{
+      const playerName=(name.textContent||'').trim();
+      const match=[...voicePeerMeta.entries()].find(([id,meta])=>String(meta.username||'').trim()===playerName && meta.role!=='spectator');
+      if(!match){const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Audio jwè sa a poko konekte nan vwa.';return;}
+      const [id]=match;const muted=!voiceMutedPeers.has(id);if(muted)voiceMutedPeers.add(id);else voiceMutedPeers.delete(id);
+      const audio=document.getElementById('voiceAudio_'+id);if(audio)audio.muted=muted;
+      b.textContent=muted?'🔇 Audio':'🔊 Audio';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande jwè sa a':'Klike pou mute jwè sa a';renderVoicePeerControls();
+    });
+    name.insertAdjacentElement('afterend',b);
+  });
+}
+function renderVoicePeerControls(){addPlayerAudioShortcuts();const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou mute '+(meta.username||'moun sa a');b.textContent=(meta.speaking?'🎙️ ':'')+(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(meta.speaking?'Ap pale':(muted?'Mute':'Aktif'));
     b.dataset.speaking=String(Boolean(meta.speaking));b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id);renderVoicePeerControls();});box.appendChild(b);}}
-function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){}const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);});voiceAudioContexts.clear();voiceSpeakingTimers.clear();matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
+function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){}const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);});voiceAudioContexts.clear();voiceSpeakingTimers.clear();matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b){b.textContent='🎤 Mikwo pa m: OFF';b.disabled=false;b.classList.remove('mic-on');b.classList.add('mic-off');b.setAttribute('aria-pressed','false');}const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
 // Traduction continue des écrans internes et des éléments créés après le changement de langue.
 // Ainsi, Play Online, Spectators et Play with a Friend gardent la langue choisie même après navigation.
