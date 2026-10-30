@@ -304,66 +304,14 @@ h1 {
     box-sizing: border-box;
 }
 
-/* Zòn revanche: vizib, klè, responsive, ak bouton ki sanble ak yon jwèt pwofesyonèl. */
-#rematchBox { min-height: 76px; height: auto; margin: 5px auto 4px; padding: 9px 12px; gap: 6px; border: 1px solid rgba(212,175,55,.9); border-radius: 14px; background: linear-gradient(135deg,#111827 0%,#243047 55%,#172033 100%); box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); }
-#undoBox { min-height: 58px; height: auto; margin: 5px auto 6px; padding: 6px 8px; }
-#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 42px; padding: 9px 15px; font-size: 14px; border-radius: 10px; font-weight: 800; transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
-#rematchBox .rematch-button:hover, #undoBox .rematch-button:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 5px 14px rgba(0,0,0,.24); }
-#rematchBox .rematch-message, #undoBox .rematch-message { margin: 2px 0 5px; font-size: 14px; line-height: 1.35; font-weight: 750; }
-#rematchBox .rematch-message { color: #f8fafc; }
-#rematchBox .rematch-actions, #undoBox .rematch-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 9px; }
-#rematchBox .rematch-request { background: linear-gradient(135deg,#d4af37,#f5d76e); color: #171717; border: 1px solid #ffe79a; box-shadow: 0 4px 14px rgba(212,175,55,.22); }
-#rematchBox .rematch-accept { background: linear-gradient(135deg,#16a34a,#22c55e); color: #fff; border: 1px solid #86efac; }
-#rematchBox .rematch-refuse { background: linear-gradient(135deg,#991b1b,#ef4444); color: #fff; border: 1px solid #fca5a5; }
-#onlineBlackTimer, #onlineRedTimer { margin: 3px 0; }
-#onlineBoard { margin-top: 0 !important; margin-bottom: 10px !important; }
-/* Mare rezilta/revanch la kole ak tablo a pou li santi tankou yon sèl zòn jwèt. */
-#onlineScreen .game-info { margin-bottom: 0 !important; padding-bottom: 0 !important; }
-#onlineResult { margin: 5px auto 4px; }
-#rematchBox:not(.show) { display: none; }
-#rematchBox.show { display: flex; }
-#undoBox:not(.show) { display: none; }
-#undoBox.show { display: flex; }
-#onlineBoard .cell.last-move-cell { z-index: 8; position: relative; }
-#onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: none !important; transform-origin: center; border: 2px solid rgba(255,255,255,.95); outline: 2px solid #facc15; outline-offset: -2px; box-shadow: none !important; z-index: 2; animation: none !important; }
-@keyframes lastStoneReveal { from { transform: scale(.78); opacity:.6; } to { transform: scale(1.17); opacity:1; } }
-#onlineBoard .cell.last-move-cell::after { background: #facc15; opacity: .9; }
-#gameSoundPanel { width:min(100%,560px); margin:12px auto; padding:13px 15px; border:1px solid #34435f; border-radius:15px; background:linear-gradient(145deg,#111827,#1e293b); color:#edf2ff; box-sizing:border-box; text-align:left; }
-#gameSoundPanel .sound-panel-title { margin:0 0 8px; font-size:15px; font-weight:900; }
-#gameSoundPanel .sound-panel-row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-#soundToggleButton { border:1px solid #d4af37; background:linear-gradient(135deg,#202b42,#111827); color:#f9fafb; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer; min-height:42px; }
-#soundToggleButton[aria-pressed="true"] { border-color:#86efac; box-shadow:inset 0 0 0 1px rgba(134,239,172,.25); }
-#gameSoundVolume { width:min(220px,48vw); accent-color:#d4af37; }
-#gameSoundHelp { display:block; margin-top:8px; color:#bdc9dd; font-size:12px; line-height:1.5; }
-#gameSoundStatus { font-size:12px; font-weight:800; color:#86efac; }
-@media (max-width: 600px) {
-  #rematchBox { min-height: 82px; height: auto; padding: 8px 7px; margin: 7px auto; }
-  #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 40px; padding: 8px 10px; font-size: 12px; }
-  #rematchBox .rematch-message, #undoBox .rematch-message { font-size: 12px; }
-  #onlineBoard { width: min(98vw, 760px); margin-top: -4px !important; }
-  #onlineBoard .stone.last-move-stone { transform: none !important; outline-width: 2px; box-shadow: none !important; }
-}
+/* Rezève menm espas la pou mesaj rejwe a pa fè tablo a deplase. */
+#rematchBox, #undoBox { min-height: 94px; height: 94px; }
 #rematchBox.show, #undoBox.show { visibility: visible; }
 #onlineStatus { min-height: 34px; display: flex; align-items: center; justify-content: center; }
 #onlineStatus.opponent-turn { font-size: 22px; font-weight: 900; color: #FBBF24; }
 #onlineMatchNotice { min-height: 28px; }
 #onlineBoard { contain: layout paint; }
-/* Rezève plas pou demande rejwe a depi kòmansman: tablo a pa janm monte/desann. */
-#rematchBox, #undoBox { display:flex !important; box-sizing:border-box; flex-shrink:0; }
-#rematchBox:not(.show), #undoBox:not(.show) { visibility:hidden !important; pointer-events:none; }
-#rematchBox.show, #undoBox.show { visibility:visible !important; pointer-events:auto; }
-#rematchBox { min-height:76px; height:auto!important; overflow:visible!important; }
-#rematchBox.show { visibility:visible!important; display:flex!important; opacity:1!important; }
-#rematchBox.show .rematch-button { display:inline-flex!important; align-items:center; justify-content:center; visibility:visible!important; opacity:1!important; position:relative; z-index:5; cursor:pointer; }
-.player-audio-shortcut { display:inline-flex; align-items:center; justify-content:center; margin:3px 5px; min-height:32px; padding:5px 9px; border-radius:9px; border:1px solid #d4af37; background:#172033; color:#fff; font-weight:800; cursor:pointer; vertical-align:middle; }
-.mic-quick-shortcut { border-color:#42c99a; background:#10271f; }
-#undoBox { min-height:58px; }
-.match-voice-controls { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
-#matchVoicePeerControls button { min-height:40px; padding:9px 12px; border:1px solid #40516f; border-radius:10px; background:#111b2e; color:#f5f7ff; font-weight:750; cursor:pointer; }
-#matchVoicePeerControls button:hover { border-color:#43e0d0; }
-.match-voice-note { color:#a7b3cc; font-size:12px; line-height:1.5; }
-@media(max-width:600px){#rematchBox{min-height:82px;height:auto!important;overflow:visible!important}#undoBox{min-height:58px}#onlineBoard{margin-top:0!important}}
-
+#rematchBox .rematch-button, #undoBox .rematch-button { min-height: 46px; padding: 11px 18px; font-size: 16px; }
 
 .rematch-box.show {
     visibility: visible;
@@ -1004,63 +952,11 @@ td, th { overflow-wrap: anywhere; }
 .jery-games-note{padding:14px 16px;border-radius:12px;background:#0a1a2c;border:1px solid #254766;color:#c5d3e5;line-height:1.5}
 </style>
 
-<style id="mrjery-rank-styles">
-.rank-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid currentColor;border-radius:999px;padding:5px 10px;font-weight:900;font-size:12px;white-space:nowrap;background:rgba(255,255,255,.05)}
-.rank-panel{max-width:1000px;margin:24px auto;padding:20px;background:#081322;border:1px solid #234766;border-radius:16px;color:#edf5ff}
-.rank-current{display:grid;grid-template-columns:84px minmax(0,1fr);gap:16px;align-items:center;padding:18px;border-radius:14px;background:linear-gradient(120deg,#0c2540,#101a2c);border:1px solid #315574}
-.rank-emblem{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:32px;font-weight:1000;background:#101c2d;border:3px solid currentColor}
-.rank-progress{height:12px;background:#25364b;border-radius:20px;overflow:hidden;margin:10px 0}.rank-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#1c9cff,#f5bd32);transition:width .25s}
-.rank-table{width:100%;border-collapse:collapse;margin-top:18px}.rank-table th,.rank-table td{text-align:left;padding:10px;border-bottom:1px solid #26384b}.rank-table th{color:#f5bd32}.rank-table tr.current-rank{background:#17314a}.rank-small{color:#9fb1c7;font-size:13px}.rank-actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.rank-actions button{padding:10px 14px;border-radius:9px;border:1px solid #34536e;background:#0b2138;color:white;font-weight:800;cursor:pointer}
-@media(max-width:600px){.rank-panel{padding:12px}.rank-table th,.rank-table td{padding:8px 5px;font-size:12px}.rank-current{grid-template-columns:60px minmax(0,1fr)}.rank-emblem{width:56px;height:56px;font-size:24px}}
+<style>
+/* Morpion 3x3 Jery - styles isolated from existing games */
+.ttt-wrap{max-width:620px;margin:0 auto;padding:14px;color:#edf2ff}.ttt-panel{margin:14px 0;padding:18px;background:#101b2d;border:1px solid #34445f;border-radius:18px}.ttt-panel h1{color:#f5c13a}.ttt-muted{color:#aebbd0;line-height:1.5}.ttt-modes,.ttt-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:16px 0}.ttt-modes button,.ttt-actions button{border:1px solid #405477;border-radius:10px;padding:11px 13px;background:#202f48;color:#fff;font-weight:800;cursor:pointer}.ttt-modes button.active,.ttt-actions .ttt-primary{background:#b7791f;border-color:#f6c453;color:#111827}.ttt-info{padding:12px;border:1px solid #8a6423;background:#302610;color:#ffe3a3;border-radius:10px;text-align:left;line-height:1.5}.ttt-score{display:flex;justify-content:space-around;gap:8px;flex-wrap:wrap;margin:18px 0;padding:12px;background:#0a1424;border-radius:12px}.ttt-score span{display:flex;gap:7px;align-items:center}.ttt-score strong{color:#f5c13a}.ttt-status{font-size:19px;font-weight:900;color:#f5c13a;min-height:28px;margin:14px 0}.ttt-board{width:min(100%,390px);aspect-ratio:1;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ttt-cell{border:2px solid #425574;border-radius:14px;background:#18263b;color:#fff;font-size:clamp(42px,12vw,76px);font-weight:900;display:grid;place-items:center;cursor:pointer;min-width:0;aspect-ratio:1}.ttt-cell:disabled{cursor:default;opacity:1}.ttt-cell.x{color:#ff6666}.ttt-cell.o{color:#75c9ff}.ttt-cell.win{background:#36552e;border-color:#a3e635}.ttt-actions button{min-width:145px}@media(max-width:480px){.ttt-panel{padding:12px}.ttt-modes button{flex:1 1 42%}.ttt-score{font-size:12px}}
 </style>
 
-
-<style id="mrjery-inline-audio-shortcuts">
-.score-player{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.player-audio-shortcut{border:1px solid #40516f;border-radius:8px;background:#111b2e;color:#f5f7ff;padding:4px 7px;min-height:30px;font-size:12px;font-weight:800;cursor:pointer}
-.player-audio-shortcut[aria-pressed="false"]{border-color:#ef7676;background:#35191d}
-#matchMicButton.mic-off{background:#991b1b!important}
-#matchMicButton.mic-on{background:#087b58!important}
-</style>
-
-
-<style id="mrjery-only-requested-fixes">
-/* Tablo a rete fiks: pa gen animasyon, zoom oswa deplasman sou selil/pyon yo. */
-#onlineBoard { width:min(100%,760px)!important; margin-left:auto!important; margin-right:auto!important; position:relative; flex:none!important; }
-#onlineBoard .board { width:100%!important; aspect-ratio:1/1!important; transition:none!important; animation:none!important; transform:none!important; }
-#onlineBoard .cell, #onlineBoard .stone { transition:none!important; animation:none!important; transform:none!important; }
-#onlineBoard .cell.last-move-cell::after { pointer-events:none; }
-/* Un seul emplacement fixe pour les deux demandes: jamais les deux en même temps. */
-#matchActionArea{display:grid!important;grid-template-areas:"slot";width:100%;min-height:76px;box-sizing:border-box;margin:5px auto 6px;}
-#matchActionArea>#rematchBox,#matchActionArea>#undoBox{grid-area:slot;width:100%;min-height:76px!important;height:auto!important;margin:0!important;box-sizing:border-box;align-self:stretch;}
-#matchActionArea>#undoBox{display:flex!important;padding:5px 8px!important;flex-direction:column;justify-content:center;align-items:center;gap:4px;}
-#matchActionArea>#undoBox:not(.show),#matchActionArea>#rematchBox:not(.show){visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
-#matchActionArea>#undoBox.show,#matchActionArea>#rematchBox.show{visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
-#undoBox .undo-button{min-height:40px;padding:8px 13px;border-radius:10px;font-weight:800;cursor:pointer}
-#undoBox .undo-request{background:linear-gradient(135deg,#d4af37,#f5d76e);color:#171717;border:1px solid #ffe79a}
-#undoBox .undo-accept{background:#16a34a;color:white;border:1px solid #86efac}
-#undoBox .undo-refuse{background:#991b1b;color:white;border:1px solid #fca5a5}
-#matchMicQuickButton{position:fixed!important;right:12px!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;z-index:99990!important;min-width:154px;min-height:40px;margin:0!important;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.35)}
-@media(max-width:600px){#matchActionArea{min-height:76px;margin:5px auto 6px}#matchActionArea>#rematchBox,#matchActionArea>#undoBox{min-height:76px!important}#matchMicQuickButton{right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;min-width:146px}}
-
-</style>
-
-<style id="mrjery-stable-single-action-row">
-/* Yon sèl emplacement rezève pou demann pyon/revanche: pa gen okenn chanjman wotè tablo. */
-#matchActionArea{position:relative!important;display:block!important;width:100%;height:78px;min-height:78px;max-height:78px;box-sizing:border-box;overflow:visible!important;margin:5px auto 6px!important;padding:0!important;}
-#matchActionArea>#rematchBox,#matchActionArea>#undoBox{position:absolute!important;inset:0!important;width:100%!important;height:78px!important;min-height:78px!important;max-height:78px!important;margin:0!important;padding:6px 10px!important;box-sizing:border-box!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:nowrap!important;overflow:hidden!important;}
-#matchActionArea>#rematchBox:not(.show),#matchActionArea>#undoBox:not(.show){visibility:hidden!important;pointer-events:none!important;}
-#matchActionArea>#rematchBox.show,#matchActionArea>#undoBox.show{visibility:visible!important;pointer-events:auto!important;}
-#matchActionArea .rematch-message{flex:0 1 auto!important;min-width:0!important;margin:0!important;text-align:center!important;line-height:1.25!important;}
-#matchActionArea .rematch-actions{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:7px!important;}
-#matchActionArea .rematch-button{white-space:nowrap!important;min-height:38px!important;padding:7px 11px!important;}
-@media(max-width:600px){#matchActionArea{height:72px;min-height:72px;max-height:72px;}#matchActionArea>#rematchBox,#matchActionArea>#undoBox{height:72px!important;min-height:72px!important;max-height:72px!important;padding:4px 5px!important;gap:5px!important;}#matchActionArea .rematch-message{font-size:11px!important;}#matchActionArea .rematch-button{font-size:11px!important;min-height:34px!important;padding:5px 7px!important;}}
-</style>
-
-<style id="mrjery-match-player-rank-style">
-#onlineBlackName, #onlineRedName { display:inline-flex; align-items:center; gap:5px; flex-wrap:wrap; }
-.match-player-rank { display:inline-flex; align-items:center; border:1px solid currentColor; border-radius:999px; padding:2px 6px; font-size:10px; line-height:1.25; font-weight:900; white-space:nowrap; vertical-align:middle; background:rgba(255,255,255,.06); }
-</style>
 </head>
 
 <body>
@@ -1084,7 +980,9 @@ td, th { overflow-wrap: anywhere; }
                 <div class="language-menu" id="languageMenu">
                     <button data-lang="fr">🇫🇷 Français</button>
                     <button data-lang="en">🇺🇸 English</button>
+                    <button data-lang="es">🇪🇸 Español</button>
                     <button data-lang="ht">🇭🇹 Kreyòl Ayisyen</button>
+                    <button data-lang="pt">🇧🇷 Português</button>
                 </div>
             </div>
         </header>
@@ -1232,7 +1130,6 @@ td, th { overflow-wrap: anywhere; }
         <button type="button" class="dash-nav active" id="accountPlayBtn">⌂ <span>Accueil</span></button>
         <button type="button" class="dash-nav" id="accountOnlineBtn">🎮 <span>Jeu</span></button>
         <button type="button" class="dash-nav" id="dashboardRankingBtn">🏆 <span>Classement</span></button>
-        <button type="button" class="dash-nav" id="dashboardPlayersBtn">👥 <span>Jwè & Nivo</span></button>
         <button type="button" class="dash-nav" id="profileBtn">ⓘ <span>Profil</span></button>
         <button type="button" class="dash-nav" id="walletTopBtn">💰 <span>Wallet</span></button>
         <button type="button" class="dash-nav" id="adminTopBtn">👑 <span>Admin</span></button>
@@ -1270,7 +1167,6 @@ td, th { overflow-wrap: anywhere; }
         <button class="dashboard-card" id="dashboardSpectatorCard"><span class="dash-card-icon">👁️</span><strong>Spectateur</strong><small>Gade match yo an dirèk.</small></button>
         <button class="dashboard-card" id="dashboardRobotCard"><span class="dash-card-icon">🤖</span><strong>Robot</strong><small>Jwe kont IA a pou antrene.</small></button>
         <button class="dashboard-card" id="dashboardRankingCard"><span class="dash-card-icon">🏆</span><strong>Classement</strong><small>Gade pi bon jwè yo.</small></button>
-        <button class="dashboard-card" id="dashboardPlayersCard"><span class="dash-card-icon">👥🏆</span><strong>Tout jwè & nivo yo</strong><small>Gade tout kont ki enskri yo, menm jwè offline, sig yo ak 30 nivo MR_Jery yo.</small></button>
         <button class="dashboard-card gold-card" id="dashboardGamesCard"><span class="dash-card-icon">🎮</span><strong>JERY GAMES</strong><small>Tout jwèt platfòm nan nan yon sèl meni.</small></button>
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
       </section>
@@ -1297,7 +1193,7 @@ td, th { overflow-wrap: anywhere; }
       <button class="jery-game-card" data-game="chess"><span class="jery-game-icon">♟️</span><strong>Echek Jery</strong><small>Estrateji ak refleksyon</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="checkers"><span class="jery-game-icon">🔴⚫</span><strong>Dam Jery</strong><small>Defi 1 kont 1</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="connect4"><span class="jery-game-icon">🟡🔴</span><strong>Puissance 4 Jery</strong><small>Aliyen 4 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
-      <button class="jery-game-card available" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>2 jwè • Robot • Anliy</small><span class="jery-game-status">DISPONIB</span></button>
+      <button class="jery-game-card available" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>2 jwè lokal • kont robot • mòd anliy an preparasyon</small><span class="jery-game-status">DISPONIB</span></button>
       <button class="jery-game-card" data-game="battleship"><span class="jery-game-icon">⚓</span><strong>Bataille Navale</strong><small>Jwenn bato advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="reversi"><span class="jery-game-icon">⚫⚪</span><strong>Reversi / Othello</strong><small>Kontwole tablo a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="backgammon"><span class="jery-game-icon">🎲</span><strong>Backgammon</strong><small>Deplase pyès ak zo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
@@ -1317,16 +1213,27 @@ td, th { overflow-wrap: anywhere; }
   </main>
 </section>
 
-
-<section id="tttScreen" class="screen">
- <div class="inner-page-head"><button type="button" class="back-icon" id="tttBack">←</button><div class="brand-mini">❌⭕ MR_<b>Jery</b> Morpion 3×3</div><span></span></div>
- <main style="max-width:560px;margin:20px auto;padding:18px;text-align:center">
-  <h2>Morpion 3×3</h2><p id="tttStatus">Chwazi mòd ou vle jwe.</p>
-  <div id="tttModes" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="auth-main-btn" id="tttLocal">2 jwè menm aparèy</button><button class="auth-main-btn" id="tttRobot">Kont robot</button><button class="auth-main-btn" id="tttOnline">Anliy</button></div>
-  <div id="tttOnlineControls" style="display:none;margin:14px 0"><button id="tttCreate" class="online-player-invite">Kreye chanm</button><div style="margin:10px"><input id="tttRoomCode" placeholder="Kòd chanm" maxlength="6" style="padding:12px;text-transform:uppercase"><button id="tttJoin" class="online-player-invite">Antre</button></div><p id="tttCode"></p></div>
-  <div id="tttBoard" style="display:none;grid-template-columns:repeat(3, minmax(75px,110px));gap:8px;justify-content:center;margin:20px auto"></div>
-  <button id="tttRestart" class="online-player-invite" style="display:none">Rekòmanse</button><button id="tttExit" class="online-player-invite" style="display:none">Chanje mòd</button>
- </main>
+<!-- MORPION 3x3 JERY -->
+<section id="ticTacToeScreen" class="screen">
+  <div class="ttt-wrap">
+    <div class="inner-page-head"><button type="button" class="back-icon" id="tttBack">←</button><div class="brand-mini">❌⭕ <b>Morpion 3×3 Jery</b></div><span></span></div>
+    <div class="ttt-panel">
+      <h1>❌⭕ Morpion 3×3</h1>
+      <p class="ttt-muted">Fòme yon liy 3 senbòl: orizontal, vètikal oswa dyagonal.</p>
+      <div class="ttt-modes">
+        <button type="button" class="ttt-mode active" data-mode="local">👥 2 jwè lokal</button>
+        <button type="button" class="ttt-mode" data-mode="robot">🤖 Kont robot</button>
+        <button type="button" class="ttt-mode" data-mode="online">🌐 Anliy</button>
+      </div>
+      <div id="tttOnlineInfo" class="ttt-info" hidden>Mòd anliy la bezwen koneksyon ak sèvè match la. Koòdone a pare, men matchmaking Morpion 3×3 poko konekte ak backend la; mwen pa aktive yon fo match anliy.</div>
+      <div class="ttt-score"><span>❌ <b id="tttXName">Jwè X</b> <strong id="tttXScore">0</strong></span><span>⭕ <b id="tttOName">Jwè O</b> <strong id="tttOScore">0</strong></span><span>🤝 <b>Match nil</b> <strong id="tttDrawScore">0</strong></span></div>
+      <div id="tttStatus" class="ttt-status" aria-live="polite">Se tou pa X.</div>
+      <div id="tttBoard" class="ttt-board" role="group" aria-label="Tablo Morpion 3 pa 3"></div>
+      <div class="ttt-actions"><button type="button" class="ttt-primary" id="tttNewRound">Nouvo manch</button><button type="button" id="tttReset">Rekòmanse nòt yo</button></div>
+      <p class="ttt-muted" id="tttHint">Chwazi yon kare vid pou mete X.</p>
+    </div>
+    <button type="button" class="back-button" id="tttMenuBack">← Retounen nan JERY GAMES</button>
+  </div>
 </section>
 
 <!-- PROFIL -->
@@ -1337,42 +1244,7 @@ td, th { overflow-wrap: anywhere; }
         <div class="profile-row"><span class="profile-label">Email</span><span id="profileEmail" class="profile-value">---</span></div>
         <div class="profile-row"><span class="profile-label">ID joueur</span><span id="profilePlayerId" class="profile-value">---</span></div>
     </div>
-    <div class="rank-panel" id="profileRankSummary">
-      <h2>🏆 Nivo ak Tit</h2>
-      <div id="profileRankContent">Chaje nivo jwè a…</div>
-      <div class="rank-actions"><button type="button" id="openRanksFromProfile">Gade tout nivo yo</button></div>
-    </div>
     <button class="back-button" id="profileBack">← Retour</button>
-</section>
-
-<!-- NIVO AK TIT / KLASMAN -->
-<section id="rankingScreen" class="screen">
-  <div class="rank-panel">
-    <h1>🏆 Nivo ak Tit MR_Jery</h1>
-    <p class="rank-small">Chak viktwa fè w pwoche bò kote pwochen tit la. Sig la parèt bò non jwè a.</p>
-    <div id="rankingCurrent" class="rank-current"></div>
-    <div class="rank-actions"><button type="button" id="rankingBack">← Retounen</button></div>
-    <div style="overflow-x:auto"><table class="rank-table"><thead><tr><th>Nivo</th><th>Tit / Sig</th><th>Viktwa nesesè</th><th>Eta</th></tr></thead><tbody id="rankTableBody"></tbody></table></div>
-    <p class="rank-small">Pou kounye a, kantite viktwa sa yo sove nan navigatè aparèy sa a. Pou klasman ofisyèl ant tout jwè yo, sistèm nan dwe konekte ak baz done sèvè a.</p>
-  </div>
-</section>
-
-<!-- ANNUAIRE DES JOUEURS + NIVEAUX -->
-<section id="playersDirectoryScreen" class="screen">
-  <div class="rank-panel">
-    <h1>👥 Tout jwè yo & 🏆 Nivo yo</h1>
-    <p class="rank-small">Lis sa a montre TOUT kont ki enskri sou MR_Jery Morpion, menm lè jwè yo offline. Klasman an baze sou viktwa ki anrejistre nan baz done sèvè a.</p>
-    <div class="rank-actions">
-      <button type="button" id="playersDirectoryRefresh">🔄 Rafrechi lis jwè yo</button>
-      <button type="button" id="playersDirectoryShowRanks">🏆 Gade 30 nivo yo</button>
-      <button type="button" id="playersDirectoryBack">← Retounen</button>
-    </div>
-    <div id="playersDirectoryStatus" class="rank-small" aria-live="polite">Konekte pou chaje lis jwè yo.</div>
-    <div style="overflow-x:auto"><table class="rank-table"><thead><tr><th>#</th><th>Jwè</th><th>Sig / Tit</th><th>Viktwa</th><th>Defèt</th><th>Estati</th></tr></thead><tbody id="playersDirectoryBody"><tr><td colspan="6">Konekte sou kont ou epi peze “Rafrechi lis jwè yo”.</td></tr></tbody></table></div>
-    <h2 style="margin-top:28px">🏅 Tout 30 nivo MR_Jery yo</h2>
-    <p class="rank-small">Sig la parèt bò non jwè a. Nivo a dwe baze sou viktwa ki verifye sou sèvè a pou klasman an valab pou tout moun.</p>
-    <div style="overflow-x:auto"><table class="rank-table"><thead><tr><th>Nivo</th><th>Tit / Sig</th><th>Viktwa pou rive</th></tr></thead><tbody id="playersDirectoryRanks"></tbody></table></div>
-  </div>
 </section>
 
 <!-- PARAMÈTRES -->
@@ -1741,22 +1613,35 @@ td, th { overflow-wrap: anywhere; }
 
         </div>
 
-        <div id="matchActionArea" class="match-action-area" aria-live="polite">
-          <div id="rematchBox" class="rematch-box">
-            <div id="rematchMessage" class="rematch-message"></div>
-            <div id="rematchActions" class="rematch-actions"></div>
-          </div>
-          <div id="undoBox" class="rematch-box undo-box">
+        <div id="onlineResult" class="online-result"></div>
+
+        <div id="rematchBox" class="rematch-box">
+
+            <div
+                id="rematchMessage"
+                class="rematch-message">
+            </div>
+
+            <div
+                id="rematchActions"
+                class="rematch-actions">
+            </div>
+
+        </div>
+
+        <div id="undoBox" class="rematch-box undo-box">
+
             <div id="undoMessage" class="rematch-message"></div>
+
             <div id="undoActions" class="rematch-actions"></div>
-          </div>
+
         </div>
 
     </div>
 
     <div id="onlineBoard" class="board-area"></div>
 
-    <!-- Chat la vini imedyatman anba tablo a -->
+    <!-- Chat en direct + communication vocale -->
     <section id="matchCommunication" class="match-communication" aria-label="Chat du match">
       <div class="match-comm-header">
         <h3>💬 Chat du match</h3>
@@ -1771,15 +1656,12 @@ td, th { overflow-wrap: anywhere; }
       </div>
       <div class="match-voice-controls">
         <button type="button" id="matchMicButton">🎤 Aktive mikwo</button>
-        <span id="matchVoiceStatus" role="status">Mikwo fèmen</span><span id="matchSpeakingStatus" class="match-voice-note" aria-live="polite">Pa gen moun k ap pale kounye a.</span>
+        <span id="matchVoiceStatus" role="status">Mikwo fèmen</span>
       </div>
-      <div id="matchVoicePeerControls" class="match-voice-controls" aria-label="Kontwòl vwa chak moun"></div>
-      <div id="matchRemoteAudios"></div>
       <audio id="matchRemoteAudio" autoplay playsinline></audio>
-      <div class="match-voice-note">Chak bouton kontwole son ou tande sou aparèy pa w: 🔊 Non — Aktif = w ap tande moun nan; 🔇 Non — Mute = ou fèmen son li. Sa mache pou jwè ak espektatè (O).</div>
+      <div class="match-comm-note">Vwa a disponib ant jwè yo. Spektatè yo ka tande, men yo pa ka pale.</div>
     </section>
 
-    <div id="onlineResult" class="online-result"></div>
     <div class="game-actions">
 
         <button
@@ -1788,15 +1670,6 @@ td, th { overflow-wrap: anywhere; }
             style="display:none;">
             🔄 Nouvelle partie
         </button>
-        <section id="gameSoundPanel" aria-label="Kontwòl son jwèt la">
-            <h3 class="sound-panel-title">🔊 Kontwòl son jwèt la</h3>
-            <div class="sound-panel-row">
-                <button type="button" id="soundToggleButton" aria-pressed="true" title="Klike pou limen oswa fèmen tout son jwèt la">🔊 Son aktive</button>
-                <label for="gameSoundVolume">Volim <input id="gameSoundVolume" type="range" min="0" max="100" value="65"></label>
-                <span id="gameSoundStatus" role="status">Son limen</span>
-            </div>
-            <small id="gameSoundHelp">Son jwèt la sèlman: pion, revanche ak viktwa. Pou vwa moun yo, sèvi ak bouton ki gen non chak moun nan seksyon chat la.</small>
-        </section>
 
     </div>
 
@@ -1936,7 +1809,6 @@ document.getElementById("boardStyleSelect")?.addEventListener("change",e=>applyB
 function refreshDashboardUser(){
   const u=document.getElementById('dashboardUsername'); if(u) u.textContent=currentUsername||'Joueur';
   const au=document.getElementById('accountMenuUser'); if(au) au.textContent='👤 '+(currentUsername||'Connecté');
-  try { if(typeof mrjeryUpdateRankDisplays==='function') mrjeryUpdateRankDisplays(); } catch(e) {}
 }
 
 function openWalletFromDashboard(){ showScreen('walletScreen'); }
@@ -1957,7 +1829,7 @@ document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>{
   showScreen('robotScreen');
 });
 document.getElementById('dashboardSpectatorCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
-document.getElementById('dashboardRankingBtn')?.addEventListener('click',openRankingScreen);
+document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>alert('🏆 Classement : cette section sera ajoutée dans la prochaine étape.'));
 document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
 document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
 document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
@@ -1968,11 +1840,35 @@ document.getElementById('dashboardGamesCard')?.addEventListener('click',()=>show
 document.getElementById('jeryGamesBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
 document.getElementById('jeryGamesGrid')?.addEventListener('click',function(e){
   const card=e.target.closest('[data-game]'); if(!card)return;
-  if(card.dataset.game==='morpion'){showScreen('accountMenuScreen');document.getElementById('dashboardOnlineCard')?.focus();return;}
-  if(card.dataset.game==='tictactoe'){openTtt();return;}
+  if(card.dataset.game==='morpion'){
+    showScreen('accountMenuScreen');
+    document.getElementById('dashboardOnlineCard')?.focus();
+    return;
+  }
+  if(card.dataset.game==='tictactoe'){showScreen('ticTacToeScreen');tttRender();return;}
   const label=card.querySelector('strong')?.textContent||'Jwèt sa a';
   alert(label+' ap vini byento. Nou poko aktive jwèt sa a; jwèt ki deja la yo pa chanje.');
 });
+
+
+/* MORPION 3x3 JERY: local play + minimax robot */
+(function(){
+ const board=Array(9).fill(''), wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ let mode='local',turn='X',finished=false,scores={X:0,O:0,D:0},cells=board.slice();
+ const el=id=>document.getElementById(id);
+ function winner(b){for(const line of wins)if(b[line[0]]&&b[line[0]]===b[line[1]]&&b[line[1]]===b[line[2]])return {p:b[line[0]],line};return b.every(Boolean)?{p:'D',line:[]}:null;}
+ function minimax(b,player,depth){const w=winner(b);if(w)return w.p==='O'?10-depth:w.p==='X'?depth-10:0;let best=player==='O'?-Infinity:Infinity;for(let i=0;i<9;i++)if(!b[i]){b[i]=player;const val=minimax(b,player==='O'?'X':'O',depth+1);b[i]='';best=player==='O'?Math.max(best,val):Math.min(best,val);}return best;}
+ function robotMove(){let best=-Infinity,choices=[];for(let i=0;i<9;i++)if(!cells[i]){cells[i]='O';const v=minimax(cells,'X',0);cells[i]='';if(v>best){best=v;choices=[i];}else if(v===best)choices.push(i);}return choices[Math.floor(Math.random()*choices.length)];}
+ function render(){const b=el('tttBoard');if(!b)return;b.innerHTML='';cells.forEach((v,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='ttt-cell'+(v?' '+v.toLowerCase():'');btn.textContent=v;btn.setAttribute('aria-label',v?`Kare ${i+1}: ${v}`:`Kare ${i+1}, vid`);btn.disabled=!!v||finished||mode==='online';btn.addEventListener('click',()=>play(i));b.appendChild(btn);});const res=winner(cells);if(res&&res.p!=='D')res.line.forEach(i=>b.children[i].classList.add('win'));el('tttXScore').textContent=scores.X;el('tttOScore').textContent=scores.O;el('tttDrawScore').textContent=scores.D;el('tttXName').textContent=mode==='robot'?'Ou':'Jwè X';el('tttOName').textContent=mode==='robot'?'Robot':'Jwè O';el('tttStatus').textContent=finished?(res.p==='D'?'Match nil!':`${res.p==='X'?(mode==='robot'?'Ou':'Jwè X'):(mode==='robot'?'Robot':'Jwè O')} genyen!`):`Se tou pa ${turn}.`;el('tttHint').textContent=mode==='online'?'Mòd anliy poko konekte ak backend match la.':finished?'Peze “Nouvo manch” pou jwe ankò.':mode==='robot'?'Ou jwe ak X; robot la jwe ak O.':'Chwazi yon kare vid pou mete '+turn+'.';}
+ function finishIfNeeded(){const r=winner(cells);if(r){finished=true;scores[r.p]++;return true;}return false;}
+ function play(i){if(finished||cells[i]||mode==='online')return;cells[i]=turn;if(finishIfNeeded()){render();return;}turn=turn==='X'?'O':'X';if(mode==='robot'&&turn==='O'){const move=robotMove();if(move!==undefined){cells[move]='O';finishIfNeeded();turn='X';}}render();}
+ function newRound(){cells=Array(9).fill('');turn='X';finished=false;render();}
+ function setMode(m){mode=m;document.querySelectorAll('.ttt-mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===m));el('tttOnlineInfo').hidden=m!=='online';newRound();}
+ document.querySelectorAll('.ttt-mode').forEach(x=>x.addEventListener('click',()=>setMode(x.dataset.mode)));
+ el('tttNewRound')?.addEventListener('click',newRound);el('tttReset')?.addEventListener('click',()=>{scores={X:0,O:0,D:0};newRound();});
+ el('tttBack')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));el('tttMenuBack')?.addEventListener('click',()=>showScreen('jeryGamesScreen'));
+ window.tttRender=render;render();
+})();
 
 /* ==================================================
    ÉCRANS
@@ -1982,7 +1878,6 @@ const screens =
     document.querySelectorAll(".screen");
 
 function showScreen(id) {
-    if (id === "onlineGameScreen") { setTimeout(() => { addPlayerAudioShortcuts(); autoStartMatchVoice(); }, 120); }
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
@@ -2124,54 +2019,6 @@ function createBoard(container, clickFunction) {
 
     container.appendChild(board);
 }
-
-/* ==================================================
-   SON JWÈT — efè son lejè, san fichye ekstèn
-================================================== */
-let gameSoundsEnabled = true;
-let gameAudioContext = null;
-let gameSoundVolume = 0.65;
-function playGameSound(kind) {
-    if (!gameSoundsEnabled) return;
-    try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        if (!gameAudioContext) gameAudioContext = new AudioCtx();
-        if (gameAudioContext.state === "suspended") gameAudioContext.resume().catch(() => {});
-        const ctx = gameAudioContext;
-        const now = ctx.currentTime;
-        const tones = kind === "win" ? [660, 880, 1100] : kind === "rematch" ? [520, 760] : kind === "ui" ? [480] : [360, 520];
-        tones.forEach((freq, i) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = kind === "move" ? "triangle" : "sine";
-            osc.frequency.setValueAtTime(freq, now + i * 0.075);
-            gain.gain.setValueAtTime(0.0001, now + i * 0.075);
-            gain.gain.exponentialRampToValueAtTime((kind === "move" ? 0.055 : 0.07) * gameSoundVolume, now + i * 0.075 + 0.012);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.075 + 0.13);
-            osc.connect(gain); gain.connect(ctx.destination);
-            osc.start(now + i * 0.075); osc.stop(now + i * 0.075 + 0.14);
-        });
-    } catch (err) { /* Son an pa dwe bloke yon mouvman nan jwèt la. */ }
-}
-(function setupGameSoundToggle() {
-    const button = document.getElementById("soundToggleButton");
-    if (!button) return;
-    const status = document.getElementById("gameSoundStatus");
-    const volume = document.getElementById("gameSoundVolume");
-    if (volume) volume.addEventListener("input", function () {
-        gameSoundVolume = Math.max(0, Math.min(1, Number(volume.value) / 100));
-        if (status) status.textContent = gameSoundsEnabled ? "Son limen · " + volume.value + "%" : "Son fèmen";
-        if (gameSoundsEnabled && gameSoundVolume > 0) playGameSound("ui");
-    });
-    button.addEventListener("click", function () {
-        gameSoundsEnabled = !gameSoundsEnabled;
-        button.setAttribute("aria-pressed", String(gameSoundsEnabled));
-        button.textContent = gameSoundsEnabled ? "🔊 Son aktive" : "🔇 Son fèmen";
-        if (status) status.textContent = gameSoundsEnabled ? "Son limen · " + (volume ? volume.value : 65) + "%" : "Son fèmen";
-        if (gameSoundsEnabled) playGameSound("ui");
-    });
-})();
 
 /* ==================================================
    PION
@@ -3349,99 +3196,9 @@ function checkWin(
    VICTOIRE LOCAL / ROBOT
 ================================================== */
 
-// SYSTEME DE NIVEAUX ET SIGLES — 30 rangs basés sur les victoires.
-const MRJERY_RANKS = [
- {n:1,title:'Débutant',sig:'DBT',wins:0,color:'#9ca3af',en:'Beginner',ht:'Debitan'},
- {n:2,title:'Apprenti',sig:'APP',wins:3,color:'#a8b0bd',en:'Apprentice',ht:'Apranti'},
- {n:3,title:'Joueur',sig:'JOU',wins:8,color:'#d1d5db',en:'Player',ht:'Jwè'},
- {n:4,title:'Combattant',sig:'CMB',wins:15,color:'#86efac',en:'Fighter',ht:'Konbatan'},
- {n:5,title:'Stratège',sig:'STR',wins:25,color:'#4ade80',en:'Strategist',ht:'Estratej'},
- {n:6,title:'Tacticien',sig:'TAC',wins:40,color:'#34d399',en:'Tactician',ht:'Taktisyen'},
- {n:7,title:'Expert',sig:'EXP',wins:60,color:'#22d3ee',en:'Expert',ht:'Ekspè'},
- {n:8,title:'Expert confirmé',sig:'EXC',wins:85,color:'#38bdf8',en:'Skilled Expert',ht:'Ekspè konfime'},
- {n:9,title:'Maître tactique',sig:'MT',wins:115,color:'#60a5fa',en:'Tactical Master',ht:'Mèt taktik'},
- {n:10,title:'Maître',sig:'MTR',wins:150,color:'#818cf8',en:'Master',ht:'Mèt'},
- {n:11,title:'Maître avancé',sig:'MTA',wins:190,color:'#a78bfa',en:'Advanced Master',ht:'Mèt avanse'},
- {n:12,title:'Maître supérieur',sig:'MTS',wins:235,color:'#c084fc',en:'Senior Master',ht:'Mèt siperyè'},
- {n:13,title:'Champion',sig:'CH',wins:285,color:'#e879f9',en:'Champion',ht:'Chanpyon'},
- {n:14,title:'Champion confirmé',sig:'CHC',wins:340,color:'#f472b6',en:'Proven Champion',ht:'Chanpyon konfime'},
- {n:15,title:'Champion élite',sig:'CHE',wins:400,color:'#fb7185',en:'Elite Champion',ht:'Chanpyon elit'},
- {n:16,title:'Grand Champion',sig:'GC',wins:470,color:'#f87171',en:'Grand Champion',ht:'Gran chanpyon'},
- {n:17,title:'Maître d’élite',sig:'ME',wins:550,color:'#fb923c',en:'Elite Master',ht:'Mèt elit'},
- {n:18,title:'Maître légendaire',sig:'ML',wins:640,color:'#fbbf24',en:'Legendary Master',ht:'Mèt lejandè'},
- {n:19,title:'Élite suprême',sig:'ES',wins:740,color:'#facc15',en:'Supreme Elite',ht:'Elit siprèm'},
- {n:20,title:'Grand Maître',sig:'GM',wins:850,color:'#fde047',en:'Grandmaster',ht:'Gran Mèt'},
- {n:21,title:'Grand Maître confirmé',sig:'GMC',wins:975,color:'#bef264',en:'Senior Grandmaster',ht:'Gran Mèt konfime'},
- {n:22,title:'Grand Maître d’élite',sig:'GME',wins:1110,color:'#a3e635',en:'Elite Grandmaster',ht:'Gran Mèt elit'},
- {n:23,title:'Maître international',sig:'MI',wins:1260,color:'#4ade80',en:'International Master',ht:'Mèt entènasyonal'},
- {n:24,title:'Grand Maître international',sig:'GMI',wins:1425,color:'#2dd4bf',en:'International Grandmaster',ht:'Gran Mèt entènasyonal'},
- {n:25,title:'Légende',sig:'LEG',wins:1605,color:'#22d3ee',en:'Legend',ht:'Lejand'},
- {n:26,title:'Légende suprême',sig:'LS',wins:1800,color:'#38bdf8',en:'Supreme Legend',ht:'Lejand siprèm'},
- {n:27,title:'Icône',sig:'ICO',wins:2020,color:'#60a5fa',en:'Icon',ht:'Ikòn'},
- {n:28,title:'Icône mondiale',sig:'IM',wins:2260,color:'#818cf8',en:'World Icon',ht:'Ikòn mondyal'},
- {n:29,title:'Immortel',sig:'IMM',wins:2525,color:'#c084fc',en:'Immortal',ht:'Imòtèl'},
- {n:30,title:'Légende MR_Jery',sig:'LMJ',wins:2800,color:'#f5bd32',en:'MR_Jery Legend',ht:'Lejand MR_Jery'}
-];
-function mrjeryRankStorageKey(){return 'mrjery_rank_stats_'+String(currentUsername||currentPlayerId||'guest').toLowerCase().replace(/[^a-z0-9_-]/g,'_');}
-function mrjeryGetWins(){try{return Math.max(0,Number(JSON.parse(localStorage.getItem(mrjeryRankStorageKey())||'{}').wins)||0)}catch(e){return 0}}
-function mrjeryCurrentRank(wins=mrjeryGetWins()){let r=MRJERY_RANKS[0];for(const x of MRJERY_RANKS){if(wins>=x.wins)r=x;else break;}return r;}
-function mrjeryRankLabel(r){const lang=localStorage.getItem('mrjery_language')||'fr';return lang==='en'?r.en:lang==='ht'?r.ht:r.title;}
-function mrjeryUpdateRankDisplays(){
- const wins=mrjeryGetWins(),r=mrjeryCurrentRank(wins),next=MRJERY_RANKS.find(x=>x.n===r.n+1),pct=next?Math.max(0,Math.min(100,(wins-r.wins)/(next.wins-r.wins)*100)):100;
- const lv=document.getElementById('dashboardLevel');if(lv)lv.innerHTML='Nivo '+r.n+' · <span class="rank-pill" style="color:'+r.color+'">['+r.sig+'] '+mrjeryRankLabel(r)+'</span>';
- const un=document.getElementById('dashboardUsername');if(un){un.textContent=currentUsername||'Joueur';un.title='['+r.sig+'] '+mrjeryRankLabel(r);}
- const prof=document.getElementById('profileRankContent');
- const summary='<div class="rank-current"><div class="rank-emblem" style="color:'+r.color+'">'+r.n+'</div><div><div class="rank-pill" style="color:'+r.color+'">['+r.sig+'] '+mrjeryRankLabel(r)+'</div><h3 style="margin:9px 0 4px">Niveau '+r.n+' · '+wins+' victoire(s)</h3><div class="rank-small">'+(next?(next.wins-wins)+' victoire(s) avant '+mrjeryRankLabel(next)+' ['+next.sig+']':'Tu as atteint le rang maximum !')+'</div><div class="rank-progress"><span style="width:'+pct+'%;background:'+r.color+'"></span></div><div class="rank-small">'+(next?wins+' / '+next.wins+' victoires':'Niveau maximum')+'</div></div></div>';
- if(prof)prof.innerHTML=summary;
- const cur=document.getElementById('rankingCurrent');if(cur)cur.innerHTML=summary;
- const tbody=document.getElementById('rankTableBody');if(tbody)tbody.innerHTML=MRJERY_RANKS.map(x=>'<tr class="'+(x.n===r.n?'current-rank':'')+'"><td>'+x.n+'</td><td><span class="rank-pill" style="color:'+x.color+'">['+x.sig+'] '+mrjeryRankLabel(x)+'</span></td><td>'+x.wins.toLocaleString()+'</td><td>'+(wins>=x.wins?'✅ Acquis':'🔒')+'</td></tr>').join('');
-}
-function openRankingScreen(){mrjeryUpdateRankDisplays();showScreen('rankingScreen');}
-document.getElementById('openRanksFromProfile')?.addEventListener('click',openRankingScreen);
-document.getElementById('rankingBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
-
-function mrjeryRenderPlayersDirectory(list){
-  const body=document.getElementById('playersDirectoryBody');
-  const status=document.getElementById('playersDirectoryStatus');
-  if(!body)return;
-  const players=Array.isArray(list)?list:[];
-  body.innerHTML='';
-  if(!players.length){body.innerHTML='<tr><td colspan="6">Pa gen kont jwè ki retounen nan baz done a.</td></tr>';if(status)status.textContent='0 jwè jwenn nan baz done a.';return;}
-  players.sort((a,b)=>(Number(b.wins)||0)-(Number(a.wins)||0)||(Number(b.points)||0)-(Number(a.points)||0)||String(a.username||'').localeCompare(String(b.username||'')));
-  players.forEach((player,index)=>{
-    const wins=Math.max(0,Number(player.wins)||0);
-    const rank=(()=>{let r=MRJERY_RANKS[0];for(const x of MRJERY_RANKS){if(wins>=x.wins)r=x;else break;}return r;})();
-    const tr=document.createElement('tr');
-    const tdPosition=document.createElement('td');tdPosition.textContent=String(index+1);
-    const tdName=document.createElement('td');tdName.textContent=String(player.username||('Jwè '+(player.player_id??'')));
-    const tdRank=document.createElement('td');tdRank.innerHTML='<span class="rank-pill" style="color:'+rank.color+'">['+rank.sig+'] '+mrjeryRankLabel(rank)+'</span>';
-    const tdWins=document.createElement('td');tdWins.textContent=String(wins);
-    const tdLosses=document.createElement('td');tdLosses.textContent=String(Math.max(0,Number(player.losses)||0));
-    const tdState=document.createElement('td');tdState.textContent=player.in_game?'🎮 Nan yon pati':(player.online?'🟢 Anliy':'⚪ Offline');
-    tr.append(tdPosition,tdName,tdRank,tdWins,tdLosses,tdState);body.appendChild(tr);
-  });
-  if(status)status.textContent=players.length+' kont enskri nan baz done a — lis la gen jwè online ak offline. Klasman an klase selon viktwa verifye.';
-}
-function mrjeryOpenPlayersDirectory(){
-  showScreen('playersDirectoryScreen');
-  const ranks=document.getElementById('playersDirectoryRanks');
-  if(ranks && typeof MRJERY_RANKS!=='undefined') ranks.innerHTML=MRJERY_RANKS.map(x=>'<tr><td>'+x.n+'</td><td><span class="rank-pill" style="color:'+x.color+'">['+x.sig+'] '+mrjeryRankLabel(x)+'</span></td><td>'+x.wins.toLocaleString()+'</td></tr>').join('');
-  const status=document.getElementById('playersDirectoryStatus');
-  if(socket && socket.readyState===WebSocket.OPEN){if(status)status.textContent='Ap chaje tout kont jwè yo nan baz done a…';socket.send(JSON.stringify({type:'registered_players'}));}
-  else if(status)status.textContent='Sèvè a pa konekte. Verifye koneksyon ak sèvè a, epi peze Rafrechi.';
-}
-document.getElementById('dashboardPlayersBtn')?.addEventListener('click',mrjeryOpenPlayersDirectory);
-document.getElementById('dashboardPlayersCard')?.addEventListener('click',mrjeryOpenPlayersDirectory);
-document.getElementById('playersDirectoryRefresh')?.addEventListener('click',()=>{const status=document.getElementById('playersDirectoryStatus');if(socket&&socket.readyState===WebSocket.OPEN){if(status)status.textContent='Ap rafrechi lis tout kont yo…';socket.send(JSON.stringify({type:'registered_players'}));}else if(status)status.textContent='Sèvè a pa konekte. Eseye ankò.';});
-document.getElementById('playersDirectoryShowRanks')?.addEventListener('click',()=>openRankingScreen());
-document.getElementById('playersDirectoryBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
-
-
 function showWinScreen(message) {
 
     stopAllTimers();
-    // Les écrans de victoire de ce jeu signalent une victoire du joueur local.
-    try { const key=mrjeryRankStorageKey(), data=JSON.parse(localStorage.getItem(key)||'{"wins":0}'); data.wins=Math.max(0,Number(data.wins)||0)+1; localStorage.setItem(key,JSON.stringify(data)); mrjeryUpdateRankDisplays(); } catch(e) { console.warn('Impossible de sauvegarder le rang local',e); }
 
     const result =
         document.getElementById(
@@ -3728,7 +3485,6 @@ document.getElementById("profileBtn").addEventListener("click", function() {
     document.getElementById("profileUsername").textContent = currentUsername || "---";
     document.getElementById("profileEmail").textContent = currentEmail || "---";
     document.getElementById("profilePlayerId").textContent = currentPlayerId || "---";
-    mrjeryUpdateRankDisplays();
     showScreen("profileScreen");
 });
 
@@ -3874,14 +3630,9 @@ let onlinePlayersList = [];
 let pendingGameInviteId = null;
 let matchMicStream = null;
 let matchVoicePeers = new Map();
-let voicePeerMeta = new Map();
-let voiceMutedPeers = new Set();
-let voiceMuteAllSpectators = false;
 let voiceJoinedRoom = null;
 let matchMicEnabled = false;
 let renderedChatSignature = "";
-let voiceAudioContexts = new Map();
-let voiceSpeakingTimers = new Map();
 
 /* ==================================================
    JOUEURS EN LIGNE + INVITATION DIRECTE
@@ -3889,7 +3640,7 @@ let voiceSpeakingTimers = new Map();
 
 function renderOnlinePlayers(list) {
     const container=document.getElementById("onlinePlayersList"), status=document.getElementById("onlinePlayersStatus");
-    if(!container) { onlinePlayersList=Array.isArray(list)?list:[]; if(typeof mrjeryRenderPlayersDirectory==='function')mrjeryRenderPlayersDirectory(onlinePlayersList); return; } container.innerHTML=""; onlinePlayersList=Array.isArray(list)?list:[]; if(typeof mrjeryRenderPlayersDirectory==='function')mrjeryRenderPlayersDirectory(onlinePlayersList);
+    if(!container) return; container.innerHTML=""; onlinePlayersList=Array.isArray(list)?list:[];
     if(!onlinePlayersList.length){if(status)status.textContent="Aucun autre joueur en ligne pour le moment.";return;}
     if(status)status.textContent=onlinePlayersList.length+" joueur(s) en ligne.";
     onlinePlayersList.forEach(function(player){
@@ -4461,8 +4212,6 @@ function connectServer(callback) {
                         event.data
                     );
 
-                if (String(data.type||'').startsWith('ttt_')) { handleTttMessage(data); return; }
-
                 /* ==================================
                    COMPTE - INSCRIPTION
                 ================================== */
@@ -4566,11 +4315,8 @@ function connectServer(callback) {
                 ================================== */
 
                 if (data.type === "online_players") { renderOnlinePlayers(data.players || []); return; }
-                if (data.type === "online_players_refresh") { requestOnlinePlayers(); return; }
-                if (data.type === "registered_players") { if(data.success){mrjeryRenderPlayersDirectory(data.players||[]);}else{const st=document.getElementById("playersDirectoryStatus");if(st)st.textContent=data.message||"Pa t kapab chaje lis tout jwè yo.";} return; }
                 if (data.type === "game_invite") { showGameInvite(data.invitation_id, data.from_username, data.duration_minutes, data.board_size); return; }
                 if (data.type === "voice_peer_join") { handleVoicePeerJoin(data); return; }
-                if (data.type === "voice_peer_left") { const id=String(data.peer_id); closeVoicePeer(id); voicePeerMeta.delete(id); document.getElementById('voiceAudio_'+id)?.remove(); renderVoicePeerControls(); return; }
                 if (data.type === "voice_peer_list") { handleVoicePeerList(data.peers || []); return; }
                 if (data.type === "voice_signal") { handleVoiceSignal(data); return; }
                 if (data.type === "invite_result") { const b=document.getElementById("onlineError"); if(b)b.textContent=data.message||""; return; }
@@ -4995,21 +4741,10 @@ function connectServer(callback) {
                     "state"
                 ) {
 
-                    const previousLastMoveSignature = onlineLastMove
-                        ? [onlineLastMove.row, onlineLastMove.col, onlineLastMove.player].join(":")
-                        : "";
-                    const incomingLastMove = data.last_move || null;
-                    const incomingLastMoveSignature = incomingLastMove
-                        ? [incomingLastMove.row, incomingLastMove.col, incomingLastMove.player].join(":")
-                        : "";
                     onlineBoardState =
                         convertServerBoard(
                             data.board
                         );
-                    onlineLastMove = incomingLastMove;
-                    if (incomingLastMoveSignature && incomingLastMoveSignature !== previousLastMoveSignature) {
-                        playGameSound("move");
-                    }
 
                     onlinePlayersState =
                         data.players || {};
@@ -5191,32 +4926,13 @@ function updateOnlineScoreDisplay() {
     const blackName = document.getElementById("onlineBlackName");
     const redName = document.getElementById("onlineRedName");
 
-    // Montre le sigle du rang directement à côté du pseudo pendant la partie.
-    const rankForMatchPlayer = (player) => {
-        const username = String(player.username || player.name || '');
-        let wins = Number(player.wins);
-        if (!Number.isFinite(wins)) wins = 0;
-        // Pour le compte connecté, utilise aussi le compteur de victoires local déjà existant.
-        if (username && String(username).toLowerCase() === String(currentUsername || '').toLowerCase()) {
-            wins = Math.max(wins, mrjeryGetWins());
-        }
-        return mrjeryCurrentRank(Math.max(0, wins));
-    };
-    const setMatchPlayerName = (element, player, fallback) => {
-        if (!element) return;
-        const username = player.username || player.name || fallback;
-        const rank = rankForMatchPlayer(player);
-        element.textContent = String(username);
-        const badge = document.createElement('span');
-        badge.className = 'match-player-rank';
-        badge.textContent = '[' + rank.sig + ']';
-        badge.title = 'Nivo ' + rank.n + ' · ' + mrjeryRankLabel(rank);
-        badge.style.color = rank.color;
-        element.appendChild(document.createTextNode(' '));
-        element.appendChild(badge);
-    };
-    setMatchPlayerName(blackName, p1, 'Joueur 1');
-    setMatchPlayerName(redName, p2, 'Joueur 2');
+    if (blackName) {
+        blackName.textContent = p1.username || p1.name || "Joueur 1";
+    }
+
+    if (redName) {
+        redName.textContent = p2.username || p2.name || "Joueur 2";
+    }
 
     const blackTimerLabel = document.querySelector("#onlineBlackTimer .timer-label");
     const redTimerLabel = document.querySelector("#onlineRedTimer .timer-label");
@@ -5524,22 +5240,14 @@ function renderOnlineState() {
 
             cell.innerHTML = "";
 
-            if (onlineBoardState[key]) {
-                drawStone(cell, onlineBoardState[key]);
-                if (onlineLastMove && Number(onlineLastMove.row) === row && Number(onlineLastMove.col) === col) {
-                    cell.classList.add("last-move-cell");
-                    const lastStone = cell.querySelector(".stone");
-                    if (lastStone) lastStone.classList.add("last-move-stone");
-                } else {
-                    cell.classList.remove("last-move-cell");
-                }
-            } else {
-                cell.classList.remove("last-move-cell");
-            }
-            if (onlineLastMove && Number(onlineLastMove.row) === row && Number(onlineLastMove.col) === col && onlineBoardState[key]) {
-                cell.classList.add("last-move-cell");
-                const markerStone = cell.querySelector(".stone");
-                if (markerStone) markerStone.classList.add("last-move-stone");
+            if (
+                onlineBoardState[key]
+            ) {
+
+                drawStone(
+                    cell,
+                    onlineBoardState[key]
+                );
             }
         }
     }
@@ -5568,58 +5276,66 @@ function renderOnlineState() {
 ================================================== */
 
 function updateRematchUI() {
+
     const box = document.getElementById("rematchBox");
     const message = document.getElementById("rematchMessage");
     const actions = document.getElementById("rematchActions");
+
     if (!box || !message || !actions) return;
 
-    box.classList.remove("show");
     box.style.visibility = "hidden";
     message.textContent = "";
     actions.innerHTML = "";
 
-    // La revanche n'existe qu'après une victoire (pas pendant la partie ni après un nul).
-    if (onlineConnectionMode === "spectator" || !onlineGameOver || onlineDraw || !onlineWinner) return;
-
-    if (onlineRematchRequest !== null) {
-        const requester = Number(onlineRematchRequest);
-        if (requester === Number(onlinePlayer)) {
-            box.classList.add("show");
-            box.style.visibility = "visible";
-            message.textContent = "⏳ Demande de revanche envoyée. En attente de l'adversaire.";
-            return;
-        }
-        // L'autre joueur, qu'il ait gagné ou perdu, reçoit la demande et peut répondre.
-        box.classList.add("show");
-        box.style.visibility = "visible";
-        message.textContent = "🔄 Votre adversaire demande une revanche.";
-        const accept = document.createElement("button");
-        accept.type = "button"; accept.className = "rematch-button rematch-accept";
-        accept.textContent = "✅ Accepter";
-        accept.addEventListener("click", function() { sendRematchResponse(true); });
-        const refuse = document.createElement("button");
-        refuse.type = "button"; refuse.className = "rematch-button rematch-refuse";
-        refuse.textContent = "❌ Refuser";
-        refuse.addEventListener("click", function() { sendRematchResponse(false); });
-        actions.append(accept, refuse);
+    if (onlineConnectionMode === "spectator" || !onlineGameOver || onlineDraw || !onlineWinner) {
         return;
     }
 
-    // Les deux joueurs (gagnant ou perdant) peuvent demander une revanche.
-    box.classList.add("show");
-    box.style.visibility = "visible";
-    message.textContent = "La partie est terminée. Vous pouvez demander une revanche.";
-    const request = document.createElement("button");
-    request.type = "button"; request.className = "rematch-button rematch-request";
-    request.textContent = "🔄 Demander une revanche";
-    request.addEventListener("click", requestRematch);
-    actions.appendChild(request);
+    if (onlineRematchRequest !== null) {
+        box.style.visibility = "visible";
+        const requester = Number(onlineRematchRequest);
+
+        if (requester === Number(onlinePlayer)) {
+            message.textContent = "⏳ Demande de revanche envoyée. En attente de l'adversaire.";
+            return;
+        }
+
+        message.textContent = "🔄 Votre adversaire demande une revanche.";
+
+        const accept = document.createElement("button");
+        accept.type = "button";
+        accept.className = "rematch-button rematch-accept";
+        accept.textContent = "✅ Accepter";
+        accept.addEventListener("click", function() { sendRematchResponse(true); });
+
+        const refuse = document.createElement("button");
+        refuse.type = "button";
+        refuse.className = "rematch-button rematch-refuse";
+        refuse.textContent = "❌ Refuser";
+        refuse.addEventListener("click", function() { sendRematchResponse(false); });
+
+        actions.appendChild(accept);
+        actions.appendChild(refuse);
+        return;
+    }
+
+    if (Number(onlineWinner) !== Number(onlinePlayer)) {
+        box.style.visibility = "visible";
+        message.textContent = "Vous avez perdu. Demandez une revanche à votre adversaire.";
+
+        const request = document.createElement("button");
+        request.type = "button";
+        request.className = "rematch-button rematch-request";
+        request.textContent = "🔄 Demander une revanche";
+        request.addEventListener("click", requestRematch);
+        actions.appendChild(request);
+    }
 }
 
 function requestRematch() {
-    playGameSound("rematch");
     if (!socket || socket.readyState !== WebSocket.OPEN || !onlineRoom) return;
-    if (!onlineGameOver) return;
+    if (!onlineGameOver || onlineDraw || !onlineWinner) return;
+    if (Number(onlineWinner) === Number(onlinePlayer)) return;
 
     socket.send(JSON.stringify({
         type: "rematch_request",
@@ -5630,7 +5346,6 @@ function requestRematch() {
 function sendRematchResponse(
     accepted
 ) {
-    playGameSound(accepted ? "rematch" : "ui");
 
     if (
         !socket ||
@@ -5668,7 +5383,6 @@ function updateUndoUI() {
 
     if (!box || !message || !actions) return;
 
-    box.classList.remove("show");
     box.style.visibility = "hidden";
     message.textContent = "";
     actions.innerHTML = "";
@@ -5678,7 +5392,6 @@ function updateUndoUI() {
     }
 
     if (onlineUndoRequest !== null) {
-        box.classList.add("show");
         box.style.visibility = "visible";
 
         if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
@@ -5709,15 +5422,14 @@ function updateUndoUI() {
         return;
     }
 
-    box.classList.add("show");
     box.style.display = "flex";
     box.style.visibility = "visible";
-    message.textContent = "Ou fèk jwe. Ou ka mande retire dènye pyès ou a anvan advèsè a jwe.";
+    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
 
     const request = document.createElement("button");
     request.type = "button";
     request.className = "undo-button undo-request";
-    request.textContent = "↩️ Mande retire dènye pyon mwen";
+    request.textContent = "🔄 Demande rejwe";
     request.addEventListener("click", requestUndo);
     actions.appendChild(request);
 }
@@ -6439,245 +6151,16 @@ document.getElementById("saveAdminBtn")?.addEventListener("click",()=>{const s=d
    LANDING / LANGUAGE / AUTH NAVIGATION
 ================================================== */
 const landingTranslations={
- fr:{navHome:'Accueil',navGame:'Jeu',navAbout:'À propos',heroTitle:'Plus qu’un jeu... une communauté !',heroText:'Affronte des joueurs du monde entier, relève des défis, progresse et deviens le meilleur sur MR_Jery Morpion.',fGlobal:'Joueurs du monde entier',fSecure:'Sécurisé & fiable',fFast:'Rapide & fluide',fRewards:'Défis & récompenses',login:'Connexion',register:'Créer un compte',about:'À propos',cardOnline:'Jouer en ligne',cardOnlineText:'Défie des joueurs de tous les pays.',cardSecurity:'Sécurité',cardSecurityText:'Protection pour ton compte et tes parties.',cardCommunity:'Communauté',cardCommunityText:'Rencontre de nouveaux joueurs.',cardFast:'Rapide',cardFastText:'Des matchs fluides, sans complication.',cardChallenge:'Défis',cardChallengeText:'Montre ta valeur sur le plateau.',footer:'Joue • Défie • Gagne',aboutTitle:'Plus qu’un jeu... une communauté !',aboutText:'MR_Jery Morpion est une plateforme pour jouer, rencontrer des joueurs, relever des défis et suivre ta progression.',vision:'Vision',visionText:'Rassembler les joueurs de morpion du monde entier.',mission:'Mission',missionText:'Offrir une expérience rapide, simple et agréable.',values:'Valeurs',valuesText:'Respect, fair-play, communauté et évolution.'},
+ fr:{navHome:'Accueil',navGame:'Jeu',navAbout:'À propos',heroTitle:'Plus qu’un jeu... une communauté !',heroText:'Affronte des joueurs du monde entier, relève des défis, progresse et deviens le meilleur sur MR_Jery Morpion.',fGlobal:'Joueurs du monde entier',fSecure:'Sécurisé & fiable',fFast:'Rapide & fluide',fRewards:'Défis & récompenses',login:'Connexion',register:'Créer un compte',about:'À propos',cardOnline:'Jwe Anliy',cardOnlineText:'Defi e jwè nan tout peyi.',cardSecurity:'Sécurité',cardSecurityText:'Protection pour ton compte et tes parties.',cardCommunity:'Communauté',cardCommunityText:'Rencontre de nouveaux joueurs.',cardFast:'Rapide',cardFastText:'Des matchs fluides, sans complication.',cardChallenge:'Défis',cardChallengeText:'Montre ta valeur sur le plateau.',footer:'Joue • Défie • Gagne',aboutTitle:'Plus qu’un jeu... une communauté !',aboutText:'MR_Jery Morpion est une plateforme pour jouer, rencontrer des joueurs, relever des défis et suivre ta progression.',vision:'Vision',visionText:'Rassembler les joueurs de morpion du monde entier.',mission:'Mission',missionText:'Offrir une expérience rapide, simple et agréable.',values:'Valeurs',valuesText:'Respect, fair-play, communauté et évolution.'},
  en:{navHome:'Home',navGame:'Game',navAbout:'About',heroTitle:'More than a game... a community!',heroText:'Face players from around the world, take on challenges, compete and climb MR_Jery Morpion.',fGlobal:'Players worldwide',fSecure:'Secure & reliable',fFast:'Fast & fluid',fRewards:'Challenges & rewards',login:'Login',register:'Create an account',about:'About',cardOnline:'Play Online',cardOnlineText:'Challenge players worldwide.',cardSecurity:'Security',cardSecurityText:'Protection for your account and games.',cardCommunity:'Community',cardCommunityText:'Meet new players and opponents.',cardFast:'Fast',cardFastText:'Smooth matches, no hassle.',cardChallenge:'Challenges',cardChallengeText:'Show your skills on the board.',footer:'Play • Challenge • Win',aboutTitle:'More than a game... a community!',aboutText:'MR_Jery Morpion is a platform to play, meet players, take on challenges and track your progress.',vision:'Vision',visionText:'Bring morpion players together worldwide.',mission:'Mission',missionText:'Offer a fast, simple and enjoyable experience.',values:'Values',valuesText:'Respect, fair play, community and growth.'},
  es:{navHome:'Inicio',navGame:'Juego',navAbout:'Acerca de',heroTitle:'Más que un juego... ¡una comunidad!',heroText:'Enfréntate a jugadores de todo el mundo, acepta desafíos y progresa en MR_Jery Morpion.',fGlobal:'Jugadores de todo el mundo',fSecure:'Seguro y fiable',fFast:'Rápido y fluido',fRewards:'Desafíos y recompensas',login:'Iniciar sesión',register:'Crear una cuenta',about:'Acerca de',cardOnline:'Jugar en línea',cardOnlineText:'Desafía a jugadores de todo el mundo.',cardSecurity:'Seguridad',cardSecurityText:'Protección para tu cuenta y partidas.',cardCommunity:'Comunidad',cardCommunityText:'Conoce nuevos jugadores.',cardFast:'Rápido',cardFastText:'Partidas fluidas y sencillas.',cardChallenge:'Desafíos',cardChallengeText:'Demuestra tus habilidades.',footer:'Juega • Desafía • Gana',aboutTitle:'Más que un juego... ¡una comunidad!',aboutText:'MR_Jery Morpion es una plataforma para jugar, conocer jugadores, aceptar desafíos y seguir tu progreso.',vision:'Visión',visionText:'Reunir a jugadores de todo el mundo.',mission:'Misión',missionText:'Ofrecer una experiencia rápida, sencilla y divertida.',values:'Valores',valuesText:'Respeto, juego limpio, comunidad y evolución.'},
- ht:{navHome:'Akèy',navGame:'Jwèt',navAbout:'A Pwopo',heroTitle:'Plis pase yon jwèt... yon kominote!',heroText:'Jwe ak moun ki soti nan tout mond lan, leve defi, fè konpetisyon epi monte nan MR_Jery Morpion.',fGlobal:'Jwè nan tout mond lan',fSecure:'Sekirize & serye',fFast:'Rapid & fluid',fRewards:'Defi & rekonpans',login:'Konekte',register:'Kreye yon kont',about:'A pwopo',cardOnline:'Jouer en ligne',cardOnlineText:'Défie des joueurs de tous les pays.',cardSecurity:'Sekirite',cardSecurityText:'Pwoteksyon pou kont ou ak jwèt yo.',cardCommunity:'Kominote',cardCommunityText:'Rankontre nouvo jwè ak advèsè.',cardFast:'Rapid',cardFastText:'Match fluid, san konplikasyon.',cardChallenge:'Defi',cardChallengeText:'Montre kapasite w sou tablo a.',footer:'Jwe • Defi • Gagne',aboutTitle:'Plis pase yon jwèt... yon kominote!',aboutText:'MR_Jery Morpion se yon platfòm pou jwe, rankontre jwè, leve defi epi suiv pwogrè ou.',vision:'Vizyon',visionText:'Rasanble jwè morpion atravè mond lan.',mission:'Misyon',missionText:'Bay yon eksperyans rapid, senp ak agreyab.',values:'Valè',valuesText:'Respè, fair-play, kominote ak evolisyon.'},
+ ht:{navHome:'Akèy',navGame:'Jwèt',navAbout:'A Pwopo',heroTitle:'Plis pase yon jwèt... yon kominote!',heroText:'Jwe ak moun ki soti nan tout mond lan, leve defi, fè konpetisyon epi monte nan MR_Jery Morpion.',fGlobal:'Jwè nan tout mond lan',fSecure:'Sekirize & serye',fFast:'Rapid & fluid',fRewards:'Defi & rekonpans',login:'Connexion',register:'Kreye yon kont',about:'A pwopo',cardOnline:'Jwe Anliy',cardOnlineText:'Defi e jwè nan tout peyi.',cardSecurity:'Sekirite',cardSecurityText:'Pwoteksyon pou kont ou ak jwèt yo.',cardCommunity:'Kominote',cardCommunityText:'Rankontre nouvo jwè ak advèsè.',cardFast:'Rapid',cardFastText:'Match fluid, san konplikasyon.',cardChallenge:'Defi',cardChallengeText:'Montre kapasite w sou tablo a.',footer:'Jwe • Defi • Gagne',aboutTitle:'Plis pase yon jwèt... yon kominote!',aboutText:'MR_Jery Morpion se yon platfòm pou jwe, rankontre jwè, leve defi epi suiv pwogrè ou.',vision:'Vizyon',visionText:'Rasanble jwè morpion atravè mond lan.',mission:'Misyon',missionText:'Bay yon eksperyans rapid, senp ak agreyab.',values:'Valè',valuesText:'Respè, fair-play, kominote ak evolisyon.'},
  pt:{navHome:'Início',navGame:'Jogo',navAbout:'Sobre',heroTitle:'Mais que um jogo... uma comunidade!',heroText:'Enfrente jogadores do mundo inteiro, aceite desafios e avance no MR_Jery Morpion.',fGlobal:'Jogadores do mundo inteiro',fSecure:'Seguro e confiável',fFast:'Rápido e fluido',fRewards:'Desafios e recompensas',login:'Entrar',register:'Criar uma conta',about:'Sobre',cardOnline:'Jogar online',cardOnlineText:'Desafie jogadores do mundo inteiro.',cardSecurity:'Segurança',cardSecurityText:'Proteção para sua conta e partidas.',cardCommunity:'Comunidade',cardCommunityText:'Conheça novos jogadores.',cardFast:'Rápido',cardFastText:'Partidas fluidas e simples.',cardChallenge:'Desafios',cardChallengeText:'Mostre suas habilidades.',footer:'Jogue • Desafie • Vença',aboutTitle:'Mais que um jogo... uma comunidade!',aboutText:'MR_Jery Morpion é uma plataforma para jogar, conhecer jogadores, aceitar desafios e acompanhar seu progresso.',vision:'Visão',visionText:'Reunir jogadores de morpion do mundo inteiro.',mission:'Missão',missionText:'Oferecer uma experiência rápida, simples e agradável.',values:'Valores',valuesText:'Respeito, fair play, comunidade e evolução.'}
 };
-const fullSiteTextTranslations={
-  'Jwe Anliy':{fr:'Jouer en ligne',en:'Play Online',ht:'Jwe Anliy'},
-  'Jwe ak yon zanmi':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'},
-  'Defi':{fr:'Défis',en:'Challenges',ht:'Defi'},
-  'Paryaj':{fr:'Paris',en:'Bets',ht:'Paryaj'},
-  'Spectateur':{fr:'Spectateurs',en:'Spectators',ht:'Espektatè'},
-  'Robot':{fr:'Robot',en:'Robot',ht:'Robo'},
-  'Classement':{fr:'Classement',en:'Leaderboard',ht:'Klasman'},
-  'Affronte des joueurs du monde entier.':{fr:'Affronte des joueurs du monde entier.',en:'Challenge players from around the world.',ht:'Defi jwè ki soti toupatou nan mond lan.'},
-  'Envite yon zanmi epi jwe ansanm.':{fr:'Invite un ami et jouez ensemble.',en:'Invite a friend and play together.',ht:'Envite yon zanmi epi jwe ansanm.'},
-  'Kreye oswa aksepte defi.':{fr:'Crée ou accepte des défis.',en:'Create or accept challenges.',ht:'Kreye oswa aksepte defi.'},
-  'Mise, jwe epi suiv rekonpans yo.':{fr:'Mise, joue et suis tes récompenses.',en:'Place bets, play, and track rewards.',ht:'Mize, jwe epi suiv rekonpans yo.'},
-  'Gade match yo an dirèk.':{fr:'Regarde les matchs en direct.',en:'Watch matches live.',ht:'Gade match yo an dirèk.'},
-  'Jwe kont IA a pou antrene.':{fr:'Joue contre l’IA pour t’entraîner.',en:'Play against the AI to practice.',ht:'Jwe kont IA a pou antrene.'},
-  'Gade pi bon jwè yo.':{fr:'Découvre les meilleurs joueurs.',en:'See the top players.',ht:'Gade pi bon jwè yo.'},
-  'Tout jwèt platfòm nan nan yon sèl meni.':{fr:'Tous les jeux de la plateforme dans un seul menu.',en:'All platform games in one menu.',ht:'Tout jwèt platfòm nan nan yon sèl meni.'},
-  'Solde USD':{fr:'Solde USD',en:'USD Balance',ht:'Balans USD'},
-  'Solde HTG':{fr:'Solde HTG',en:'HTG Balance',ht:'Balans HTG'},
-  'Joueur MR_Jery':{fr:'Joueur MR_Jery',en:'MR_Jery Player',ht:'Jwè MR_Jery'},
-  'Connecté':{fr:'Connecté',en:'Signed in',ht:'Konekte'},
-  'Jwe • Defi • Gagne':{fr:'Joue • Défie • Gagne',en:'Play • Challenge • Win',ht:'Jwe • Defi • Genyen'},
-  'Defi e jwè nan tout peyi.':{fr:'Défie des joueurs de tous les pays.',en:'Challenge players worldwide.',ht:'Defi jwè nan tout peyi.'},
-  'Sekirite':{fr:'Sécurité',en:'Security',ht:'Sekirite'},
-  'Pwoteksyon pou kont ou ak jwèt yo.':{fr:'Protection de ton compte et de tes parties.',en:'Protection for your account and games.',ht:'Pwoteksyon pou kont ou ak jwèt yo.'},
-  'Kominote':{fr:'Communauté',en:'Community',ht:'Kominote'},
-  'Rankontre jwè ak nouvo advèsè.':{fr:'Rencontre de nouveaux joueurs et adversaires.',en:'Meet new players and opponents.',ht:'Rankontre nouvo jwè ak advèsè.'},
-  'Rapid':{fr:'Rapide',en:'Fast',ht:'Rapid'},
-  'Match vit, san konplikasyon.':{fr:'Des matchs rapides et simples.',en:'Fast, hassle-free matches.',ht:'Match rapid, san konplikasyon.'},
-  'Montre kapasite w sou tablo a.':{fr:'Montre tes compétences sur le plateau.',en:'Show your skills on the board.',ht:'Montre kapasite w sou tablo a.'}
-};
-Object.assign(fullSiteTextTranslations, {
- 'Connexion':{fr:'Connexion',en:'Login',ht:'Konekte'}, 'Créer un compte':{fr:'Créer un compte',en:'Create an account',ht:'Kreye yon kont'},
- 'Accueil':{fr:'Accueil',en:'Home',ht:'Akèy'}, 'Jeu':{fr:'Jeu',en:'Game',ht:'Jwèt'}, 'À propos':{fr:'À propos',en:'About',ht:'A pwopo'},
- 'Jouer avec un ami':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'}, 'Spectateur':{fr:'Spectateurs',en:'Spectators',ht:'Espektatè'},
- 'Mon profil':{fr:'Mon profil',en:'My Profile',ht:'Pwofil mwen'}, 'Profil':{fr:'Profil',en:'Profile',ht:'Pwofil'}, 'Wallet':{fr:'Portefeuille',en:'Wallet',ht:'Bous'},
- 'Déconnexion':{fr:'Déconnexion',en:'Log out',ht:'Dekonekte'}, 'Classement':{fr:'Classement',en:'Leaderboard',ht:'Klasman'},
- 'Affronte des joueurs du monde entier.':{fr:'Affronte des joueurs du monde entier.',en:'Challenge players around the world.',ht:'Defi jwè toupatou nan mond lan.'},
- 'Jwe ak yon zanmi':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'}, 'Defi':{fr:'Défis',en:'Challenges',ht:'Defi'}, 'Paryaj':{fr:'Paris',en:'Bets',ht:'Paryaj'},
- 'Créer un compte':{fr:'Créer un compte',en:'Create an account',ht:'Kreye yon kont'}, 'Connexion':{fr:'Connexion',en:'Login',ht:'Konekte'},
- "Connecte-toi à ton compte":{fr:'Connecte-toi à ton compte',en:'Sign in to your account',ht:'Konekte sou kont ou'},
- "Nom d'utilisateur ou e-mail":{fr:"Nom d'utilisateur ou e-mail",en:'Username or email',ht:'Non itilizatè oswa imèl'},
- "Nom d'utilisateur":{fr:"Nom d'utilisateur",en:'Username',ht:'Non itilizatè'}, 'Mot de passe':{fr:'Mot de passe',en:'Password',ht:'Modpas'},
- 'Confirmer le mot de passe':{fr:'Confirmer le mot de passe',en:'Confirm password',ht:'Konfime modpas la'}, 'E-mail':{fr:'E-mail',en:'Email',ht:'Imèl'},
- 'Pays de résidence':{fr:'Pays de résidence',en:'Country of residence',ht:'Peyi kote w rete'}, 'Langue préférée':{fr:'Langue préférée',en:'Preferred language',ht:'Lang ou prefere'},
- 'Se souvenir de moi':{fr:'Se souvenir de moi',en:'Remember me',ht:'Sonje mwen'}, 'Mot de passe oublié ?':{fr:'Mot de passe oublié ?',en:'Forgot password?',ht:'Ou bliye modpas ou?'},
- 'Se connecter':{fr:'Se connecter',en:'Sign in',ht:'Konekte'}, 'Se connecter avec Google':{fr:'Se connecter avec Google',en:'Sign in with Google',ht:'Konekte ak Google'},
- 'OU':{fr:'OU',en:'OR',ht:'OSWA'}, "Vous n'avez pas de compte ?":{fr:"Vous n'avez pas de compte ?",en:"Don't have an account?",ht:'Ou poko gen kont?'},
- 'Vous avez déjà un compte ?':{fr:'Vous avez déjà un compte ?',en:'Already have an account?',ht:'Ou deja gen kont?'},
- "J'accepte les conditions d'utilisation et la politique de confidentialité.":{fr:"J'accepte les conditions d'utilisation et la politique de confidentialité.",en:'I accept the terms of use and privacy policy.',ht:'Mwen aksepte kondisyon itilizasyon yo ak règleman konfidansyalite a.'},
- 'Créer mon compte':{fr:'Créer mon compte',en:'Create my account',ht:'Kreye kont mwen'}, 'Retour':{fr:'Retour',en:'Back',ht:'Retounen'},
- 'Paramètres':{fr:'Paramètres',en:'Settings',ht:'Paramèt'}, 'Les paramètres du jeu seront ajoutés ici.':{fr:'Les paramètres du jeu seront ajoutés ici.',en:'Game settings will be added here.',ht:'Paramèt jwèt la ap ajoute isit la.'},
- "Pour le moment, aucun réglage supplémentaire n'est nécessaire.":{fr:"Pour le moment, aucun réglage supplémentaire n'est nécessaire.",en:'No additional settings are needed for now.',ht:'Pou kounye a, pa gen lòt paramèt ki nesesè.'},
- 'Portefeuille & Défis':{fr:'Portefeuille & Défis',en:'Wallet & Challenges',ht:'Bous ak Defi'}, 'Solde USD':{fr:'Solde USD',en:'USD Balance',ht:'Balans USD'}, 'Solde HTG':{fr:'Solde HTG',en:'HTG Balance',ht:'Balans HTG'},
- 'Commissions plateforme':{fr:'Commissions plateforme',en:'Platform fees',ht:'Komisyon platfòm'}, 'Créer un défi':{fr:'Créer un défi',en:'Create a challenge',ht:'Kreye yon defi'},
- 'Demander un retrait':{fr:'Demander un retrait',en:'Request a withdrawal',ht:'Mande retrè'}, 'Actualiser':{fr:'Actualiser',en:'Refresh',ht:'Rafrechi'},
- 'Nouveau défi':{fr:'Nouveau défi',en:'New challenge',ht:'Nouvo defi'}, 'Mise joueur 1 :':{fr:'Mise joueur 1 :',en:'Player 1 stake:',ht:'Miz jwè 1:'}, 'Mise joueur 2 :':{fr:'Mise joueur 2 :',en:'Player 2 stake:',ht:'Miz jwè 2:'},
- 'Total :':{fr:'Total :',en:'Total:',ht:'Total:'}, 'Commission plateforme :':{fr:'Commission plateforme :',en:'Platform fee:',ht:'Komisyon platfòm:'}, 'Montant net du gagnant :':{fr:'Montant net du gagnant :',en:'Winner payout:',ht:'Kob gayan an ap resevwa:'},
- 'Annuler':{fr:'Annuler',en:'Cancel',ht:'Anile'}, 'Historique':{fr:'Historique',en:'History',ht:'Istwa'}, 'Aucune transaction en mode test.':{fr:'Aucune transaction en mode test.',en:'No transactions in test mode.',ht:'Pa gen tranzaksyon nan mòd tès la.'},
- 'Administration':{fr:'Administration',en:'Administration',ht:'Administrasyon'}, 'Commission':{fr:'Commission',en:'Commission',ht:'Komisyon'}, 'Matchs avec mise':{fr:'Matchs avec mise',en:'Wager matches',ht:'Match ak miz'}, 'Revenus plateforme':{fr:'Revenus plateforme',en:'Platform revenue',ht:'Revni platfòm'}, 'Paramètres de calcul':{fr:'Paramètres de calcul',en:'Calculation settings',ht:'Paramèt kalkil'}, 'Enregistrer':{fr:'Enregistrer',en:'Save',ht:'Anrejistre'},
- 'Jouer avec Robot — Niveau MASTER':{fr:'Jouer avec Robot — Niveau MASTER',en:'Play against Robot — MASTER Level',ht:'Jwe kont Robo — Nivo MASTER'}, 'À ton tour — le robot bloque les victoires immédiates et les trois ouverts.':{fr:'À ton tour — le robot bloque les victoires immédiates et les trois ouverts.',en:'Your turn — the robot blocks immediate wins and open threes.',ht:'Se tou pa w — robo a bloke viktwa imedya ak twa ouvè.'},
- '2 Utilisateurs':{fr:'2 joueurs',en:'2 Players',ht:'2 jwè'}, 'Tour du joueur noir':{fr:'Tour du joueur noir',en:'Black player’s turn',ht:'Se tou jwè nwa a'}, 'Jouer en Ligne':{fr:'Jouer en ligne',en:'Play Online',ht:'Jwe Anliy'},
- 'Trouver un adversaire':{fr:'Trouver un adversaire',en:'Find an opponent',ht:'Jwenn yon advèsè'}, "Salle d'attente":{fr:"Salle d'attente",en:'Waiting room',ht:'Sal datant'}, 'Regarder un match':{fr:'Regarder un match',en:'Watch a match',ht:'Gade yon match'},
- "Recherche d'un adversaire...":{fr:"Recherche d'un adversaire...",en:'Searching for an opponent...',ht:'N ap chèche yon advèsè...'}, 'Créer une partie':{fr:'Créer une partie',en:'Create a game',ht:'Kreye yon pati'}, 'Rejoindre une partie':{fr:'Rejoindre une partie',en:'Join a game',ht:'Antre nan yon pati'},
- 'Paramètres de l’invitation':{fr:'Paramètres de l’invitation',en:'Invitation settings',ht:'Paramèt envitasyon an'}, 'Durée du match':{fr:'Durée du match',en:'Match duration',ht:'Dire match la'}, 'Joueurs en ligne':{fr:'Joueurs en ligne',en:'Players online',ht:'Jwè anliy'}, 'Chargement des joueurs...':{fr:'Chargement des joueurs...',en:'Loading players...',ht:'N ap chaje jwè yo...'},
- 'En attente...':{fr:'En attente...',en:'Waiting...',ht:'Ap tann...'}, 'Choisissez un match en direct :':{fr:'Choisissez un match en direct :',en:'Choose a live match:',ht:'Chwazi yon match an dirèk:'}, 'Connexion...':{fr:'Connexion...',en:'Connecting...',ht:'Ap konekte...'},
- 'Chat du match':{fr:'Chat du match',en:'Match chat',ht:'Chat match la'}, 'Masquer':{fr:'Masquer',en:'Hide',ht:'Kache'}, 'Voye':{fr:'Envoyer',en:'Send',ht:'Voye'}, 'Mikwo fèmen':{fr:'Micro désactivé',en:'Microphone off',ht:'Mikwo fèmen'},
- 'Nouvelle partie':{fr:'Nouvelle partie',en:'New game',ht:'Nouvo pati'}, 'Kite match la':{fr:'Quitter le match',en:'Leave match',ht:'Kite match la'}, 'Retour au menu':{fr:'Retour au menu',en:'Back to menu',ht:'Retounen nan meni an'}, 'Accepter':{fr:'Accepter',en:'Accept',ht:'Aksepte'}, 'Refuser':{fr:'Refuser',en:'Decline',ht:'Refize'}, 'FIN DE PARTIE':{fr:'FIN DE PARTIE',en:'GAME OVER',ht:'MATCH FINI'}, 'Rejouer':{fr:'Rejouer',en:'Play again',ht:'Jwe ankò'},
- 'Aucune transaction en mode test.':{fr:'Aucune transaction en mode test.',en:'No transactions in test mode.',ht:'Pa gen tranzaksyon nan mòd tès la.'}
-});
-
-Object.assign(fullSiteTextTranslations, {
- '🌐 Jouer en Ligne':{fr:'🌐 Jouer en ligne',en:'🌐 Play Online',ht:'🌐 Jwe Anliy'},
- '🔎 Trouver un adversaire':{fr:'🔎 Trouver un adversaire',en:'🔎 Find an opponent',ht:'🔎 Jwenn yon advèsè'},
- '👥 Jouer avec un ami':{fr:'👥 Jouer avec un ami',en:'👥 Play with a Friend',ht:'👥 Jwe ak yon zanmi'},
- '⏳ Salle d’attente':{fr:'⏳ Salle d’attente',en:'⏳ Waiting Room',ht:'⏳ Sal datant'},
- '👁️ Regarder un match':{fr:'👁️ Regarder un match',en:'👁️ Watch a Match',ht:'👁️ Gade yon match'},
- 'Salle d’attente':{fr:'Salle d’attente',en:'Waiting Room',ht:'Sal datant'},
- 'Annuler':{fr:'Annuler',en:'Cancel',ht:'Anile'},
- 'Créer une partie':{fr:'Créer une partie',en:'Create a Game',ht:'Kreye yon pati'},
- 'Rejoindre une partie':{fr:'Rejoindre une partie',en:'Join a Game',ht:'Antre nan yon pati'},
- '⚙️ Paramètres de l’invitation':{fr:'⚙️ Paramètres de l’invitation',en:'⚙️ Invitation Settings',ht:'⚙️ Paramèt envitasyon an'},
- '1 minute':{fr:'1 minute',en:'1 minute',ht:'1 minit'},
- '2 minutes':{fr:'2 minutes',en:'2 minutes',ht:'2 minit'},
- '3 minutes':{fr:'3 minutes',en:'3 minutes',ht:'3 minit'},
- '4 minutes':{fr:'4 minutes',en:'4 minutes',ht:'4 minit'},
- '5 minutes':{fr:'5 minutes',en:'5 minutes',ht:'5 minit'},
- '6 minutes':{fr:'6 minutes',en:'6 minutes',ht:'6 minit'},
- '7 minutes':{fr:'7 minutes',en:'7 minutes',ht:'7 minit'},
- '8 minutes':{fr:'8 minutes',en:'8 minutes',ht:'8 minit'},
- '9 minutes':{fr:'9 minutes',en:'9 minutes',ht:'9 minit'},
- '10 minutes':{fr:'10 minutes',en:'10 minutes',ht:'10 minit'},
- '11 minutes':{fr:'11 minutes',en:'11 minutes',ht:'11 minit'},
- '12 minutes':{fr:'12 minutes',en:'12 minutes',ht:'12 minit'},
- '13 minutes':{fr:'13 minutes',en:'13 minutes',ht:'13 minit'},
- '14 minutes':{fr:'14 minutes',en:'14 minutes',ht:'14 minit'},
- '15 minutes':{fr:'15 minutes',en:'15 minutes',ht:'15 minit'},
- '16 minutes':{fr:'16 minutes',en:'16 minutes',ht:'16 minit'},
- '17 minutes':{fr:'17 minutes',en:'17 minutes',ht:'17 minit'},
- '18 minutes':{fr:'18 minutes',en:'18 minutes',ht:'18 minit'},
- '19 minutes':{fr:'19 minutes',en:'19 minutes',ht:'19 minit'},
- '20 minutes':{fr:'20 minutes',en:'20 minutes',ht:'20 minit'},
- '21 minutes':{fr:'21 minutes',en:'21 minutes',ht:'21 minit'},
- '22 minutes':{fr:'22 minutes',en:'22 minutes',ht:'22 minit'},
- '23 minutes':{fr:'23 minutes',en:'23 minutes',ht:'23 minit'},
- '24 minutes':{fr:'24 minutes',en:'24 minutes',ht:'24 minit'},
- '25 minutes':{fr:'25 minutes',en:'25 minutes',ht:'25 minit'},
- '26 minutes':{fr:'26 minutes',en:'26 minutes',ht:'26 minit'},
- '27 minutes':{fr:'27 minutes',en:'27 minutes',ht:'27 minit'},
- '28 minutes':{fr:'28 minutes',en:'28 minutes',ht:'28 minit'},
- '29 minutes':{fr:'29 minutes',en:'29 minutes',ht:'29 minit'},
- '30 minutes':{fr:'30 minutes',en:'30 minutes',ht:'30 minit'},
- 'Gwosè tablo':{fr:'Taille du plateau',en:'Board size',ht:'Gwosè tablo'},
- 'Koulè tablo sou telefòn pa w':{fr:'Couleur du plateau sur votre téléphone',en:'Board color on your phone',ht:'Koulè tablo sou telefòn pa w'},
- 'Klasik blan':{fr:'Blanc classique',en:'Classic White',ht:'Blan klasik'},
- 'Nuit ble':{fr:'Nuit bleue',en:'Blue Night',ht:'Nuit ble'},
- 'Vèt mant':{fr:'Vert menthe',en:'Mint Green',ht:'Vèt mant'},
- 'Woz dous':{fr:'Rose doux',en:'Soft Pink',ht:'Woz dous'},
- 'Sab klè':{fr:'Sable clair',en:'Light Sand',ht:'Sab klè'},
- '👥 Joueurs en ligne':{fr:'👥 Joueurs en ligne',en:'👥 Players Online',ht:'👥 Jwè anliy'},
- 'Chargement des joueurs...':{fr:'Chargement des joueurs...',en:'Loading players...',ht:'N ap chaje jwè yo...'},
- '👁️ Regarder un match':{fr:'👁️ Regarder un match',en:'👁️ Watch a Match',ht:'👁️ Gade yon match'},
- 'Choisissez un match en direct :':{fr:'Choisissez un match en direct :',en:'Choose a live match:',ht:'Chwazi yon match an dirèk:'},
- '🔄 Actualiser':{fr:'🔄 Actualiser',en:'🔄 Refresh',ht:'🔄 Rafrechi'},
- '🌐 Gomoku en Ligne':{fr:'🌐 Gomoku en ligne',en:'🌐 Online Gomoku',ht:'🌐 Gomoku anliy'},
- '👁️ Spectateurs : 0':{fr:'👁️ Spectateurs : 0',en:'👁️ Spectators: 0',ht:'👁️ Espektatè: 0'},
- 'Joueur 1':{fr:'Joueur 1',en:'Player 1',ht:'Jwè 1'}, 'Joueur 2':{fr:'Joueur 2',en:'Player 2',ht:'Jwè 2'},
- '⚫ Noir':{fr:'⚫ Noir',en:'⚫ Black',ht:'⚫ Nwa'}, '🔴 Rouge':{fr:'🔴 Rouge',en:'🔴 Red',ht:'🔴 Wouj'},
- 'Chat en direct + communication vocale':{fr:'Chat en direct + communication vocale',en:'Live Chat + Voice Communication',ht:'Chat an dirèk + kominikasyon vokal'},
- '💬 Chat du match':{fr:'💬 Chat du match',en:'💬 Match Chat',ht:'💬 Chat match la'},
- 'Masquer':{fr:'Masquer',en:'Hide',ht:'Kache'}, 'Voye':{fr:'Envoyer',en:'Send',ht:'Voye'},
- '🎤 Aktive mikwo':{fr:'🎤 Activer le micro',en:'🎤 Turn on microphone',ht:'🎤 Aktive mikwo'},
- 'Mikwo fèmen':{fr:'Micro désactivé',en:'Microphone off',ht:'Mikwo fèmen'},
- 'Jwè ak espektatè kapab pale epi tande youn lòt. Chak moun ka mute lòt moun sou aparèy pa li.':{fr:'Les joueurs et les spectateurs peuvent parler et s’entendre. Chacun peut couper le son d’une personne sur son propre appareil.',en:'Players and spectators can speak and hear one another. Each person can mute others locally.',ht:'Jwè ak espektatè kapab pale epi tande youn lòt. Espektatè yo ka tande, men yo pa ka pale.'},
- '🔄 Nouvelle partie':{fr:'🔄 Nouvelle partie',en:'🔄 New Game',ht:'🔄 Nouvo pati'},
- '🚪 Kite match la':{fr:'🚪 Quitter le match',en:'🚪 Leave Match',ht:'🚪 Kite match la'},
- '← Retour au menu':{fr:'← Retour au menu',en:'← Back to Menu',ht:'← Retounen nan meni an'},
- 'Code :':{fr:'Code :',en:'Code:',ht:'Kòd:'}, 'Joueur :':{fr:'Joueur :',en:'Player:',ht:'Jwè:'},
- '← Retour':{fr:'← Retour',en:'← Back',ht:'← Retounen'}, 'Retour':{fr:'Retour',en:'Back',ht:'Retounen'},
- 'En attente...':{fr:'En attente...',en:'Waiting...',ht:'Ap tann...'}, 'Connecté':{fr:'Connecté',en:'Connected',ht:'Konekte'},
- 'Connexion...':{fr:'Connexion...',en:'Connecting...',ht:'Ap konekte...'},
- 'Recherche d’un adversaire...':{fr:'Recherche d’un adversaire...',en:'Searching for an opponent...',ht:'N ap chèche yon advèsè...'},
- 'Aucun match disponible.':{fr:'Aucun match disponible.',en:'No match available.',ht:'Pa gen match disponib.'},
- 'Entrez le code de la partie.':{fr:'Entrez le code de la partie.',en:'Enter the game code.',ht:'Antre kòd pati a.'},
- 'Invitation envoyée.':{fr:'Invitation envoyée.',en:'Invitation sent.',ht:'Envitasyon an voye.'},
- 'Le joueur a refusé l’invitation.':{fr:'Le joueur a refusé l’invitation.',en:'The player declined the invitation.',ht:'Jwè a refize envitasyon an.'}
-});
-
-function translateWholeSiteText(lang){
-  const nodes=[];
-  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode(node){
-    const parent=node.parentElement;
-    if(!parent || parent.closest('script,style,noscript,textarea,option,[contenteditable="true"]')) return NodeFilter.FILTER_REJECT;
-    const raw=node.nodeValue, trimmed=raw.trim();
-    if(!trimmed) return NodeFilter.FILTER_REJECT;
-    return Object.prototype.hasOwnProperty.call(fullSiteTextTranslations,trimmed) || Object.values(fullSiteTextTranslations).some(v=>Object.values(v).includes(trimmed)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-  }});
-  while(walker.nextNode()) nodes.push(walker.currentNode);
-  nodes.forEach(node=>{
-    const raw=node.nodeValue, trimmed=raw.trim();
-    let canonical=trimmed;
-    if(!fullSiteTextTranslations[canonical]) canonical=Object.keys(fullSiteTextTranslations).find(k=>Object.values(fullSiteTextTranslations[k]).includes(trimmed))||trimmed;
-    const translated=fullSiteTextTranslations[canonical]?.[lang];
-    if(translated && translated!==trimmed) node.nodeValue=raw.replace(trimmed,translated);
-  });
-}
-function setLanguage(lang){
-  // Se sèlman 3 lang ki disponib pou Morpion: franse (pa defo), anglè, kreyòl.
-  if(!['fr','en','ht'].includes(lang)) lang='fr';
-  const t=landingTranslations[lang]||landingTranslations.fr;
-  document.documentElement.lang=lang;
-  translateWholeSiteText(lang);
-  try{localStorage.setItem('mrjery_language',lang)}catch(e){}
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const key=el.dataset.i18n;
-    if(!Object.prototype.hasOwnProperty.call(t,key)) return;
-    // Kenbe baliz HTML anndan tit yo (pa egzanp <em>) olye efase yo.
-    if(key==='heroTitle'||key==='aboutTitle'){
-      const title=t[key];
-      if(el.querySelector('em')){
-        const em=el.querySelector('em');
-        const full=el.ownerDocument.createElement('span');
-        full.textContent=title;
-        el.textContent=''; el.appendChild(full);
-      } else el.textContent=title;
-    } else el.textContent=t[key];
-  });
-  const names={fr:'Français',en:'English',ht:'Kreyòl Ayisyen'};
-  const n=names[lang];
-  ['currentLanguage','aboutCurrentLanguage'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});
-  // Tradui tou tèks ki nan atribi fòm yo (placeholder, title, aria-label)
-  // ak opsyon lis yo, san manyen valè itilizatè a deja antre.
-  const translateKnown = value => {
-    if(!value) return value;
-    const trimmed=value.trim();
-    let canonical=trimmed;
-    if(!fullSiteTextTranslations[canonical]) canonical=Object.keys(fullSiteTextTranslations).find(k=>Object.values(fullSiteTextTranslations[k]).includes(trimmed))||trimmed;
-    const result=fullSiteTextTranslations[canonical]?.[lang];
-    return result ? value.replace(trimmed,result) : value;
-  };
-  document.querySelectorAll('input[placeholder],textarea[placeholder], [title], [aria-label]').forEach(el=>{
-    for(const attr of ['placeholder','title','aria-label']){
-      if(el.hasAttribute(attr)){
-        const old=el.getAttribute(attr), next=translateKnown(old);
-        if(next!==old) el.setAttribute(attr,next);
-      }
-    }
-  });
-  document.querySelectorAll('option').forEach(el=>{
-    const old=el.textContent, next=translateKnown(old);
-    if(next!==old) el.textContent=next;
-  });
-  document.getElementById('languageMenu')?.classList.remove('show');
-}
-
-
+function setLanguage(lang){const t=landingTranslations[lang]||landingTranslations.fr;document.documentElement.lang=lang;localStorage.setItem('mrjery_language',lang);document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(t[key])el.textContent=t[key]});const names={fr:'Français',en:'English',es:'Español',ht:'Kreyòl Ayisyen',pt:'Português'};const n=names[lang]||names.fr;['currentLanguage','aboutCurrentLanguage'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});document.getElementById('languageMenu')?.classList.remove('show');}
 function openAuth(mode){showScreen('accountScreen');setAuthMode(mode);}
 function setAuthMode(mode){const login=mode==='login';document.getElementById('loginPanel').style.display=login?'block':'none';document.getElementById('registerPanel').style.display=login?'none':'block';document.getElementById('authLoginTab').classList.toggle('active',login);document.getElementById('authRegisterTab').classList.toggle('active',!login);document.getElementById('authTitle').textContent=login?'Connexion':'Créer un compte';document.getElementById('authSubtitle').textContent=login?'Connecte-toi à ton compte':'Rejoins la communauté MR_Jery Morpion';}
-let savedLang='fr';try{savedLang=localStorage.getItem('mrjery_language')||'fr'}catch(e){}setLanguage(['fr','en','ht'].includes(savedLang)?savedLang:'fr');
-// Re-aplike tradiksyon sou eleman ki parèt pita (meni, mesaj ak ekran dinamik), san modifye lojik jwèt la.
-let languageObserverTimer=null;
-const languageObserver=new MutationObserver(()=>{if(languageObserverTimer)clearTimeout(languageObserverTimer);languageObserverTimer=setTimeout(()=>{const active=(()=>{try{return localStorage.getItem('mrjery_language')||'fr'}catch(e){return 'fr'}})();const lang=['fr','en','ht'].includes(active)?active:'fr';translateWholeSiteText(lang);translateSiteAttributes(lang);},40);});
-languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','aria-label','title']});
-// Tradui placeholder, titres, aria-label et options de listes san modifye sa itilizatè a ekri.
-function translateSiteAttributes(lang){
- const translate=value=>{if(!value)return value;const trimmed=value.trim();const canonical=Object.keys(fullSiteTextTranslations).find(k=>k===trimmed||Object.values(fullSiteTextTranslations[k]).includes(trimmed));const result=canonical&&fullSiteTextTranslations[canonical][lang];return result?value.replace(trimmed,result):value;};
- document.querySelectorAll('input[placeholder],textarea[placeholder],[aria-label],[title],option').forEach(el=>{
-  for(const attr of ['placeholder','aria-label','title']){const value=el.getAttribute(attr);if(value){const next=translate(value);if(next!==value)el.setAttribute(attr,next);}}
-  if(el.tagName==='OPTION'){const value=el.textContent,next=translate(value);if(next!==value)el.textContent=next;}
- });
-}
-const originalSetLanguage=setLanguage;
-setLanguage=function(lang){originalSetLanguage(lang);translateSiteAttributes(['fr','en','ht'].includes(lang)?lang:'fr');};
-setLanguage((()=>{try{return localStorage.getItem('mrjery_language')||'fr'}catch(e){return 'fr'}})());
+const savedLang=localStorage.getItem('mrjery_language')||'fr';setLanguage(savedLang);
 document.getElementById('languageButton')?.addEventListener('click',()=>document.getElementById('languageMenu').classList.toggle('show'));
 document.querySelectorAll('#languageMenu [data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
 document.getElementById('landingLoginBtn')?.addEventListener('click',()=>openAuth('login'));
@@ -6697,20 +6180,6 @@ document.getElementById('goRegisterBtn')?.addEventListener('click',()=>setAuthMo
 document.getElementById('goLoginBtn')?.addEventListener('click',()=>setAuthMode('login'));
 
 
-
-/* MORPION 3x3 - modes local, robot minimax, online authentifie */
-let ttt={mode:'',board:Array(9).fill(''),turn:'X',room:null,player:null,status:'idle'};
-function tttSend(o){if(socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify(o));else document.getElementById('tttStatus').textContent='Koneksyon sèvè a poko pare.';}
-function openTtt(){showScreen('tttScreen');tttReset();}
-function tttReset(){ttt.board=Array(9).fill('');ttt.turn='X';ttt.status='playing';document.getElementById('tttBoard').style.display='grid';document.getElementById('tttRestart').style.display='inline-block';document.getElementById('tttExit').style.display='inline-block';tttRender();}
-function tttRender(){const b=document.getElementById('tttBoard');b.innerHTML='';ttt.board.forEach((v,i)=>{const q=document.createElement('button');q.type='button';q.textContent=v||' ';q.style.cssText='height:100px;font-size:42px;font-weight:900;border:2px solid #d4af37;border-radius:12px;background:#111c30;color:white;';q.disabled=!!v||ttt.status!=='playing';q.addEventListener('click',()=>tttPlay(i));b.append(q);});}
-function tttWin(b){for(const [a,c,d] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])if(b[a]&&b[a]===b[c]&&b[a]===b[d])return b[a];return null;}
-function tttFinish(){const w=tttWin(ttt.board);if(w||ttt.board.every(Boolean)){ttt.status='finished';document.getElementById('tttStatus').textContent=w?(w+' genyen!'):'Match nil!';}else document.getElementById('tttStatus').textContent='Tou pa '+ttt.turn;}
-function tttPlay(i){if(ttt.status!=='playing'||ttt.board[i])return;if(ttt.mode==='online'){tttSend({type:'ttt_move',room:ttt.room,index:i});return;}ttt.board[i]=ttt.turn;ttt.turn=ttt.turn==='X'?'O':'X';tttFinish();tttRender();if(ttt.mode==='robot'&&ttt.status==='playing'){const best=tttBest(ttt.board.slice(),'O');if(best>=0){ttt.board[best]='O';ttt.turn='X';tttFinish();tttRender();}}}
-function tttBest(b,p){const w=tttWin(b);if(w)return w==='O'?10:-10;if(b.every(Boolean))return 0;let scores=[];b.forEach((v,i)=>{if(!v){b[i]=p;let score=tttBest(b,p==='O'?'X':'O');b[i]='';scores.push({i,score});}});return scores.length?(p==='O'?scores.sort((a,c)=>c.score-a.score)[0].i:scores.sort((a,c)=>a.score-c.score)[0].i):-1;}
-function handleTttMessage(d){if(d.type==='ttt_error'){document.getElementById('tttStatus').textContent=d.message;return;}if(d.type==='ttt_created'||d.type==='ttt_joined'){ttt.room=d.room;ttt.player=d.player;document.getElementById('tttCode').textContent='Kòd chanm: '+d.room+' — pataje l ak zanmi ou.';document.getElementById('tttStatus').textContent=d.message||'Ou antre nan chanm nan.';return;}if(d.type==='ttt_opponent_joined'){document.getElementById('tttStatus').textContent='Advèsè a antre. X kòmanse.';return;}if(d.type==='ttt_state'){ttt.room=d.room;ttt.board=d.board;ttt.turn=d.turn;ttt.status=d.status==='finished'?'finished':d.status;document.getElementById('tttStatus').textContent=d.status==='waiting'?'Ap tann dezyèm jwè a…':d.winner==='draw'?'Match nil!':d.winner?('Gayan: '+d.players[d.winner]):'Tou: '+d.turn;tttRender();}}
-document.getElementById('tttBack').onclick=()=>showScreen('jeryGamesScreen');document.getElementById('tttLocal').onclick=()=>{ttt.mode='local';document.getElementById('tttOnlineControls').style.display='none';tttReset();document.getElementById('tttStatus').textContent='X kòmanse. Jwe youn apre lòt sou menm aparèy la.';};document.getElementById('tttRobot').onclick=()=>{ttt.mode='robot';document.getElementById('tttOnlineControls').style.display='none';tttReset();document.getElementById('tttStatus').textContent='Ou se X. Robot la se O.';};document.getElementById('tttOnline').onclick=()=>{ttt.mode='online';document.getElementById('tttOnlineControls').style.display='block';document.getElementById('tttBoard').style.display='none';document.getElementById('tttStatus').textContent=accountConnected?'Kreye chanm oswa antre ak kòd.':'Ou dwe konekte sou kont ou pou jwe anliy.';};document.getElementById('tttCreate').onclick=()=>{if(!accountConnected)return document.getElementById('tttStatus').textContent='Konekte sou kont MR_Jery ou anvan.';ttt.mode='online';tttSend({type:'ttt_create'});};document.getElementById('tttJoin').onclick=()=>{if(!accountConnected)return document.getElementById('tttStatus').textContent='Konekte sou kont MR_Jery ou anvan.';ttt.mode='online';tttSend({type:'ttt_join',room:document.getElementById('tttRoomCode').value.trim().toUpperCase()});};document.getElementById('tttRestart').onclick=()=>{if(ttt.mode==='online')return document.getElementById('tttStatus').textContent='Kreye yon nouvo chanm pou yon lòt match anliy.';tttReset();};document.getElementById('tttExit').onclick=()=>{ttt.room=null;ttt.mode='';document.getElementById('tttBoard').style.display='none';document.getElementById('tttOnlineControls').style.display='none';document.getElementById('tttStatus').textContent='Chwazi mòd ou vle jwe.';};
-
 /* ==================================================
    CHAT DU MATCH + VOIX WEBRTC
 ================================================== */
@@ -6729,227 +6198,35 @@ function renderMatchChat(items){
 document.getElementById('matchChatForm')?.addEventListener('submit',function(e){e.preventDefault();const input=document.getElementById('matchChatInput');const message=(input?.value||'').trim();if(!message||!onlineRoom)return;if(!socket||socket.readyState!==WebSocket.OPEN){document.getElementById('matchVoiceStatus').textContent='Koneksyon sèvè a pa disponib.';return;}matchSend({type:'chat',room:onlineRoom,message});input.value='';});
 document.getElementById('toggleMatchChat')?.addEventListener('click',function(){const body=document.getElementById('matchChatBody');if(!body)return;const hidden=body.style.display==='none';body.style.display=hidden?'':'none';this.textContent=hidden?'Masquer':'Afficher chat';});
 function voiceIsSpectator(){return onlineConnectionMode==='spectator'||Number(onlinePlayer||0)===0;}
-function voiceSend(to,type,payload){if(!onlineRoom)return;matchSend({type:'voice_signal',room:onlineRoom,to:String(to),signal_type:type,payload});}
+function voiceSend(to,type,payload){matchSend({type:'voice_signal',room:onlineRoom,to:to,signal_type:type,payload:payload});}
 function ensureVoiceJoined(){if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN||voiceJoinedRoom===String(onlineRoom))return;voiceJoinedRoom=String(onlineRoom);matchSend({type:'voice_join',room:onlineRoom});}
-async function autoStartMatchVoice(){
-  // Vwa antre otomatikman san mande mikwo. Jwè a aktive mikwo a sèlman lè li peze bouton an.
-  ensureVoiceJoined();
-  const st=document.getElementById('matchVoiceStatus');
-  if(st)st.textContent='Vwa pare. Peze “Mikwo pa m” pou pale; peze “Aktive son” pou tande.';
-}
-function getAudioElement(id){let a=document.getElementById('voiceAudio_'+id);if(!a){a=document.createElement('audio');a.id='voiceAudio_'+id;a.autoplay=true;a.playsInline=true;a.controls=false;a.style.display='none';document.getElementById('matchRemoteAudios')?.appendChild(a);}return a;}
-function createVoicePeer(id,role='player'){
-  id=String(id);let pc=matchVoicePeers.get(id);if(pc)return pc;
-  const spectator=voiceIsSpectator();
-  pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
-  matchVoicePeers.set(id,pc);
-  // Transceiver la rete la depi kòmansman: mikwo ka aktive pita san renegosyasyon.
-  const audioTransceiver=pc.addTransceiver('audio',{direction:(spectator||role==='spectator')?'recvonly':'sendrecv'});
-  if(!spectator&&role!=='spectator'&&matchMicStream&&matchMicEnabled){audioTransceiver.sender.replaceTrack(matchMicStream.getAudioTracks()[0]).catch(()=>{});}
+async function getMatchMic(){if(voiceIsSpectator())throw new Error('Spektatè yo pa ka pale nan mikwo.');if(!matchMicStream){matchMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});}matchMicEnabled=true;matchMicStream.getAudioTracks().forEach(t=>t.enabled=true);return matchMicStream;}
+function closeVoicePeer(id){const pc=matchVoicePeers.get(String(id));if(pc){try{pc.close();}catch(e){}matchVoicePeers.delete(String(id));}}
+function createVoicePeer(id){id=String(id);let pc=matchVoicePeers.get(id);if(pc)return pc;pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});matchVoicePeers.set(id,pc);
+  if(matchMicStream&&!voiceIsSpectator())matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));
+  else if(voiceIsSpectator())pc.addTransceiver('audio',{direction:'recvonly'});
   pc.onicecandidate=e=>{if(e.candidate)voiceSend(id,'ice',e.candidate.toJSON());};
-  pc.ontrack=e=>{
-    const a=getAudioElement(id);const stream=e.streams&&e.streams[0];
-    if(stream)a.srcObject=stream;
-    a.muted=voiceMutedPeers.has(id);
-    a.play().then(()=>{const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Son advèsè a aktive.';}).catch(()=>{const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Peze bouton “🔊 Aktive son” pou tande advèsè a.';});
-    renderVoicePeerControls();
-  };
-  pc.onconnectionstatechange=()=>{const st=document.getElementById('matchVoiceStatus');if(pc.connectionState==='connected'&&st)st.textContent='Vwa konekte.';if(pc.connectionState==='failed'&&st)st.textContent='Koneksyon vwa echwe. Rezo a ka bezwen TURN.';};
-  return pc;
+  pc.ontrack=e=>{const audio=document.getElementById('matchRemoteAudio');if(audio){if(e.streams&&e.streams[0])audio.srcObject=e.streams[0];audio.play().catch(()=>{});}};
+  pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState))closeVoicePeer(id);};return pc;
 }
-async function handleVoicePeerJoin(data){
-  if(!onlineRoom||String(data.room)!==String(onlineRoom))return;
-  const id=String(data.peer_id||'');if(!id||id==='undefined')return;
-  const role=data.role||'player';voicePeerMeta.set(id,{role,username:data.username||'Jwè'});renderVoicePeerControls();
-  // Se ansyen koneksyon an ki fè premye òf la.
-  if(voiceIsSpectator())return;
-  try{const pc=createVoicePeer(id,role);if(pc.signalingState!=='stable')return;const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}
-  catch(e){console.warn('Voice offer:',e);const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Pa rive etabli koneksyon vwa a.';}
+async function handleVoicePeerJoin(data){if(!onlineRoom||String(data.room)!==String(onlineRoom))return;const id=String(data.peer_id);if(!id||id==='undefined')return;
+  // Only player 1 creates offers, avoiding duplicate offer collisions. Spectators only receive audio.
+  if(!voiceIsSpectator()&&Number(onlinePlayer)===1){try{const pc=createVoicePeer(id);if(matchMicStream)matchMicStream.getAudioTracks().forEach(track=>{if(!pc.getSenders().some(s=>s.track===track))pc.addTrack(track,matchMicStream);});const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}catch(e){console.warn('Voice offer failed',e);}}
 }
-function handleVoicePeerList(peers){(peers||[]).forEach(p=>{const id=String(p.peer_id);voicePeerMeta.set(id,{role:p.role||'player',username:p.username||'Jwè'});});renderVoicePeerControls();}
-async function handleVoiceSignal(data){
-  if(String(data.room)!==String(onlineRoom))return;
-  const from=String(data.from_id||'');if(!from||from==='undefined')return;
-  const role=data.from_role||'player';voicePeerMeta.set(from,{role,username:data.from_username||'Jwè'});renderVoicePeerControls();
-  try{const pc=createVoicePeer(from,role);const payload=data.payload||{};
-    if(data.signal_type==='description'){
-      await pc.setRemoteDescription(new RTCSessionDescription(payload));
-      if(payload.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);voiceSend(from,'description',pc.localDescription.toJSON());}
-    }else if(data.signal_type==='ice'&&payload){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){console.debug('ICE candidate:',e);}}
-  }catch(e){console.warn('Voice signal:',e);const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Erè koneksyon vwa. Eseye rekonekte nan match la.';}
-}
-async function toggleOwnMatchMic(){
-  const btn=document.getElementById('matchMicButton'),st=document.getElementById('matchVoiceStatus');
-  try{
-    if(voiceIsSpectator()){if(st)st.textContent='Espektatè yo ka tande, men yo pa ka pale.';return;}
-    if(!matchMicStream){matchMicStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});}
-    matchMicEnabled=!matchMicEnabled;
-    matchMicStream.getAudioTracks().forEach(t=>t.enabled=matchMicEnabled);
-    // Transceiver deja egziste; replaceTrack voye mikwo a san nouvo òf.
-    for(const [id,pc] of matchVoicePeers){const tr=pc.getTransceivers().find(x=>x.receiver?.track?.kind==='audio'||x.sender?.track?.kind==='audio');if(tr&&tr.sender)await tr.sender.replaceTrack(matchMicEnabled?matchMicStream.getAudioTracks()[0]:null);}
-    if(btn){btn.textContent=matchMicEnabled?'🎙️ Mikwo pa m: ON':'🔇 Mikwo pa m: OFF';btn.classList.toggle('mic-on',matchMicEnabled);btn.classList.toggle('mic-off',!matchMicEnabled);btn.setAttribute('aria-pressed',String(matchMicEnabled));btn.disabled=false;}
-    if(st)st.textContent=matchMicEnabled?'Mikwo ouvè. Advèsè a ta dwe tande w.':'Mikwo fèmen. Ou ka toujou tande advèsè a.';
-    ensureVoiceJoined();ensureMicShortcut();
-  }catch(err){if(st)st.textContent='Mikwo pa ouvri: bay navigatè a pèmisyon mikwo. '+(err.message||'');}
-}
-document.getElementById('matchMicButton')?.addEventListener('click',toggleOwnMatchMic);
-function ensureMicShortcut(){let b=document.getElementById('matchMicQuickButton');if(!b){b=document.createElement('button');b.id='matchMicQuickButton';b.type='button';b.className='player-audio-shortcut mic-quick-shortcut';b.addEventListener('click',toggleOwnMatchMic);document.body.appendChild(b);}b.textContent=matchMicEnabled?'🎙️ Mikwo mwen: ON':'🔇 Mikwo mwen: OFF';b.setAttribute('aria-pressed',String(matchMicEnabled));}
-function addPlayerAudioShortcuts(){
-  [['onlineBlackName','black'],['onlineRedName','red']].forEach(([nameId,side])=>{const name=document.getElementById(nameId);if(!name||name.parentElement.querySelector('.player-audio-shortcut'))return;const b=document.createElement('button');b.type='button';b.className='player-audio-shortcut';b.textContent='🔊 Audio';b.dataset.side=side;b.addEventListener('click',()=>{const playerName=(name.textContent||'').trim();const match=[...voicePeerMeta.entries()].find(([id,m])=>String(m.username||'').trim()===playerName);if(!match)return;const [id]=match;const muted=!voiceMutedPeers.has(id);if(muted)voiceMutedPeers.add(id);else voiceMutedPeers.delete(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=muted;b.textContent=muted?'🔇 Audio':'🔊 Audio';});name.insertAdjacentElement('afterend',b);});
-}
-function renderVoicePeerControls(){ensureMicShortcut();addPlayerAudioShortcuts();const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';for(const [id,m] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);b.textContent=(muted?'🔇 ':'🔊 ')+(m.username||'Jwè')+(m.role==='spectator'?' · Espektatè':'');b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id);renderVoicePeerControls();});box.appendChild(b);}}
-async function enableMatchRemoteSound(){for(const a of document.querySelectorAll('#matchRemoteAudios audio')){a.muted=false;try{await a.play();}catch(e){}}const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Son aktive. Ou ka tande lòt jwè yo.';}
-(function addEnableSoundButton(){const st=document.getElementById('matchVoiceStatus');if(!st||document.getElementById('enableMatchSound'))return;const b=document.createElement('button');b.id='enableMatchSound';b.type='button';b.textContent='🔊 Aktive son advèsè a';b.addEventListener('click',enableMatchRemoteSound);st.insertAdjacentElement('afterend',b);})();
-function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const b=document.getElementById('matchMicButton');if(b){b.textContent='🎤 Mikwo pa m: OFF';b.disabled=false;b.classList.remove('mic-on');b.classList.add('mic-off');b.setAttribute('aria-pressed','false');}const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
-
-// Traduction continue des écrans internes et des éléments créés après le changement de langue.
-// Ainsi, Play Online, Spectators et Play with a Friend gardent la langue choisie même après navigation.
-Object.assign(fullSiteTextTranslations, {
- 'Jouer en ligne':{fr:'Jouer en ligne',en:'Play Online',ht:'Jwe Anliy'},
- 'Play Online':{fr:'Jouer en ligne',en:'Play Online',ht:'Jwe Anliy'},
- 'Jouer avec un ami':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'},
- 'Play with a Friend':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'},
- 'Spectateurs':{fr:'Spectateurs',en:'Spectators',ht:'Espektatè'},
- 'Spectators':{fr:'Spectateurs',en:'Spectators',ht:'Espektatè'},
- 'Créer une salle':{fr:'Créer une salle',en:'Create a room',ht:'Kreye yon chanm'},
- 'Rejoindre une salle':{fr:'Rejoindre une salle',en:'Join a room',ht:'Antre nan yon chanm'},
- 'Code de la salle':{fr:'Code de la salle',en:'Room code',ht:'Kòd chanm lan'},
- 'Entrer le code':{fr:'Entrer le code',en:'Enter code',ht:'Antre kòd la'},
- 'Copier le code':{fr:'Copier le code',en:'Copy code',ht:'Kopye kòd la'},
- 'Inviter un ami':{fr:'Inviter un ami',en:'Invite a friend',ht:'Envite yon zanmi'},
- 'En attente d’un joueur...':{fr:'En attente d’un joueur...',en:'Waiting for a player...',ht:'Ap tann yon jwè...'},
- 'En attente d’un adversaire...':{fr:'En attente d’un adversaire...',en:'Waiting for an opponent...',ht:'Ap tann yon advèsè...'},
- 'Aucun match en direct pour le moment.':{fr:'Aucun match en direct pour le moment.',en:'No live matches right now.',ht:'Pa gen match an dirèk pou kounye a.'},
- 'Aucun joueur disponible.':{fr:'Aucun joueur disponible.',en:'No players available.',ht:'Pa gen jwè disponib.'},
- 'Actualiser la liste':{fr:'Actualiser la liste',en:'Refresh list',ht:'Rafrechi lis la'},
- 'Annuler la recherche':{fr:'Annuler la recherche',en:'Cancel search',ht:'Anile rechèch la'},
- 'Annuler le défi':{fr:'Annuler le défi',en:'Cancel challenge',ht:'Anile defi a'},
- 'Envoyer une invitation':{fr:'Envoyer une invitation',en:'Send invitation',ht:'Voye yon envitasyon'},
- 'Accepter le défi':{fr:'Accepter le défi',en:'Accept challenge',ht:'Aksepte defi a'},
- 'Refuser le défi':{fr:'Refuser le défi',en:'Decline challenge',ht:'Refize defi a'},
- 'Aucun défi disponible.':{fr:'Aucun défi disponible.',en:'No challenges available.',ht:'Pa gen defi disponib.'},
- 'Liste des joueurs':{fr:'Liste des joueurs',en:'Player list',ht:'Lis jwè yo'},
- 'Joueurs disponibles':{fr:'Joueurs disponibles',en:'Available players',ht:'Jwè ki disponib'},
- 'Créer une partie':{fr:'Créer une partie',en:'Create a game',ht:'Kreye yon pati'},
- 'Rejoindre une partie':{fr:'Rejoindre une partie',en:'Join a game',ht:'Antre nan yon pati'},
- 'Choisir la durée':{fr:'Choisir la durée',en:'Choose duration',ht:'Chwazi dire a'},
- 'Temps de jeu':{fr:'Temps de jeu',en:'Game time',ht:'Tan jwèt la'},
- 'Retour au tableau de bord':{fr:'Retour au tableau de bord',en:'Back to dashboard',ht:'Retounen nan tablo prensipal la'},
- 'Retour au menu':{fr:'Retour au menu',en:'Back to menu',ht:'Retounen nan meni an'},
- 'Quitter':{fr:'Quitter',en:'Leave',ht:'Kite'},
- 'Envoyer':{fr:'Envoyer',en:'Send',ht:'Voye'},
- 'Message':{fr:'Message',en:'Message',ht:'Mesaj'},
- 'Écrire un message...':{fr:'Écrire un message...',en:'Write a message...',ht:'Ekri yon mesaj...'},
- 'Chargement...':{fr:'Chargement...',en:'Loading...',ht:'Ap chaje...'},
- 'Erreur de connexion.':{fr:'Erreur de connexion.',en:'Connection error.',ht:'Erè koneksyon.'},
- 'Connexion au serveur...':{fr:'Connexion au serveur...',en:'Connecting to server...',ht:'Ap konekte ak sèvè a...'},
- 'Aucun joueur trouvé.':{fr:'Aucun joueur trouvé.',en:'No players found.',ht:'Pa jwenn okenn jwè.'},
- 'Match terminé':{fr:'Match terminé',en:'Match finished',ht:'Match la fini'},
- 'Victoire':{fr:'Victoire',en:'Victory',ht:'Viktwa'},
- 'Défaite':{fr:'Défaite',en:'Defeat',ht:'Defèt'},
- 'Égalité':{fr:'Égalité',en:'Draw',ht:'Match nil'},
- 'Annuler':{fr:'Annuler',en:'Cancel',ht:'Anile'},
- 'Confirmer':{fr:'Confirmer',en:'Confirm',ht:'Konfime'},
- 'Fermer':{fr:'Fermer',en:'Close',ht:'Fèmen'},
- 'Enregistrer':{fr:'Enregistrer',en:'Save',ht:'Anrejistre'},
- 'Rechercher':{fr:'Rechercher',en:'Search',ht:'Chèche'},
- 'Aucun résultat.':{fr:'Aucun résultat.',en:'No results.',ht:'Pa gen rezilta.'}
-});
-
-// Traductions complémentaires pour tous les écrans internes (jeu en ligne, amis, spectateurs, salle et match).
-Object.assign(fullSiteTextTranslations, {
- 'Jouer en Ligne':{fr:'Jouer en Ligne',en:'Play Online',ht:'Jwe Anliy'},
- 'Trouver un adversaire':{fr:'Trouver un adversaire',en:'Find an opponent',ht:'Chèche yon advèsè'},
- 'Jouer avec un ami':{fr:'Jouer avec un ami',en:'Play with a Friend',ht:'Jwe ak yon zanmi'},
- 'Salle d’attente':{fr:'Salle d’attente',en:'Waiting Room',ht:'Sal datant'},
- 'Salle d\'attente':{fr:'Salle d’attente',en:'Waiting Room',ht:'Sal datant'},
- 'Regarder un match':{fr:'Regarder un match',en:'Watch a Match',ht:'Gade yon match'},
- 'Recherche d’un adversaire...':{fr:'Recherche d’un adversaire...',en:'Searching for an opponent...',ht:'Ap chèche yon advèsè...'},
- 'Recherche d\'un adversaire...':{fr:'Recherche d’un adversaire...',en:'Searching for an opponent...',ht:'Ap chèche yon advèsè...'},
- 'Créer une partie':{fr:'Créer une partie',en:'Create a Game',ht:'Kreye yon pati'},
- 'Rejoindre une partie':{fr:'Rejoindre une partie',en:'Join a Game',ht:'Antre nan yon pati'},
- 'Paramètres de l’invitation':{fr:'Paramètres de l’invitation',en:'Invitation Settings',ht:'Paramèt envitasyon an'},
- 'Paramètres de l\'invitation':{fr:'Paramètres de l’invitation',en:'Invitation Settings',ht:'Paramèt envitasyon an'},
- 'Durée du match':{fr:'Durée du match',en:'Match Duration',ht:'Dire match la'},
- 'minute':{fr:'minute',en:'minute',ht:'minit'}, 'minutes':{fr:'minutes',en:'minutes',ht:'minit'},
- 'Gwosè tablo':{fr:'Taille du plateau',en:'Board Size',ht:'Gwosè tablo'},
- 'Koulè tablo sou telefòn pa w':{fr:'Couleur du plateau sur votre téléphone',en:'Board color on your phone',ht:'Koulè tablo sou telefòn pa w'},
- 'Klasik blan':{fr:'Blanc classique',en:'Classic White',ht:'Blan klasik'},
- 'Nuit ble':{fr:'Ble nuit',en:'Midnight Blue',ht:'Ble nuit'},
- 'Vèt mant':{fr:'Vert menthe',en:'Mint Green',ht:'Vèt mant'},
- 'Woz dous':{fr:'Rose doux',en:'Soft Pink',ht:'Woz dous'},
- 'Sab klè':{fr:'Sable clair',en:'Light Sand',ht:'Sab klè'},
- 'Joueurs en ligne':{fr:'Joueurs en ligne',en:'Players Online',ht:'Jwè ki anliy'},
- 'Chargement des joueurs...':{fr:'Chargement des joueurs...',en:'Loading players...',ht:'Ap chaje jwè yo...'},
- 'Code :':{fr:'Code :',en:'Code:',ht:'Kòd:'}, 'Joueur :':{fr:'Joueur :',en:'Player:',ht:'Jwè:'},
- 'Retour':{fr:'Retour',en:'Back',ht:'Retounen'},
- 'En attente...':{fr:'En attente...',en:'Waiting...',ht:'Ap tann...'},
- 'Spectateurs :':{fr:'Spectateurs :',en:'Spectators:',ht:'Espektatè:'},
- 'Choisissez un match en direct :':{fr:'Choisissez un match en direct :',en:'Choose a live match:',ht:'Chwazi yon match an dirèk:'},
- 'Actualiser':{fr:'Actualiser',en:'Refresh',ht:'Rafrechi'},
- 'Gomoku en Ligne':{fr:'Gomoku en Ligne',en:'Online Gomoku',ht:'Gomoku Anliy'},
- 'Connexion...':{fr:'Connexion...',en:'Connecting...',ht:'Ap konekte...'},
- 'Joueur 1':{fr:'Joueur 1',en:'Player 1',ht:'Jwè 1'}, 'Joueur 2':{fr:'Joueur 2',en:'Player 2',ht:'Jwè 2'},
- 'Noir':{fr:'Noir',en:'Black',ht:'Nwa'}, 'Rouge':{fr:'Rouge',en:'Red',ht:'Wouj'},
- 'Chat du match':{fr:'Chat du match',en:'Match Chat',ht:'Chat match la'},
- 'Masquer':{fr:'Masquer',en:'Hide',ht:'Kache'}, 'Voye':{fr:'Envoyer',en:'Send',ht:'Voye'},
- '🎤 Aktive mikwo':{fr:'🎤 Activer le micro',en:'🎤 Turn Mic On',ht:'🎤 Aktive mikwo'},
- '🔇 Koupe mikwo':{fr:'🔇 Couper le micro',en:'🔇 Turn Mic Off',ht:'🔇 Koupe mikwo'},
- 'Mikwo fèmen':{fr:'Micro coupé',en:'Microphone off',ht:'Mikwo fèmen'},
- 'Jwè ak espektatè kapab pale epi tande youn lòt.':{fr:'Les joueurs et les spectateurs peuvent parler et s’entendre.',en:'Players and spectators can speak and hear one another.',ht:'Jwè ak espektatè kapab pale epi tande youn lòt.'},
- 'Spektatè yo ka tande, men yo pa ka pale.':{fr:'Les spectateurs peuvent écouter, mais pas parler.',en:'Spectators can listen but cannot speak.',ht:'Espektatè yo ka tande, men yo pa ka pale.'},
- 'Mòd spektatè: ou ka tande, men ou pa ka pale.':{fr:'Mode spectateur : vous pouvez écouter, mais pas parler.',en:'Spectator mode: you can listen, but cannot speak.',ht:'Mòd spektatè: ou ka tande, men ou pa ka pale.'},
- 'Nouvelle partie':{fr:'Nouvelle partie',en:'New Game',ht:'Nouvo pati'},
- 'Kite match la':{fr:'Quitter le match',en:'Leave Match',ht:'Kite match la'},
- 'Retour au menu':{fr:'Retour au menu',en:'Back to Menu',ht:'Retounen nan meni an'},
- 'Accepter':{fr:'Accepter',en:'Accept',ht:'Aksepte'}, 'Refuser':{fr:'Refuser',en:'Decline',ht:'Refize'},
- 'Déconnexion':{fr:'Déconnexion',en:'Log Out',ht:'Dekonekte'}, 'Déconnecté':{fr:'Déconnecté',en:'Disconnected',ht:'Dekonekte'},
- 'En ligne':{fr:'En ligne',en:'Online',ht:'Anliy'}, 'Hors ligne':{fr:'Hors ligne',en:'Offline',ht:'Pa anliy'},
- 'Aucun match disponible.':{fr:'Aucun match disponible.',en:'No matches available.',ht:'Pa gen match disponib.'},
- 'Aucun match en direct.':{fr:'Aucun match en direct.',en:'No live matches.',ht:'Pa gen match an dirèk.'},
- 'Le match est terminé.':{fr:'Le match est terminé.',en:'The match is over.',ht:'Match la fini.'},
- 'Impossible de se connecter au serveur.':{fr:'Impossible de se connecter au serveur.',en:'Unable to connect to the server.',ht:'Pa kapab konekte ak sèvè a.'},
- 'Code de salle invalide.':{fr:'Code de salle invalide.',en:'Invalid room code.',ht:'Kòd chanm lan pa valab.'},
- 'Veuillez entrer un code de salle.':{fr:'Veuillez entrer un code de salle.',en:'Please enter a room code.',ht:'Tanpri antre kòd chanm lan.'},
- 'Votre invitation a été envoyée.':{fr:'Votre invitation a été envoyée.',en:'Your invitation has been sent.',ht:'Yo voye envitasyon ou an.'},
- 'Invitation envoyée':{fr:'Invitation envoyée',en:'Invitation Sent',ht:'Yo voye envitasyon an'},
- 'Annuler la partie':{fr:'Annuler la partie',en:'Cancel Game',ht:'Anile pati a'},
- 'Rechercher un joueur':{fr:'Rechercher un joueur',en:'Search for a Player',ht:'Chèche yon jwè'},
- 'Nom du joueur':{fr:'Nom du joueur',en:'Player Name',ht:'Non jwè a'},
- 'Pseudo':{fr:'Pseudo',en:'Username',ht:'Psedonim'},
- 'Créer':{fr:'Créer',en:'Create',ht:'Kreye'}, 'Rejoindre':{fr:'Rejoindre',en:'Join',ht:'Antre'},
- 'Prêt':{fr:'Prêt',en:'Ready',ht:'Pare'}, 'En attente d’un joueur...':{fr:'En attente d’un joueur...',en:'Waiting for a player...',ht:'Ap tann yon jwè...'},
- 'En attente d’un adversaire...':{fr:'En attente d’un adversaire...',en:'Waiting for an opponent...',ht:'Ap tann yon advèsè...'},
- 'Aucune partie disponible.':{fr:'Aucune partie disponible.',en:'No games available.',ht:'Pa gen pati disponib.'},
- 'Votre tour':{fr:'Votre tour',en:'Your turn',ht:'Se tou pa w'}, 'Tour de l’adversaire':{fr:'Tour de l’adversaire',en:'Opponent’s turn',ht:'Se tou advèsè a'},
- 'Victoire !':{fr:'Victoire !',en:'You Win!',ht:'Ou genyen!'}, 'Vous avez perdu.':{fr:'Vous avez perdu.',en:'You lost.',ht:'Ou pèdi.'},
- 'Match nul':{fr:'Match nul',en:'Draw',ht:'Match nil'},
- 'Fermer':{fr:'Fermer',en:'Close',ht:'Fèmen'}, 'Envoyer':{fr:'Envoyer',en:'Send',ht:'Voye'},
- 'Annuler':{fr:'Annuler',en:'Cancel',ht:'Anile'}, 'Confirmer':{fr:'Confirmer',en:'Confirm',ht:'Konfime'}
-});
-
-function translateCurrentLanguageAttributes(lang){
-  const map=fullSiteTextTranslations;
-  const translate=value=>{
-    if(!value)return value;
-    const trim=value.trim(); let key=map[trim]?trim:Object.keys(map).find(k=>Object.values(map[k]).includes(trim));
-    return key&&map[key][lang]?value.replace(trim,map[key][lang]):value;
-  };
-  document.querySelectorAll('input[placeholder],textarea[placeholder],[title],[aria-label]').forEach(el=>{
-    for(const attr of ['placeholder','title','aria-label']) if(el.hasAttribute(attr)) el.setAttribute(attr,translate(el.getAttribute(attr)));
-  });
-  document.querySelectorAll('option').forEach(el=>{const t=translate(el.textContent);if(t!==el.textContent)el.textContent=t;});
-}
-let __mrjeryTranslationTimer=null;
-const __mrjeryLanguageObserver=new MutationObserver(()=>{
-  if(__mrjeryTranslationTimer)clearTimeout(__mrjeryTranslationTimer);
-  __mrjeryTranslationTimer=setTimeout(()=>{
-    const lang=(localStorage.getItem('mrjery_language')||'fr');
-    if(['fr','en','ht'].includes(lang)){translateWholeSiteText(lang);translateCurrentLanguageAttributes(lang);}
-  },40);
-});
-__mrjeryLanguageObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
-try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWholeSiteText(__lang); translateCurrentLanguageAttributes(__lang); } catch(e) {}
+function handleVoicePeerList(peers){(peers||[]).forEach(p=>handleVoicePeerJoin({room:onlineRoom,peer_id:p.peer_id}));}
+async function handleVoiceSignal(data){if(String(data.room)!==String(onlineRoom))return;const from=String(data.from_id);if(!from||from==='undefined')return;try{const pc=createVoicePeer(from);const payload=data.payload||{};
+  if(data.signal_type==='description'){const desc=new RTCSessionDescription(payload);await pc.setRemoteDescription(desc);if(desc.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);voiceSend(from,'description',pc.localDescription.toJSON());}}
+  else if(data.signal_type==='ice'){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){console.debug('ICE candidate ignored',e);}}
+}catch(e){console.warn('Voice signal failed',e);}}
+document.getElementById('matchMicButton')?.addEventListener('click',async function(){const status=document.getElementById('matchVoiceStatus');try{
+  if(voiceIsSpectator()){status.textContent='Mòd spektatè: ou ka tande, men ou pa ka pale.';return;}
+  if(matchMicEnabled){matchMicEnabled=false;if(matchMicStream)matchMicStream.getAudioTracks().forEach(t=>t.enabled=false);this.textContent='🎤 Aktive mikwo';status.textContent='Mikwo fèmen';return;}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Navigatè a pa sipòte mikwo a. Itilize HTTPS.');
+  await getMatchMic();this.textContent='🔇 Koupe mikwo';status.textContent='Mikwo aktive';
+  // Re-negotiate existing connections after microphone permission is granted.
+  for(const [id,pc] of matchVoicePeers){if(!pc.getSenders().some(s=>s.track&&s.track.kind==='audio'))matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}
+}catch(e){status.textContent=e.message||'Pa kapab aktive mikwo a.';}});
+function cleanupMatchVoice(){matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
 // Le compte reste mémorisé dans localStorage et est restauré au démarrage.
 // Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
