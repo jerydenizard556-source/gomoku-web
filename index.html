@@ -1711,7 +1711,7 @@ td, th { overflow-wrap: anywhere; }
       </div>
       <div class="match-voice-controls">
         <button type="button" id="matchMicButton">🎤 Aktive mikwo</button>
-        <span id="matchVoiceStatus" role="status">Mikwo fèmen</span>
+        <span id="matchVoiceStatus" role="status">Mikwo fèmen</span><span id="matchSpeakingStatus" class="match-voice-note" aria-live="polite">Pa gen moun k ap pale kounye a.</span>
       </div>
       <div id="matchVoicePeerControls" class="match-voice-controls" aria-label="Kontwòl vwa chak moun"></div>
       <div id="matchRemoteAudios"></div>
@@ -3827,6 +3827,8 @@ let voiceMuteAllSpectators = false;
 let voiceJoinedRoom = null;
 let matchMicEnabled = false;
 let renderedChatSignature = "";
+let voiceAudioContexts = new Map();
+let voiceSpeakingTimers = new Map();
 
 /* ==================================================
    JOUEURS EN LIGNE + INVITATION DIRECTE
@@ -6644,12 +6646,12 @@ function voiceIsSpectator(){return onlineConnectionMode==='spectator'||Number(on
 function voiceSend(to,type,payload){matchSend({type:'voice_signal',room:onlineRoom,to:to,signal_type:type,payload:payload});}
 function ensureVoiceJoined(){if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN||voiceJoinedRoom===String(onlineRoom))return;voiceJoinedRoom=String(onlineRoom);matchSend({type:'voice_join',room:onlineRoom});}
 async function getMatchMic(){if(!matchMicStream){matchMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});}matchMicEnabled=true;matchMicStream.getAudioTracks().forEach(t=>t.enabled=true);return matchMicStream;}
-function closeVoicePeer(id){const pc=matchVoicePeers.get(String(id));if(pc){try{pc.close();}catch(e){}matchVoicePeers.delete(String(id));}}
+function closeVoicePeer(id){id=String(id);const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}voiceAudioContexts.delete(id);}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);voiceSpeakingTimers.delete(id);const pc=matchVoicePeers.get(String(id));if(pc){try{pc.close();}catch(e){}matchVoicePeers.delete(String(id));}}
 function createVoicePeer(id){id=String(id);let pc=matchVoicePeers.get(id);if(pc)return pc;pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});matchVoicePeers.set(id,pc);
   if(matchMicStream&&matchMicEnabled)matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));
   else pc.addTransceiver('audio',{direction:'recvonly'});
   pc.onicecandidate=e=>{if(e.candidate)voiceSend(id,'ice',e.candidate.toJSON());};
-  pc.ontrack=e=>{let audio=document.getElementById('voiceAudio_'+id);if(!audio){audio=document.createElement('audio');audio.id='voiceAudio_'+id;audio.autoplay=true;audio.playsInline=true;audio.style.display='none';document.getElementById('matchRemoteAudios')?.appendChild(audio);}if(e.streams&&e.streams[0])audio.srcObject=e.streams[0];audio.muted=voiceMutedPeers.has(id);audio.play().catch(()=>{});renderVoicePeerControls();};
+  pc.ontrack=e=>{let audio=document.getElementById('voiceAudio_'+id);if(!audio){audio=document.createElement('audio');audio.id='voiceAudio_'+id;audio.autoplay=true;audio.playsInline=true;audio.style.display='none';document.getElementById('matchRemoteAudios')?.appendChild(audio);}if(e.streams&&e.streams[0]){audio.srcObject=e.streams[0];try{if(!voiceAudioContexts.has(id)){const Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx){const ctx=new Ctx(), analyser=ctx.createAnalyser(), source=ctx.createMediaStreamSource(e.streams[0]);analyser.fftSize=256;source.connect(analyser);voiceAudioContexts.set(id,{ctx,analyser});const data=new Uint8Array(analyser.frequencyBinCount);const poll=()=>{if(!voiceAudioContexts.has(id))return;analyser.getByteFrequencyData(data);let sum=0;for(let k=0;k<data.length;k++)sum+=data[k];const active=(sum/data.length)>12;const meta=voicePeerMeta.get(id)||{};meta.speaking=active;voicePeerMeta.set(id,meta);renderVoicePeerControls();voiceSpeakingTimers.set(id,setTimeout(poll,220));};poll();}}}catch(err){console.debug('Voice activity meter unavailable',err);}}audio.muted=voiceMutedPeers.has(id);audio.play().catch(()=>{});renderVoicePeerControls();};
   pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState))closeVoicePeer(id);};return pc;
 }
 async function handleVoicePeerJoin(data){if(!onlineRoom||String(data.room)!==String(onlineRoom))return;const id=String(data.peer_id);if(!id||id==='undefined')return;voicePeerMeta.set(id,{role:data.role||'player',username:data.username||'Jwè'});renderVoicePeerControls();
@@ -6692,8 +6694,9 @@ document.getElementById('matchMicButton')?.addEventListener('click',async functi
     console.warn('Microphone activation failed',e);
   }
 });
-function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou fèmen son '+(meta.username||'moun sa a');b.textContent=(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(muted?'Mute':'Aktif');b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id);renderVoicePeerControls();});box.appendChild(b);}}
-function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
+function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou fèmen son '+(meta.username||'moun sa a');b.textContent=(meta.speaking?'🎙️ ':'')+(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(meta.speaking?'Ap pale':(muted?'Mute':'Aktif'));
+    b.dataset.speaking=String(Boolean(meta.speaking));b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id);renderVoicePeerControls();});box.appendChild(b);}}
+function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){}const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);});voiceAudioContexts.clear();voiceSpeakingTimers.clear();matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
 // Traduction continue des écrans internes et des éléments créés après le changement de langue.
 // Ainsi, Play Online, Spectators et Play with a Friend gardent la langue choisie même après navigation.
