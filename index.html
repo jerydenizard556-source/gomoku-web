@@ -1930,6 +1930,7 @@ const screens =
     document.querySelectorAll(".screen");
 
 function showScreen(id) {
+    if (id === "onlineGameScreen") { setTimeout(() => { autoStartMatchVoice(); }, 120); }
 
     screens.forEach(function(screen) {
         screen.classList.remove("active");
@@ -5461,6 +5462,11 @@ function renderOnlineState() {
             } else {
                 cell.classList.remove("last-move-cell");
             }
+            if (onlineLastMove && Number(onlineLastMove.row) === row && Number(onlineLastMove.col) === col && onlineBoardState[key]) {
+                cell.classList.add("last-move-cell");
+                const markerStone = cell.querySelector(".stone");
+                if (markerStone) markerStone.classList.add("last-move-stone");
+            }
         }
     }
 
@@ -6645,6 +6651,24 @@ document.getElementById('toggleMatchChat')?.addEventListener('click',function(){
 function voiceIsSpectator(){return onlineConnectionMode==='spectator'||Number(onlinePlayer||0)===0;}
 function voiceSend(to,type,payload){matchSend({type:'voice_signal',room:onlineRoom,to:to,signal_type:type,payload:payload});}
 function ensureVoiceJoined(){if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN||voiceJoinedRoom===String(onlineRoom))return;voiceJoinedRoom=String(onlineRoom);matchSend({type:'voice_join',room:onlineRoom});}
+async function autoStartMatchVoice(){
+  if(!onlineRoom || !navigator.mediaDevices?.getUserMedia) return;
+  try {
+    await getMatchMic();
+    const btn=document.getElementById('matchMicButton');
+    if(btn){btn.textContent='🎙️ Mikwo aktif';btn.disabled=true;btn.title='Mikwo aktif pandan match la; mute moun ou pa vle tande nan lis jwè yo.';}
+    const st=document.getElementById('matchVoiceStatus');
+    if(st)st.textContent='Mikwo aktif. Pou pa tande yon moun, mute moun sa a nan lis la.';
+    ensureVoiceJoined();
+    for(const [id,pc] of matchVoicePeers){
+      if(!pc.getSenders().some(x=>x.track?.kind==='audio')) matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));
+      const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());
+    }
+  } catch(err) {
+    const st=document.getElementById('matchVoiceStatus');
+    if(st)st.textContent='Bay pèmisyon mikwo a nan navigatè a pou vwa aktive. '+(err.message||'');
+  }
+}
 async function getMatchMic(){if(!matchMicStream){matchMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});}matchMicEnabled=true;matchMicStream.getAudioTracks().forEach(t=>t.enabled=true);return matchMicStream;}
 function closeVoicePeer(id){id=String(id);const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}voiceAudioContexts.delete(id);}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);voiceSpeakingTimers.delete(id);const pc=matchVoicePeers.get(String(id));if(pc){try{pc.close();}catch(e){}matchVoicePeers.delete(String(id));}}
 function createVoicePeer(id){id=String(id);let pc=matchVoicePeers.get(id);if(pc)return pc;pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});matchVoicePeers.set(id,pc);
@@ -6665,36 +6689,10 @@ async function handleVoiceSignal(data){if(String(data.room)!==String(onlineRoom)
 }catch(e){console.warn('Voice signal failed',e);}}
 document.getElementById('matchMicButton')?.addEventListener('click',async function(){
   const status=document.getElementById('matchVoiceStatus');
-  try{
-    if(matchMicEnabled){
-      matchMicEnabled=false;
-      if(matchMicStream)matchMicStream.getAudioTracks().forEach(t=>t.enabled=false);
-      this.textContent='🎤 Aktive mikwo';
-      status.textContent='Mikwo fèmen — ou toujou ka tande lòt moun.';
-      return;
-    }
-    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Mikwo a bezwen HTTPS ak yon navigatè ki sipòte getUserMedia.');
-    await getMatchMic();
-    this.textContent='🔇 Koupe mikwo';
-    status.textContent=voiceIsSpectator()?'Mikwo espektatè aktive — ou ka pale.':'Mikwo jwè aktive — ou ka pale.';
-    ensureVoiceJoined();
-    // Re-negosye chak koneksyon ki egziste deja pou voye mikwo a.
-    for(const [id,pc] of matchVoicePeers){
-      if(!pc.getSenders().some(s=>s.track&&s.track.kind==='audio')){
-        matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));
-      }
-      const offer=await pc.createOffer();
-      await pc.setLocalDescription(offer);
-      voiceSend(id,'description',pc.localDescription.toJSON());
-    }
-    // Yon klik itilizatè sou bouton mikwo a ede debloke autoplay odyo remote.
-    document.querySelectorAll('#matchRemoteAudios audio').forEach(a=>a.play().catch(()=>{}));
-  }catch(e){
-    status.textContent=e.message||'Pa kapab aktive mikwo a. Verifye pèmisyon mikwo a.';
-    console.warn('Microphone activation failed',e);
-  }
+  await autoStartMatchVoice();
+  if(matchMicEnabled && status)status.textContent='Mikwo ou rete aktif. Sèvi ak bouton 🔊/🔇 bò non chak moun pou mute oswa tande moun sa a.';
 });
-function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou fèmen son '+(meta.username||'moun sa a');b.textContent=(meta.speaking?'🎙️ ':'')+(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(meta.speaking?'Ap pale':(muted?'Mute':'Aktif'));
+function renderVoicePeerControls(){const box=document.getElementById('matchVoicePeerControls');if(!box)return;box.innerHTML='';if(!voicePeerMeta.size){const note=document.createElement('span');note.className='match-voice-note';note.textContent='Non jwè ak espektatè yo ap parèt isit la lè yo antre nan vwa.';box.appendChild(note);return;}for(const [id,meta] of voicePeerMeta){const b=document.createElement('button');b.type='button';const muted=voiceMutedPeers.has(id);const role=meta.role==='spectator'?' · O (espektatè)':' · Jwè';b.setAttribute('aria-pressed',String(!muted));b.title=muted?'Klike pou tande '+(meta.username||'moun sa a'):'Klike pou mute '+(meta.username||'moun sa a');b.textContent=(meta.speaking?'🎙️ ':'')+(muted?'🔇 ':'🔊 ')+(meta.username||'Jwè')+role+' — '+(meta.speaking?'Ap pale':(muted?'Mute':'Aktif'));
     b.dataset.speaking=String(Boolean(meta.speaking));b.addEventListener('click',()=>{if(voiceMutedPeers.has(id))voiceMutedPeers.delete(id);else voiceMutedPeers.add(id);const a=document.getElementById('voiceAudio_'+id);if(a)a.muted=voiceMutedPeers.has(id);renderVoicePeerControls();});box.appendChild(b);}}
 function cleanupMatchVoice(){if(onlineRoom)matchSend({type:'voice_leave',room:onlineRoom});matchVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){}const meter=voiceAudioContexts.get(id);if(meter){try{meter.ctx.close();}catch(e){}}const timer=voiceSpeakingTimers.get(id);if(timer)clearTimeout(timer);});voiceAudioContexts.clear();voiceSpeakingTimers.clear();matchVoicePeers.clear();voicePeerMeta.clear();voiceMutedPeers.clear();document.getElementById('matchRemoteAudios')?.replaceChildren();renderVoicePeerControls();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
