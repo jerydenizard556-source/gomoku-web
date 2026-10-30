@@ -1297,7 +1297,7 @@ td, th { overflow-wrap: anywhere; }
       <button class="jery-game-card" data-game="chess"><span class="jery-game-icon">♟️</span><strong>Echek Jery</strong><small>Estrateji ak refleksyon</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="checkers"><span class="jery-game-icon">🔴⚫</span><strong>Dam Jery</strong><small>Defi 1 kont 1</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="connect4"><span class="jery-game-icon">🟡🔴</span><strong>Puissance 4 Jery</strong><small>Aliyen 4 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
-      <button class="jery-game-card" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>Match rapid</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card available" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>2 jwè • Robot • Anliy</small><span class="jery-game-status">DISPONIB</span></button>
       <button class="jery-game-card" data-game="battleship"><span class="jery-game-icon">⚓</span><strong>Bataille Navale</strong><small>Jwenn bato advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="reversi"><span class="jery-game-icon">⚫⚪</span><strong>Reversi / Othello</strong><small>Kontwole tablo a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="backgammon"><span class="jery-game-icon">🎲</span><strong>Backgammon</strong><small>Deplase pyès ak zo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
@@ -1315,6 +1315,18 @@ td, th { overflow-wrap: anywhere; }
       <button class="jery-game-card" data-game="quiz"><span class="jery-game-icon">🏆</span><strong>Jery Quiz Battle</strong><small>Kilti jeneral, syans, istwa ak espò</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
     </div>
   </main>
+</section>
+
+
+<section id="tttScreen" class="screen">
+ <div class="inner-page-head"><button type="button" class="back-icon" id="tttBack">←</button><div class="brand-mini">❌⭕ MR_<b>Jery</b> Morpion 3×3</div><span></span></div>
+ <main style="max-width:560px;margin:20px auto;padding:18px;text-align:center">
+  <h2>Morpion 3×3</h2><p id="tttStatus">Chwazi mòd ou vle jwe.</p>
+  <div id="tttModes" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="auth-main-btn" id="tttLocal">2 jwè menm aparèy</button><button class="auth-main-btn" id="tttRobot">Kont robot</button><button class="auth-main-btn" id="tttOnline">Anliy</button></div>
+  <div id="tttOnlineControls" style="display:none;margin:14px 0"><button id="tttCreate" class="online-player-invite">Kreye chanm</button><div style="margin:10px"><input id="tttRoomCode" placeholder="Kòd chanm" maxlength="6" style="padding:12px;text-transform:uppercase"><button id="tttJoin" class="online-player-invite">Antre</button></div><p id="tttCode"></p></div>
+  <div id="tttBoard" style="display:none;grid-template-columns:repeat(3, minmax(75px,110px));gap:8px;justify-content:center;margin:20px auto"></div>
+  <button id="tttRestart" class="online-player-invite" style="display:none">Rekòmanse</button><button id="tttExit" class="online-player-invite" style="display:none">Chanje mòd</button>
+ </main>
 </section>
 
 <!-- PROFIL -->
@@ -1956,11 +1968,8 @@ document.getElementById('dashboardGamesCard')?.addEventListener('click',()=>show
 document.getElementById('jeryGamesBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
 document.getElementById('jeryGamesGrid')?.addEventListener('click',function(e){
   const card=e.target.closest('[data-game]'); if(!card)return;
-  if(card.dataset.game==='morpion'){
-    showScreen('accountMenuScreen');
-    document.getElementById('dashboardOnlineCard')?.focus();
-    return;
-  }
+  if(card.dataset.game==='morpion'){showScreen('accountMenuScreen');document.getElementById('dashboardOnlineCard')?.focus();return;}
+  if(card.dataset.game==='tictactoe'){openTtt();return;}
   const label=card.querySelector('strong')?.textContent||'Jwèt sa a';
   alert(label+' ap vini byento. Nou poko aktive jwèt sa a; jwèt ki deja la yo pa chanje.');
 });
@@ -4452,6 +4461,8 @@ function connectServer(callback) {
                         event.data
                     );
 
+                if (String(data.type||'').startsWith('ttt_')) { handleTttMessage(data); return; }
+
                 /* ==================================
                    COMPTE - INSCRIPTION
                 ================================== */
@@ -6685,6 +6696,20 @@ document.getElementById('authRegisterTab')?.addEventListener('click',()=>setAuth
 document.getElementById('goRegisterBtn')?.addEventListener('click',()=>setAuthMode('register'));
 document.getElementById('goLoginBtn')?.addEventListener('click',()=>setAuthMode('login'));
 
+
+
+/* MORPION 3x3 - modes local, robot minimax, online authentifie */
+let ttt={mode:'',board:Array(9).fill(''),turn:'X',room:null,player:null,status:'idle'};
+function tttSend(o){if(socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify(o));else document.getElementById('tttStatus').textContent='Koneksyon sèvè a poko pare.';}
+function openTtt(){showScreen('tttScreen');tttReset();}
+function tttReset(){ttt.board=Array(9).fill('');ttt.turn='X';ttt.status='playing';document.getElementById('tttBoard').style.display='grid';document.getElementById('tttRestart').style.display='inline-block';document.getElementById('tttExit').style.display='inline-block';tttRender();}
+function tttRender(){const b=document.getElementById('tttBoard');b.innerHTML='';ttt.board.forEach((v,i)=>{const q=document.createElement('button');q.type='button';q.textContent=v||' ';q.style.cssText='height:100px;font-size:42px;font-weight:900;border:2px solid #d4af37;border-radius:12px;background:#111c30;color:white;';q.disabled=!!v||ttt.status!=='playing';q.addEventListener('click',()=>tttPlay(i));b.append(q);});}
+function tttWin(b){for(const [a,c,d] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])if(b[a]&&b[a]===b[c]&&b[a]===b[d])return b[a];return null;}
+function tttFinish(){const w=tttWin(ttt.board);if(w||ttt.board.every(Boolean)){ttt.status='finished';document.getElementById('tttStatus').textContent=w?(w+' genyen!'):'Match nil!';}else document.getElementById('tttStatus').textContent='Tou pa '+ttt.turn;}
+function tttPlay(i){if(ttt.status!=='playing'||ttt.board[i])return;if(ttt.mode==='online'){tttSend({type:'ttt_move',room:ttt.room,index:i});return;}ttt.board[i]=ttt.turn;ttt.turn=ttt.turn==='X'?'O':'X';tttFinish();tttRender();if(ttt.mode==='robot'&&ttt.status==='playing'){const best=tttBest(ttt.board.slice(),'O');if(best>=0){ttt.board[best]='O';ttt.turn='X';tttFinish();tttRender();}}}
+function tttBest(b,p){const w=tttWin(b);if(w)return w==='O'?10:-10;if(b.every(Boolean))return 0;let scores=[];b.forEach((v,i)=>{if(!v){b[i]=p;let score=tttBest(b,p==='O'?'X':'O');b[i]='';scores.push({i,score});}});return scores.length?(p==='O'?scores.sort((a,c)=>c.score-a.score)[0].i:scores.sort((a,c)=>a.score-c.score)[0].i):-1;}
+function handleTttMessage(d){if(d.type==='ttt_error'){document.getElementById('tttStatus').textContent=d.message;return;}if(d.type==='ttt_created'||d.type==='ttt_joined'){ttt.room=d.room;ttt.player=d.player;document.getElementById('tttCode').textContent='Kòd chanm: '+d.room+' — pataje l ak zanmi ou.';document.getElementById('tttStatus').textContent=d.message||'Ou antre nan chanm nan.';return;}if(d.type==='ttt_opponent_joined'){document.getElementById('tttStatus').textContent='Advèsè a antre. X kòmanse.';return;}if(d.type==='ttt_state'){ttt.room=d.room;ttt.board=d.board;ttt.turn=d.turn;ttt.status=d.status==='finished'?'finished':d.status;document.getElementById('tttStatus').textContent=d.status==='waiting'?'Ap tann dezyèm jwè a…':d.winner==='draw'?'Match nil!':d.winner?('Gayan: '+d.players[d.winner]):'Tou: '+d.turn;tttRender();}}
+document.getElementById('tttBack').onclick=()=>showScreen('jeryGamesScreen');document.getElementById('tttLocal').onclick=()=>{ttt.mode='local';document.getElementById('tttOnlineControls').style.display='none';tttReset();document.getElementById('tttStatus').textContent='X kòmanse. Jwe youn apre lòt sou menm aparèy la.';};document.getElementById('tttRobot').onclick=()=>{ttt.mode='robot';document.getElementById('tttOnlineControls').style.display='none';tttReset();document.getElementById('tttStatus').textContent='Ou se X. Robot la se O.';};document.getElementById('tttOnline').onclick=()=>{ttt.mode='online';document.getElementById('tttOnlineControls').style.display='block';document.getElementById('tttBoard').style.display='none';document.getElementById('tttStatus').textContent=accountConnected?'Kreye chanm oswa antre ak kòd.':'Ou dwe konekte sou kont ou pou jwe anliy.';};document.getElementById('tttCreate').onclick=()=>{if(!accountConnected)return document.getElementById('tttStatus').textContent='Konekte sou kont MR_Jery ou anvan.';ttt.mode='online';tttSend({type:'ttt_create'});};document.getElementById('tttJoin').onclick=()=>{if(!accountConnected)return document.getElementById('tttStatus').textContent='Konekte sou kont MR_Jery ou anvan.';ttt.mode='online';tttSend({type:'ttt_join',room:document.getElementById('tttRoomCode').value.trim().toUpperCase()});};document.getElementById('tttRestart').onclick=()=>{if(ttt.mode==='online')return document.getElementById('tttStatus').textContent='Kreye yon nouvo chanm pou yon lòt match anliy.';tttReset();};document.getElementById('tttExit').onclick=()=>{ttt.room=null;ttt.mode='';document.getElementById('tttBoard').style.display='none';document.getElementById('tttOnlineControls').style.display='none';document.getElementById('tttStatus').textContent='Chwazi mòd ou vle jwe.';};
 
 /* ==================================================
    CHAT DU MATCH + VOIX WEBRTC
