@@ -325,7 +325,7 @@ h1 {
 #undoBox:not(.show) { display: none; }
 #undoBox.show { display: flex; }
 #onlineBoard .cell.last-move-cell { z-index: 8; position: relative; }
-#onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: scale(1.17); transform-origin: center; border: 2px solid rgba(255,255,255,.95); outline: 3px solid #facc15; outline-offset: 1px; box-shadow: 0 0 0 5px rgba(250,204,21,.24), 0 0 16px rgba(250,204,21,.95); z-index: 12; animation: lastStoneReveal .28s ease-out; }
+#onlineBoard .stone.last-move-stone { width: 100%; height: 100%; flex-basis: 100%; transform: none !important; transform-origin: center; border: 2px solid rgba(255,255,255,.95); outline: 2px solid #facc15; outline-offset: -2px; box-shadow: none !important; z-index: 2; animation: none !important; }
 @keyframes lastStoneReveal { from { transform: scale(.78); opacity:.6; } to { transform: scale(1.17); opacity:1; } }
 #onlineBoard .cell.last-move-cell::after { background: #facc15; opacity: .9; }
 #gameSoundPanel { width:min(100%,560px); margin:12px auto; padding:13px 15px; border:1px solid #34435f; border-radius:15px; background:linear-gradient(145deg,#111827,#1e293b); color:#edf2ff; box-sizing:border-box; text-align:left; }
@@ -341,7 +341,7 @@ h1 {
   #rematchBox .rematch-button, #undoBox .rematch-button { min-height: 40px; padding: 8px 10px; font-size: 12px; }
   #rematchBox .rematch-message, #undoBox .rematch-message { font-size: 12px; }
   #onlineBoard { width: min(98vw, 760px); margin-top: -4px !important; }
-  #onlineBoard .stone.last-move-stone { transform: scale(1.1); outline-width: 2px; box-shadow: 0 0 0 4px rgba(250,204,21,.25), 0 0 12px rgba(250,204,21,.9); }
+  #onlineBoard .stone.last-move-stone { transform: none !important; outline-width: 2px; box-shadow: none !important; }
 }
 #rematchBox.show, #undoBox.show { visibility: visible; }
 #onlineStatus { min-height: 34px; display: flex; align-items: center; justify-content: center; }
@@ -5618,6 +5618,7 @@ function updateUndoUI() {
 
     if (!box || !message || !actions) return;
 
+    box.classList.remove("show");
     box.style.visibility = "hidden";
     message.textContent = "";
     actions.innerHTML = "";
@@ -5627,6 +5628,7 @@ function updateUndoUI() {
     }
 
     if (onlineUndoRequest !== null) {
+        box.classList.add("show");
         box.style.visibility = "visible";
 
         if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
@@ -5657,14 +5659,15 @@ function updateUndoUI() {
         return;
     }
 
+    box.classList.add("show");
     box.style.display = "flex";
     box.style.visibility = "visible";
-    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
+    message.textContent = "Ou fèk jwe. Ou ka mande retire dènye pyès ou a anvan advèsè a jwe.";
 
     const request = document.createElement("button");
     request.type = "button";
     request.className = "undo-button undo-request";
-    request.textContent = "🔄 Demande rejwe";
+    request.textContent = "↩️ Mande retire dènye pyon mwen";
     request.addEventListener("click", requestUndo);
     actions.appendChild(request);
 }
@@ -6934,3 +6937,17 @@ try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWhole
 #matchMicButton,#muteAllSpectatorsButton{min-height:44px;padding:10px 13px;border-radius:10px;font-weight:800}
 @media(max-width:600px){#onlineScreen #rematchBox{min-height:76px!important}#matchVoicePeerControls button{width:100%;min-width:0}}
 </style>
+
+
+/* STABILITE TABLO + BOUTON REJWÈ PION */
+#onlineBoard { width: min(100%, 760px); margin-left:auto!important; margin-right:auto!important; position:relative; }
+#onlineBoard .board { width:100%; aspect-ratio:1/1; }
+#onlineBoard .cell { box-sizing:border-box; }
+#onlineBoard .cell.last-move-cell::after { pointer-events:none; }
+#undoBox { min-height:72px; height:auto!important; }
+#undoBox.show { display:flex!important; visibility:visible!important; opacity:1!important; }
+#undoBox:not(.show) { visibility:hidden!important; pointer-events:none!important; }
+#undoBox .undo-button { min-height:40px; padding:8px 13px; border-radius:10px; font-weight:800; cursor:pointer; }
+#undoBox .undo-request { background:linear-gradient(135deg,#d4af37,#f5d76e); color:#171717; border:1px solid #ffe79a; }
+#undoBox .undo-accept { background:#16a34a; color:white; border:1px solid #86efac; }
+#undoBox .undo-refuse { background:#991b1b; color:white; border:1px solid #fca5a5; }
