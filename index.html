@@ -1023,6 +1023,23 @@ td, th { overflow-wrap: anywhere; }
 #matchMicButton.mic-on{background:#087b58!important}
 </style>
 
+
+<style id="mrjery-only-requested-fixes">
+/* Tablo a rete fiks: pa gen animasyon, zoom oswa deplasman sou selil/pyon yo. */
+#onlineBoard { width:min(100%,760px)!important; margin-left:auto!important; margin-right:auto!important; position:relative; flex:none!important; }
+#onlineBoard .board { width:100%!important; aspect-ratio:1/1!important; transition:none!important; animation:none!important; transform:none!important; }
+#onlineBoard .cell, #onlineBoard .stone { transition:none!important; animation:none!important; transform:none!important; }
+#onlineBoard .cell.last-move-cell::after { pointer-events:none; }
+/* Zòn demann lan rete nan menm plas anba Revanche pou tablo a pa deplase. */
+#onlineScreen #undoBox { display:flex!important; box-sizing:border-box; width:100%; min-height:68px!important; height:auto!important; margin:3px auto 5px!important; padding:5px 8px!important; flex-direction:column; justify-content:center; align-items:center; gap:4px; }
+#onlineScreen #undoBox:not(.show) { visibility:hidden!important; opacity:0!important; pointer-events:none!important; }
+#onlineScreen #undoBox.show { visibility:visible!important; opacity:1!important; pointer-events:auto!important; }
+#undoBox .undo-button { min-height:40px; padding:8px 13px; border-radius:10px; font-weight:800; cursor:pointer; }
+#undoBox .undo-request { background:linear-gradient(135deg,#d4af37,#f5d76e); color:#171717; border:1px solid #ffe79a; }
+#undoBox .undo-accept { background:#16a34a; color:white; border:1px solid #86efac; }
+#undoBox .undo-refuse { background:#991b1b; color:white; border:1px solid #fca5a5; }
+@media(max-width:600px){#onlineScreen #undoBox{min-height:68px!important;margin:3px auto 5px!important}}
+</style>
 </head>
 
 <body>
@@ -1705,6 +1722,12 @@ td, th { overflow-wrap: anywhere; }
 
         </div>
 
+        <!-- Demande de retrait du dernier pion : juste sous la zone Revanche -->
+        <div id="undoBox" class="rematch-box undo-box">
+          <div id="undoMessage" class="rematch-message"></div>
+          <div id="undoActions" class="rematch-actions"></div>
+        </div>
+
     </div>
 
     <div id="onlineBoard" class="board-area"></div>
@@ -1733,11 +1756,6 @@ td, th { overflow-wrap: anywhere; }
     </section>
 
     <div id="onlineResult" class="online-result"></div>
-    <div id="undoBox" class="rematch-box undo-box">
-      <div id="undoMessage" class="rematch-message"></div>
-      <div id="undoActions" class="rematch-actions"></div>
-    </div>
-
     <div class="game-actions">
 
         <button
@@ -6907,47 +6925,3 @@ try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWhole
 
 </body>
 </html>
-<style id="professional-rematch-voice-fix">
-#onlineScreen .timers{margin-bottom:2px!important}
-#rematchBox{margin:2px auto 3px!important;min-height:64px!important;padding:7px 10px!important;gap:4px!important}
-#rematchBox .rematch-message{margin:0 0 3px!important;line-height:1.2!important}
-#onlineBoard{margin-top:0!important;padding-top:0!important}
-#onlineResult{margin:3px auto 4px!important}
-#undoBox{margin:5px auto!important}
-#matchVoicePeerControls{display:flex;gap:8px;flex-wrap:wrap}
-#matchVoicePeerControls button{min-width:170px;text-align:left;min-height:44px;border-radius:10px;background:#101a2b;border:1px solid #40516f;padding:10px 12px;font-weight:800}
-#matchVoicePeerControls button[aria-pressed="false"]{border-color:#ef7676;background:#2a151b}
-#matchVoicePeerControls button[aria-pressed="true"]{border-color:#42c99a;background:#10271f}
-#matchMicButton,#muteAllSpectatorsButton{min-height:44px;padding:10px 13px;border-radius:10px;font-weight:800}
-@media(max-width:600px){#rematchBox{min-height:64px!important;margin:2px auto!important;padding:6px!important}#matchVoicePeerControls button{width:100%;min-width:0}}
-</style>
-
-<style id="mrjery-voice-layout-final">
-#onlineScreen .game-info{margin-bottom:0!important;padding-bottom:0!important}
-#onlineScreen .timers{margin-bottom:0!important}
-#onlineScreen #rematchBox{display:flex!important;box-sizing:border-box;min-height:76px!important;margin:0 auto!important;padding:8px 10px!important;visibility:visible}
-#onlineScreen #rematchBox:not(.show){visibility:hidden!important}
-#onlineScreen #onlineBoard{margin:0 auto!important;padding:0!important}
-#onlineScreen #matchCommunication{margin:8px auto 12px!important}
-#onlineScreen #onlineResult,#onlineScreen #undoBox{margin:6px auto!important}
-#matchVoicePeerControls{display:flex;gap:8px;flex-wrap:wrap}
-#matchVoicePeerControls button{min-width:180px;text-align:left;min-height:44px;border-radius:10px;background:#101a2b;border:1px solid #40516f;padding:10px 12px;font-weight:800}
-#matchVoicePeerControls button[aria-pressed="false"]{border-color:#ef7676;background:#2a151b}
-#matchVoicePeerControls button[aria-pressed="true"]{border-color:#42c99a;background:#10271f}
-#matchMicButton,#muteAllSpectatorsButton{min-height:44px;padding:10px 13px;border-radius:10px;font-weight:800}
-@media(max-width:600px){#onlineScreen #rematchBox{min-height:76px!important}#matchVoicePeerControls button{width:100%;min-width:0}}
-</style>
-
-
-/* STABILITE TABLO + BOUTON REJWÈ PION */
-#onlineBoard { width: min(100%, 760px); margin-left:auto!important; margin-right:auto!important; position:relative; }
-#onlineBoard .board { width:100%; aspect-ratio:1/1; }
-#onlineBoard .cell { box-sizing:border-box; }
-#onlineBoard .cell.last-move-cell::after { pointer-events:none; }
-#undoBox { min-height:72px; height:auto!important; }
-#undoBox.show { display:flex!important; visibility:visible!important; opacity:1!important; }
-#undoBox:not(.show) { visibility:hidden!important; pointer-events:none!important; }
-#undoBox .undo-button { min-height:40px; padding:8px 13px; border-radius:10px; font-weight:800; cursor:pointer; }
-#undoBox .undo-request { background:linear-gradient(135deg,#d4af37,#f5d76e); color:#171717; border:1px solid #ffe79a; }
-#undoBox .undo-accept { background:#16a34a; color:white; border:1px solid #86efac; }
-#undoBox .undo-refuse { background:#991b1b; color:white; border:1px solid #fca5a5; }
