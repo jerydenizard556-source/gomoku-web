@@ -2113,7 +2113,13 @@ const PREMIUM_ADMIN_API = 'https://mr-jery-control-center.onrender.com';
 
     if (!response.ok) {
       const detail = result.detail || result.message || raw || ('HTTP ' + response.status);
-      throw new Error(String(detail).slice(0, 400));
+      const detailMessage = Array.isArray(detail)
+    ? detail.map(item => item?.msg || JSON.stringify(item)).join("; ")
+    : typeof detail === "object"
+        ? JSON.stringify(detail)
+        : String(detail);
+
+throw new Error(detailMessage.slice(0, 400));
     }
 
     const requestId = result?.request?.id ?? result?.id ?? result?.request_id ?? null;
