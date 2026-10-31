@@ -2059,9 +2059,91 @@ document.getElementById('premiumProofForm')?.addEventListener('submit',e=>{
  document.getElementById('premiumProofStatus').textContent='WhatsApp ap ouvri. Tache screenshot resi a manyèlman nan konvèsasyon an.';
  window.open('https://wa.me/50931706963?text='+encodeURIComponent(message),'_blank','noopener,noreferrer');
 });
-document.getElementById('premiumAdminSubmit')?.addEventListener('click',()=>{
- const proof=getPremiumProof();if(!proof)return;
- document.getElementById('premiumProofStatus').textContent='Demann nan pa ka anrejistre nan Admin ankò: backend la poko gen endpoint pou resevwa screenshot ak demann Premium. Voye l sou WhatsApp pou verifikasyon.';
+// ==================================================
+// SOUMET PREMIUM BAY MR_JERY ADMIN API
+// ==================================================
+
+const PREMIUM_ADMIN_API =
+    "https://mr-jery-control-center.onrender.com";
+
+document.getElementById('premiumAdminSubmit')?.addEventListener('click', async () => {
+
+    const proof = getPremiumProof();
+
+    if (!proof) return;
+
+    // Verifye si jwè a konekte
+    if (!accountConnected || !currentPlayerId) {
+        document.getElementById('premiumProofStatus').textContent =
+            "Ou dwe konekte sou kont MR_Jery ou anvan ou soumèt demann lan.";
+        return;
+    }
+
+    // Verifye gwosè screenshot la
+    if (proof.file.size > 5 * 1024 * 1024) {
+        document.getElementById('premiumProofStatus').textContent =
+            "Screenshot la twò gwo. Maksimòm lan se 5 MB.";
+        return;
+    }
+
+    // Verifye kalite fichye a
+    if (!["image/jpeg", "image/png", "image/webp"].includes(proof.file.type)) {
+        document.getElementById('premiumProofStatus').textContent =
+            "Voye yon screenshot JPG, PNG oswa WEBP.";
+        return;
+    }
+
+    const button = document.getElementById('premiumAdminSubmit');
+    const status = document.getElementById('premiumProofStatus');
+
+    button.disabled = true;
+    button.textContent = "⏳ Ap voye demann lan...";
+
+    try {
+
+        const formData = new FormData();
+
+        formData.append("user_id", String(currentPlayerId));
+        formData.append("username", currentUsername || proof.name);
+        formData.append("email", currentEmail || "");
+        formData.append("plan", selectedPremium.name.toLowerCase());
+        formData.append("payment_method", premiumMethod?.value || "paypal");
+        formData.append("payment_reference", proof.txn);
+        formData.append("screenshot", proof.file);
+
+        const response = await fetch(
+            PREMIUM_ADMIN_API + "/premium/request",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(
+                result.detail || "Admin API pa aksepte demann lan."
+            );
+        }
+
+        status.textContent =
+            "✅ Demann Premium ou a rive nan Administrasyon an! " +
+            "Nimewo demann: #" + result.request.id +
+            ". Li poko aktive; Admin dwe verifye peman an.";
+
+        button.textContent = "✅ Demann voye";
+
+    } catch (error) {
+
+        console.error("Premium submission error:", error);
+
+        status.textContent =
+            "❌ Erè: " + error.message;
+
+        button.disabled = false;
+        button.textContent = "📨 Soumèt bay Admin";
+    }
 });
 
 document.getElementById('adminTopBtn')?.addEventListener('click',function(){
