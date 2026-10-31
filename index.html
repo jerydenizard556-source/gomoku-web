@@ -2094,10 +2094,11 @@ const PREMIUM_ADMIN_API = 'https://mr-jery-control-center.onrender.com';
   formData.append('username', String(currentUsername || proof.name));
   formData.append('email', String(currentEmail || ''));
   formData.append('plan', String(selectedPremium.name).toLowerCase());
+     
   formData.append('payment_method', String(premiumMethod?.value || 'paypal'));
   formData.append('payment_reference', proof.txn);
   formData.append('screenshot', proof.file, proof.file.name || 'premium-proof.png');
-
+  formData.append('premium_type', String(selectedPremium.name).toLowerCase());
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 25000);
   try {
