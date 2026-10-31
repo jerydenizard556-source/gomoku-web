@@ -1488,7 +1488,7 @@ td, th { overflow-wrap: anywhere; }
       <div class="premium-actions"><button type="submit" class="premium-wa">📲 Prepare mesaj WhatsApp ak prèv la</button><button type="button" id="premiumAdminSubmit">📨 Soumèt bay Admin</button></div>
     </form>
     <div class="premium-status" id="premiumProofStatus" aria-live="polite">Pa gen prèv ki soumèt ankò.</div>
-    <p class="premium-muted">Nòt: WhatsApp pa pèmèt yon sit mete foto a otomatikman nan mesaj la. Lè WhatsApp ouvri, w ap bezwen tache screenshot la manyèlman. Bouton “Soumèt bay Admin” lan pa ka sove prèv la sou sèvè a jiskaske gen yon endpoint backend ki konekte ak sistèm administrasyon an.</p>
+    <p class="premium-muted">Nòt: WhatsApp pa pèmèt yon sit mete foto a otomatikman nan mesaj la. Lè WhatsApp ouvri, w ap bezwen tache screenshot la manyèlman. Bouton “Soumèt bay Admin” lan voye screenshot la ak referans peman an nan Admin API. Demann lan rete an atant jiskaske Admin verifye peman an.</p>
   </div>
 </section>
 
@@ -2060,90 +2060,80 @@ document.getElementById('premiumProofForm')?.addEventListener('submit',e=>{
  window.open('https://wa.me/50931706963?text='+encodeURIComponent(message),'_blank','noopener,noreferrer');
 });
 // ==================================================
-// SOUMET PREMIUM BAY MR_JERY ADMIN API
+// SOUMET DEMANN PREMIUM NAN ADMIN API MR_JERY
 // ==================================================
+const PREMIUM_ADMIN_API = 'https://mr-jery-control-center.onrender.com';
 
-const PREMIUM_ADMIN_API =
-    "https://mr-jery-control-center.onrender.com";
+ document.getElementById('premiumAdminSubmit')?.addEventListener('click', async () => {
+  const proof = getPremiumProof();
+  if (!proof) return;
 
-document.getElementById('premiumAdminSubmit')?.addEventListener('click', async () => {
+  const status = document.getElementById('premiumProofStatus');
+  const button = document.getElementById('premiumAdminSubmit');
 
-    const proof = getPremiumProof();
+  if (!accountConnected || !currentPlayerId) {
+    status.textContent = '❌ Konekte sou kont MR_Jery ou anvan ou soumèt demann Premium lan.';
+    return;
+  }
+  if (proof.file.size > 5 * 1024 * 1024) {
+    status.textContent = '❌ Screenshot la twò gwo. Maksimòm lan se 5 MB.';
+    return;
+  }
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(proof.file.type)) {
+    status.textContent = '❌ Fòma screenshot la dwe JPG, PNG oswa WEBP.';
+    return;
+  }
 
-    if (!proof) return;
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = '⏳ Ap voye...';
+  status.textContent = 'Ap konekte ak Administrasyon MR_Jery...';
 
-    // Verifye si jwè a konekte
-    if (!accountConnected || !currentPlayerId) {
-        document.getElementById('premiumProofStatus').textContent =
-            "Ou dwe konekte sou kont MR_Jery ou anvan ou soumèt demann lan.";
-        return;
+  const formData = new FormData();
+  formData.append('user_id', String(currentPlayerId));
+  formData.append('username', String(currentUsername || proof.name));
+  formData.append('email', String(currentEmail || ''));
+  formData.append('plan', String(selectedPremium.name).toLowerCase());
+  formData.append('payment_method', String(premiumMethod?.value || 'paypal'));
+  formData.append('payment_reference', proof.txn);
+  formData.append('screenshot', proof.file, proof.file.name || 'premium-proof.png');
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+  try {
+    const response = await fetch(PREMIUM_ADMIN_API + '/premium/request', {
+      method: 'POST',
+      body: formData,
+      signal: controller.signal
+    });
+    const raw = await response.text();
+    let result = {};
+    try { result = raw ? JSON.parse(raw) : {}; } catch (_) {}
+
+    if (!response.ok) {
+      const detail = result.detail || result.message || raw || ('HTTP ' + response.status);
+      throw new Error(String(detail).slice(0, 400));
     }
 
-    // Verifye gwosè screenshot la
-    if (proof.file.size > 5 * 1024 * 1024) {
-        document.getElementById('premiumProofStatus').textContent =
-            "Screenshot la twò gwo. Maksimòm lan se 5 MB.";
-        return;
+    const requestId = result?.request?.id ?? result?.id ?? result?.request_id ?? null;
+    status.textContent = '✅ Demann Premium lan rive nan Administrasyon an' +
+      (requestId !== null ? ' (#' + requestId + ')' : '') +
+      '. Li poko aktive; Admin dwe verifye peman an.';
+    button.textContent = '✅ Demann voye';
+  } catch (error) {
+    console.error('MR_Jery Premium request failed:', error);
+    if (error?.name === 'AbortError') {
+      status.textContent = '❌ Sèvè a pran twòp tan pou reponn. Eseye ankò pita.';
+    } else if (error instanceof TypeError || /Failed to fetch|NetworkError/i.test(String(error?.message || ''))) {
+      status.textContent = '❌ Navigatè a pa rive jwenn Admin API a. Sa souvan se CORS oswa sèvis Render la ki pa disponib. Tcheke sèvis mr-jery-control-center ak FRONTEND_ORIGIN li.';
+    } else {
+      status.textContent = '❌ Admin API: ' + (error?.message || 'Erè pandan voye demann lan.');
     }
-
-    // Verifye kalite fichye a
-    if (!["image/jpeg", "image/png", "image/webp"].includes(proof.file.type)) {
-        document.getElementById('premiumProofStatus').textContent =
-            "Voye yon screenshot JPG, PNG oswa WEBP.";
-        return;
-    }
-
-    const button = document.getElementById('premiumAdminSubmit');
-    const status = document.getElementById('premiumProofStatus');
-
-    button.disabled = true;
-    button.textContent = "⏳ Ap voye demann lan...";
-
-    try {
-
-        const formData = new FormData();
-
-        formData.append("user_id", String(currentPlayerId));
-        formData.append("username", currentUsername || proof.name);
-        formData.append("email", currentEmail || "");
-        formData.append("plan", selectedPremium.name.toLowerCase());
-        formData.append("payment_method", premiumMethod?.value || "paypal");
-        formData.append("payment_reference", proof.txn);
-        formData.append("screenshot", proof.file);
-
-        const response = await fetch(
-            PREMIUM_ADMIN_API + "/premium/request",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-            throw new Error(
-                result.detail || "Admin API pa aksepte demann lan."
-            );
-        }
-
-        status.textContent =
-            "✅ Demann Premium ou a rive nan Administrasyon an! " +
-            "Nimewo demann: #" + result.request.id +
-            ". Li poko aktive; Admin dwe verifye peman an.";
-
-        button.textContent = "✅ Demann voye";
-
-    } catch (error) {
-
-        console.error("Premium submission error:", error);
-
-        status.textContent =
-            "❌ Erè: " + error.message;
-
-        button.disabled = false;
-        button.textContent = "📨 Soumèt bay Admin";
-    }
+    button.disabled = false;
+    button.textContent = originalText;
+  } finally {
+    clearTimeout(timeout);
+  }
 });
 
 document.getElementById('adminTopBtn')?.addEventListener('click',function(){
