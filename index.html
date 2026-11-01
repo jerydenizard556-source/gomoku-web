@@ -6984,7 +6984,7 @@ function updatePremiumPaymentInfo(){
 function choosePremiumPlan(type){if(!PREMIUM_PLANS[type])return;document.getElementById("premiumType").value=type;document.getElementById("premiumCheckout").classList.add("visible");updatePremiumPaymentInfo();document.getElementById("premiumCheckout").scrollIntoView({behavior:"smooth",block:"start"});}
 async function refreshPremiumStatus(){
  if(!accountConnected||!accountToken){premiumMessage("Konekte sou kont MR_Jery ou an avan.",false);return;}
- try{const r=await fetch(MRJERY_ADMIN_API+"/premium/my-status",{headers:{"X-Account-Token":accountToken}});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Pa kapab verifye estati Premium lan.");
+ try{const r=await fetch(MRJERY_ADMIN_API+"/premium/my-status?account_token="+encodeURIComponent(accountToken));const raw=await r.text();let d={};try{d=raw?JSON.parse(raw):{};}catch(_){throw new Error("Sèvè Control Center la pa retounen JSON. Verifye Render Logs.");}if(!r.ok)throw new Error(d.detail||d.message||("Erè HTTP "+r.status));
  if(d.premium){const nm=PREMIUM_PLANS[d.premium_type]?.name||d.premium_type;premiumMessage(`✅ ${nm} aktif sou kont ${d.username} jiska ${new Date(d.expires_at).toLocaleString()}.`);}
  else if(d.latest_request&&d.latest_request.status==="pending")premiumMessage(`⏳ Demann ${PREMIUM_PLANS[d.latest_request.premium_type]?.name||d.latest_request.premium_type} ou a ap tann verifikasyon Admin.`);
  else if(d.latest_request&&d.latest_request.status==="rejected")premiumMessage("❌ Dènye demann Premium lan te refize. Kontakte Admin pou detay.",false);
@@ -6994,9 +6994,9 @@ async function refreshPremiumStatus(){
 async function submitPremiumRequest(){
  if(!accountConnected||!accountToken){premiumMessage("Ou dwe konekte sou kont jwèt ou an avan.",false);return;}
  const file=document.getElementById("premiumScreenshot").files[0];if(!file){premiumMessage("Tanpri ajoute screenshot prèv peman an.",false);return;}if(file.size>5*1024*1024){premiumMessage("Screenshot la depase 5 MB.",false);return;}
- const fd=new FormData();fd.append("premium_type",document.getElementById("premiumType").value);fd.append("payment_method",selectedPremiumMethod());fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());fd.append("screenshot",file);
+ const fd=new FormData();fd.append("premium_type",document.getElementById("premiumType").value);fd.append("payment_method",selectedPremiumMethod());fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());fd.append("screenshot",file);fd.append("account_token",accountToken);
  const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;btn.textContent="Ap voye...";
- try{const r=await fetch(MRJERY_ADMIN_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":accountToken},body:fd});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Demann nan pa t pase.");premiumMessage("✅ Demann Premium ou a anrejistre. ID: "+d.request_id+". Admin ap verifye peman an avan aktivasyon.");document.getElementById("premiumScreenshot").value="";await refreshPremiumStatus();}
+ try{const r=await fetch(MRJERY_ADMIN_API+"/premium/request",{method:"POST",body:fd});const raw=await r.text();let d={};try{d=raw?JSON.parse(raw):{};}catch(_){throw new Error("Sèvè Control Center la pa retounen JSON. Verifye Render Logs.");}if(!r.ok)throw new Error(d.detail||d.message||("Demann nan pa t pase (HTTP "+r.status+")."));premiumMessage("✅ Demann Premium ou a anrejistre. ID: "+d.request_id+". Admin ap verifye peman an avan aktivasyon.");document.getElementById("premiumScreenshot").value="";await refreshPremiumStatus();}
  catch(e){premiumMessage(e.message||"Erè pandan voye demann lan.",false);}finally{btn.disabled=false;btn.textContent="Voye prèv bay Admin";}
 }
 function sendPremiumWhatsApp(){
