@@ -1273,6 +1273,7 @@ td, th { overflow-wrap: anywhere; }
         <button class="dashboard-card" id="dashboardPlayersCard"><span class="dash-card-icon">👥🏆</span><strong>Tout jwè & nivo yo</strong><small>Gade tout kont ki enskri yo, menm jwè offline, sig yo ak 30 nivo MR_Jery yo.</small></button>
         <button class="dashboard-card gold-card" id="dashboardGamesCard"><span class="dash-card-icon">🎮</span><strong>JERY GAMES</strong><small>Tout jwèt platfòm nan nan yon sèl meni.</small></button>
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
+        <button class="dashboard-card gold-card" id="premiumBtn"><span class="dash-card-icon">👑</span><strong>Premium</strong><small>Aktive opsyon espesyal MR_Jery yo.</small></button>
       </section>
 
       <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
@@ -1289,17 +1290,15 @@ td, th { overflow-wrap: anywhere; }
   </div>
   <main style="max-width:1200px;margin:0 auto;padding:24px 18px 45px">
     <div class="jery-games-head"><div><h1>🎮 JERY GAMES</h1><p>Yon sèl kont, plizyè jwèt. Chwazi jwèt ou vle jwe.</p></div></div>
-    <div class="jery-games-note">✅ <strong>Jwèt ki disponib:</strong> MR_Jery Morpion 20×20, Morpion 3×3, Jery Mots ak Jery Number Challenge. Tout lòt jwèt yo rete anba meni an ak estati <strong>BIENTÔT DISPONIBLE</strong>.</div>
+    <div class="jery-games-note">✅ <strong>MR_Jery Morpion</strong> rete jwèt ki disponib la. Lòt jwèt yo make <strong>Bientôt disponible</strong> jiskaske yo devlope epi teste. Sa pa chanje jwèt, kont, wallet oswa sistèm match ki te deja la.</div>
     <div class="jery-games-grid" id="jeryGamesGrid">
       <button class="jery-game-card available" data-game="morpion"><span class="jery-game-icon">⚫🔴</span><strong>MR_Jery Morpion</strong><small>Jwe anliy, ak zanmi oswa kont robot.</small><span class="jery-game-status">DISPONIB</span></button>
-      <button class="jery-game-card available" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>2 jwè • Robot • Envitasyon dirèk • Vwa prive</small><span class="jery-game-status">DISPONIB</span></button>
-      <button class="jery-game-card available" data-game="words"><span class="jery-game-icon">🔤</span><strong>Jery Mots</strong><small>Mo difisil nan lang kont ou chwazi a.</small><span class="jery-game-status">DISPONIB</span></button>
-      <button class="jery-game-card available" data-game="number"><span class="jery-game-icon">🔢</span><strong>Jery Number Challenge</strong><small>Matematik ak lojik — nivo ekstrèm.</small><span class="jery-game-status">DISPONIB</span></button>
       <button class="jery-game-card" data-game="domino"><span class="jery-game-icon">🁢</span><strong>Domino Jery</strong><small>2–4 jwè • estrateji</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="ludo"><span class="jery-game-icon">🎲</span><strong>Ludo Jery</strong><small>2–4 jwè • jwèt fanmi</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="chess"><span class="jery-game-icon">♟️</span><strong>Echek Jery</strong><small>Estrateji ak refleksyon</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="checkers"><span class="jery-game-icon">🔴⚫</span><strong>Dam Jery</strong><small>Defi 1 kont 1</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="connect4"><span class="jery-game-icon">🟡🔴</span><strong>Puissance 4 Jery</strong><small>Aliyen 4 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="tictactoe"><span class="jery-game-icon">❌⭕</span><strong>Morpion 3×3</strong><small>Match rapid</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="battleship"><span class="jery-game-icon">⚓</span><strong>Bataille Navale</strong><small>Jwenn bato advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="reversi"><span class="jery-game-icon">⚫⚪</span><strong>Reversi / Othello</strong><small>Kontwole tablo a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="backgammon"><span class="jery-game-icon">🎲</span><strong>Backgammon</strong><small>Deplase pyès ak zo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
@@ -1307,99 +1306,14 @@ td, th { overflow-wrap: anywhere; }
       <button class="jery-game-card" data-game="mills"><span class="jery-game-icon">⚙️</span><strong>Moulin</strong><small>Fòme liy 3 pyès</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="awale"><span class="jery-game-icon">🪵</span><strong>Awalé / Mancala</strong><small>Kolekte grenn ak estrateji</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="rps"><span class="jery-game-icon">✊📄✂️</span><strong>Wòch, Papye, Sizo</strong><small>Defi rapid</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="words"><span class="jery-game-icon">🔤</span><strong>Jery Mots</strong><small>Devine mo an Kreyòl, Franse oswa Anglè</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="hangman"><span class="jery-game-icon">🪢</span><strong>Jeu du Pendu</strong><small>Devine mo kache a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="memory"><span class="jery-game-icon">🧠</span><strong>Memory Jery</strong><small>Jwenn pè kat yo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="minesweeper"><span class="jery-game-icon">💣</span><strong>Démineur</strong><small>Jwenn kare ki an sekirite yo</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
+      <button class="jery-game-card" data-game="number"><span class="jery-game-icon">🔢</span><strong>Jery Number Challenge</strong><small>Devinèt nimewo ak tan limite</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="cards"><span class="jery-game-icon">🃏</span><strong>Bataille de Cartes</strong><small>Jwèt kat ak règ defini</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="puzzle"><span class="jery-game-icon">🧩</span><strong>Jery Puzzle Battle</strong><small>Rezoud devinèt anvan advèsè a</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
       <button class="jery-game-card" data-game="quiz"><span class="jery-game-icon">🏆</span><strong>Jery Quiz Battle</strong><small>Kilti jeneral, syans, istwa ak espò</small><span class="jery-game-status">BIENTÔT DISPONIBLE</span></button>
-    </div>
-  </main>
-</section>
-
-<!-- MORPION 3x3: jeu local, robot et invitations en ligne -->
-<section id="tttScreen" class="screen">
-  <div class="inner-page-head">
-    <button type="button" class="back-icon" id="tttBack" aria-label="Retour">←</button>
-    <div class="brand-mini">❌⭕ MR_<b>Jery</b> Morpion 3×3</div><span></span>
-  </div>
-  <main style="max-width:650px;margin:18px auto;padding:18px;text-align:center">
-    <h2>Morpion 3×3</h2>
-    <p id="tttStatus" aria-live="polite">Chwazi mòd ou vle jwe.</p>
-    <div id="tttModes" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      <button class="auth-main-btn" id="tttLocal" type="button">2 jwè menm aparèy</button>
-      <button class="auth-main-btn" id="tttRobot" type="button">Kont robot</button>
-      <button class="auth-main-btn" id="tttOnline" type="button">Anliy</button>
-    </div>
-    <div id="tttOnlinePlayers" class="online-players-box" style="display:none;text-align:left;margin-top:14px">
-      <div class="online-players-title">👥 Jwè ki disponib pou Morpion 3×3</div>
-      <div id="tttPlayersList" class="online-players-list"></div>
-      <div id="tttPlayersStatus" class="online-players-status">Ap chèche jwè...</div>
-      <button type="button" id="tttRefreshPlayers" class="online-player-invite">Actualiser</button>
-    </div>
-    <div id="tttOnlineControls" style="display:none;margin:14px 0">
-      <button id="tttCreate" class="online-player-invite" type="button">Kreye chanm prive</button>
-      <div style="margin:10px"><input id="tttRoomCode" placeholder="Kòd chanm" maxlength="6" style="padding:12px;text-transform:uppercase"><button id="tttJoin" class="online-player-invite" type="button">Antre</button></div>
-      <p id="tttCode"></p>
-    </div>
-    <div id="tttVoiceControls" style="display:none;margin:12px auto;padding:12px;border:1px solid #35435f;border-radius:12px;background:#111c30;text-align:left">
-      <button type="button" id="tttMicToggle" class="online-player-invite" aria-pressed="false">🔇 Mikwo pa m: FÈMEN</button>
-      <span id="tttVoiceStatus" class="match-voice-note">Vwa prive sèlman ant 2 jwè Morpion 3×3 yo.</span>
-      <div id="tttRemoteAudios" aria-hidden="true"></div>
-    </div>
-    <div id="tttBoard" style="display:none;grid-template-columns:repeat(3,minmax(75px,110px));gap:8px;justify-content:center;margin:20px auto"></div>
-    <button id="tttRestart" class="online-player-invite" type="button" style="display:none">Rekòmanse</button>
-    <button id="tttExit" class="online-player-invite" type="button" style="display:none">Chanje mòd</button>
-  </main>
-</section>
-
-<!-- Envitasyon 3x3 la rete vizib menm lè jwè a sou yon lòt ekran -->
-<div id="tttInviteBox" class="game-invite-box" role="dialog" aria-live="assertive" aria-label="Envitasyon Morpion 3×3" style="display:none">
-  <div id="tttInviteMessage" class="game-invite-message"></div>
-  <div class="game-invite-actions">
-    <button type="button" id="tttInviteAccept" class="invite-accept">Aksepte</button>
-    <button type="button" id="tttInviteRefuse" class="invite-refuse">Refize</button>
-  </div>
-</div>
-
-<!-- JERY MOTS + JERY NUMBER CHALLENGE -->
-<section id="jerySoloScreen" class="screen">
-  <div class="inner-page-head">
-    <button type="button" class="back-icon" id="jerySoloBack" aria-label="Retour">←</button>
-    <div class="brand-mini">♛ JERY GAMES</div><span></span>
-  </div>
-  <main style="max-width:760px;margin:18px auto;padding:18px">
-    <div id="jeryWordGame" style="display:none">
-      <h1>🔤 Jery Mots — Difisil</h1>
-      <p id="jwIntro">Devine mo kache a. Lang lan swiv lang ou chwazi sou sit la.</p>
-      <p><strong id="jwLanguageName">Lang: Français</strong></p>
-      <div style="padding:18px;border:1px solid #35435f;border-radius:14px;background:#111c30;text-align:center">
-        <div id="jwHint" style="color:#b8c8df;line-height:1.5"></div>
-        <div id="jwWord" style="font-size:clamp(25px,6vw,42px);letter-spacing:8px;font-weight:900;margin:18px 0">_ _ _</div>
-        <div id="jwTries">7 chans rete</div>
-        <div id="jwLetters" style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:18px"></div>
-        <p id="jwMessage" aria-live="polite"></p>
-        <button type="button" id="jwNew" class="online-player-invite">Nouvo mo</button>
-      </div>
-      <p><span id="jwWinsLabel">Viktwa:</span> <strong id="jwWins">0</strong> · <span id="jwLossesLabel">Defèt:</span> <strong id="jwLosses">0</strong></p>
-    </div>
-    <div id="jeryNumberGame" style="display:none">
-      <h1>🔢 Jery Number Challenge</h1>
-      <p>Defi matematik ak lojik ekstrèm. Pa gen kalkilatris.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0">
-        <strong>Nivo: TRÈ DIFISIL</strong>
-        <button type="button" id="jnStart" class="online-player-invite">Kòmanse defi</button>
-      </div>
-      <div style="padding:20px;border:1px solid #35435f;border-radius:14px;background:#111c30;text-align:center">
-        <div>Tan: <strong id="jnTime">90</strong> segonn · Pwen: <strong id="jnScore">0</strong></div>
-        <h2 id="jnQuestion" style="font-size:clamp(22px,5.5vw,36px);line-height:1.45;margin:22px 0">Peze Kòmanse pou resevwa premye defi a.</h2>
-        <form id="jnForm" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-          <input id="jnAnswer" type="number" inputmode="numeric" placeholder="Repons nimerik" required disabled style="padding:12px;max-width:190px">
-          <button type="submit">Verifye</button>
-        </form>
-        <p id="jnMessage" aria-live="polite">Bon repons: +10 pwen. Move repons: −8 segonn.</p>
-      </div>
-      <p>Pi bon nòt sou aparèy sa a: <strong id="jnBest">0</strong></p>
     </div>
   </main>
 </section>
@@ -1463,6 +1377,22 @@ td, th { overflow-wrap: anywhere; }
 
 
 <!-- PORTEFEUILLE / DEFIS -->
+<section id="premiumScreen" class="screen">
+  <div class="inner-page-head"><div><h2>👑 MR_Jery Premium</h2><p>Chwazi sèvis ou vle aktive sou kont MR_Jery ou.</p></div></div>
+  <div class="wallet-box" style="max-width:760px">
+    <div class="notice-test">Enpòtan: demann lan mare ak kont jwè ou konekte a. Voye prèv peman an; Admin ap verifye li epi aktive Premium lan. Fòm sa a pa retire lajan otomatikman.</div>
+    <div class="form-row">
+      <label>Kalite Premium<select id="premiumType"><option value="bronze">Bronze</option><option value="silver">Silver</option><option value="diamond">Diamond</option><option value="freestyle">Freestyle</option><option value="pro">Pro</option><option value="swap">Swap</option><option value="all">Tout opsyon (All)</option></select></label>
+      <label>Mwayen peman<select id="premiumPaymentMethod"><option value="Tranzak">Tranzak</option><option value="PayPal">PayPal</option><option value="Apple Pay">Apple Pay</option><option value="Lòt">Lòt</option></select></label>
+    </div>
+    <label style="display:block;margin-top:12px">Referans tranzaksyon (si genyen)<input id="premiumPaymentReference" type="text" maxlength="180" placeholder="ID tranzaksyon / referans peman" style="width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white;box-sizing:border-box"></label>
+    <label style="display:block;margin-top:12px">Screenshot prèv peman (JPG, PNG oswa WEBP, max 5 MB)<input id="premiumScreenshot" type="file" accept="image/png,image/jpeg,image/webp" style="display:block;margin-top:8px"></label>
+    <div class="wallet-actions"><button type="button" class="primary-pay" id="premiumSubmitBtn">📨 Voye demann Premium</button><button type="button" id="premiumRefreshBtn">🔄 Verifye estati</button></div>
+    <div id="premiumStatusBox" class="calc-box" aria-live="polite">Estati Premium ou ap parèt isit la.</div>
+    <button type="button" class="back-button" id="premiumBackBtn">← Retounen</button>
+  </div>
+</section>
+
 <section id="walletScreen" class="screen">
     <h1>💰 Portefeuille & Défis</h1>
     <div class="wallet-box">
@@ -2043,16 +1973,13 @@ document.getElementById('dashboardGamesCard')?.addEventListener('click',()=>show
 document.getElementById('jeryGamesBack')?.addEventListener('click',()=>showScreen('accountMenuScreen'));
 document.getElementById('jeryGamesGrid')?.addEventListener('click',function(e){
   const card=e.target.closest('[data-game]'); if(!card)return;
-  const game=card.dataset.game;
-  if(game==='morpion'){
+  if(card.dataset.game==='morpion'){
     showScreen('accountMenuScreen');
     document.getElementById('dashboardOnlineCard')?.focus();
     return;
   }
-  if(game==='tictactoe'){openTtt();return;}
-  if(game==='words'||game==='number'){openJerySolo(game);return;}
   const label=card.querySelector('strong')?.textContent||'Jwèt sa a';
-  alert(label+' ap vini byento.');
+  alert(label+' ap vini byento. Nou poko aktive jwèt sa a; jwèt ki deja la yo pa chanje.');
 });
 
 /* ==================================================
@@ -4542,12 +4469,6 @@ function connectServer(callback) {
                         event.data
                     );
 
-                // Morpion 3×3 gen pwotokòl ak chanm pa li; li pa antre nan eta 20×20 la.
-                if (data && typeof data.type === "string" && data.type.startsWith("ttt_")) {
-                    if (typeof handleTttMessage === "function") handleTttMessage(data);
-                    return;
-                }
-
                 /* ==================================
                    COMPTE - INSCRIPTION
                 ================================== */
@@ -7025,14 +6946,54 @@ const __mrjeryLanguageObserver=new MutationObserver(()=>{
 __mrjeryLanguageObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
 try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWholeSiteText(__lang); translateCurrentLanguageAttributes(__lang); } catch(e) {}
 
-
-Object.assign(fullSiteTextTranslations, {
-  'DISPONIB':{fr:'DISPONIBLE',en:'AVAILABLE',ht:'DISPONIB'},
-  'BIENTÔT DISPONIBLE':{fr:'BIENTÔT DISPONIBLE',en:'COMING SOON',ht:'BIENTÔT DISPONIBLE'},
-  'Morpion 3×3':{fr:'Morpion 3×3',en:'Tic-Tac-Toe 3×3',ht:'Morpion 3×3'},
-  'Jery Mots':{fr:'Jery Mots',en:'Jery Words',ht:'Jery Mots'},
-  'Jery Number Challenge':{fr:'Défi Jery Number',en:'Jery Number Challenge',ht:'Jery Number Challenge'}
+/* ==================================================
+   MR_JERY PREMIUM - connecté au compte joueur + Admin API
+================================================== */
+const MRJERY_ADMIN_API = "https://mr-jery-control-center.onrender.com";
+function premiumMessage(message, ok=true) {
+  const box=document.getElementById("premiumStatusBox");
+  if(box){box.textContent=message;box.style.borderColor=ok?"#16A34A":"#DC2626";}
+}
+async function refreshPremiumStatus(){
+  if(!accountConnected || !accountToken){premiumMessage("Konekte sou kont MR_Jery ou an avan.",false);return;}
+  try{
+    const r=await fetch(MRJERY_ADMIN_API+"/premium/my-status",{headers:{"X-Account-Token":accountToken}});
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.detail||"Pa kapab verifye estati Premium lan.");
+    if(d.premium){premiumMessage("✅ Premium "+String(d.premium_type||"").toUpperCase()+" aktif sou kont "+d.username+" jiska "+new Date(d.expires_at).toLocaleString()+".");}
+    else if(d.latest_request && d.latest_request.status==="pending") premiumMessage("⏳ Demann "+d.latest_request.premium_type+" ou a ap tann verifikasyon Admin.");
+    else if(d.latest_request && d.latest_request.status==="rejected") premiumMessage("❌ Dènye demann Premium lan te refize. Kontakte Admin pou detay.",false);
+    else premiumMessage("Ou poko gen Premium aktif. Chwazi yon opsyon epi voye prèv peman an.");
+  }catch(e){premiumMessage(e.message||"Erè rezo pandan verifikasyon.",false);}
+}
+async function submitPremiumRequest(){
+  if(!accountConnected || !accountToken){premiumMessage("Ou dwe konekte sou kont jwèt ou an avan.",false);return;}
+  const file=document.getElementById("premiumScreenshot").files[0];
+  if(!file){premiumMessage("Tanpri chwazi screenshot prèv peman an.",false);return;}
+  if(file.size>5*1024*1024){premiumMessage("Screenshot la depase 5 MB.",false);return;}
+  const fd=new FormData();
+  fd.append("premium_type",document.getElementById("premiumType").value);
+  fd.append("payment_method",document.getElementById("premiumPaymentMethod").value);
+  fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());
+  fd.append("screenshot",file);
+  const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;btn.textContent="Ap voye...";
+  try{
+    const r=await fetch(MRJERY_ADMIN_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":accountToken},body:fd});
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.detail||"Demann nan pa t pase.");
+    premiumMessage("✅ Demann Premium ou a anrejistre. ID: "+d.request_id+". Li parèt nan Admin pou verifikasyon.");
+    document.getElementById("premiumScreenshot").value="";
+    await refreshPremiumStatus();
+  }catch(e){premiumMessage(e.message||"Erè pandan voye demann lan.",false);}
+  finally{btn.disabled=false;btn.textContent="📨 Voye demann Premium";}
+}
+document.getElementById("premiumBtn")?.addEventListener("click",()=>{
+  if(!accountConnected || !accountToken){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Premium.",false);return;}
+  showScreen("premiumScreen");refreshPremiumStatus();
 });
+document.getElementById("premiumSubmitBtn")?.addEventListener("click",submitPremiumRequest);
+document.getElementById("premiumRefreshBtn")?.addEventListener("click",refreshPremiumStatus);
+document.getElementById("premiumBackBtn")?.addEventListener("click",showAccountMenu);
 
 // Le compte reste mémorisé dans localStorage et est restauré au démarrage.
 // Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
@@ -7047,536 +7008,6 @@ Object.assign(fullSiteTextTranslations, {
     });
   } catch(e) { console.warn("Restauration de session reportée", e); }
 })();
-
-/* ==========================================================
-   MR_JERY GAMES — MORPION 3×3 + JERY MOTS + JERY NUMBER
-   Tout mesaj TTT yo sèvi ak ttt_* ak ttt_rooms separe.
-   Sistèm match 20×20 la rete endepandan.
-========================================================== */
-
-let ttt = {mode:'', board:Array(9).fill(''), turn:'X', room:null, player:null, status:'idle'};
-let tttPendingInvite = null;
-let tttMicStream = null;
-let tttMicOn = false;
-let tttVoiceJoinedRoom = null;
-let tttVoicePeers = new Map();
-let tttVoicePendingIce = new Map();
-
-function tttStatus(message){const el=document.getElementById('tttStatus');if(el)el.textContent=message;}
-function tttSend(message){
-  if(socket && socket.readyState===WebSocket.OPEN){socket.send(JSON.stringify(message));return true;}
-  tttStatus('Koneksyon ak sèvè a pa pare. Rekonekte epi eseye ankò.');
-  return false;
-}
-function tttWithServer(action){
-  if(!accountConnected){tttStatus('Konekte sou kont MR_Jery ou anvan pou jwe anliy.');return;}
-  if(socket && socket.readyState===WebSocket.OPEN){action();return;}
-  tttStatus('Koneksyon ak sèvè a ap louvri…');
-  connectServer(()=>{
-    if(accountConnected && socket && socket.readyState===WebSocket.OPEN) action();
-    else tttStatus('Sesyon an poko pare. Tanpri eseye ankò.');
-  });
-}
-function openTtt(){
-  if(ttt.room)tttLeave();else tttVoiceStop(false);
-  showScreen('tttScreen');
-  ttt.mode='';ttt.room=null;ttt.player=null;ttt.status='idle';
-  ttt.board=Array(9).fill('');ttt.turn='X';
-  document.getElementById('tttOnlineControls').style.display='none';
-  document.getElementById('tttOnlinePlayers').style.display='none';
-  document.getElementById('tttVoiceControls').style.display='none';
-  document.getElementById('tttBoard').style.display='none';
-  document.getElementById('tttRestart').style.display='none';
-  document.getElementById('tttExit').style.display='none';
-  tttStatus('Chwazi mòd ou vle jwe.');
-}
-function tttReset(){
-  tttVoiceStop(false);
-  ttt.board=Array(9).fill('');ttt.turn='X';ttt.status='playing';ttt.room=null;ttt.player=null;
-  document.getElementById('tttBoard').style.display='grid';
-  document.getElementById('tttRestart').style.display='inline-block';
-  document.getElementById('tttExit').style.display='inline-block';
-  document.getElementById('tttVoiceControls').style.display='none';
-  tttRender();
-}
-function tttRender(){
-  const board=document.getElementById('tttBoard');if(!board)return;
-  board.innerHTML='';
-  ttt.board.forEach((mark,index)=>{
-    const cell=document.createElement('button');cell.type='button';cell.textContent=mark||' ';
-    cell.style.cssText='height:clamp(78px,22vw,108px);font-size:clamp(34px,9vw,48px);font-weight:900;border:2px solid #d4af37;border-radius:12px;background:#111c30;color:'+(mark==='X'?'#ff5b62':'#58c7ff')+';';
-    const onlineCanPlay=ttt.mode!=='online'||(ttt.status==='playing'&&ttt.turn===ttt.player);
-    cell.disabled=Boolean(mark)||ttt.status!=='playing'||!onlineCanPlay;
-    cell.addEventListener('click',()=>tttPlay(index));board.appendChild(cell);
-  });
-}
-function tttWin(board){
-  for(const [a,b,c] of [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])
-    if(board[a]&&board[a]===board[b]&&board[a]===board[c])return board[a];
-  return null;
-}
-function tttFinishLocal(){
-  const winner=tttWin(ttt.board);
-  if(winner||ttt.board.every(Boolean)){
-    ttt.status='finished';
-    tttStatus(winner?(winner+' genyen!'):'Match nil!');
-  }else tttStatus('Tou pa '+ttt.turn+'.');
-}
-function tttPlay(index){
-  if(ttt.status!=='playing'||ttt.board[index])return;
-  if(ttt.mode==='online'){
-    if(ttt.turn!==ttt.player)return;
-    tttSend({type:'ttt_move',room:ttt.room,index});return;
-  }
-  ttt.board[index]=ttt.turn;ttt.turn=ttt.turn==='X'?'O':'X';tttFinishLocal();tttRender();
-  if(ttt.mode==='robot'&&ttt.status==='playing'){
-    const best=tttBest(ttt.board.slice(),'O');
-    if(best>=0){ttt.board[best]='O';ttt.turn='X';tttFinishLocal();tttRender();}
-  }
-}
-function tttBest(board,player,depth=0){
-  const winner=tttWin(board);if(winner)return winner==='O'?10-depth:depth-10;
-  if(board.every(Boolean))return 0;
-  let best=-1,bestScore=player==='O'?-Infinity:Infinity;
-  for(let i=0;i<9;i++)if(!board[i]){
-    board[i]=player;const score=tttBest(board,player==='O'?'X':'O',depth+1);board[i]='';
-    if((player==='O'&&score>bestScore)||(player==='X'&&score<bestScore)){bestScore=score;best=i;}
-  }
-  return depth===0?best:bestScore;
-}
-function tttRenderPlayers(players){
-  const list=document.getElementById('tttPlayersList');if(!list)return;list.innerHTML='';
-  (players||[]).forEach(player=>{
-    const row=document.createElement('div');row.className='online-player-row';
-    const name=document.createElement('span');name.className='online-player-name';name.textContent='🟢 '+(player.username||'Jwè');
-    const status=document.createElement('small');status.textContent=player.in_game?' · Nan match':' · Disponib';name.appendChild(status);
-    const invite=document.createElement('button');invite.type='button';invite.className='online-player-invite';invite.textContent='Envite';invite.disabled=Boolean(player.in_game)||!accountConnected;
-    invite.addEventListener('click',()=>{
-      tttWithServer(()=>{tttSend({type:'ttt_invite_player',target_player_id:Number(player.player_id)});const s=document.getElementById('tttPlayersStatus');if(s)s.textContent='Envitasyon ap voye bay '+(player.username||'jwè a')+'…';});
-    });row.append(name,invite);list.appendChild(row);
-  });
-  const status=document.getElementById('tttPlayersStatus');if(status)status.textContent=(players&&players.length)?players.length+' jwè konekte.':'Pa gen lòt jwè disponib pou kounye a.';
-}
-function tttRefreshPlayers(){tttWithServer(()=>tttSend({type:'ttt_online_players'}));}
-function tttShowInvite(data){
-  tttPendingInvite=data.invitation_id;
-  const box=document.getElementById('tttInviteBox');
-  document.getElementById('tttInviteMessage').textContent=(data.from_username||'Yon jwè')+' envite w nan Morpion 3×3. Èske w aksepte?';
-  if(box){if(box.parentElement!==document.body)document.body.appendChild(box);box.style.cssText='display:block!important;visibility:visible!important;opacity:1!important;position:fixed!important;top:18px!important;left:50%!important;transform:translateX(-50%)!important;z-index:2147483647!important;max-width:92vw!important;width:520px!important;';}
-  try{if(document.hidden&&'Notification'in window&&Notification.permission==='granted')new Notification('Envitasyon Morpion 3×3',{body:(data.from_username||'Yon jwè')+' envite w.'});}catch(e){}
-}
-function tttAnswerInvite(accepted){
-  if(!tttPendingInvite)return;
-  const id=tttPendingInvite;
-  tttWithServer(()=>{
-    if(tttSend({type:'ttt_invite_response',invitation_id:id,accepted:Boolean(accepted)})){
-      tttPendingInvite=null;const box=document.getElementById('tttInviteBox');if(box)box.style.display='none';
-    }
-  });
-}
-
-// Vwa a itilize menm WebRTC/STUN ak match 20×20 la, men pwotokòl ttt_voice_*
-// ak ttt.room fè tout siyal yo rete sèlman nan chanm Morpion 3×3 la.
-function tttVoiceSend(peerId,signalType,payload){
-  if(!ttt.room||!socket||socket.readyState!==WebSocket.OPEN)return;
-  tttSend({type:'ttt_voice_signal',room:ttt.room,to:String(peerId),signal_type:signalType,payload});
-}
-function tttVoiceJoinRoom(){
-  if(!ttt.room||!socket||socket.readyState!==WebSocket.OPEN||tttVoiceJoinedRoom===String(ttt.room))return;
-  tttVoiceJoinedRoom=String(ttt.room);tttSend({type:'ttt_voice_join',room:ttt.room});
-}
-async function tttCreateVoicePeer(peerId){
-  peerId=String(peerId);if(tttVoicePeers.has(peerId))return tttVoicePeers.get(peerId);
-  const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});
-  tttVoicePeers.set(peerId,pc);
-  const transceiver=pc.addTransceiver('audio',{direction:'sendrecv'});
-  if(tttMicStream){const track=tttMicStream.getAudioTracks()[0];if(track)await transceiver.sender.replaceTrack(track);}
-  pc.onicecandidate=e=>{if(e.candidate)tttVoiceSend(peerId,'ice',e.candidate.toJSON());};
-  pc.ontrack=e=>{
-    let audio=document.getElementById('tttRemoteAudio_'+peerId);
-    if(!audio){audio=document.createElement('audio');audio.id='tttRemoteAudio_'+peerId;audio.autoplay=true;audio.playsInline=true;audio.style.display='none';document.getElementById('tttRemoteAudios')?.appendChild(audio);}
-    if(e.streams&&e.streams[0])audio.srcObject=e.streams[0];audio.play().catch(()=>{});
-  };
-  pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState)){try{pc.close();}catch(e){}tttVoicePeers.delete(peerId);document.getElementById('tttRemoteAudio_'+peerId)?.remove();}};
-  return pc;
-}
-async function tttVoicePrepare(){
-  if(!ttt.room||tttVoiceJoinedRoom===String(ttt.room))return;
-  const status=document.getElementById('tttVoiceStatus');
-  try{
-    if(!tttMicStream){
-      tttMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-      tttMicStream.getAudioTracks().forEach(track=>track.enabled=false);
-    }
-    tttMicOn=false;
-    const button=document.getElementById('tttMicToggle');if(button){button.textContent='🔇 Mikwo pa m: FÈMEN';button.setAttribute('aria-pressed','false');}
-    if(status)status.textContent='Vwa konekte. Mikwo pa w fèmen otomatikman; ou ka tande advèsè a.';
-  }catch(error){if(status)status.textContent='Pèmisyon mikwo pa bay. Ou ka aktive l pita; vwa a ap tann koneksyon.';}
-  tttVoiceJoinRoom();
-}
-async function tttVoiceToggle(){
-  const status=document.getElementById('tttVoiceStatus');const button=document.getElementById('tttMicToggle');
-  if(!ttt.room||ttt.mode!=='online'){if(status)status.textContent='Vwa disponib sèlman nan match 3×3 anliy.';return;}
-  try{
-    if(!tttMicStream)tttMicStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-    tttMicOn=!tttMicOn;tttMicStream.getAudioTracks().forEach(track=>track.enabled=tttMicOn);
-    for(const [peerId,pc] of tttVoicePeers){
-      const sender=pc.getSenders().find(x=>x.track?.kind==='audio')||pc.getTransceivers().find(x=>x.receiver?.track?.kind==='audio')?.sender;
-      if(sender){const track=tttMicStream.getAudioTracks()[0];if(track)await sender.replaceTrack(track);}
-    }
-    tttVoiceJoinRoom();
-    if(button){button.textContent=tttMicOn?'🎙️ Mikwo pa m: ON':'🔇 Mikwo pa m: FÈMEN';button.setAttribute('aria-pressed',String(tttMicOn));}
-    if(status)status.textContent=tttMicOn?'Mikwo aktive. Se sèlman advèsè 3×3 ou a ki resevwa vwa w.':'Mikwo fèmen. Ou ka toujou tande advèsè a.';
-  }catch(error){if(status)status.textContent='Pa kapab aktive mikwo a: '+(error.message||'verifye pèmisyon navigatè a.');}
-}
-function tttVoiceStop(notifyServer=true){
-  if(notifyServer&&ttt.room&&socket&&socket.readyState===WebSocket.OPEN&&tttVoiceJoinedRoom===String(ttt.room))tttSend({type:'ttt_voice_leave',room:ttt.room});
-  tttVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});tttVoicePeers.clear();tttVoicePendingIce.clear();
-  document.getElementById('tttRemoteAudios')?.replaceChildren();
-  if(tttMicStream){tttMicStream.getTracks().forEach(track=>track.stop());tttMicStream=null;}
-  tttMicOn=false;tttVoiceJoinedRoom=null;
-  const button=document.getElementById('tttMicToggle');if(button){button.textContent='🔇 Mikwo pa m: FÈMEN';button.setAttribute('aria-pressed','false');}
-  const status=document.getElementById('tttVoiceStatus');if(status)status.textContent='Vwa fèmen.';
-}
-async function tttHandleVoice(data){
-  if(!ttt.room||String(data.room)!==String(ttt.room))return;
-  if(data.type==='ttt_voice_peer_list'){
-    for(const peer of data.peers||[])await tttCreateVoicePeer(peer.peer_id);
-    return;
-  }
-  if(data.type==='ttt_voice_peer_join'){
-    const peerId=String(data.peer_id);const pc=await tttCreateVoicePeer(peerId);
-    const offer=await pc.createOffer();await pc.setLocalDescription(offer);tttVoiceSend(peerId,'description',pc.localDescription.toJSON());
-    return;
-  }
-  if(data.type==='ttt_voice_peer_left'){
-    const peerId=String(data.peer_id);const pc=tttVoicePeers.get(peerId);if(pc)pc.close();tttVoicePeers.delete(peerId);tttVoicePendingIce.delete(peerId);document.getElementById('tttRemoteAudio_'+peerId)?.remove();return;
-  }
-  if(data.type==='ttt_voice_signal'){
-    const peerId=String(data.from_id);const pc=await tttCreateVoicePeer(peerId);const payload=data.payload||{};
-    if(data.signal_type==='description'){
-      await pc.setRemoteDescription(new RTCSessionDescription(payload));
-      const queued=tttVoicePendingIce.get(peerId)||[];tttVoicePendingIce.delete(peerId);
-      for(const candidate of queued){try{await pc.addIceCandidate(new RTCIceCandidate(candidate));}catch(e){}}
-      if(payload.type==='offer'){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);tttVoiceSend(peerId,'description',pc.localDescription.toJSON());}
-    }else if(data.signal_type==='ice'&&payload){
-      if(pc.remoteDescription&&pc.remoteDescription.type){try{await pc.addIceCandidate(new RTCIceCandidate(payload));}catch(e){}}
-      else{const q=tttVoicePendingIce.get(peerId)||[];q.push(payload);tttVoicePendingIce.set(peerId,q);}
-    }
-  }
-}
-function handleTttMessage(data){
-  if(data.type==='ttt_error'){tttStatus(data.message||'Gen yon erè nan Morpion 3×3.');return;}
-  if(data.type==='ttt_online_players'){tttRenderPlayers(data.players||[]);return;}
-  if(data.type==='ttt_game_invite'){tttShowInvite(data);return;}
-  if(data.type==='ttt_invite_result'){tttStatus(data.message||'Repons envitasyon an resevwa.');return;}
-  if(data.type==='ttt_match_started'){
-    ttt.mode='online';ttt.room=data.room;ttt.player=data.player;ttt.board=data.board||Array(9).fill('');ttt.turn=data.turn||'X';ttt.status='playing';
-    const box=document.getElementById('tttInviteBox');if(box)box.style.display='none';tttPendingInvite=null;
-    document.getElementById('tttOnlinePlayers').style.display='none';document.getElementById('tttOnlineControls').style.display='none';
-    document.getElementById('tttBoard').style.display='grid';document.getElementById('tttRestart').style.display='inline-block';document.getElementById('tttExit').style.display='inline-block';document.getElementById('tttVoiceControls').style.display='block';
-    showScreen('tttScreen');tttStatus('Match 3×3 anliy kòmanse. Ou se '+ttt.player+'.');tttRender();tttVoicePrepare().catch(()=>{});return;
-  }
-  if(data.type==='ttt_created'||data.type==='ttt_joined'){
-    ttt.mode='online';ttt.room=data.room;ttt.player=data.player;tttStatus(data.message||'Chanm nan pare.');
-    const code=document.getElementById('tttCode');if(code)code.textContent='Kòd chanm: '+data.room+' — pataje l ak zanmi ou.';return;
-  }
-  if(data.type==='ttt_state'){
-    ttt.room=data.room;ttt.board=Array.isArray(data.board)?data.board:Array(9).fill('');ttt.turn=data.turn||'X';ttt.status=data.status==='finished'?'finished':data.status;
-    if(data.status==='playing'){
-      document.getElementById('tttVoiceControls').style.display='block';
-      if(ttt.mode==='online')tttVoicePrepare().catch(()=>{});
-    }
-    const winner=data.winner==='draw'?'Match nil!':data.winner?('Gayan: '+(data.players?.[data.winner]||data.winner)):(data.status==='waiting'?'Ap tann dezyèm jwè a…':'Tou: '+data.turn);
-    tttStatus(winner);tttRender();return;
-  }
-  if(data.type==='ttt_opponent_left'){tttStatus('Advèsè a kite chanm nan. Ou ka retounen nan meni an.');tttVoiceStop(false);return;}
-  if(data.type.startsWith('ttt_voice_')){tttHandleVoice(data).catch(error=>console.warn('TTT voice error',error));}
-}
-function tttLeave(){
-  if(ttt.room&&socket&&socket.readyState===WebSocket.OPEN){tttVoiceStop(true);tttSend({type:'ttt_leave',room:ttt.room});}
-  else tttVoiceStop(false);ttt.room=null;ttt.player=null;ttt.mode='';ttt.status='idle';ttt.board=Array(9).fill('');ttt.turn='X';
-  document.getElementById('tttBoard').style.display='none';document.getElementById('tttVoiceControls').style.display='none';
-  document.getElementById('tttOnlineControls').style.display='none';document.getElementById('tttOnlinePlayers').style.display='none';
-  document.getElementById('tttRestart').style.display='none';document.getElementById('tttExit').style.display='none';tttStatus('Chwazi mòd ou vle jwe.');
-}
-
-document.getElementById('tttBack')?.addEventListener('click',()=>{tttLeave();showScreen('jeryGamesScreen');});
-document.getElementById('tttLocal')?.addEventListener('click',()=>{
-  tttLeave();ttt.mode='local';tttReset();document.getElementById('tttOnlineControls').style.display='none';
-  tttStatus('X kòmanse. Jwe youn apre lòt sou menm aparèy la.');
-});
-document.getElementById('tttRobot')?.addEventListener('click',()=>{
-  tttLeave();ttt.mode='robot';tttReset();document.getElementById('tttOnlineControls').style.display='none';
-  tttStatus('Ou se X. Robot la sèvi ak minimax epi li jwe pi fò li kapab.');
-});
-document.getElementById('tttOnline')?.addEventListener('click',()=>{
-  ttt.mode='online';document.getElementById('tttOnlineControls').style.display='block';
-  document.getElementById('tttOnlinePlayers').style.display=accountConnected?'block':'none';
-  document.getElementById('tttBoard').style.display='none';document.getElementById('tttVoiceControls').style.display='none';
-  if(!accountConnected){tttStatus('Ou dwe konekte sou kont MR_Jery ou pou envite yon jwè.');return;}
-  tttStatus('Chwazi yon jwè pou voye envitasyon dirèk, oswa kreye yon chanm.');
-  tttWithServer(()=>{tttSend({type:'ttt_online_players'});try{if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();}catch(e){}});
-});
-document.getElementById('tttCreate')?.addEventListener('click',()=>tttWithServer(()=>tttSend({type:'ttt_create'})));
-document.getElementById('tttJoin')?.addEventListener('click',()=>{
-  const room=(document.getElementById('tttRoomCode').value||'').trim().toUpperCase();
-  if(!room){tttStatus('Antre kòd chanm lan anvan.');return;}
-  tttWithServer(()=>tttSend({type:'ttt_join',room}));
-});
-document.getElementById('tttRefreshPlayers')?.addEventListener('click',tttRefreshPlayers);
-document.getElementById('tttInviteAccept')?.addEventListener('click',()=>tttAnswerInvite(true));
-document.getElementById('tttInviteRefuse')?.addEventListener('click',()=>tttAnswerInvite(false));
-document.getElementById('tttMicToggle')?.addEventListener('click',tttVoiceToggle);
-document.getElementById('tttRestart')?.addEventListener('click',()=>{
-  if(ttt.mode==='online'){tttStatus('Pou yon lòt match anliy, kite chanm sa a epi voye yon nouvo envitasyon.');return;}
-  tttReset();tttStatus(ttt.mode==='robot'?'Nouvo match. Ou se X.':'Nouvo match. X kòmanse.');
-});
-document.getElementById('tttExit')?.addEventListener('click',tttLeave);
-
-/* JERY MOTS — mo avanse, lang li soti nan mrjery_language */
-const jwSource = {
-  ht:[
-    ['AKWAPONIK','Metòd kote yo fè pwason ak plant grandi ansanm nan yon sistèm dlo.'],
-    ['ANALIZ','Etid ki separe yon sijè an pati pou konprann li.'],
-    ['ANVIWÒNMAN','Tout eleman natirèl ak sosyal ki antoure lavi.'],
-    ['DEKONSTRIKSYON','Metòd pou egzamine yon lide lè w separe estrikti li.'],
-    ['DEMOKRASI','Sistèm kote sitwayen yo patisipe nan pouvwa politik.'],
-    ['DEVLOPMAN','Pwosesis ki fè yon moun oswa sosyete avanse.'],
-    ['EKOSISTÈM','Kominote òganis vivan ak anviwònman kote yo viv.'],
-    ['ENFRASTRIKTI','Enstalasyon ak sèvis fondamantal ki fè sosyete a mache.'],
-    ['ENTÈDEPANDANS','Relasyon kote plizyè eleman depann youn de lòt.'],
-    ['EPISTEMOLOJI','Etid sou konesans ak fason moun rive konnen.'],
-    ['EVALYASYON','Aksyon pou mezire valè, kalite oswa rezilta yon bagay.'],
-    ['FILOZOFI','Refleksyon sistematik sou egzistans, konesans ak valè.'],
-    ['IDANTITE','Karakteristik ki pèmèt rekonèt yon moun oswa yon gwoup.'],
-    ['INOVASYON','Kreyasyon oswa aplikasyon yon nouvo lide oswa metòd.'],
-    ['KONPLEKSITE','Kalite yon sistèm ki gen anpil eleman mare ansanm.'],
-    ['KONSTITISYON','Lwa fondamantal ki òganize pouvwa yon peyi.'],
-    ['KOWÒDINASYON','Òganizasyon plizyè aksyon pou yo mache ansanm.'],
-    ['METODOLOJI','Etid prensip ak metòd yo itilize nan rechèch.'],
-    ['OBSÈVASYON','Aksyon pou egzamine yon fenomèn ak anpil atansyon.'],
-    ['PÈSPÈKTIV','Fason yon moun wè oswa entèprete yon sitiyasyon.'],
-    ['REZILYANS','Kapasite pou reprann fòs apre gwo difikilte.'],
-    ['RESPONSABLITE','Obligasyon pou reponn pou aksyon ak desizyon ou.'],
-    ['SOUVERÈNTE','Dwa yon pèp genyen pou dirije tèt li.'],
-    ['TRANSPARANS','Kalite sa ki klè epi ki fasil pou verifye.'],
-    ['VULNERABILITE','Eta kote yon moun oswa sistèm ka fasil sibi domaj.'],
-    ['KONSANTMAN','Dakò yon moun bay lib e ak bon jan enfòmasyon.'],
-    ['KONTINWITE','Lefèt pou yon pwosesis kontinye san entèripsyon.'],
-    ['KONTRADIKSYON','Lè de lide oswa deklarasyon pa ka vre ansanm.'],
-    ['ENTÈPRETASYON','Aksyon pou bay yon tèks oswa fenomèn sans.'],
-    ['REKONSILYASYON','Pwosesis pou retabli relasyon apre yon konfli.'],
-    ['ESTRATEJI','Plan reflechi ki sèvi pou rive nan yon objektif.'],
-    ['KONSYANS','Kapasite pou konnen sa k ap pase nan tèt ou oswa bò kote w.']
-  ],
-  fr:[
-    ['ABSTRACTION','Opération intellectuelle qui isole les propriétés essentielles.'],
-    ['AMBIGUÏTÉ','Caractère de ce qui admet plusieurs interprétations.'],
-    ['ANTHROPOLOGIE','Étude de l’être humain et de ses sociétés.'],
-    ['ARCHIPEL','Ensemble d’îles situées dans une même région maritime.'],
-    ['ASTRONOMIE','Science qui étudie les astres et l’univers.'],
-    ['BIODIVERSITÉ','Variété des formes de vie dans un milieu donné.'],
-    ['CONJECTURE','Proposition plausible qui reste à démontrer.'],
-    ['DÉONTOLOGIE','Ensemble des devoirs propres à une profession.'],
-    ['ÉPISTÉMOLOGIE','Étude critique de la connaissance scientifique.'],
-    ['ÉQUILIBRE','État de stabilité entre plusieurs forces opposées.'],
-    ['EXTRAPOLATION','Estimation effectuée au-delà des données observées.'],
-    ['HÉTÉROGÉNÉITÉ','Caractère d’un ensemble composé d’éléments différents.'],
-    ['INTERDÉPENDANCE','Relation dans laquelle plusieurs éléments dépendent mutuellement.'],
-    ['MÉTAMORPHOSE','Transformation profonde d’une forme ou d’un état.'],
-    ['PARADOXE','Idée qui semble contradictoire mais révèle une logique.'],
-    ['PERSPECTIVE','Manière d’envisager ou de représenter une situation.'],
-    ['PHÉNOMÉNOLOGIE','Étude philosophique des phénomènes tels qu’ils apparaissent.'],
-    ['PROBABILITÉ','Mesure mathématique du caractère incertain d’un événement.'],
-    ['RECONSTITUTION','Action de reconstruire un ensemble à partir de ses éléments.'],
-    ['SOUVERAINETÉ','Autorité suprême d’un État ou d’un peuple.'],
-    ['THERMODYNAMIQUE','Étude des échanges entre chaleur, travail et énergie.'],
-    ['TRANSCENDANCE','Caractère de ce qui dépasse l’expérience ordinaire.'],
-    ['VULNÉRABILITÉ','Disposition à être atteint ou endommagé.'],
-    ['CONTRADICTION','Opposition logique entre deux propositions incompatibles.'],
-    ['INTERPRÉTATION','Action de donner un sens à un texte ou à un phénomène.'],
-    ['CONVERGENCE','Tendance de plusieurs éléments à se rapprocher.'],
-    ['DISCONTINUITÉ','Absence de continuité dans une évolution.'],
-    ['ONTOLOGIE','Étude philosophique de l’être et de l’existence.'],
-    ['RHÉTORIQUE','Art de construire un discours efficace et persuasif.'],
-    ['DIALECTIQUE','Méthode de raisonnement par confrontation des idées.'],
-    ['INCOMMENSURABLE','Impossible à mesurer avec une unité commune.'],
-    ['CIRCUMNAVIGATION','Action de faire le tour complet d’un espace maritime.']
-  ],
-  en:[
-    ['ABSTRACTION','The process of isolating essential properties from details.'],
-    ['AMBIGUITY','The quality of allowing multiple interpretations.'],
-    ['ANTHROPOLOGY','The study of humans and their societies.'],
-    ['ARCHIPELAGO','A chain or cluster of islands.'],
-    ['ASTRONOMY','The science of celestial objects and space.'],
-    ['BIODIVERSITY','The variety of living organisms in an ecosystem.'],
-    ['CONJECTURE','A plausible statement that has not yet been proven.'],
-    ['DEONTOLOGY','The study of professional duties and ethical obligations.'],
-    ['EPISTEMOLOGY','The philosophical study of knowledge.'],
-    ['EQUILIBRIUM','A state in which opposing forces are balanced.'],
-    ['EXTRAPOLATION','An estimate beyond the range of known observations.'],
-    ['HETEROGENEITY','The condition of being composed of unlike elements.'],
-    ['INTERDEPENDENCE','A relationship in which elements rely on one another.'],
-    ['METAMORPHOSIS','A profound change in form or nature.'],
-    ['PARADOX','A statement that seems contradictory but may be true.'],
-    ['PERSPECTIVE','A particular way of viewing or interpreting something.'],
-    ['PHENOMENOLOGY','The philosophical study of structures of experience.'],
-    ['PROBABILITY','A mathematical measure of how likely an event is.'],
-    ['RECONSTRUCTION','The process of rebuilding from available evidence.'],
-    ['SOVEREIGNTY','The supreme authority of a state or people.'],
-    ['THERMODYNAMICS','The study of heat, work, and energy transfer.'],
-    ['TRANSCENDENCE','The quality of going beyond ordinary limits.'],
-    ['VULNERABILITY','The susceptibility to harm or damage.'],
-    ['CONTRADICTION','A logical opposition between incompatible claims.'],
-    ['INTERPRETATION','The act of assigning meaning to information.'],
-    ['CONVERGENCE','The tendency of separate things to move toward one point.'],
-    ['DISCONTINUITY','A break in an otherwise continuous process.'],
-    ['ONTOLOGY','The philosophical study of being and existence.'],
-    ['RHETORIC','The art of effective or persuasive communication.'],
-    ['DIALECTIC','A method of reasoning through opposing viewpoints.'],
-    ['INCOMMENSURABLE','Impossible to measure using a common standard.'],
-    ['CIRCUMNAVIGATION','The act of traveling completely around something.']
-  ]
-};
-const jwUI={
-  ht:{intro:'Devine mo kache a. Lang lan swiv lang ou chwazi sou sit la.',language:'Lang kont ou: ',hint:'Endis: ',tries:' chans rete',new:'Nouvo mo',choose:'Chwazi lèt yo pou devine mo a.',win:'Bravo! Ou jwenn mo a. 🎉',loss:'Ou pèdi. Mo a se ',wins:'Viktwa',losses:'Defèt'},
-  fr:{intro:'Devinez le mot caché. La langue suit celle que vous avez choisie sur le site.',language:'Langue du compte : ',hint:'Indice : ',tries:' essais restants',new:'Nouveau mot',choose:'Choisissez des lettres pour trouver le mot.',win:'Bravo ! Vous avez trouvé le mot. 🎉',loss:'Perdu. Le mot était ',wins:'Victoires',losses:'Défaites'},
-  en:{intro:'Guess the hidden word. The game follows your selected website language.',language:'Account language: ',hint:'Clue: ',tries:' guesses left',new:'New word',choose:'Choose letters to reveal the word.',win:'Excellent! You found the word. 🎉',loss:'You lost. The word was ',wins:'Wins',losses:'Losses'}
-};
-let jwCurrent=null,jwCurrentLang='fr',jwGuessed=new Set(),jwMistakes=0,jwDone=false,jwWins=0,jwLosses=0,jwUsed=new Set();
-function jwLang(){let lang='fr';try{lang=localStorage.getItem('mrjery_language')||'fr';}catch(e){}return ['ht','fr','en'].includes(lang)?lang:'fr';}
-function jwNormalize(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();}
-function jwApplyLanguage(){
-  const lang=jwLang(),ui=jwUI[lang];jwCurrentLang=lang;
-  document.getElementById('jwIntro').textContent=ui.intro;
-  document.getElementById('jwLanguageName').textContent=ui.language+(lang==='ht'?'Kreyòl Ayisyen':lang==='fr'?'Français':'English');
-  document.getElementById('jwNew').textContent=ui.new;
-  document.getElementById('jwWinsLabel').textContent=ui.wins+':';
-  document.getElementById('jwLossesLabel').textContent=ui.losses+':';
-}
-function openJerySolo(which){
-  showScreen('jerySoloScreen');
-  document.getElementById('jeryWordGame').style.display=which==='words'?'block':'none';
-  document.getElementById('jeryNumberGame').style.display=which==='number'?'block':'none';
-  if(which==='words'){
-    jwApplyLanguage();jwWins=Number(localStorage.getItem('jwWins_'+jwLang())||0);jwLosses=Number(localStorage.getItem('jwLosses_'+jwLang())||0);jwUsed=new Set();jwUpdateScore();jwNewGame();
-  }else{
-    clearInterval(jnTimer);document.getElementById('jnBest').textContent=localStorage.getItem('jnBest')||'0';
-    document.getElementById('jnTime').textContent='90';document.getElementById('jnScore').textContent='0';
-    document.getElementById('jnQuestion').textContent='Peze Kòmanse pou resevwa premye defi a.';
-    document.getElementById('jnAnswer').value='';document.getElementById('jnAnswer').disabled=true;jnRunning=false;
-  }
-}
-document.getElementById('jerySoloBack')?.addEventListener('click',()=>{clearInterval(jnTimer);jnRunning=false;showScreen('jeryGamesScreen');});
-function jwNewGame(){
-  jwApplyLanguage();const lang=jwLang(),bank=jwSource[lang];
-  if(!bank||!bank.length)return;
-  if(jwUsed.size>=bank.length)jwUsed.clear();
-  let available=bank.filter((item)=>!jwUsed.has(item[0]));
-  if(!available.length){jwUsed.clear();available=bank.slice();}
-  jwCurrent=available[Math.floor(Math.random()*available.length)];jwUsed.add(jwCurrent[0]);
-  jwGuessed=new Set();jwMistakes=0;jwDone=false;
-  document.getElementById('jwHint').textContent=jwUI[lang].hint+jwCurrent[1];
-  document.getElementById('jwMessage').textContent=jwUI[lang].choose; jwRender();
-}
-function jwRender(){
-  if(!jwCurrent)return;const ui=jwUI[jwCurrentLang],word=jwCurrent[0],normalized=jwNormalize(word);
-  const shown=[...word].map((letter,index)=>/[A-Z]/.test(normalized[index])?(jwGuessed.has(normalized[index])?letter:'_'):letter).join(' ');
-  document.getElementById('jwWord').textContent=shown;
-  document.getElementById('jwTries').textContent=(7-jwMistakes)+ui.tries;
-  const box=document.getElementById('jwLetters');box.innerHTML='';
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(letter=>{
-    const button=document.createElement('button');button.type='button';button.textContent=letter;button.disabled=jwDone||jwGuessed.has(letter);
-    button.style.cssText='min-width:36px;padding:8px;border-radius:7px';button.addEventListener('click',()=>jwGuess(letter));box.appendChild(button);
-  });
-  if(jwMistakes>=7){jwDone=true;document.getElementById('jwMessage').textContent=ui.loss+word+'.';jwLosses++;jwSave();}
-  else if([...normalized].every(letter=>!/[A-Z]/.test(letter)||jwGuessed.has(letter))){jwDone=true;document.getElementById('jwMessage').textContent=ui.win;jwWins++;jwSave();}
-}
-function jwGuess(letter){if(jwDone||!jwCurrent)return;jwGuessed.add(letter);if(!jwNormalize(jwCurrent[0]).includes(letter))jwMistakes++;jwRender();}
-function jwSave(){try{localStorage.setItem('jwWins_'+jwCurrentLang,String(jwWins));localStorage.setItem('jwLosses_'+jwCurrentLang,String(jwLosses));}catch(e){}jwUpdateScore();}
-function jwUpdateScore(){document.getElementById('jwWins').textContent=jwWins;document.getElementById('jwLosses').textContent=jwLosses;}
-document.getElementById('jwNew')?.addEventListener('click',jwNewGame);
-
-/* JERY NUMBER: seri, aljèb, aritmetik modilè ak lojik nivo ekstrèm */
-let jnTimer=null,jnRemaining=90,jnScore=0,jnAnswer=0,jnRunning=false,jnSeen=new Set();
-function jnRand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-function jnGcd(a,b){while(b){const t=b;b=a%b;a=t;}return Math.abs(a);}
-function jnLcm(a,b){return Math.abs(a*b)/jnGcd(a,b);}
-function jnIsPrime(n){if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true;}
-function jnNextPrime(n){let x=n+1;while(!jnIsPrime(x))x++;return x;}
-function jnChoose(n,k){let out=1;for(let i=1;i<=k;i++)out=out*(n-i+1)/i;return Math.round(out);}
-function jnMakeQuestion(){
-  const type=jnRand(0,9);let question='',answer=0;
-  if(type===0){ // Algebra with a hidden integer solution
-    const x=jnRand(7,24),a=jnRand(5,12),c=jnRand(2,4),b=jnRand(9,35),d=(a-c)*x+b;
-    question=`Rezoud ekwasyon an pou x:  ${a}x + ${b} = ${c}x + ${d}`;answer=x;
-  }else if(type===1){ // Quadratic equation with integer roots
-    let r=jnRand(4,18),s=jnRand(4,18);while(s===r)s=jnRand(4,18);
-    question=`Ekwasyon: x² − ${r+s}x + ${r*s} = 0. Ki pi gwo rasin lan?`;answer=Math.max(r,s);
-  }else if(type===2){ // Constant second difference
-    const first=jnRand(3,17),diff=jnRand(4,11),second=jnRand(2,7);
-    const seq=[];for(let n=0;n<5;n++)seq.push(first+n*diff+(second*n*(n-1))/2);
-    answer=first+5*diff+(second*5*4)/2;question=`Ki pwochen tèm nan seri sa a?  ${seq.join(', ')}, ?`;
-  }else if(type===3){ // Chinese remainder theorem, two coprime moduli
-    let m=jnRand(7,13),n=jnRand(8,14);while(jnGcd(m,n)!==1)n=jnRand(8,14);
-    const hidden=jnRand(60,220),r=hidden%m,s=hidden%n;answer=0;
-    for(let x=1;x<=m*n;x++)if(x%m===r&&x%n===s){answer=x;break;}
-    question=`Jwenn pi piti x pozitif la: x bay rès ${r} lè w divize pa ${m}, epi rès ${s} lè w divize pa ${n}.`;
-  }else if(type===4){ // Combinatorics
-    const n=jnRand(10,16),k=jnRand(4,Math.min(7,n-3));answer=jnChoose(n,k);
-    question=`Gen ${n} kandida. Konbyen gwoup diferan ${k} moun ou ka fòme si lòd pa konte?`;
-  }else if(type===5){ // LCM and GCD
-    const a=jnRand(24,68),b=jnRand(35,84);answer=jnLcm(a,b);
-    question=`Kalkile PPCM/LCM(${a}, ${b}). Bay repons lan kòm yon nonb antye.`;
-  }else if(type===6){ // Prime logic
-    const p=jnRand(120,260);let prime=p;while(!jnIsPrime(prime))prime++;
-    answer=jnNextPrime(prime);question=`Ki pi piti nonb premye ki vini touswit apre ${prime}?`;
-  }else if(type===7){ // Exponents and order of operations
-    const a=jnRand(3,7),b=jnRand(2,4),c=jnRand(3,7),d=jnRand(2,3),e=jnRand(2,5);
-    answer=Math.pow(a,b)+Math.pow(c,d)-e*jnGcd(a,c);
-    question=`Kalkile: ${a}^${b} + ${c}^${d} − (${e} × PGCD(${a}, ${c})).`;
-  }else if(type===8){ // Two-digit digit logic
-    let tens=jnRand(6,9),units=jnRand(1,4);while(tens<=units)units=jnRand(1,4);
-    const sum=tens+units,diff=9*(tens-units);answer=10*tens+units;
-    question=`Yon nonb gen 2 chif. Sòm chif yo se ${sum}; nonb lan depase nonb ki ranvèse a pa ${diff}. Ki nonb lan?`;
-  }else{ // Arithmetic progression sum
-    const first=jnRand(5,28),step=jnRand(3,12),count=jnRand(12,24);
-    answer=count*(2*first+(count-1)*step)/2;
-    question=`Kalkile sòm ${count} premye tèm yon pwogresyon aritmetik ki kòmanse ak ${first} epi ki ogmante pa ${step} chak fwa.`;
-  }
-  return {question,answer:Number(answer)};
-}
-function jnQuestion(){
-  let item=null;
-  for(let i=0;i<50;i++){const candidate=jnMakeQuestion();const key=candidate.question;if(!jnSeen.has(key)){jnSeen.add(key);item=candidate;break;}}
-  if(!item)item=jnMakeQuestion();
-  jnAnswer=item.answer;document.getElementById('jnQuestion').textContent=item.question;
-  document.getElementById('jnAnswer').value='';
-}
-function jnFinish(){
-  clearInterval(jnTimer);jnRunning=false;document.getElementById('jnAnswer').disabled=true;
-  document.getElementById('jnMessage').textContent='Tan fini! Nòt final ou: '+jnScore+' pwen.';
-  const best=Math.max(jnScore,Number(localStorage.getItem('jnBest')||0));
-  try{localStorage.setItem('jnBest',String(best));}catch(e){}
-  document.getElementById('jnBest').textContent=String(best);
-}
-function jnStartGame(){
-  clearInterval(jnTimer);jnRemaining=90;jnScore=0;jnRunning=true;jnSeen.clear();
-  document.getElementById('jnTime').textContent='90';document.getElementById('jnScore').textContent='0';
-  document.getElementById('jnMessage').textContent='Defi a kòmanse. Reflechi byen!';
-  document.getElementById('jnAnswer').disabled=false;jnQuestion();
-  jnTimer=setInterval(()=>{jnRemaining--;document.getElementById('jnTime').textContent=String(jnRemaining);if(jnRemaining<=0)jnFinish();},1000);
-}
-document.getElementById('jnStart')?.addEventListener('click',jnStartGame);
-document.getElementById('jnForm')?.addEventListener('submit',event=>{
-  event.preventDefault();if(!jnRunning)return;
-  const input=document.getElementById('jnAnswer');const value=Number(input.value);
-  if(input.value.trim()!==''&&Number.isFinite(value)&&value===jnAnswer){jnScore+=10;document.getElementById('jnScore').textContent=String(jnScore);document.getElementById('jnMessage').textContent='Bon repons! +10 pwen.';jnQuestion();}
-  else{jnRemaining=Math.max(0,jnRemaining-8);document.getElementById('jnTime').textContent=String(jnRemaining);document.getElementById('jnMessage').textContent='Repons lan pa kòrèk. Ou pèdi 8 segonn; eseye ankò.';input.value='';if(jnRemaining<=0)jnFinish();}
-  input.focus();
-});
-
 </script>
 
 </body>
