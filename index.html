@@ -4497,7 +4497,7 @@ function connectServer(callback) {
                         currentPlayerId = data.player_id || null;
                         currentUsername = data.username || null;
                         currentEmail = data.email || null;
-                        accountToken = data.account_token || getPremiumAccountToken();
+                        accountToken = data.account_token || null;
                         accountConnected = true;
                         try { if(accountToken) localStorage.setItem("mrjery_account_token", accountToken); } catch(e) {}
 
@@ -4532,7 +4532,7 @@ function connectServer(callback) {
                         currentPlayerId = data.player_id || null;
                         currentUsername = data.username || null;
                         currentEmail = data.email || null;
-                        accountToken = data.account_token || getPremiumAccountToken();
+                        accountToken = data.account_token || null;
                         accountConnected = true;
                         try { if(accountToken) localStorage.setItem("mrjery_account_token", accountToken); } catch(e) {}
 
@@ -4562,7 +4562,7 @@ function connectServer(callback) {
                         currentPlayerId = data.player_id || null;
                         currentUsername = data.username || null;
                         currentEmail = data.email || null;
-                        accountToken = data.account_token || getPremiumAccountToken();
+                        try { accountToken = data.account_token || localStorage.getItem("mrjery_account_token") || null; } catch(e) { accountToken = data.account_token || accountToken || null; }
                         accountConnected = Boolean(accountToken || currentPlayerId || currentUsername);
                         updateAccountDisplay();
                         refreshDashboardUser();
@@ -6969,18 +6969,6 @@ const PREMIUM_PLANS={
  pro:{name:"Premium Pro",usd:"24.99",htg:"3,499",usdValue:24.99},
  elite:{name:"Premium Elite",usd:"36.99",htg:"5,179",usdValue:36.99}
 };
-function getPremiumAccountToken(){
- // Rekipere menm token sesyon jwèt la, menm si varyab JavaScript la te pèdi apre navigasyon.
- let token = accountToken;
- if (!token) {
-  try { token = localStorage.getItem("mrjery_account_token") || localStorage.getItem("accountToken"); } catch(e) {}
- }
- if (!token) {
-  try { token = sessionStorage.getItem("mrjery_account_token") || sessionStorage.getItem("accountToken"); } catch(e) {}
- }
- if (token) accountToken = token;
- return token || null;
-}
 function premiumMessage(message,ok=true){const box=document.getElementById("premiumStatusBox");if(box){box.textContent=message;box.style.borderColor=ok?"#16A34A":"#DC2626";}}
 function selectedPremiumMethod(){return document.querySelector('input[name="premiumPaymentMethod"]:checked')?.value||"PayPal";}
 function updatePremiumPaymentInfo(){
@@ -6995,9 +6983,8 @@ function updatePremiumPaymentInfo(){
 }
 function choosePremiumPlan(type){if(!PREMIUM_PLANS[type])return;document.getElementById("premiumType").value=type;document.getElementById("premiumCheckout").classList.add("visible");updatePremiumPaymentInfo();document.getElementById("premiumCheckout").scrollIntoView({behavior:"smooth",block:"start"});}
 async function refreshPremiumStatus(){
- const token=getPremiumAccountToken();
- if(!accountConnected||!token){premiumMessage("Kont lan parèt konekte, men token sesyon an pa disponib. Dekonekte epi rekonekte sou kont jwèt la, apre sa retounen Premium.",false);return;}
- try{const r=await fetch(MRJERY_ADMIN_API+"/premium/my-status",{headers:{"X-Account-Token":token}});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Pa kapab verifye estati Premium lan.");
+ if(!accountConnected||!accountToken){premiumMessage("Konekte sou kont MR_Jery ou an avan.",false);return;}
+ try{const r=await fetch(MRJERY_ADMIN_API+"/premium/my-status",{headers:{"X-Account-Token":accountToken}});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Pa kapab verifye estati Premium lan.");
  if(d.premium){const nm=PREMIUM_PLANS[d.premium_type]?.name||d.premium_type;premiumMessage(`✅ ${nm} aktif sou kont ${d.username} jiska ${new Date(d.expires_at).toLocaleString()}.`);}
  else if(d.latest_request&&d.latest_request.status==="pending")premiumMessage(`⏳ Demann ${PREMIUM_PLANS[d.latest_request.premium_type]?.name||d.latest_request.premium_type} ou a ap tann verifikasyon Admin.`);
  else if(d.latest_request&&d.latest_request.status==="rejected")premiumMessage("❌ Dènye demann Premium lan te refize. Kontakte Admin pou detay.",false);
@@ -7005,12 +6992,11 @@ async function refreshPremiumStatus(){
  }catch(e){premiumMessage(e.message||"Erè rezo pandan verifikasyon.",false);}
 }
 async function submitPremiumRequest(){
- const token=getPremiumAccountToken();
- if(!accountConnected||!token){premiumMessage("Kont lan parèt konekte, men token sesyon an pa disponib. Dekonekte epi rekonekte sou kont jwèt la, apre sa voye prèv la ankò.",false);return;}
+ if(!accountConnected||!accountToken){premiumMessage("Ou dwe konekte sou kont jwèt ou an avan.",false);return;}
  const file=document.getElementById("premiumScreenshot").files[0];if(!file){premiumMessage("Tanpri ajoute screenshot prèv peman an.",false);return;}if(file.size>5*1024*1024){premiumMessage("Screenshot la depase 5 MB.",false);return;}
  const fd=new FormData();fd.append("premium_type",document.getElementById("premiumType").value);fd.append("payment_method",selectedPremiumMethod());fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());fd.append("screenshot",file);
  const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;btn.textContent="Ap voye...";
- try{const r=await fetch(MRJERY_ADMIN_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":token},body:fd});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Demann nan pa t pase.");premiumMessage("✅ Demann Premium ou a anrejistre. ID: "+d.request_id+". Admin ap verifye peman an avan aktivasyon.");document.getElementById("premiumScreenshot").value="";await refreshPremiumStatus();}
+ try{const r=await fetch(MRJERY_ADMIN_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":accountToken},body:fd});const d=await r.json();if(!r.ok)throw new Error(d.detail||"Demann nan pa t pase.");premiumMessage("✅ Demann Premium ou a anrejistre. ID: "+d.request_id+". Admin ap verifye peman an avan aktivasyon.");document.getElementById("premiumScreenshot").value="";await refreshPremiumStatus();}
  catch(e){premiumMessage(e.message||"Erè pandan voye demann lan.",false);}finally{btn.disabled=false;btn.textContent="Voye prèv bay Admin";}
 }
 function sendPremiumWhatsApp(){
@@ -7022,7 +7008,7 @@ function sendPremiumWhatsApp(){
 }
 document.querySelectorAll(".plan-select").forEach(b=>b.addEventListener("click",()=>choosePremiumPlan(b.dataset.plan)));
 document.querySelectorAll('input[name="premiumPaymentMethod"]').forEach(r=>r.addEventListener("change",updatePremiumPaymentInfo));
-document.getElementById("premiumBtn")?.addEventListener("click",()=>{if(!accountConnected||!getPremiumAccountToken()){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Premium.",false);return;}showScreen("premiumScreen");refreshPremiumStatus();updatePremiumPaymentInfo();});
+document.getElementById("premiumBtn")?.addEventListener("click",()=>{if(!accountConnected||!accountToken){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Premium.",false);return;}showScreen("premiumScreen");refreshPremiumStatus();updatePremiumPaymentInfo();});
 document.getElementById("premiumSubmitBtn")?.addEventListener("click",submitPremiumRequest);
 document.getElementById("premiumWhatsAppBtn")?.addEventListener("click",sendPremiumWhatsApp);
 document.getElementById("premiumRefreshBtn")?.addEventListener("click",refreshPremiumStatus);
