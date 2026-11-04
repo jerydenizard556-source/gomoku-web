@@ -1174,11 +1174,42 @@ td, th { overflow-wrap: anywhere; }
         <button class="dashboard-card" id="dashboardPlayersCard"><span class="dash-card-icon">👥🏆</span><strong>Tout jwè & nivo yo</strong><small>Gade tout kont ki enskri yo, menm jwè offline, sig yo ak 30 nivo MR_Jery yo.</small></button>
         <button class="dashboard-card gold-card" id="dashboardGamesCard"><span class="dash-card-icon">🎮</span><strong>JERY GAMES</strong><small>Tout jwèt platfòm nan nan yon sèl meni.</small></button>
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
+        <button class="dashboard-card gold-card" id="premiumOpenBtn"><span class="dash-card-icon">⭐</span><strong>MR_Jery Premium</strong><small>Chwazi Starter, Pro oswa Elite pou 30 jou.</small></button>
       </section>
 
       <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
     </main>
   </div>
+</section>
+
+<!-- MR_JERY PREMIUM -->
+<section id="premiumScreen" class="screen">
+  <div class="inner-page-head">
+    <button type="button" class="back-icon" id="premiumBack" aria-label="Retour">←</button>
+    <div class="brand-mini"><span class="brand-crown">♛</span> MR_Jery <b>PREMIUM</b></div><span></span>
+  </div>
+  <main style="max-width:1050px;margin:0 auto;padding:22px 16px 45px;color:#edf2ff">
+    <div style="text-align:center;margin-bottom:20px"><h1 style="color:#f5bd32">⭐ Chwazi abònman ou</h1><p style="color:#a9b8d0">Chak abònman dire 30 jou apre administratè a fin verifye peman an.</p></div>
+    <div id="premiumCurrentStatus" class="notice" style="background:#101d30;border:1px solid #29415f;border-radius:12px;padding:14px;margin-bottom:16px">Ap verifye estati abònman ou…</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+      <article class="dashboard-card" style="cursor:default"><span class="dash-card-icon">🥉</span><strong>STARTER</strong><h2>$12.99 / 1,819 HTG</h2><small>MR_Jery Morpion san odyo.</small><button type="button" class="auth-main-btn premiumChoose" data-plan="starter">Chwazi Starter</button></article>
+      <article class="dashboard-card" style="cursor:default"><span class="dash-card-icon">🥈</span><strong>PRO</strong><h2>$24.99 / 3,499 HTG</h2><small>Starter + MR_Jery Gomoku + Morpion 3×3.</small><button type="button" class="auth-main-btn premiumChoose" data-plan="pro">Chwazi Pro</button></article>
+      <article class="dashboard-card gold-card" style="cursor:default"><span class="dash-card-icon">🥇</span><strong>ELITE</strong><h2>$36.99 / 5,179 HTG</h2><small>Pro + odyo an dirèk ant 2 jwè + aksè tout MR_Jery Games.</small><button type="button" class="auth-main-btn premiumChoose" data-plan="elite">Chwazi Elite</button></article>
+    </div>
+    <form id="premiumRequestForm" style="display:none;margin-top:20px;background:#0b1728;border:1px solid #29415f;border-radius:14px;padding:18px">
+      <h2 id="premiumFormTitle">Demann abònman</h2>
+      <p style="color:#a9b8d0">Fè peman an sou youn nan mwayen sa yo, epi mete referans tranzaksyon an ak foto resi a.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0">
+        <div><b>PayPal</b><p>jerydenizard556@gmail.com</p></div><div><b>MonCash</b><p>31706963</p></div><div><b>NatCash</b><p>43813217</p></div>
+      </div>
+      <label for="premiumPaymentMethod">Mwayen peman</label><select id="premiumPaymentMethod" required style="width:100%;padding:12px;border-radius:8px"><option value="">Chwazi</option><option>PayPal</option><option>MonCash</option><option>NatCash</option></select>
+      <label for="premiumPaymentReference">Nimewo referans tranzaksyon an</label><input id="premiumPaymentReference" maxlength="160" required style="width:100%;padding:12px;border-radius:8px" placeholder="Mete referans peman an">
+      <label for="premiumReceipt">Foto resi peman an (JPG, PNG oswa WEBP; max 5 MB)</label><input id="premiumReceipt" type="file" accept="image/jpeg,image/png,image/webp" required style="width:100%;padding:10px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><button type="submit" class="auth-main-btn" id="premiumSubmitBtn">Voye demann lan</button><button type="button" class="auth-tab" id="premiumCancelBtn">Anile</button></div>
+      <div id="premiumFormMessage" role="status" style="margin-top:12px"></div>
+    </form>
+    <p style="color:#91a5c1;font-size:13px;margin-top:18px">Enpòtan: voye demann lan pa aktive Premium otomatikman. Administratè a dwe verifye tranzaksyon an anvan li apwouve li. Pa voye modpas oswa kòd sekirite.</p>
+  </main>
 </section>
 
 <!-- JERY GAMES: menu added without replacing existing screens -->
@@ -6697,6 +6728,46 @@ __mrjeryLanguageObserver.observe(document.body,{subtree:true,childList:true,char
 try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWholeSiteText(__lang); translateCurrentLanguageAttributes(__lang); } catch(e) {}
 
 // Le compte reste mémorisé dans localStorage et est restauré au démarrage.
+// ==================================================
+// MR_JERY PREMIUM — DEMANDE SÉCURISÉE
+// ==================================================
+const PREMIUM_API = "https://mr-jery-control-center.onrender.com";
+const PREMIUM_PRICES = {starter:{usd:"12.99",htg:"1,819"},pro:{usd:"24.99",htg:"3,499"},elite:{usd:"36.99",htg:"5,179"}};
+let selectedPremiumPlan = "";
+function openPremium(){
+  if(!accountConnected || !accountToken){showScreen("accountScreen");showAccountMessage("Konekte sou kont ou anvan ou mande Premium.",false);return;}
+  showScreen("premiumScreen"); document.getElementById("premiumRequestForm").style.display="none";
+  loadMyPremiumStatus();
+}
+async function loadMyPremiumStatus(){
+ const box=document.getElementById("premiumCurrentStatus"); box.textContent="Ap verifye estati abònman ou…";
+ try{const r=await fetch(PREMIUM_API+"/premium/my-status",{headers:{"X-Account-Token":accountToken}});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Pa kapab verifye estati Premium la.");
+  if(d.premium){box.textContent="✅ Abònman aktif: "+String(d.premium_type||"").toUpperCase()+" — Ekspirasyon: "+(d.expires_at||"");}
+  else if(d.latest_request){box.textContent="Dènye demann: "+String(d.latest_request.premium_type||"").toUpperCase()+" — Estati: "+d.latest_request.status+ (d.latest_request.admin_note?" — Nòt: "+d.latest_request.admin_note:"");}
+  else{box.textContent="Ou poko gen abònman aktif ni demann ki an atant.";}
+ }catch(e){box.textContent=e.message;}
+}
+document.getElementById("premiumOpenBtn")?.addEventListener("click",openPremium);
+document.getElementById("premiumBack")?.addEventListener("click",showAccountMenu);
+document.getElementById("premiumCancelBtn")?.addEventListener("click",()=>{document.getElementById("premiumRequestForm").style.display="none";});
+document.querySelectorAll(".premiumChoose").forEach(btn=>btn.addEventListener("click",()=>{
+ selectedPremiumPlan=btn.dataset.plan; const p=PREMIUM_PRICES[selectedPremiumPlan];
+ document.getElementById("premiumFormTitle").textContent="Demann "+selectedPremiumPlan.toUpperCase()+" — $"+p.usd+" / "+p.htg+" HTG";
+ document.getElementById("premiumRequestForm").style.display="block"; document.getElementById("premiumFormMessage").textContent="";
+ document.getElementById("premiumRequestForm").scrollIntoView({behavior:"smooth",block:"start"});
+}));
+document.getElementById("premiumRequestForm")?.addEventListener("submit",async ev=>{
+ ev.preventDefault(); const msg=document.getElementById("premiumFormMessage"), file=document.getElementById("premiumReceipt").files[0];
+ if(!accountConnected||!accountToken){msg.textContent="Sesyon ou fini. Rekonekte avan ou voye demann lan.";return;}
+ if(!selectedPremiumPlan){msg.textContent="Chwazi yon plan avan.";return;}
+ if(!file||file.size>5*1024*1024||!(["image/jpeg","image/png","image/webp"].includes(file.type))){msg.textContent="Chwazi yon foto JPG, PNG oswa WEBP ki pa depase 5 MB.";return;}
+ const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;msg.textContent="Ap voye demann lan…";
+ try{const fd=new FormData();fd.append("premium_type",selectedPremiumPlan);fd.append("payment_method",document.getElementById("premiumPaymentMethod").value);fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());fd.append("screenshot",file);
+  const r=await fetch(PREMIUM_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":accountToken},body:fd});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Demann lan pa t kapab anrejistre.");
+  msg.textContent="✅ Demann ou anrejistre. Li an atant verifikasyon administratè a. ID: "+(d.request_id||"—");document.getElementById("premiumRequestForm").reset();await loadMyPremiumStatus();
+ }catch(e){msg.textContent="❌ "+e.message;}finally{btn.disabled=false;}
+});
+
 // Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
 // Au chargement, tenter de restaurer le compte sauvegardé sans exiger une nouvelle connexion.
 (function restoreSavedAccountAtStartup(){
