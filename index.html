@@ -1196,19 +1196,31 @@ td, th { overflow-wrap: anywhere; }
       <article class="dashboard-card" style="cursor:default"><span class="dash-card-icon">🥈</span><strong>PRO</strong><h2>$24.99 / 3,499 HTG</h2><small>Starter + MR_Jery Gomoku + Morpion 3×3.</small><button type="button" class="auth-main-btn premiumChoose" data-plan="pro">Chwazi Pro</button></article>
       <article class="dashboard-card gold-card" style="cursor:default"><span class="dash-card-icon">🥇</span><strong>ELITE</strong><h2>$36.99 / 5,179 HTG</h2><small>Pro + odyo an dirèk ant 2 jwè + aksè tout MR_Jery Games.</small><button type="button" class="auth-main-btn premiumChoose" data-plan="elite">Chwazi Elite</button></article>
     </div>
-    <form id="premiumRequestForm" style="display:none;margin-top:20px;background:#0b1728;border:1px solid #29415f;border-radius:14px;padding:18px">
-      <h2 id="premiumFormTitle">Demann abònman</h2>
-      <p style="color:#a9b8d0">Fè peman an sou youn nan mwayen sa yo, epi mete referans tranzaksyon an ak foto resi a.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0">
-        <div><b>PayPal</b><p>jerydenizard556@gmail.com</p></div><div><b>MonCash</b><p>31706963</p></div><div><b>NatCash</b><p>43813217</p></div>
+    <div id="premiumWalletBox" style="margin-top:20px;background:#0b1728;border:1px solid #29415f;border-radius:14px;padding:18px">
+      <h2>🔐 Konekte Wallet MR_Jery</h2>
+      <p style="color:#a9b8d0">Pou mare kont yo san danje, konekte oswa kreye Wallet la ak <strong>menm email</strong> ak kont jwèt ou a.</p>
+      <label for="premiumWalletUsername">Pseudo (sèlman lè w ap kreye kont)</label>
+      <input id="premiumWalletUsername" maxlength="100" autocomplete="username" style="width:100%;padding:12px;border-radius:8px;margin:6px 0 12px" placeholder="Pseudo Wallet">
+      <label for="premiumWalletEmail">Email</label>
+      <input id="premiumWalletEmail" type="email" maxlength="255" autocomplete="email" required style="width:100%;padding:12px;border-radius:8px;margin:6px 0 12px" placeholder="Menm email ak kont jwèt la">
+      <label for="premiumWalletPassword">Modpas Wallet</label>
+      <input id="premiumWalletPassword" type="password" minlength="8" autocomplete="current-password" required style="width:100%;padding:12px;border-radius:8px;margin:6px 0 12px" placeholder="Modpas Wallet la">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button type="button" class="auth-main-btn" id="premiumWalletLoginBtn">Konekte Wallet</button>
+        <button type="button" class="auth-tab" id="premiumWalletRegisterBtn">Kreye Wallet</button>
+        <button type="button" class="auth-tab" id="premiumWalletLogoutBtn" style="display:none">Dekonekte Wallet</button>
       </div>
-      <label for="premiumPaymentMethod">Mwayen peman</label><select id="premiumPaymentMethod" required style="width:100%;padding:12px;border-radius:8px"><option value="">Chwazi</option><option>PayPal</option><option>MonCash</option><option>NatCash</option></select>
-      <label for="premiumPaymentReference">Nimewo referans tranzaksyon an</label><input id="premiumPaymentReference" maxlength="160" required style="width:100%;padding:12px;border-radius:8px" placeholder="Mete referans peman an">
-      <label for="premiumReceipt">Foto resi peman an (JPG, PNG oswa WEBP; max 5 MB)</label><input id="premiumReceipt" type="file" accept="image/jpeg,image/png,image/webp" required style="width:100%;padding:10px">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><button type="submit" class="auth-main-btn" id="premiumSubmitBtn">Voye demann lan</button><button type="button" class="auth-tab" id="premiumCancelBtn">Anile</button></div>
+      <div id="premiumWalletMessage" role="status" style="margin-top:12px"></div>
+    </div>
+    <div id="premiumRequestForm" style="display:none;margin-top:20px;background:#0b1728;border:1px solid #29415f;border-radius:14px;padding:18px">
+      <h2 id="premiumFormTitle">Peye abònman</h2>
+      <p style="color:#a9b8d0">Chwazi metòd peman an. Tranzak ap konfime peman an; Premium ap aktive sèlman apre konfimasyon ofisyèl la.</p>
+      <label for="premiumPaymentMethod">Mwayen peman</label>
+      <select id="premiumPaymentMethod" required style="width:100%;padding:12px;border-radius:8px;margin:6px 0 12px"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px"><button type="button" class="auth-main-btn" id="premiumSubmitBtn">Kontinye sou Tranzak</button></div>
       <div id="premiumFormMessage" role="status" style="margin-top:12px"></div>
-    </form>
-    <p style="color:#91a5c1;font-size:13px;margin-top:18px">Enpòtan: voye demann lan pa aktive Premium otomatikman. Administratè a dwe verifye tranzaksyon an anvan li apwouve li. Pa voye modpas oswa kòd sekirite.</p>
+    </div>
+    <p style="color:#91a5c1;font-size:13px;margin-top:18px">Sekirite: kont jwèt la ak Wallet la dwe itilize menm email. Nou verifye tou de sesyon yo sou sèvè. Pa gen Premium ki aktive sou baz yon senp retou navigatè; fòk Tranzak konfime peman an.</p>
   </main>
 </section>
 
@@ -4440,6 +4452,7 @@ function connectServer(callback) {
                 if (data.type === "voice_peer_join") { handleVoicePeerJoin(data); return; }
                 if (data.type === "voice_peer_list") { handleVoicePeerList(data.peers || []); return; }
                 if (data.type === "voice_signal") { handleVoiceSignal(data); return; }
+                if (data.type === "voice_error") { const vs=document.getElementById("matchVoiceStatus"); if(vs)vs.textContent=data.message||"Vwa pa disponib."; const mb=document.getElementById("matchMicButton"); if(mb)mb.disabled=true; return; }
                 if (data.type === "invite_result") { const b=document.getElementById("onlineError"); if(b)b.textContent=data.message||""; return; }
                 if (data.type === "direct_match") {
                     onlineRoom=data.room; onlinePlayer=Number(data.player); onlineSessionToken=data.session_token||null; onlineConnectionMode="direct_invite"; onlineLastMove=null; onlineRematchRequest=null; onlineUndoRequest=null;
@@ -6576,7 +6589,7 @@ document.getElementById('matchMicButton')?.addEventListener('click',async functi
   // Re-negotiate existing connections after microphone permission is granted.
   for(const [id,pc] of matchVoicePeers){if(!pc.getSenders().some(s=>s.track&&s.track.kind==='audio'))matchMicStream.getAudioTracks().forEach(track=>pc.addTrack(track,matchMicStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);voiceSend(id,'description',pc.localDescription.toJSON());}
 }catch(e){status.textContent=e.message||'Pa kapab aktive mikwo a.';}});
-function cleanupMatchVoice(){matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
+function cleanupMatchVoice(){const micButton=document.getElementById('matchMicButton');if(micButton)micButton.disabled=false;matchVoicePeers.forEach(pc=>{try{pc.close();}catch(e){}});matchVoicePeers.clear();voiceJoinedRoom=null;if(matchMicStream){matchMicStream.getTracks().forEach(t=>t.stop());matchMicStream=null;}matchMicEnabled=false;const a=document.getElementById('matchRemoteAudio');if(a)a.srcObject=null;const b=document.getElementById('matchMicButton');if(b)b.textContent='🎤 Aktive mikwo';const st=document.getElementById('matchVoiceStatus');if(st)st.textContent='Mikwo fèmen';}
 
 // Traduction continue des écrans internes et des éléments créés après le changement de langue.
 // Ainsi, Play Online, Spectators et Play with a Friend gardent la langue choisie même après navigation.
@@ -6729,45 +6742,79 @@ try { const __lang=localStorage.getItem('mrjery_language')||'fr'; translateWhole
 
 // Le compte reste mémorisé dans localStorage et est restauré au démarrage.
 // ==================================================
-// MR_JERY PREMIUM — DEMANDE SÉCURISÉE
+// MR_JERY PREMIUM — WALLET + TRANZAK (CONFIRMATION WEBHOOK)
 // ==================================================
 const PREMIUM_API = "https://mr-jery-control-center.onrender.com";
+const WALLET_API = "https://mr-jery-wallet.onrender.com";
 const PREMIUM_PRICES = {starter:{usd:"12.99",htg:"1,819"},pro:{usd:"24.99",htg:"3,499"},elite:{usd:"36.99",htg:"5,179"}};
 let selectedPremiumPlan = "";
+let premiumWalletToken = null;
+try { premiumWalletToken = sessionStorage.getItem("mrjery_wallet_token"); } catch(e) {}
+function premiumWalletHeaders(){return premiumWalletToken?{Authorization:"Bearer "+premiumWalletToken}:{};}
 function openPremium(){
-  if(!accountConnected || !accountToken){showScreen("accountScreen");showAccountMessage("Konekte sou kont ou anvan ou mande Premium.",false);return;}
-  showScreen("premiumScreen"); document.getElementById("premiumRequestForm").style.display="none";
-  loadMyPremiumStatus();
+ if(!accountConnected || !accountToken){showScreen("accountScreen");showAccountMessage("Konekte sou kont jwèt ou anvan ou mande Premium.",false);return;}
+ showScreen("premiumScreen"); document.getElementById("premiumRequestForm").style.display="none";
+ updatePremiumWalletUI(); loadMyPremiumStatus();
+}
+function updatePremiumWalletUI(){
+ const connected=!!premiumWalletToken;
+ document.getElementById("premiumWalletLoginBtn").style.display=connected?"none":"inline-block";
+ document.getElementById("premiumWalletRegisterBtn").style.display=connected?"none":"inline-block";
+ document.getElementById("premiumWalletLogoutBtn").style.display=connected?"inline-block":"none";
+ document.getElementById("premiumRequestForm").style.display=connected?"block":"none";
+ if(connected)document.getElementById("premiumWalletMessage").textContent="✅ Wallet konekte. N ap verifye si email li matche ak kont jwèt la lè w kontinye.";
 }
 async function loadMyPremiumStatus(){
  const box=document.getElementById("premiumCurrentStatus"); box.textContent="Ap verifye estati abònman ou…";
  try{const r=await fetch(PREMIUM_API+"/premium/my-status",{headers:{"X-Account-Token":accountToken}});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Pa kapab verifye estati Premium la.");
   if(d.premium){box.textContent="✅ Abònman aktif: "+String(d.premium_type||"").toUpperCase()+" — Ekspirasyon: "+(d.expires_at||"");}
-  else if(d.latest_request){box.textContent="Dènye demann: "+String(d.latest_request.premium_type||"").toUpperCase()+" — Estati: "+d.latest_request.status+ (d.latest_request.admin_note?" — Nòt: "+d.latest_request.admin_note:"");}
+  else if(d.latest_request){box.textContent="Dènye demann: "+String(d.latest_request.premium_type||"").toUpperCase()+" — Estati: "+d.latest_request.status;}
   else{box.textContent="Ou poko gen abònman aktif ni demann ki an atant.";}
  }catch(e){box.textContent=e.message;}
 }
+async function premiumWalletAuth(mode){
+ const msg=document.getElementById("premiumWalletMessage");
+ const email=document.getElementById("premiumWalletEmail").value.trim().toLowerCase();
+ const password=document.getElementById("premiumWalletPassword").value;
+ const username=document.getElementById("premiumWalletUsername").value.trim();
+ if(!email||!password){msg.textContent="Antre email ak modpas Wallet la.";return;}
+ if(mode==="register"&&username.length<3){msg.textContent="Pseudo Wallet la dwe genyen omwen 3 karaktè.";return;}
+ msg.textContent="Ap konekte ak Wallet la…";
+ try{
+  if(mode==="register"){
+   const rr=await fetch(WALLET_API+"/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username,email,password})});
+   const rd=await rr.json().catch(()=>({}));if(!rr.ok)throw new Error(rd.detail||"Kreyasyon Wallet la echwe.");
+  }
+  const r=await fetch(WALLET_API+"/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password})});
+  const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Email oswa modpas Wallet la pa kòrèk.");
+  premiumWalletToken=d.access_token;sessionStorage.setItem("mrjery_wallet_token",premiumWalletToken);updatePremiumWalletUI();msg.textContent="✅ Wallet konekte. Kont jwèt la ap verifye sou sèvè a.";
+ }catch(e){msg.textContent="❌ "+e.message;}
+}
 document.getElementById("premiumOpenBtn")?.addEventListener("click",openPremium);
 document.getElementById("premiumBack")?.addEventListener("click",showAccountMenu);
-document.getElementById("premiumCancelBtn")?.addEventListener("click",()=>{document.getElementById("premiumRequestForm").style.display="none";});
+document.getElementById("premiumWalletLoginBtn")?.addEventListener("click",()=>premiumWalletAuth("login"));
+document.getElementById("premiumWalletRegisterBtn")?.addEventListener("click",()=>premiumWalletAuth("register"));
+document.getElementById("premiumWalletLogoutBtn")?.addEventListener("click",()=>{premiumWalletToken=null;sessionStorage.removeItem("mrjery_wallet_token");updatePremiumWalletUI();document.getElementById("premiumWalletMessage").textContent="Wallet dekonekte.";});
 document.querySelectorAll(".premiumChoose").forEach(btn=>btn.addEventListener("click",()=>{
  selectedPremiumPlan=btn.dataset.plan; const p=PREMIUM_PRICES[selectedPremiumPlan];
- document.getElementById("premiumFormTitle").textContent="Demann "+selectedPremiumPlan.toUpperCase()+" — $"+p.usd+" / "+p.htg+" HTG";
- document.getElementById("premiumRequestForm").style.display="block"; document.getElementById("premiumFormMessage").textContent="";
- document.getElementById("premiumRequestForm").scrollIntoView({behavior:"smooth",block:"start"});
+ document.getElementById("premiumFormTitle").textContent="Plan "+selectedPremiumPlan.toUpperCase()+" — $"+p.usd+" / "+p.htg+" HTG";
+ document.getElementById("premiumFormMessage").textContent="";
+ if(premiumWalletToken)document.getElementById("premiumRequestForm").scrollIntoView({behavior:"smooth",block:"start"});
+ else document.getElementById("premiumWalletBox").scrollIntoView({behavior:"smooth",block:"start"});
 }));
-document.getElementById("premiumRequestForm")?.addEventListener("submit",async ev=>{
- ev.preventDefault(); const msg=document.getElementById("premiumFormMessage"), file=document.getElementById("premiumReceipt").files[0];
- if(!accountConnected||!accountToken){msg.textContent="Sesyon ou fini. Rekonekte avan ou voye demann lan.";return;}
- if(!selectedPremiumPlan){msg.textContent="Chwazi yon plan avan.";return;}
- if(!file||file.size>5*1024*1024||!(["image/jpeg","image/png","image/webp"].includes(file.type))){msg.textContent="Chwazi yon foto JPG, PNG oswa WEBP ki pa depase 5 MB.";return;}
- const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;msg.textContent="Ap voye demann lan…";
- try{const fd=new FormData();fd.append("premium_type",selectedPremiumPlan);fd.append("payment_method",document.getElementById("premiumPaymentMethod").value);fd.append("payment_reference",document.getElementById("premiumPaymentReference").value.trim());fd.append("screenshot",file);
-  const r=await fetch(PREMIUM_API+"/premium/request",{method:"POST",headers:{"X-Account-Token":accountToken},body:fd});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Demann lan pa t kapab anrejistre.");
-  msg.textContent="✅ Demann ou anrejistre. Li an atant verifikasyon administratè a. ID: "+(d.request_id||"—");document.getElementById("premiumRequestForm").reset();await loadMyPremiumStatus();
+document.getElementById("premiumSubmitBtn")?.addEventListener("click",async()=>{
+ const msg=document.getElementById("premiumFormMessage");
+ if(!accountConnected||!accountToken){msg.textContent="Sesyon kont jwèt la fini. Rekonekte.";return;}
+ if(!premiumWalletToken){msg.textContent="Konekte Wallet ou anvan.";return;}
+ if(!selectedPremiumPlan){msg.textContent="Chwazi Starter, Pro oswa Elite anvan.";return;}
+ const btn=document.getElementById("premiumSubmitBtn");btn.disabled=true;msg.textContent="Ap verifye de kont yo epi prepare peman an…";
+ try{
+  const r=await fetch(WALLET_API+"/premium/checkout",{method:"POST",headers:{...premiumWalletHeaders(),"Content-Type":"application/json","X-Account-Token":accountToken},body:JSON.stringify({premium_type:selectedPremiumPlan,payment_method:document.getElementById("premiumPaymentMethod").value,customer_name:currentUsername||"MR Jery Customer"})});
+  const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||"Tranzak pa t kapab prepare peman an.");
+  if(!d.payment_url)throw new Error("Tranzak pa retounen yon lyen peman. Kontakte sipò.");
+  msg.textContent="✅ Peman an prepare. N ap voye w sou Tranzak…";window.location.href=d.payment_url;
  }catch(e){msg.textContent="❌ "+e.message;}finally{btn.disabled=false;}
 });
-
 // Un incident réseau ne supprime jamais la session; seul le bouton Déconnexion l'efface.
 // Au chargement, tenter de restaurer le compte sauvegardé sans exiger une nouvelle connexion.
 (function restoreSavedAccountAtStartup(){
