@@ -834,7 +834,7 @@ h1 {
    WALLET / DEFIS — PREPARATION
    Mode test: aucune vraie transaction n'est exécutée
 ================================================== */
-.wallet-box,.bet-box{max-width:650px;margin:16px auto;padding:18px;border:1px solid #374151;border-radius:14px;background:#1F2937;text-align:left}.wallet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.wallet-card{padding:16px;border-radius:12px;background:#111827;border:1px solid #374151}.wallet-card small{display:block;color:#9CA3AF}.wallet-card strong{display:block;font-size:25px;margin-top:6px;color:#D4AF37}.wallet-actions,.bet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.wallet-actions button,.bet-actions button{flex:1;min-width:150px;padding:11px;border-radius:9px;border:1px solid #4B5563;color:white;background:#273449;font-weight:bold;cursor:pointer}.primary-pay{background:#166534!important;border-color:#22C55E!important}.danger-pay{background:#7F1D1D!important}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-row input,.form-row select,.bet-box input,.bet-box select{width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white}.notice-test{padding:12px;border-radius:10px;background:#422006;border:1px solid #D97706;color:#FED7AA;margin-bottom:12px;font-size:13px}.calc-box{margin-top:14px;padding:14px;border-radius:10px;background:#111827;border:1px solid #374151;line-height:1.8}.history-item{padding:10px;border-bottom:1px solid #374151;color:#D1D5DB}.history-item:last-child{border-bottom:0}.admin-stat{font-size:28px;color:#D4AF37;font-weight:bold}.@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.wallet-box,.bet-box,.admin-box{max-width:650px;margin:16px auto;padding:18px;border:1px solid #374151;border-radius:14px;background:#1F2937;text-align:left}.wallet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.wallet-card{padding:16px;border-radius:12px;background:#111827;border:1px solid #374151}.wallet-card small{display:block;color:#9CA3AF}.wallet-card strong{display:block;font-size:25px;margin-top:6px;color:#D4AF37}.wallet-actions,.bet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.wallet-actions button,.bet-actions button{flex:1;min-width:150px;padding:11px;border-radius:9px;border:1px solid #4B5563;color:white;background:#273449;font-weight:bold;cursor:pointer}.primary-pay{background:#166534!important;border-color:#22C55E!important}.danger-pay{background:#7F1D1D!important}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-row input,.form-row select,.bet-box input,.bet-box select{width:100%;padding:11px;border-radius:9px;border:1px solid #4B5563;background:#111827;color:white}.notice-test{padding:12px;border-radius:10px;background:#422006;border:1px solid #D97706;color:#FED7AA;margin-bottom:12px;font-size:13px}.calc-box{margin-top:14px;padding:14px;border-radius:10px;background:#111827;border:1px solid #374151;line-height:1.8}.history-item{padding:10px;border-bottom:1px solid #374151;color:#D1D5DB}.history-item:last-child{border-bottom:0}.admin-stat{font-size:28px;color:#D4AF37;font-weight:bold}.@media(max-width:600px){.form-row{grid-template-columns:1fr}}
 
 
 /* ==================================================
@@ -919,7 +919,7 @@ body{background:radial-gradient(ellipse at 50% -10%,rgba(83,88,255,.18),transpar
 /* Ajustements responsive MR_Jery : tableaux et navigation */
 html { -webkit-text-size-adjust: 100%; }
 .dashboard-shell, .dashboard-main, .dashboard-header, .dashboard-nav,
-.wallet-box, .bet-box, .profile-box { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.wallet-box, .bet-box, .admin-box, .profile-box { min-width: 0; max-width: 100%; box-sizing: border-box; }
 .dashboard-header { flex-wrap: wrap; }
 .dashboard-nav { flex-wrap: wrap; min-width: 0; }
 .dash-nav { white-space: nowrap; }
@@ -935,7 +935,7 @@ td, th { overflow-wrap: anywhere; }
   .dashboard-nav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
   .dash-nav { padding: 10px 8px; font-size: 11px; }
   .dashboard-user { margin-left: auto; }
-  .wallet-box, .bet-box { padding: 12px; }
+  .wallet-box, .bet-box, .admin-box { padding: 12px; }
   .board-area { margin-left: auto; margin-right: auto; }
 }
 </style>
@@ -1114,6 +1114,7 @@ td, th { overflow-wrap: anywhere; }
         <button type="button" class="dash-nav" id="dashboardRankingBtn">🏆 <span>Classement</span></button>
         <button type="button" class="dash-nav" id="profileBtn">ⓘ <span>Profil</span></button>
         <button type="button" class="dash-nav" id="walletTopBtn">💰 <span>Wallet</span></button>
+        <button type="button" class="dash-nav" id="adminTopBtn">👑 <span>Admin</span></button>
       </nav>
       <div class="dashboard-user">
         <div class="dash-avatar">♟</div>
@@ -1202,11 +1203,11 @@ td, th { overflow-wrap: anywhere; }
             <select id="walletDepositMethod" aria-label="Metòd peman"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select>
         </div>
         <div style="margin-top:10px"><input id="walletDepositAmount" type="number" min="0.01" step="0.01" placeholder="Montan depo a"></div>
-        <label for="walletDepositProof" style="display:block;margin-top:12px">Prèv peman (JPG oswa PNG)</label>
+        <label for="walletDepositProof" style="display:block;margin-top:12px">Prèv peman (opsyonèl, si sipò mande li)</label>
         <input id="walletDepositProof" type="file" accept="image/jpeg,image/png">
         <img id="walletDepositPreview" alt="Aperçu prèv peman" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
-        <button id="walletDepositSubmit" class="primary-pay" type="button">Peye depo a</button>
-        <small>Demann depo yo dwe verifye sou backend la anvan nenpòt kredi.</small>
+        <button id="walletDepositSubmit" class="primary-pay" type="button">Kontinye ak Tranzak</button>
+        <small>Tranzaksyon an fèt sou Tranzak; foto pa ajoute lajan otomatikman.</small>
     </div>
 
     <div class="bet-box">
@@ -1223,13 +1224,16 @@ td, th { overflow-wrap: anywhere; }
 
     <div class="bet-box">
         <h2>⭐ MR_Jery Premium</h2>
-        <p>Chwazi plan ou. Ou pral peye sou paj Tranzak sekirize a; Premium aktive sèlman apre backend la verifye peman an.</p>
+        <p>Chwazi plan ou. Pri yo dwe konfime sou backend la anvan peman.</p>
         <div class="form-row">
             <select id="walletPremiumPlan"><option value="starter">Starter — $12.99 / 1,819 HTG</option><option value="pro">Pro — $24.99 / 3,499 HTG</option><option value="elite">Elite — $36.99 / 5,179 HTG</option></select>
             <select id="walletPremiumMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select>
         </div>
-        <button id="walletPremiumSubmit" class="primary-pay" type="button">Achte Premium</button>
-        <small>Pa voye resi manyèl. Pa pataje modpas oswa kòd sekirite. Peman an pase dirèkteman nan Tranzak.</small>
+        <label for="walletPremiumProof" style="display:block;margin-top:12px">Prèv peman (opsyonèl, si sipò mande li)</label>
+        <input id="walletPremiumProof" type="file" accept="image/jpeg,image/png">
+        <img id="walletPremiumPreview" alt="Aperçu prèv Premium" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
+        <button id="walletPremiumSubmit" class="primary-pay" type="button">Achte Premium ak Tranzak</button>
+        <small>Premium aktive sèlman apre konfimasyon peman oswa validasyon admin.</small>
     </div>
 
     <div class="wallet-box">
@@ -1237,6 +1241,25 @@ td, th { overflow-wrap: anywhere; }
         <div id="walletHistory"><div class="history-item">Istorik la ap parèt lè API Wallet la konekte.</div></div>
     </div>
     <button class="back-button" id="walletBack">← Retounen</button>
+</section>
+
+<!-- ADMIN -->
+<section id="adminScreen" class="screen">
+    <h1>👑 Administration</h1>
+    <div class="admin-box">
+        <div class="notice-test">⚠️ Écran de préparation uniquement. Les valeurs réelles doivent être protégées côté serveur, jamais dans le navigateur.</div>
+        <div class="wallet-grid">
+            <div class="wallet-card"><small>Commission</small><div class="admin-stat" id="adminFee">10%</div></div>
+            <div class="wallet-card"><small>Matchs avec mise</small><div class="admin-stat" id="adminMatches">0</div></div>
+            <div class="wallet-card"><small>Revenus plateforme</small><div class="admin-stat" id="adminRevenue">$0.00</div></div>
+        </div>
+        <h2>Paramètres de calcul</h2>
+        <div class="form-row">
+            <input id="adminCommission" type="number" min="0" max="100" step="0.1" value="10" placeholder="Commission %">
+            <button id="saveAdminBtn" class="primary-pay">Enregistrer</button>
+        </div>
+    </div>
+    <button class="back-button" id="adminBack">← Retour</button>
 </section>
 
 <!-- ROBOT -->
@@ -1624,6 +1647,9 @@ td, th { overflow-wrap: anywhere; }
 const SERVER_URL =
     "wss://gomoku-server-5h60.onrender.com";
 
+// API Wallet la sèvi ak menm sesyon kont MR_Jery a; pa gen dezyèm kont.
+const WALLET_API_URL = "https://mr-jery-wallet.onrender.com";
+
 let BOARD_SIZE = 20;
 const START_TIME = 10 * 60;
 
@@ -1691,6 +1717,11 @@ function refreshDashboardUser(){
 
 function openWalletFromDashboard(){ showScreen('walletScreen'); }
 document.getElementById('walletTopBtn')?.addEventListener('click',openWalletFromDashboard);
+document.getElementById('adminTopBtn')?.addEventListener('click',function(){
+  showScreen('adminScreen');
+  renderWallet();
+});
+document.getElementById('adminBack')?.addEventListener('click',function(){showAccountMenu();});
 document.getElementById('dashboardBetCard')?.addEventListener('click',openWalletFromDashboard);
 document.getElementById('dashboardChallengeCard')?.addEventListener('click',openWalletFromDashboard);
 document.getElementById('dashboardOnlineCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
@@ -5818,56 +5849,24 @@ function stopAllTimers() {
 
 
 /* ==================================================
-   MR_JERY WALLET — LIVE API (X-ACCOUNT-TOKEN)
+   MR_JERY WALLET — CONNECTED TO LIVE WALLET API
 ================================================== */
-const WALLET_API_BASE = "https://mr-jery-wallet.onrender.com";
-let walletFxQuoteId = null;
-function money(v,c){const n=Number(v||0);return c === "HTG" ? n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" HTG" : "$"+n.toFixed(2)+" USD";}
+let walletQuoteId = null;
+let walletBusy = false;
+function money(v,c){const n=Number(v);return c === "HTG" ? n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" HTG" : "$"+n.toFixed(2)+" USD";}
 function walletNotice(message,good=false){const el=document.getElementById("walletMessage");if(el){el.textContent=message;el.style.color=good?"#86EFAC":"#FCA5A5";}}
-async function walletApi(path,options={}){
-  if(!accountToken)throw new Error("Konekte sou kont MR_Jery ou an avan.");
+async function walletRequest(path, options={}){
+  if(!accountConnected || !accountToken) throw new Error("Konekte sou kont MR_Jery ou an avan.");
   const headers={"X-Account-Token":accountToken,...(options.headers||{})};
-  if(options.body && !(options.body instanceof FormData))headers["Content-Type"]="application/json";
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),15000);
+  if(options.body && !(options.body instanceof FormData)) headers["Content-Type"]="application/json";
   let response;
-  try{response=await fetch(WALLET_API_BASE+path,{...options,headers,signal:controller.signal});}
-  catch(err){if(err.name==="AbortError")throw new Error("Sèvis Wallet la pran twòp tan (15 segonn). Verifye Render/API a epi eseye ankò.");throw new Error("Pa kapab kontakte Wallet API a. Verifye koneksyon an.");}
-  finally{clearTimeout(timer);}
-  let data={};try{data=await response.json();}catch(_){ }
-  if(!response.ok)throw new Error(data.detail||data.message||"Sèvis Wallet la pa disponib kounye a.");
+  try{response=await fetch(WALLET_API_URL+path,{...options,headers});}
+  catch(e){throw new Error("Nou pa rive kontakte Wallet la. Eseye ankò pita.");}
+  let data={};try{data=await response.json();}catch(e){}
+  if(!response.ok) throw new Error(data.detail||data.message||("Erè Wallet: "+response.status));
   return data;
 }
-function renderWalletHistory(items){
-  const box=document.getElementById("walletHistory");if(!box)return;
-  if(!items||!items.length){box.innerHTML='<div class="history-item">Pa gen tranzaksyon pou kounye a.</div>';return;}
-  box.innerHTML=items.map(t=>{
-    const date=t.created_at?new Date(t.created_at).toLocaleString():"";
-    const sign=Number(t.amount)<0?"":"+";
-    return `<div class="history-item"><strong>${String(t.transaction_type||"Wallet").replaceAll("_"," ")}</strong><br><span>${sign}${money(Math.abs(Number(t.amount)),t.currency)}</span> · ${t.status}<br><small>${date}</small></div>`;
-  }).join("");
-}
-async function renderWallet(){
-  const usd=document.getElementById("demoUsd"),htg=document.getElementById("demoHtg");
-  const history=document.getElementById("walletHistory");
-  if(usd)usd.textContent="— USD";if(htg)htg.textContent="— HTG";
-  if(history)history.innerHTML='<div class="history-item">Ap chaje istorik la...</div>';
-  ["walletDepositSubmit","walletExchangeQuoteBtn","walletPremiumSubmit"].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=!accountConnected;});
-  if(!accountConnected||!accountToken){walletNotice("Konekte sou kont MR_Jery ou an pou itilize Wallet la.");if(history)history.innerHTML='<div class="history-item">Konekte pou wè istorik tranzaksyon yo.</div>';return;}
-  walletNotice("Ap konekte ak Wallet MR_Jery...");
-  try{
-    const w=await walletApi("/wallet");
-    const balances=w.balances||{};
-    if(usd)usd.textContent=money(balances.USD||0,"USD");
-    if(htg)htg.textContent=money(balances.HTG||0,"HTG");
-    walletNotice("Balans Wallet la chaje.",true);
-  }catch(e){walletNotice("Balans: "+e.message);}
-  try{
-    const h=await walletApi("/transactions");
-    renderWalletHistory(h.transactions||[]);
-  }catch(e){if(history)history.innerHTML='<div class="history-item">Nou pa kapab chaje istorik la: '+String(e.message).replace(/[<>]/g,'')+'</div>';}
-}
-
+function setWalletBusy(b){walletBusy=b;["walletDepositSubmit","walletExchangeQuoteBtn","walletExchangeConfirmBtn","walletPremiumSubmit","refreshWalletBtn"].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=b;});}
 function bindProofPreview(inputId,imgId){
   const input=document.getElementById(inputId),img=document.getElementById(imgId);if(!input||!img)return;
   input.addEventListener("change",()=>{const f=input.files&&input.files[0];if(!f){img.removeAttribute("src");img.style.display="none";return;}
@@ -5875,56 +5874,68 @@ function bindProofPreview(inputId,imgId){
     const reader=new FileReader();reader.onload=()=>{img.src=reader.result;img.style.display="block";};reader.readAsDataURL(f);
   });
 }
-bindProofPreview("walletDepositProof","walletDepositPreview");
+async function renderWallet(){
+  if(!accountConnected){walletNotice("Konekte sou kont jwèt ou pou w jwenn Wallet la.");return;}
+  walletNotice("⏳ Nap chaje balans ak istorik ou...");
+  try{
+    const [w,tx]=await Promise.all([walletRequest("/wallet"),walletRequest("/transactions")]);
+    const balances=w.balances||{};
+    document.getElementById("demoUsd").textContent=money(balances.USD??w.balance_usd??0,"USD");
+    document.getElementById("demoHtg").textContent=money(balances.HTG??w.balance_htg??0,"HTG");
+    const box=document.getElementById("walletHistory"),items=Array.isArray(tx.transactions)?tx.transactions:[];
+    box.innerHTML=items.length?items.map(t=>{
+      const label=String(t.transaction_type||t.type||"Tranzaksyon").replaceAll("_"," ");
+      const status=String(t.status||"unknown");
+      return `<div class="history-item"><strong>${escapeWalletText(label)}</strong><br><span>${escapeWalletText(t.created_at||t.updated_at||"")}</span><br>${escapeWalletText(String(t.amount??""))} ${escapeWalletText(t.currency||"")} · ${escapeWalletText(status)}</div>`;
+    }).join(""):'<div class="history-item">Pa gen tranzaksyon pou kounye a.</div>';
+    walletNotice("Wallet ou konekte avèk siksè.",true);
+  }catch(e){walletNotice(e.message||"Nou pa kapab chaje Wallet la.");}
+}
+function escapeWalletText(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function startWalletDeposit(){
+  const amount=Number(document.getElementById("walletDepositAmount").value),currency=document.getElementById("walletDepositCurrency").value,method=document.getElementById("walletDepositMethod").value;
+  if(!Number.isFinite(amount)||amount<=0){walletNotice("Antre yon montan depo ki valab.");return;}
+  if(method==="tranzak"){walletNotice("Chwazi MonCash oswa NatCash pou kontinye ak Tranzak.");return;}
+  setWalletBusy(true);walletNotice("⏳ Nap kreye peman an sou Tranzak...");
+  try{const d=await walletRequest("/deposits",{method:"POST",body:JSON.stringify({amount,currency,payment_method:method,customer_name:currentUsername||"MR Jery Customer"})});
+    if(!d.payment_url)throw new Error("Tranzak pa retounen lyen peman an.");
+    walletNotice("Peman an kreye. Nap ouvri paj Tranzak la...",true);window.location.assign(d.payment_url);
+  }catch(e){walletNotice(e.message||"Depo a pa t kapab kreye.");setWalletBusy(false);}
+}
+async function getWalletQuote(){
+  const from=document.getElementById("walletExchangeFrom").value,to=document.getElementById("walletExchangeTo").value,amount=Number(document.getElementById("walletExchangeAmount").value);
+  if(from===to){walletNotice("Chwazi de lajan diferan.");return;}
+  if(!Number.isFinite(amount)||amount<=0){walletNotice("Antre yon montan valab pou chanje.");return;}
+  setWalletBusy(true);walletNotice("⏳ Nap mande to aktyèl la...");
+  try{const q=await walletRequest(`/fx/quote?from_currency=${encodeURIComponent(from)}&to_currency=${encodeURIComponent(to)}&amount=${encodeURIComponent(amount)}`);
+    walletQuoteId=q.quote_id;document.getElementById("walletExchangeQuote").textContent=`To Tranzak: ${q.tranzak_rate} | To MR_Jery: ${q.customer_rate} | Maj MR_Jery: ${q.mr_jery_margin_percent}% | Ou resevwa: ${money(q.to_amount,to)}. ${q.fees_disclosed||""} Konfimasyon valab pandan 5 minit.`;
+    document.getElementById("walletExchangeConfirmBtn").disabled=false;walletNotice("Verifye kalkil la anvan ou konfime.",true);
+  }catch(e){walletQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(e.message||"Nou pa kapab jwenn to echanj la.");}
+  finally{setWalletBusy(false);}
+}
+async function confirmWalletExchange(){
+  if(!walletQuoteId){walletNotice("Mande yon nouvo kalkil anvan konfimasyon.");return;}
+  if(!confirm("Èske ou konfime konvèsyon sa a? Balans lan ap chanje touswit."))return;
+  setWalletBusy(true);try{const d=await walletRequest("/fx/confirm",{method:"POST",body:JSON.stringify({quote_id:walletQuoteId})});walletQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(`Konvèsyon fini: ${money(d.from_amount,d.from_currency)} → ${money(d.to_amount,d.to_currency)}.`,true);await renderWallet();}
+  catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false);}
+}
+async function startPremiumCheckout(){
+  const premium_type=document.getElementById("walletPremiumPlan").value,payment_method=document.getElementById("walletPremiumMethod").value;
+  if(!confirm("Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
+  setWalletBusy(true);walletNotice("⏳ Nap prepare peman Premium ou...");
+  try{const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
+    if(!d.payment_url)throw new Error("Tranzak pa retounen lyen peman an.");
+    walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
+  }catch(e){walletNotice(e.message||"Checkout Premium lan pa t kapab kòmanse.");setWalletBusy(false);}
+}
+bindProofPreview("walletDepositProof","walletDepositPreview");bindProofPreview("walletPremiumProof","walletPremiumPreview");
 document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Wallet.",false);return;}showScreen("walletScreen");renderWallet();});
 document.getElementById("walletBack")?.addEventListener("click",()=>showAccountMenu());
 document.getElementById("refreshWalletBtn")?.addEventListener("click",renderWallet);
-document.getElementById("walletDepositSubmit")?.addEventListener("click",async()=>{
-  const amount=Number(document.getElementById("walletDepositAmount")?.value||0);
-  const currency=document.getElementById("walletDepositCurrency")?.value||"HTG";
-  const payment_method=document.getElementById("walletDepositMethod")?.value||"moncash";
-  if(!(amount>0)){walletNotice("Mete yon montan ki valab.");return;}
-  const b=document.getElementById("walletDepositSubmit");b.disabled=true;
-  try{
-    const r=await walletApi("/deposits",{method:"POST",body:JSON.stringify({amount,currency,payment_method,customer_name:currentUsername||"MR Jery Player"})});
-    const proof=document.getElementById("walletDepositProof")?.files?.[0];
-    if(proof){const fd=new FormData();fd.append("proof_kind","deposit");fd.append("transaction_id",r.transaction_id);fd.append("image",proof);await walletApi("/wallet/proof",{method:"POST",body:fd});}
-    if(!r.payment_url)throw new Error("Tranzak pa retounen lyen peman an. Pa fè yon lòt peman; kontakte sipò.");
-    walletNotice("Tranzak kreye peman an. Ou pral ale sou paj peman sekirize a.",true);
-    window.location.assign(r.payment_url);
-  }catch(e){walletNotice(e.message);b.disabled=false;}
-});
-document.getElementById("walletExchangeQuoteBtn")?.addEventListener("click",async()=>{
-  const from=document.getElementById("walletExchangeFrom")?.value||"USD";
-  const to=document.getElementById("walletExchangeTo")?.value||"HTG";
-  const amount=Number(document.getElementById("walletExchangeAmount")?.value||0);
-  if(from===to||!(amount>0)){walletNotice("Chwazi de lajan diferan epi mete yon montan valab.");return;}
-  try{
-    const q=new URLSearchParams({from_currency:from,to_currency:to,amount:String(amount)});
-    const r=await walletApi("/fx/quote?"+q.toString());walletFxQuoteId=r.quote_id;
-    document.getElementById("walletExchangeQuote").textContent=`To Tranzak: ${r.tranzak_rate} HTG/USD · Maj MR_Jery: ${r.mr_jery_margin_percent}% · To kliyan: ${r.customer_rate} · W ap resevwa: ${money(r.to_amount,to)}. Frè Tranzak apa: ${r.fees_disclosed}. Quote la dire 5 minit.`;
-    document.getElementById("walletExchangeConfirmBtn").disabled=false;
-    walletNotice("Verifye montan final la, epi konfime si li bon.",true);
-  }catch(e){walletFxQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(e.message);}
-});
-document.getElementById("walletExchangeConfirmBtn")?.addEventListener("click",async()=>{
-  if(!walletFxQuoteId){walletNotice("Mande yon nouvo kalkil anvan.");return;}
-  const b=document.getElementById("walletExchangeConfirmBtn");b.disabled=true;
-  try{const r=await walletApi("/fx/confirm",{method:"POST",body:JSON.stringify({quote_id:walletFxQuoteId})});walletFxQuoteId=null;walletNotice(`Konvèsyon fini: ${money(r.from_amount,r.from_currency)} → ${money(r.to_amount,r.to_currency)}.`,true);await renderWallet();}
-  catch(e){walletNotice(e.message);b.disabled=false;}
-});
-document.getElementById("walletPremiumSubmit")?.addEventListener("click",async()=>{
-  const premium_type=document.getElementById("walletPremiumPlan")?.value||"starter";
-  const payment_method=document.getElementById("walletPremiumMethod")?.value||"moncash";
-  const b=document.getElementById("walletPremiumSubmit");b.disabled=true;
-  try{
-    const r=await walletApi("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Player"})});
-    if(!r.payment_url)throw new Error("Tranzak pa retounen lyen peman an. Pa repete peman an; kontakte sipò.");
-    walletNotice("Tranzak kreye peman Premium lan. Ou pral ale sou paj peman sekirize a.",true);
-    window.location.assign(r.payment_url);
-  }catch(e){walletNotice(e.message);b.disabled=false;}
-});
-
+document.getElementById("walletDepositSubmit")?.addEventListener("click",startWalletDeposit);
+document.getElementById("walletExchangeQuoteBtn")?.addEventListener("click",getWalletQuote);
+document.getElementById("walletExchangeConfirmBtn")?.addEventListener("click",confirmWalletExchange);
+document.getElementById("walletPremiumSubmit")?.addEventListener("click",startPremiumCheckout);
 
 /* ==================================================
    LANDING / LANGUAGE / AUTH NAVIGATION
