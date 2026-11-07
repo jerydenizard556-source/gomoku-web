@@ -1,11 +1,11 @@
 import asyncio,json,secrets,string,time,os,hashlib,hmac,re
-import websockets, psycopg2
+import websockets, psycopg
 from websockets.http11 import Headers, Response
 HOST='0.0.0.0'; PORT=int(os.environ.get('PORT','10000')); BOARD_SIZE=20; START_TIME=600; RECONNECT_GRACE_SECONDS=45; INVITATION_TTL_SECONDS=90
 DATABASE_URL=os.environ.get('DATABASE_URL'); db=None
 if DATABASE_URL:
     try:
-        db=psycopg2.connect(DATABASE_URL); db.autocommit=True
+        db=psycopg.connect(DATABASE_URL); db.autocommit=True
         c=db.cursor(); c.execute('''CREATE TABLE IF NOT EXISTS players (id SERIAL PRIMARY KEY, username VARCHAR(50) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'''); c.execute("ALTER TABLE players ADD COLUMN IF NOT EXISTS points INTEGER NOT NULL DEFAULT 0"); c.execute("ALTER TABLE players ADD COLUMN IF NOT EXISTS wins INTEGER NOT NULL DEFAULT 0"); c.execute("ALTER TABLE players ADD COLUMN IF NOT EXISTS losses INTEGER NOT NULL DEFAULT 0"); c.execute("ALTER TABLE players ADD COLUMN IF NOT EXISTS draws INTEGER NOT NULL DEFAULT 0"); c.execute('''CREATE TABLE IF NOT EXISTS account_sessions (token_hash VARCHAR(64) PRIMARY KEY, player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'''); c.close(); print('PostgreSQL database connected.')
     except Exception as e: print('Database connection error:',repr(e)); db=None
 
