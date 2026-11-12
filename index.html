@@ -4580,6 +4580,7 @@ function connectServer(callback) {
             } else if (callback) {
                 callback();
             }
+            if (document.getElementById("tournamentScreen")?.classList.contains("active")) loadTournamentList();
 
             if (reconnectTimer) {
 
@@ -4788,6 +4789,10 @@ function connectServer(callback) {
                     const cb = pendingRestoreCallback;
                     pendingRestoreCallback = null;
                     if (typeof cb === "function") cb();
+                    if (data.success && document.getElementById("tournamentScreen")?.classList.contains("active")) {
+                        setTournamentStage(5);
+                        loadTournamentList();
+                    }
                     return;
                 }
 
@@ -6841,11 +6846,16 @@ function tournamentSend(type,payload={}) {
   socket.send(JSON.stringify({type,...payload})); return true;
 }
 function escTournament(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function loadTournamentList(){tournamentSend("tournament_list");}
+let tournamentListReloadPending=false;
+function loadTournamentList(){
+  if(!socket||socket.readyState!==WebSocket.OPEN){tournamentListReloadPending=true;tournamentNotice("Koneksyon an ap retabli. Lis tournoi yo ap chaje otomatikman.",false);return false;}
+  tournamentListReloadPending=false;
+  return tournamentSend("tournament_list");
+}
 function loadTournamentState(id){if(id)tournamentSend("tournament_state",{tournament_id:id});}
 function openTournamentScreen(){
   if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Tournoi.",false);return;}
-  showScreen("tournamentScreen");setTournamentStage(2);loadTournamentList();
+  showScreen("tournamentScreen");setTournamentStage(5);loadTournamentList();
 }
 document.getElementById("dashboardTournamentCard")?.addEventListener("click",openTournamentScreen);
 document.getElementById("tournamentBack")?.addEventListener("click",()=>showAccountMenu());
