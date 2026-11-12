@@ -7114,6 +7114,7 @@ async function sendTournamentRegister(tid){
     })});
     if(!result.payment_url)throw new Error("Wallet la pa retounen lyen peman an.");
     tournamentNotice("Peman an pare. Nap redirije ou sou paj peman an...",true);
+    try { sessionStorage.setItem("mrjery_return_to_tournament","1"); } catch(e) {}
     window.location.assign(result.payment_url);
   }catch(error){
     tournamentNotice(error.message||"Peman an pa kapab kòmanse kounye a.",false);
