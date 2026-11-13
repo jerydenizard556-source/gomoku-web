@@ -7110,6 +7110,7 @@ async function sendTournamentRegister(tid){
   const button=Array.from(document.querySelectorAll('[data-t-action="register"]')).find(b=>b.dataset.id===tid);
   if(button){button.disabled=true;button.textContent="⏳ Ap prepare peman an...";}
   try{
+    if(tournamentTestMode){const sent=tournamentSend("tournament_register",{tournament_id:tid,terms_accepted:true});if(button){button.disabled=false;button.textContent="Antre gratis →";}if(sent)tournamentNotice("Demann enskripsyon gratis la voye.",true);return;}
     const result=await walletRequest("/tournaments/entry/checkout",{method:"POST",body:JSON.stringify({
       tournament_id:tid,payment_method:method,terms_accepted:true,customer_name:currentUsername||"MR Jery Customer"
     })});
@@ -7146,6 +7147,7 @@ document.getElementById("tournamentCreateBtn")?.addEventListener("click",async()
   const button=document.getElementById("tournamentCreateBtn");
   if(button){button.disabled=true;button.textContent="⏳ Ap prepare peman an...";}
   try{
+    if(tournamentTestMode){const sent=tournamentSend("tournament_create",{title,board_size:Number(tournamentValue("tournamentBoard")),duration_seconds:Number(tournamentValue("tournamentDuration")),max_participants:capacity});if(button){button.disabled=false;button.textContent="Kontinye →";}if(sent)tournamentNotice("Demann kreyasyon gratis la voye.",true);return;}
     const result=await walletRequest("/tournaments/create/checkout",{method:"POST",body:JSON.stringify({
       title,entry_fee:tournamentValue("tournamentFee"),currency:tournamentValue("tournamentCurrency"),
       payment_method:tournamentValue("tournamentCreationPaymentMethod")||"moncash",
