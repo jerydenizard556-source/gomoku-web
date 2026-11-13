@@ -6823,6 +6823,13 @@ function validateTournamentPayoutSettings(){
  return true;
 }
 function buildTournamentConfirmation(){
+ if(tournamentTestMode){
+  const rows=[["Non tounwa",tournamentValue("tournamentTitle")],["Pri pou kreye","GRATIS"],["Pri pou antre","GRATIS"],["Kantite jwè maksimòm",tournamentValue("tournamentCapacity")],["Tablo jwèt",tournamentValue("tournamentBoard")+" × "+tournamentValue("tournamentBoard")],["Tan pou chak match",Math.round(Number(tournamentValue("tournamentDuration"))/60)+" minit"],["Peman","Okenn"]];
+  const root=document.getElementById("tournamentConfirmSummary");
+  if(root)root.innerHTML=rows.map(([k,v])=>'<div><small>'+escTournament(k)+'</small><strong>'+escTournament(v)+'</strong></div>').join("");
+  return;
+ }
+
  const shares=getTournamentPrizeShares();
  const payout=Object.entries(shares).map(([place,pct])=>place+"ye: "+pct+"%").join(" · ");
  const rows=[
