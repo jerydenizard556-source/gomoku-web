@@ -6990,6 +6990,19 @@ function renderTournamentDetail(t){
       ${m.status!=="finished"&&String(m.player1_id)===String(currentPlayerId)||m.status!=="finished"&&String(m.player2_id)===String(currentPlayerId)?`<button data-t-action="match" data-id="${escTournament(t.tournament_id)}" data-match="${escTournament(m.match_id)}">Antre nan match</button>`:""}
       ${m.room_code?`<button data-t-action="watch" data-room="${escTournament(m.room_code)}" data-id="${escTournament(t.tournament_id)}">Gade match</button>`:""}
     </div>`).join(""):'<div class="tournament-empty">Bracket la ap parèt lè òganizatè a lanse tournoi a.</div>'}</div>`;
+  if(tournamentTestMode){
+    root.querySelector(".tournament-detail-head p:nth-of-type(2)")?.remove();
+    root.querySelector(".tournament-stat-grid")?.remove();
+    root.querySelector(":scope > .tournament-note")?.remove();
+    const payButton=root.querySelector('[data-t-action="register"]');
+    if(payButton)payButton.textContent="Antre gratis →";
+    root.querySelector("#tournamentPaymentMethod")?.previousElementSibling?.remove();
+    root.querySelector("#tournamentPaymentMethod")?.remove();
+    const terms=root.querySelector(".tournament-terms-accept");
+    if(terms)terms.textContent="Mwen li epi mwen aksepte règ tounwa sa a. Antre a gratis.";
+    const joinSteps=root.querySelector(".tournament-join-steps");
+    if(joinSteps)joinSteps.innerHTML="<strong>Antre nan tounwa sa a gratis.</strong><ol><li>Ou pa bezwen peye.</li><li>Peze bouton « Antre gratis » la.</li><li>Tann konfimasyon enskripsyon an.</li></ol>";
+  }
   const pRoot=document.getElementById("tournamentPlayersList");
   if(pRoot)pRoot.innerHTML=players.map(p=>`<div class="tournament-player-row"><strong>${escTournament(p.username||p.player_id)}</strong><span class="tournament-pill">${escTournament(p.payment_status)}</span></div>`).join("")||'<p class="tournament-note">Pa gen jwè ki enskri ankò.</p>';
   tournamentSend("tournament_chat_history",{tournament_id:t.tournament_id});
