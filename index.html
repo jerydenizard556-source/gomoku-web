@@ -6896,40 +6896,9 @@ function tournamentMethodLabel(method){
   return ({tranzak:"Tranzak",moncash:"MonCash",natcash:"NatCash"})[String(method||"").toLowerCase()]||"Metòd peman";
 }
 function renderTournamentList(items){
-  const root=document.getElementById("tournamentList");if(!root)return;
+  const root=document.getElementById("tournamentList"); if(!root)return;
   tournamentListCache=Array.isArray(items)?items:[];
   const search=(document.getElementById("tournamentSearch")?.value||"").trim().toLowerCase();
-  const status=document.getElementById("tournamentStatusFilter")?.value||"all";
-  const filtered=tournamentListCache.filter(t=>{
-    const state=String(t.status||"").toLowerCase();
-    return (status==="all"||state===status)&&(String(t.title||"")+" "+String(t.organizer||"")).toLowerCase().includes(search);
-  });
-  const meta=document.getElementById("tournamentListMeta");
-  if(meta)meta.textContent=filtered.length+" tounwa jwenn sou "+tournamentListCache.length+".";
-  if(!tournamentListCache.length){root.innerHTML='<div class="tournament-empty"><strong>Pa gen tounwa pou kounye a.</strong><br>Ou ka kreye yon nouvo tounwa oswa retounen pita.</div>';return;}
-  if(!filtered.length){root.innerHTML='<div class="tournament-empty"><strong>Nou pa jwenn tounwa sa a.</strong><br>Eseye yon lòt non oswa chanje filtè a.</div>';return;}
-  root.innerHTML=filtered.map(t=>{
-    const players=Number(t.paid_count??t.verified_players??0);
-    const state=String(t.status||"").toLowerCase();
-    const fee=tournamentTestMode?"GRATIS":escTournament(t.entry_fee??"—")+" "+escTournament(t.currency||"USD");
-    const size=Number(t.board_size)||15;
-    const minutes=Math.max(1,Math.round((Number(t.duration_seconds)||600)/60));
-    const action=state==="registration"?"Gade detay epi antre":state==="live"?"Gade match yo":"Gade rezilta yo";
-    const description=tournamentTestMode?"Pa gen peman. Ou ka antre gratis.":("Pri antre: "+fee+".");
-    return '<article class="tournament-item"><div class="tournament-item-head"><div>'+
-      '<h3>🏆 '+escTournament(t.title||"Tounwa san non")+'</h3>'+
-      '<p class="tournament-organizer">Òganizatè: <strong>'+escTournament(t.organizer||"MR_Jery")+'</strong></p>'+
-      '<p class="tournament-fee">'+fee+'</p>'+
-      '</div><span class="tournament-pill status-'+(["registration","live","finished"].includes(state)?state:"unknown")+'">'+escTournament(tournamentStatusLabel(state))+'</span></div>'+
-      '<div class="tournament-card-stats">'+
-      '<div class="tournament-card-stat"><small>Jwè ki enskri</small><strong>'+players+'</strong></div>'+
-      '<div class="tournament-card-stat"><small>Jwè maksimòm</small><strong>'+escTournament(t.max_participants??"—")+'</strong></div>'+
-      '<div class="tournament-card-stat"><small>Tan match la</small><strong>'+size+' × '+size+' · '+minutes+' min</strong></div>'+
-      '</div><p class="tournament-card-description">'+description+' '+(state==="registration"?"Enskripsyon ouvè.":state==="live"?"Tounwa a kòmanse.":"Tounwa a fini.")+'</p>'+
-      '<div class="tournament-actions"><button data-t-action="detail" data-id="'+escTournament(t.tournament_id)+'" class="gold">'+action+' →</button></div></article>';
-  }).join("");
-}
-document.getElementById("tournamentSearch")?.value||"").trim().toLowerCase();
   const status=document.getElementById("tournamentStatusFilter")?.value||"all";
   const filtered=tournamentListCache.filter(t=>{
     const matchesStatus=status==="all"||String(t.status||"").toLowerCase()===status;
