@@ -3959,6 +3959,7 @@ document.getElementById("registerBtn").addEventListener("click", function() {
     }
 
     accountRequestInProgress = true;
+    startAuthRequestTimeout();
     showAccountMessage("⏳ Création du compte...", true);
 
     connectServer(function() {
@@ -3987,6 +3988,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
     }
 
     accountRequestInProgress = true;
+    startAuthRequestTimeout();
     showAccountMessage("⏳ Connexion...", true);
 
     connectServer(function() {
@@ -4080,6 +4082,19 @@ document.getElementById("settingsBack").addEventListener("click", function() {
 
 let socket = null;
 let pendingServerCallbacks = [];
+let authRequestTimeout = null;
+function startAuthRequestTimeout() {
+    if (authRequestTimeout) clearTimeout(authRequestTimeout);
+    authRequestTimeout = setTimeout(function() {
+        if (!accountRequestInProgress) return;
+        accountRequestInProgress = false;
+        showAccountMessage("❌ Sèvè a pa reponn. Verifye koneksyon an epi eseye ankò.", false);
+    }, 15000);
+}
+function clearAuthRequestTimeout() {
+    if (authRequestTimeout) clearTimeout(authRequestTimeout);
+    authRequestTimeout = null;
+}
 
 let onlinePlayer = null;
 let onlineRoom = null;
@@ -4612,8 +4627,9 @@ function connectServer(callback) {
         function() {
 
             const waitingCallbacks = pendingServerCallbacks.splice(0);
-            if (waitingCallbacks.length) {
+            if (waitingCallbacks.length || accountRequestInProgress) {
                 accountRequestInProgress = false;
+                clearAuthRequestTimeout();
                 showAccountMessage("❌ Koneksyon ak sèvè a koupe. Tanpri eseye ankò.", false);
             }
             closeTournamentVoice();
@@ -4724,6 +4740,7 @@ function connectServer(callback) {
                 if (data.type === "register_result") {
 
                     accountRequestInProgress = false;
+                    clearAuthRequestTimeout();
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
@@ -4759,6 +4776,7 @@ function connectServer(callback) {
                 if (data.type === "login_result") {
 
                     accountRequestInProgress = false;
+                    clearAuthRequestTimeout();
 
                     if (data.success) {
                         currentPlayerId = data.player_id || null;
