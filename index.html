@@ -1037,6 +1037,8 @@ td, th { overflow-wrap: anywhere; }
 </style>
 
 <style id="tournament-visual-refresh">
+.tournament-mode-notice{margin:14px 0;padding:13px 16px;border:1px solid #397b58;border-radius:12px;background:#102d20;color:#b9f4ce;font-weight:850;text-align:center;line-height:1.5}.tournament-page.test-mode .tournament-admin-card{display:none}
+
 /* TOURNOI ONLY — redesign visuel, sans toucher au jeu ni au JavaScript */
 .tournament-page{
   position:relative;isolation:isolate;max-width:1180px!important;
@@ -1933,17 +1935,18 @@ td, th { overflow-wrap: anywhere; }
   </section>
   <header class="tournament-top">
     <button class="back-button" id="tournamentBack" type="button">← Retounen</button>
-    <div><small>MR_JERY ARENA</small><h1>🏆 Tournoi Center</h1><p class="tournament-subtitle">Kreye konpetisyon, enskri, suiv match yo epi goumen pou premye plas la.</p></div>
+    <div><small>MR_JERY ARENA</small><h1>🏆 Tournoi Center</h1><p class="tournament-subtitle">Kreye yon tounwa, antre ladan l, epi suiv match ou yo etap pa etap.</p></div>
     <button class="tournament-refresh" id="tournamentRefresh" type="button">⟳ Rafrechi lis la</button>
   </header>
+  <div id="tournamentModeNotice" class="tournament-mode-notice" hidden></div>
   <nav class="tournament-stepper" aria-label="Etap tournoi">
     <button type="button" class="active" data-t-step="2"><span>01</span><b>Chwazi</b></button><i></i><button type="button" data-t-step="3"><span>02</span><b>Kreye</b></button><i></i><button type="button" data-t-step="4"><span>03</span><b>Konfime</b></button><i></i><button type="button" data-t-step="5"><span>04</span><b>Disponib</b></button><i></i><button type="button" data-t-step="6"><span>05</span><b>Detay</b></button>
   </nav>
   <section class="tournament-stage active" data-t-stage="2">
     <div class="tournament-choice-wrap"><div class="tournament-choice-heading"><span>MR_JERY ARENA</span><h2>Kisa ou vle fè?</h2><p>Chwazi kijan ou vle patisipe nan konpetisyon yo.</p></div>
       <div class="tournament-choice-grid">
-        <button type="button" class="tournament-choice-card" data-t-go="5"><span>🏆</span><strong>Rejoindre un tournoi</strong><small>Gade tournoi ki disponib yo epi antre nan youn.</small><b>CONTINUER →</b></button>
-        <button type="button" class="tournament-choice-card" data-t-go="3"><span>✨</span><strong>Créer un tournoi</strong><small>Kreye pwòp konpetisyon ou epi jere patisipan yo.</small><b>CRÉER →</b></button>
+        <button type="button" class="tournament-choice-card" data-t-go="5"><span>🏆</span><strong>Antre nan yon tounwa</strong><small>Gade tounwa ki disponib yo, chwazi youn, epi enskri.</small><b>Gade tounwa yo →</b></button>
+        <button type="button" class="tournament-choice-card" data-t-go="3"><span>✨</span><strong>Kreye yon tounwa</strong><small>Bay tounwa ou a yon non, chwazi règ jwèt yo, epi lanse li.</small><b>Kreye tounwa →</b></button>
       </div>
     </div>
   </section>
@@ -1952,18 +1955,18 @@ td, th { overflow-wrap: anywhere; }
     <div class="create-pro-heading">
       <div class="create-pro-kicker"><span>MR_JERY ARENA</span><i>•</i><span>TOURNAMENT SETUP</span></div>
       <h2>Kreye <em>Tournoi</em></h2>
-      <p>Konfigure frè antre, metòd peman ak distribisyon prim yo anvan ou lanse konpetisyon ou.</p>
+      <p>Antre non tounwa a, chwazi kantite jwè ak règ jwèt la. Rès la fasil.</p>
     </div>
     <div class="create-pro-card">
       <div class="create-pro-card-head"><span class="create-pro-icon">🏆</span><div><strong>Enfòmasyon konpetisyon an</strong><small>Prepare tournoi ou an kèk segonn</small></div><span class="create-pro-step">01 / 02</span></div>
       <div class="create-pro-fields">
         <label class="create-pro-field create-pro-field-wide"><span>NON TOURNOI A</span><input id="tournamentTitle" maxlength="100" required placeholder="Egzanp: MR_Jery Championship"><small>Chwazi yon non ki fasil pou jwè yo rekonèt.</small></label>
-        <div class="create-pro-field"><label for="tournamentFee">FRÈ PATISIPASYON</label><div class="create-pro-money"><input id="tournamentFee" type="number" min="1" max="1000" step="0.01" value="5"><select id="tournamentCurrency" aria-label="Monnen"><option value="USD">USD $</option><option value="HTG">HTG G</option></select></div><small>Pri chak jwè ap peye pou antre.</small><small id="tournamentEntryFxEquivalent" class="create-pro-fx">Ekivalan lòt lajan an ap parèt isit la.</small></div>
+        <div class="create-pro-field" id="tournamentFeeField"><label for="tournamentFee">FRÈ PATISIPASYON</label><div class="create-pro-money"><input id="tournamentFee" type="number" min="1" max="1000" step="0.01" value="5"><select id="tournamentCurrency" aria-label="Monnen"><option value="USD">USD $</option><option value="HTG">HTG G</option></select></div><small>Pri chak jwè ap peye pou antre.</small><small id="tournamentEntryFxEquivalent" class="create-pro-fx">Ekivalan lòt lajan an ap parèt isit la.</small></div>
         <div class="create-pro-field"><label for="tournamentCapacity">KANTITE JWÈ MAXIMUM</label><input id="tournamentCapacity" type="number" min="2" max="10000" step="1" value="10"><small>Chwazi kantite maksimòm jwè ki ka enskri.</small></div>
-        <div class="create-pro-field"><label for="tournamentMethod">MWAYEN PEMAN POU ENSKRIPSYON</label><select id="tournamentMethod"><option value="tranzak">Tranzak</option><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Chwazi mwayen peman ki disponib pou tounwa sa a.</small></div>
-        <div class="create-pro-field"><label for="tournamentCreationPaymentMethod">MWAYEN POU PEYE FRÈ PLATFÒM NAN</label><select id="tournamentCreationPaymentMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Ou peye frè kreyasyon an anvan tournoi a parèt.</small></div>
-        <div class="create-pro-field"><label for="tournamentCommission">AVANTAJ ÒGANIZATÈ A (%)</label><input id="tournamentCommission" type="number" min="2" max="15" step="1" value="10"><small>Ou ka chwazi ant 2% ak 15%. Rès la sèvi pou prim gayan yo.</small></div>
-        <div class="create-pro-field"><label for="tournamentWinnerCount">KONBYEN GAYAN?</label><select id="tournamentWinnerCount"><option value="1">1 gayan</option><option value="2">2 gayan</option><option value="3" selected>3 gayan</option></select><small>Chwazi konbyen plas k ap resevwa prim.</small></div>
+        <div class="create-pro-field" id="tournamentMethodField"><label for="tournamentMethod">MWAYEN PEMAN POU ENSKRIPSYON</label><select id="tournamentMethod"><option value="tranzak">Tranzak</option><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Chwazi mwayen peman ki disponib pou tounwa sa a.</small></div>
+        <div class="create-pro-field" id="tournamentCreationPaymentField"><label for="tournamentCreationPaymentMethod">MWAYEN POU PEYE FRÈ PLATFÒM NAN</label><select id="tournamentCreationPaymentMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Ou peye frè kreyasyon an anvan tournoi a parèt.</small></div>
+        <div class="create-pro-field" id="tournamentCommissionField"><label for="tournamentCommission">AVANTAJ ÒGANIZATÈ A (%)</label><input id="tournamentCommission" type="number" min="2" max="15" step="1" value="10"><small>Ou ka chwazi ant 2% ak 15%. Rès la sèvi pou prim gayan yo.</small></div>
+        <div class="create-pro-field" id="tournamentWinnerCountField"><label for="tournamentWinnerCount">KONBYEN GAYAN?</label><select id="tournamentWinnerCount"><option value="1">1 gayan</option><option value="2">2 gayan</option><option value="3" selected>3 gayan</option></select><small>Chwazi konbyen plas k ap resevwa prim.</small></div>
         <div class="create-pro-field"><label for="tournamentPrize1">PREMYE PLAS (%)</label><input id="tournamentPrize1" type="number" min="60" max="100" step="1" value="70"><small>Premye plas dwe resevwa omwen 60% nan fon prim lan.</small></div>
         <div class="create-pro-field" id="tournamentPrize2Wrap"><label for="tournamentPrize2">DEZYÈM PLAS (%)</label><input id="tournamentPrize2" type="number" min="0" max="40" step="1" value="20"></div>
         <div class="create-pro-field" id="tournamentPrize3Wrap"><label for="tournamentPrize3">TWAZYÈM PLAS (%)</label><input id="tournamentPrize3" type="number" min="0" max="40" step="1" value="10"></div>
@@ -1972,8 +1975,8 @@ td, th { overflow-wrap: anywhere; }
         <div class="create-pro-field"><label for="tournamentBoard">GWOSÈ TABLO A</label><select id="tournamentBoard"><option value="15" selected>15 × 15</option><option value="19">19 × 19</option><option value="20">20 × 20</option></select><small>Chwazi dimansyon tablo Gomoku a.</small></div>
         <div class="create-pro-field"><label for="tournamentDuration">DIRE MATCH LA</label><select id="tournamentDuration"><option value="60">1 minit</option><option value="120">2 minit</option><option value="180">3 minit</option><option value="300">5 minit</option><option value="600" selected>10 minit</option><option value="900">15 minit</option><option value="1200">20 minit</option><option value="1800">30 minit</option></select><small>Tan refleksyon ki disponib pou chak match.</small></div>
       </div>
-      <div class="create-pro-included" style="margin-top:12px"><span>🔒</span><div><strong>Montan pou lanse tournoi a: <b id="tournamentCreationFeeAmount">—</b></strong><small id="tournamentCreationFeeDetails">Montan an kalkile otomatikman selon pri patisipasyon an ak kantite jwè maksimòm.</small><small id="tournamentCreationFeeFxEquivalent" class="create-pro-fx"></small><small id="tournamentFxRateLabel" class="create-pro-fx">To konvèsyon an ap chaje otomatikman.</small></div></div>
-      <div class="create-pro-included"><span>✓</span><div><strong>Kondisyon finansye yo ap rete fiks</strong><small>Avantaj òganizatè a limite ant 2% ak 15%. Pataj prim yo dwe totalize 100% nan fon prim lan epi yo pa ka modifye apre premye enskripsyon an.</small></div></div>
+      <div class="create-pro-included" id="tournamentCreationFeeBox" style="margin-top:12px"><span>🔒</span><div><strong>Montan pou lanse tournoi a: <b id="tournamentCreationFeeAmount">—</b></strong><small id="tournamentCreationFeeDetails">Montan an kalkile otomatikman selon pri patisipasyon an ak kantite jwè maksimòm.</small><small id="tournamentCreationFeeFxEquivalent" class="create-pro-fx"></small><small id="tournamentFxRateLabel" class="create-pro-fx">To konvèsyon an ap chaje otomatikman.</small></div></div>
+      <div class="create-pro-included" id="tournamentFinancialRules"><span>✓</span><div><strong>Kondisyon finansye yo ap rete fiks</strong><small>Avantaj òganizatè a limite ant 2% ak 15%. Pataj prim yo dwe totalize 100% nan fon prim lan epi yo pa ka modifye apre premye enskripsyon an.</small></div></div>
       <div class="create-pro-footer"><div><small>ETAP 1 SOU 2</small><strong>Prèske pare pou lanse</strong></div><button class="tournament-primary create-pro-submit" id="tournamentCreateBtn" type="button">Kontinye <span>→</span></button></div>
     </div>
     <div class="create-pro-security">🔒 Konfigirasyon an ap rete asosye ak kont òganizatè a.</div>
@@ -1992,7 +1995,7 @@ td, th { overflow-wrap: anywhere; }
   </section>
   <section class="tournament-stage" data-t-stage="5">
     <section class="tournament-list-card">
-      <div class="tournament-section-title"><span>02</span><div><h2>Tournois disponib</h2><p>Chèche konpetisyon ki ouvè yo, gade kondisyon yo epi antre ladan yo.</p></div></div>
+      <div class="tournament-section-title"><span>02</span><div><h2>Tournois disponib</h2><p>Chwazi yon tounwa pou wè detay li epi antre ladan l.</p></div></div>
       <div class="tournament-list-tools">
         <label class="tournament-search"><span>RECHÈCHE YON TOURNOI</span><input id="tournamentSearch" type="search" maxlength="100" placeholder="Ekri non tournoi oswa òganizatè..."></label>
         <label class="tournament-filter"><span>FILTRE PA ESTATI</span><select id="tournamentStatusFilter"><option value="all">Tout tournoi yo</option><option value="registration">Enskripsyon ouvè</option><option value="live">Tournoi an kou</option><option value="finished">Tournoi fini</option></select></label>
@@ -4659,7 +4662,7 @@ function connectServer(callback) {
                         event.data
                     );
 
-                if (data.type === "server_config") { tournamentTestMode=String(data.gomoku_mode||"live").toLowerCase()==="test"; if(tournamentTestMode)updateTournamentCreationFeePreview(); return; }
+                if (data.type === "server_config") { tournamentTestMode=String(data.gomoku_mode||"live").toLowerCase()==="test"; applyTournamentModeUI(); if(tournamentTestMode)updateTournamentCreationFeePreview(); return; }
                 if (data.type === "tournament_list_result") { renderTournamentList(data.tournaments || []); return; }
                 if (data.type === "tournament_create_result") {
                     tournamentNotice(data.message || (data.ok ? "Tournoi kreye." : "Erè."), !!data.ok);
@@ -6763,6 +6766,16 @@ let activeTournamentMatchRoom = null;
 let tournamentPendingVoice = [];
 let tournamentStage = 1;
 let tournamentCreateConfirmed = false;
+function applyTournamentModeUI(){
+ const screen=document.getElementById("tournamentScreen");if(!screen)return;
+ screen.classList.toggle("test-mode",tournamentTestMode);
+ const notice=document.getElementById("tournamentModeNotice");if(notice){notice.hidden=!tournamentTestMode;notice.textContent=tournamentTestMode?"MÒD TÈS: Kreye tounwa gratis. Antre gratis. Pa gen peman ni pri lajan.":"";}
+ const ids=["tournamentFeeField","tournamentMethodField","tournamentCreationPaymentField","tournamentCommissionField","tournamentWinnerCountField","tournamentCreationFeeBox","tournamentFinancialRules"];
+ ids.forEach(id=>{const el=document.getElementById(id);if(el)el.hidden=tournamentTestMode;});
+ ["tournamentPrize1","tournamentPrize2Wrap","tournamentPrize3Wrap"].forEach(id=>{const el=document.getElementById(id);if(el){const box=el.closest(".create-pro-field");if(box)box.hidden=tournamentTestMode;}});
+ const btn=document.getElementById("tournamentCreateBtn");if(btn&&tournamentTestMode)btn.textContent="Kreye tounwa gratis →";
+ const confirm=document.getElementById("tournamentConfirmCreate");if(confirm&&tournamentTestMode)confirm.textContent="Kreye tounwa gratis";
+}
 function setTournamentStage(stage){
   tournamentStage=Math.max(1,Math.min(6,Number(stage)||1));
   document.querySelectorAll("#tournamentScreen [data-t-stage]").forEach(el=>el.classList.toggle("active",Number(el.dataset.tStage)===tournamentStage));
@@ -6866,6 +6879,7 @@ document.getElementById("tournamentBack")?.addEventListener("click",()=>showAcco
 document.getElementById("tournamentRefresh")?.addEventListener("click",loadTournamentList);
 
 let tournamentListCache=[];
+applyTournamentModeUI();
 function tournamentStatusLabel(status){
   return ({registration:"Enskripsyon ouvè",live:"Tournoi an kou",finished:"Tournoi fini"})[String(status||"").toLowerCase()]||"Estati pa defini";
 }
