@@ -4079,6 +4079,7 @@ document.getElementById("settingsBack").addEventListener("click", function() {
 ================================================== */
 
 let socket = null;
+let pendingServerCallbacks = [];
 
 let onlinePlayer = null;
 let onlineRoom = null;
@@ -4543,10 +4544,11 @@ function connectServer(callback) {
         socket.readyState ===
         WebSocket.CONNECTING
     ) {
-
+        if (callback) pendingServerCallbacks.push(callback);
         return;
     }
 
+    pendingServerCallbacks = callback ? [callback] : [];
     socket =
         new WebSocket(
             SERVER_URL
@@ -4566,9 +4568,16 @@ function connectServer(callback) {
             // seule la déconnexion explicite retire le jeton local.
             let savedToken = null;
             try { savedToken = localStorage.getItem("mrjery_account_token"); } catch(e) {}
+            const readyCallbacks = pendingServerCallbacks.splice(0);
+            const runReadyCallbacks = function() {
+                readyCallbacks.forEach(function(fn) {
+                    try { if (typeof fn === "function") fn(); }
+                    catch (callbackError) { console.error("Callback serveur:", callbackError); }
+                });
+            };
             if (savedToken && !accountRequestInProgress) {
                 restoringAccountSession = true;
-                pendingRestoreCallback = callback || null;
+                pendingRestoreCallback = readyCallbacks.length ? runReadyCallbacks : null;
                 if (restoreSessionTimeout) clearTimeout(restoreSessionTimeout);
                 restoreSessionTimeout = setTimeout(function(){
                     if (!restoringAccountSession) return;
@@ -4582,8 +4591,8 @@ function connectServer(callback) {
                     if (typeof cb === "function") cb();
                 }, 7000);
                 socket.send(JSON.stringify({type:"restore_session", account_token:savedToken}));
-            } else if (callback) {
-                callback();
+            } else {
+                runReadyCallbacks();
             }
             if (document.getElementById("tournamentScreen")?.classList.contains("active")) loadTournamentList();
 
@@ -4602,6 +4611,11 @@ function connectServer(callback) {
     socket.onclose =
         function() {
 
+            const waitingCallbacks = pendingServerCallbacks.splice(0);
+            if (waitingCallbacks.length) {
+                accountRequestInProgress = false;
+                showAccountMessage("❌ Koneksyon ak sèvè a koupe. Tanpri eseye ankò.", false);
+            }
             closeTournamentVoice();
             stopOnlineDisplayTimer();
 
