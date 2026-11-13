@@ -7007,7 +7007,7 @@ function renderTournamentDetail(t){
     root.querySelector("#tournamentPaymentMethod")?.previousElementSibling?.remove();
     root.querySelector("#tournamentPaymentMethod")?.remove();
     const terms=root.querySelector(".tournament-terms-accept");
-    if(terms)terms.textContent="Mwen li epi mwen aksepte règ tounwa sa a. Antre a gratis.";
+    if(terms)terms.innerHTML='<input id="tournamentTermsAccepted" type="checkbox"> Mwen li epi mwen aksepte règ tounwa sa a. Antre a gratis.';
     const joinSteps=root.querySelector(".tournament-join-steps");
     if(joinSteps)joinSteps.innerHTML="<strong>Antre nan tounwa sa a gratis.</strong><ol><li>Ou pa bezwen peye.</li><li>Peze bouton « Antre gratis » la.</li><li>Tann konfimasyon enskripsyon an.</li></ol>";
   }
