@@ -494,6 +494,8 @@ h1 {
     overflow: hidden;
 }
 
+.board:focus { outline: 3px solid #D4AF37; outline-offset: 3px; }
+.cell.keyboard-selected { box-shadow: inset 0 0 0 3px #D4AF37; z-index: 4; }
 .cell {
     position: relative;
     display: flex;
@@ -2465,6 +2467,7 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     letters.className = "letters";
+    letters.style.gridTemplateColumns = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
 
     for (let i = 0; i < BOARD_SIZE; i++) {
 
@@ -2483,6 +2486,7 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     numbers.className = "numbers";
+    numbers.style.gridTemplateRows = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
 
     for (let i = 1; i <= BOARD_SIZE; i++) {
 
@@ -2500,6 +2504,40 @@ function createBoard(container, clickFunction) {
         document.createElement("div");
 
     board.className = "board";
+    board.style.gridTemplateColumns = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
+    board.style.gridTemplateRows = `repeat(${BOARD_SIZE}, minmax(0, 1fr))`;
+    board.tabIndex = 0;
+    board.setAttribute("role", "grid");
+    board.setAttribute("aria-label", "Tablo Gomoku. Flèch yo deplase; Enter oswa Espas pou jwe.");
+    board.title = "Peze Tab pou chwazi tablo a. Flèch yo deplase; Enter/Espas mete pyès la.";
+    let selectedRow = Math.floor(BOARD_SIZE / 2);
+    let selectedCol = Math.floor(BOARD_SIZE / 2);
+    const updateKeyboardSelection = () => {
+        board.querySelectorAll(".cell.keyboard-selected").forEach(el => el.classList.remove("keyboard-selected"));
+        const selected = board.children[selectedRow * BOARD_SIZE + selectedCol];
+        if (selected && selected.classList.contains("cell")) selected.classList.add("keyboard-selected");
+    };
+    board.addEventListener("keydown", event => {
+        const moves = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1]};
+        if (moves[event.key]) {
+            event.preventDefault();
+            selectedRow = Math.max(0, Math.min(BOARD_SIZE - 1, selectedRow + moves[event.key][0]));
+            selectedCol = Math.max(0, Math.min(BOARD_SIZE - 1, selectedCol + moves[event.key][1]));
+            updateKeyboardSelection();
+        } else if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const selected = board.children[selectedRow * BOARD_SIZE + selectedCol];
+            if (selected && selected.classList.contains("cell")) selected.click();
+        }
+    });
+    board.addEventListener("focus", updateKeyboardSelection);
+    board.addEventListener("click", event => {
+        const cell = event.target.closest(".cell");
+        if (!cell) return;
+        selectedRow = Number(cell.dataset.row);
+        selectedCol = Number(cell.dataset.col);
+        updateKeyboardSelection();
+    });
 
     for (let row = 0; row < BOARD_SIZE; row++) {
 
