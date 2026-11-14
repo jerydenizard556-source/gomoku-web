@@ -1991,7 +1991,7 @@ td, th { overflow-wrap: anywhere; }
     <button class="tournament-refresh" id="tournamentRefresh" type="button">⟳ Rafrechi lis la</button>
   </header>
   <div id="tournamentModeNotice" class="tournament-mode-notice" hidden></div>
-  <nav class="tournament-stepper" aria-label="Etap tournoi">
+  <nav class="tournament-stepper" aria-label="Etap tournoi" hidden>
     <button type="button" class="active" data-t-step="2"><span>01</span><b>Chwazi</b></button><i></i><button type="button" data-t-step="3"><span>02</span><b>Kreye</b></button><i></i><button type="button" data-t-step="4"><span>03</span><b>Konfime</b></button><i></i><button type="button" data-t-step="5"><span>04</span><b>Disponib</b></button><i></i><button type="button" data-t-step="6"><span>05</span><b>Detay</b></button>
   </nav>
   <section class="tournament-stage active" data-t-stage="2">
@@ -2056,7 +2056,7 @@ td, th { overflow-wrap: anywhere; }
   </div>
 
 </section>
-  <section class="tournament-stage" data-t-stage="4">
+  <section class="tournament-stage" data-t-stage="4" hidden>
     <div class="tournament-confirm-card">
       <div class="tournament-section-title"><span>02</span><div><h2>Verifye konpetisyon an</h2><p>Verifye enfòmasyon yo anvan ou kreye tournoi a.</p></div></div>
       <div id="tournamentConfirmSummary" class="tournament-confirm-summary"></div>
@@ -2070,10 +2070,7 @@ td, th { overflow-wrap: anywhere; }
     <section class="tournament-list-card">
       <div class="tournament-section-title"><span>02</span><div><h2 id="tournamentListHeading">Tout tounwa</h2><p id="tournamentListDescription">Chwazi yon tounwa pou wè detay li epi antre ladan l.</p></div></div>
       <div class="tournament-list-tools">
-        <div class="tournament-view-tabs" role="tablist" aria-label="Lis tounwa">
-          <button type="button" class="active" data-t-list-view="all">Tout tounwa</button>
-          <button type="button" data-t-list-view="mine">🏆 Tounwa mwen</button>
-        </div>
+        
         <label class="tournament-search"><span>RECHÈCHE YON TOURNOI</span><input id="tournamentSearch" type="search" maxlength="100" placeholder="Ekri non tournoi oswa òganizatè..."></label>
         <label class="tournament-filter"><span>FILTRE PA ESTATI</span><select id="tournamentStatusFilter"><option value="all">Tout tournoi yo</option><option value="registration">Enskripsyon ouvè</option><option value="live">Tournoi an kou</option><option value="finished">Tournoi fini</option></select></label>
       </div>
@@ -6909,7 +6906,7 @@ function applyTournamentModeUI(){
  const ids=["tournamentFeeField","tournamentMethodField","tournamentCreationPaymentField","tournamentCommissionField","tournamentWinnerCountField","tournamentCreationFeeBox","tournamentFinancialRules"];
  ids.forEach(id=>{const el=document.getElementById(id);if(el)el.hidden=tournamentTestMode;});
  ["tournamentPrize1","tournamentPrize2Wrap","tournamentPrize3Wrap"].forEach(id=>{const el=document.getElementById(id);if(el){const box=el.closest(".create-pro-field");if(box)box.hidden=tournamentTestMode;}});
- const btn=document.getElementById("tournamentCreateBtn");if(btn&&tournamentTestMode)btn.textContent="Kreye tounwa gratis →";
+ const btn=document.getElementById("tournamentCreateBtn");if(btn)btn.textContent=tournamentTestMode?"Kreye tounwa gratis":"Kreye tounwa";
  const confirm=document.getElementById("tournamentConfirmCreate");if(confirm&&tournamentTestMode)confirm.textContent="Kreye tounwa gratis";
 }
 function setTournamentStage(stage){
@@ -7084,15 +7081,18 @@ function renderTournamentList(items){
   const root=document.getElementById("tournamentList"); if(!root)return;
   tournamentListCache=Array.isArray(items)?items:[];
   const heading=document.getElementById("tournamentListHeading"),description=document.getElementById("tournamentListDescription");
-  if(heading)heading.textContent=tournamentListView==="mine"?"Tounwa mwen ladan yo":"Rejoindre tounwa";
-  if(description)description.textContent=tournamentListView==="mine"?"Men tout tounwa kote kont ou deja enskri.":"Gade tounwa ki disponib epi chwazi youn pou antre ladan l.";
+  if(heading)heading.textContent=tournamentListView==="mine"?"Tounwa mwen ladan yo":"Tounwa ki disponib";
+  if(description)description.textContent=tournamentListView==="mine"?"Men tout tounwa kote kont ou deja enskri.":"Men sèlman tounwa ki ouvè pou enskripsyon.";
+  const statusSelect=document.getElementById("tournamentStatusFilter");
+  if(statusSelect){if(tournamentListView==="mine")statusSelect.value="all";else statusSelect.value="registration";statusSelect.disabled=tournamentListView!=="mine";}
   const search=(document.getElementById("tournamentSearch")?.value||"").trim().toLowerCase();
   const status=document.getElementById("tournamentStatusFilter")?.value||"all";
   const filtered=tournamentListCache.filter(t=>{
     const matchesStatus=status==="all"||String(t.status||"").toLowerCase()===status;
     const haystack=(String(t.title||"")+" "+String(t.organizer||"")).toLowerCase();
     const isMine=Array.isArray(t.players)&&t.players.some(p=>String(p.player_id)===String(currentPlayerId));
-    return matchesStatus&&haystack.includes(search)&&(tournamentListView!=="mine"||isMine);
+    const available=tournamentListView==="mine"||String(t.status||"").toLowerCase()==="registration";
+    return matchesStatus&&haystack.includes(search)&&available&&(tournamentListView!=="mine"||isMine);
   });
   document.querySelectorAll("[data-t-list-view]").forEach(b=>b.classList.toggle("active",b.dataset.tListView===tournamentListView));
   const meta=document.getElementById("tournamentListMeta");
@@ -7371,7 +7371,7 @@ document.getElementById("tournamentCreateBtn")?.addEventListener("click",async()
   const button=document.getElementById("tournamentCreateBtn");
   if(button){button.disabled=true;button.textContent="⏳ Ap prepare peman an...";}
   try{
-    if(tournamentTestMode){const sent=tournamentSend("tournament_create",{title,board_size:Number(tournamentValue("tournamentBoard")),duration_seconds:Number(tournamentValue("tournamentDuration")),max_participants:capacity});if(button){button.disabled=false;button.textContent="Kontinye →";}if(sent)tournamentNotice("Demann kreyasyon gratis la voye.",true);return;}
+    if(tournamentTestMode){const sent=tournamentSend("tournament_create",{title,board_size:Number(tournamentValue("tournamentBoard")),duration_seconds:Number(tournamentValue("tournamentDuration")),max_participants:capacity});if(button){button.disabled=false;button.textContent="Kreye tounwa gratis";}if(sent)tournamentNotice("Demann kreyasyon gratis la voye.",true);return;}
     const result=await walletRequest("/tournaments/create/checkout",{method:"POST",body:JSON.stringify({
       title,entry_fee:tournamentValue("tournamentFee"),currency:tournamentValue("tournamentCurrency"),
       payment_method:tournamentValue("tournamentCreationPaymentMethod")||"moncash",
@@ -7388,7 +7388,7 @@ document.getElementById("tournamentCreateBtn")?.addEventListener("click",async()
     window.location.assign(result.payment_url);
   }catch(error){
     tournamentNotice(error.message||"Peman kreyasyon an pa kapab kòmanse kounye a.",false);
-    if(button){button.disabled=false;button.textContent="Kontinye →";}
+    if(button){button.disabled=false;button.textContent=tournamentTestMode?"Kreye tounwa gratis":"Kreye tounwa";}
     const confirmButton=document.getElementById("tournamentConfirmCreate");
     if(confirmButton){confirmButton.disabled=false;confirmButton.textContent="🏆 Rekòmanse peman an";}
   }
