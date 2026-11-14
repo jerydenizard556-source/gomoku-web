@@ -7600,7 +7600,7 @@ function closeTournamentCamera(){
 async function ensureTournamentCameraPeer(peerId,makeOffer){
   peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
   let pc=tournamentCameraPeers.get(peerId);
-  if(pc){if(makeOffer)pc.__cameraOfferer=true;return pc;}
+  if(pc){if(makeOffer&&!pc.__cameraOfferer){pc.__cameraOfferer=true;Promise.resolve().then(()=>renegotiateTournamentCameraPeer(peerId,pc));}return pc;}
   pc=new RTCPeerConnection(tournamentPeerConfiguration());
   pc.__cameraOfferer=!!makeOffer;pc.__cameraOfferInProgress=false;pc.__cameraRenegotiatePending=false;
   pc.__pendingIce=[];pc.__remoteStream=new MediaStream();pc.__iceRestartAttempted=false;
