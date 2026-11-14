@@ -5053,8 +5053,8 @@ function connectServer(callback) {
                     renderTournamentChat(data.messages || []); return;
                 }
                 if (data.type === "tournament_voice_pending") { addTournamentVoicePending(data); return; }
-                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,true).catch(e=>console.warn(e))); return; }
-                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { return; }
+                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,false).catch(e=>console.warn(e))); return; }
+                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentCameraPeer(data.peer_id,true).catch(e=>console.warn("Camera peer join:",e)); return; }
                 if (data.type === "camera_peer_leave" && data.room===activeTournamentMatchRoom) { closeTournamentCameraPeer(data.peer_id); return; }
                 if (data.type === "camera_signal" && data.room===activeTournamentMatchRoom) { handleTournamentCameraSignal(data).catch(e=>console.warn("Camera signal:",e)); return; }
                 if (data.type === "voice_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentVoicePeer(peer.peer_id,true).catch(e=>console.warn(e))); return; }
@@ -7489,7 +7489,7 @@ function closeTournamentCamera(){
   const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop"),local=document.getElementById("onlineTournamentLocalCamera");
   if(local)local.replaceChildren();if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera mwen";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera etenn.");
 }
-async async function ensureTournamentCameraPeer(peerId,makeOffer){
+async function ensureTournamentCameraPeer(peerId,makeOffer){
   peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
   let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
   pc=new RTCPeerConnection({iceServers:[
