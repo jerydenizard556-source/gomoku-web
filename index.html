@@ -7680,6 +7680,15 @@ async function renegotiateTournamentCameraPeer(peerId,pc){
 async function handleTournamentCameraSignal(data){
   const peerId=String(data.from_id||"");if(!peerId)return;
   const pc=await ensureTournamentCameraPeer(peerId,false);if(!pc)return;
+  // WebSocket events can arrive faster than async SDP/ICE operations finish.
+  // Serialize every signal for this peer so ICE never races setRemoteDescription.
+  pc.__signalQueue=pc.__signalQueue||Promise.resolve();
+  pc.__signalQueue=pc.__signalQueue.then(()=>processTournamentCameraSignal(data,peerId,pc)).catch(error=>{
+    console.warn("Camera signal queue:",error);
+  });
+  return pc.__signalQueue;
+}
+async function processTournamentCameraSignal(data,peerId,pc){
   if(data.signal_type==="ready"){
     await renegotiateTournamentCameraPeer(peerId,pc);
     return;
