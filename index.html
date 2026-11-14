@@ -7606,13 +7606,23 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
     let tile=document.getElementById("tournament-camera-"+peerId);
     if(!tile){
       tile=document.createElement("div");tile.className="tournament-camera-tile";tile.id="tournament-camera-"+peerId;
-      const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;
+      const video=document.createElement("video");
+      video.autoplay=true;video.playsInline=true;video.muted=true;
+      video.setAttribute("autoplay","");video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");
       const label=document.createElement("small");label.textContent="Kamera lòt jwè";
       tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
     }
     const video=tile.querySelector("video");
-    video.srcObject=e.streams?.[0]||new MediaStream([e.track]);
-    video.play().catch(()=>tournamentCameraStatus("Peze videyo a pou pèmèt li jwe."));
+    let remoteStream=e.streams&&e.streams[0]?e.streams[0]:video.srcObject;
+    if(!remoteStream)remoteStream=new MediaStream();
+    if(!e.streams||!e.streams[0]){
+      if(!remoteStream.getTracks().some(track=>track.id===e.track.id))remoteStream.addTrack(e.track);
+    }
+    video.muted=true;video.srcObject=remoteStream;
+    const playRemoteVideo=()=>video.play().catch(()=>tournamentCameraStatus("Peze videyo lòt jwè a pou aktive imaj la."));
+    e.track.addEventListener("unmute",playRemoteVideo);
+    video.onloadedmetadata=playRemoteVideo;
+    playRemoteVideo();
   };
   pc.onconnectionstatechange=()=>{
     if(pc.connectionState==="failed"||pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
