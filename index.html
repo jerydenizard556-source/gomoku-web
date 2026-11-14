@@ -1799,6 +1799,10 @@ td, th { overflow-wrap: anywhere; }
 }
 </style>
 
+<style id="mrjery-camera-mic-state">
+.camera-mic-state{display:block;margin-top:3px;font-size:11px;font-weight:700;color:#f5ce6a;text-align:center}
+#onlineTournamentVoiceMute{min-width:150px}
+</style>
 </head>
 
 <body>
@@ -4547,6 +4551,7 @@ let tournamentVoiceJoined = false;
 let tournamentLocalAudioStream = null;
 let tournamentVoiceMuted = false;
 const tournamentVoicePeers = new Map();
+const tournamentRemoteMicStates = new Map();
 let tournamentCameraStream=null;
 let tournamentCameraJoined=false;
 const tournamentCameraPeers=new Map();
@@ -7603,7 +7608,7 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
       tile=document.createElement("div");tile.className="tournament-camera-tile";tile.id="tournament-camera-"+peerId;
       const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;
       const label=document.createElement("small");label.textContent="Kamera lòt jwè";
-      tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);
+      tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
     }
     const video=tile.querySelector("video");
     video.srcObject=e.streams?.[0]||new MediaStream([e.track]);
@@ -7749,6 +7754,7 @@ function toggleTournamentVoiceMute(){
   tournamentVoiceStatus(tournamentVoiceMuted?"Mikwo sou silans.":"Mikwo aktive. Ou ka pale.");
 }
 function updateRemoteMicState(peerId,muted){
+  tournamentRemoteMicStates.set(String(peerId),!!muted);
   const tile=document.getElementById("tournament-camera-"+String(peerId));
   if(!tile)return;
   let badge=tile.querySelector(".camera-mic-state");
