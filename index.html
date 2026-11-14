@@ -7362,12 +7362,11 @@ document.getElementById("tournamentCreateBtn")?.addEventListener("click",async()
   const capacity=Number(tournamentValue("tournamentCapacity"));
   if(!Number.isInteger(capacity)||capacity<2||capacity>10000){tournamentNotice("Kantite jwè a dwe ant 2 ak 10,000.",false);return;}
   if(!accountConnected||!accountToken){tournamentNotice("Konekte sou kont MR_Jery ou an avan ou peye frè kreyasyon an.",false);return;}
-  if(!tournamentCreateConfirmed){
-    await updateTournamentCreationFeePreview();
-    if(!tournamentTestMode&&tournamentFxRateHTGPerUSD===null){tournamentNotice("Nou bezwen to konvèsyon aktyèl la pou montre ekivalan egzak USD/HTG a. Eseye ankò.",false);return;}
-    buildTournamentConfirmation();setTournamentStage(4);return;
-  }
   tournamentCreateConfirmed=false;
+  if(!tournamentTestMode){
+    await updateTournamentCreationFeePreview();
+    if(tournamentFxRateHTGPerUSD===null){tournamentNotice("Nou bezwen to konvèsyon aktyèl la pou montre ekivalan egzak USD/HTG a. Eseye ankò.",false);return;}
+  }
   const button=document.getElementById("tournamentCreateBtn");
   if(button){button.disabled=true;button.textContent="⏳ Ap prepare peman an...";}
   try{
