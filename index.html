@@ -4919,10 +4919,18 @@ function connectServer(callback) {
     }
 
     pendingServerCallbacks = callback ? [callback] : [];
-    socket =
-        new WebSocket(
-            SERVER_URL
-        );
+    try {
+        socket = new WebSocket(SERVER_URL);
+    } catch (connectionError) {
+        pendingServerCallbacks = [];
+        if (accountRequestInProgress) {
+            accountRequestInProgress = false;
+            clearAuthRequestTimeout();
+            showAccountMessage("❌ Enposib louvri koneksyon ak sèvè a. Verifye entènèt ou epi rekòmanse paj la.", false);
+        }
+        console.error("WebSocket creation failed:", connectionError);
+        return;
+    }
 
     socket.onopen =
         function() {
@@ -5000,21 +5008,18 @@ function connectServer(callback) {
             }
         };
 
-    socket.onerror =
-        function() {
-
-            const onlineError =
-                document.getElementById(
-                    "onlineError"
-                );
-
-            const gameError =
-                document.getElementById(
-                    "gameOnlineError"
-                );
-
-            // Erè rezo tanporè a pa deranje jwè a; onclose jere rekoneksyon an.
-        };
+    socket.onerror = function(event) {
+        console.error("MR_JERY WebSocket error:", event);
+        if (accountRequestInProgress) {
+            accountRequestInProgress = false;
+            clearAuthRequestTimeout();
+            showAccountMessage("❌ Koneksyon ak sèvè a echwe. Tann kèk segonn epi peze Se connecter ankò.", false);
+        }
+        const onlineError = document.getElementById("onlineError");
+        const gameError = document.getElementById("gameOnlineError");
+        if (onlineError && !accountConnected) onlineError.textContent = "Sèvè a pa disponib. Eseye ankò.";
+        if (gameError) gameError.textContent = "Koneksyon ak sèvè a echwe.";
+    };
 
     socket.onmessage =
         function(event) {
