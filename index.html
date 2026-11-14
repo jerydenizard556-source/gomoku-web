@@ -1645,6 +1645,92 @@ td, th { overflow-wrap: anywhere; }
 @media(max-width:650px){#tournamentScreen .tournament-create-pro{margin:16px auto 30px;padding:18px 12px;border-radius:18px}#tournamentScreen .create-pro-fields{grid-template-columns:1fr;gap:20px;padding:20px 0}#tournamentScreen .create-pro-card{padding:17px}#tournamentScreen .create-pro-footer{align-items:stretch;flex-direction:column}#tournamentScreen .create-pro-submit{width:100%}#tournamentScreen .create-pro-step{font-size:9px}#tournamentScreen .create-pro-kicker{font-size:8px;letter-spacing:1.5px}}
 
 </style>
+
+<style id="mrjery-portrait-approved-layout">
+/* Approved portrait layout: blue/red cameras side-by-side, board centered, no Intel label */
+#onlineGameScreen{
+ display:grid!important;
+ grid-template-columns:minmax(58px,.72fr) minmax(0,4.5fr) minmax(58px,.72fr);
+ grid-auto-flow:row;
+ align-items:stretch;
+ gap:7px clamp(5px,1vw,12px);
+ width:100%;max-width:1500px;margin:0 auto;padding:9px clamp(5px,1vw,14px) 18px;
+ box-sizing:border-box;
+}
+#onlineGameScreen>.online-showcase-header{grid-column:1/-1;grid-row:1;margin:0 0 2px;grid-template-columns:1fr auto}
+#onlineGameScreen .online-versus-title{font-size:clamp(13px,1.4vw,18px);letter-spacing:.08em;color:#facc15}
+#onlineGameScreen>.game-info{display:contents}
+#onlineGameScreen #onlineStatus,#onlineGameScreen #onlineMatchNotice,
+#onlineGameScreen #onlineSpectatorCount,#onlineGameScreen .room{
+ grid-column:1/-1;grid-row:auto;margin:1px auto;min-height:0;text-align:center
+}
+#onlineGameScreen .score-board{display:contents}
+#onlineGameScreen .score-player{
+ align-self:stretch;justify-self:stretch;min-width:0;margin:0;padding:10px 5px;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;
+ text-align:center;overflow-wrap:anywhere;border-radius:13px;
+ background:linear-gradient(160deg,#10294d,#07152b);border:1px solid #1687ff;
+ box-shadow:0 0 14px rgba(22,135,255,.17);font-size:clamp(9px,1vw,14px)
+}
+#onlineGameScreen .score-player:first-child{grid-column:1;grid-row:7;border-color:#1687ff}
+#onlineGameScreen .score-player:last-child{grid-column:3;grid-row:7;border-color:#fb3152;background:linear-gradient(160deg,#3b1023,#180b19);box-shadow:0 0 14px rgba(251,49,82,.16)}
+#onlineGameScreen .score-player span{font-size:clamp(12px,1.25vw,18px);overflow-wrap:anywhere}
+#onlineGameScreen .timers{grid-column:1/-1;grid-row:5;display:flex;justify-content:center;gap:10px;margin:2px auto 5px}
+#onlineGameScreen .player-timer{min-width:125px;padding:7px 12px;text-align:center;border-radius:11px;background:#101d35}
+#onlineGameScreen .online-match-camera-panel{
+ grid-column:1/-1;grid-row:6;width:100%;max-width:1120px;box-sizing:border-box;
+ margin:0 auto 3px;padding:8px 10px;display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 10px;
+ border:1px solid rgba(212,175,55,.4);border-radius:15px;
+ background:linear-gradient(110deg,#07152d,#101a36 48%,#240d25);
+ box-shadow:0 8px 24px rgba(0,0,0,.25)
+}
+#onlineGameScreen .online-camera-heading{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+#onlineGameScreen .online-camera-heading>strong{font-size:13px}
+#onlineGameScreen .online-camera-heading .tournament-note{font-size:11px;margin:0}
+#onlineGameScreen .tournament-camera-controls{grid-column:1/-1;justify-content:center;margin:0}
+#onlineGameScreen #onlineTournamentLocalCamera,#onlineGameScreen #onlineTournamentRemoteCameras{display:contents!important}
+#onlineGameScreen .online-match-camera-panel .tournament-camera-tile{
+ min-width:0;width:100%;box-sizing:border-box;padding:4px;border-radius:11px;
+ background:#07152d;border:2px solid #1687ff
+}
+#onlineGameScreen .online-match-camera-panel .tournament-camera-tile:nth-child(even){border-color:#fb3152}
+#onlineGameScreen .online-match-camera-panel .tournament-camera-tile video{
+ display:block;width:100%;height:clamp(105px,16vw,190px);max-height:190px;
+ aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:#020617
+}
+#onlineGameScreen .online-match-camera-panel .tournament-camera-tile small{font-size:11px;padding:4px}
+#onlineGameScreen #onlineBoard{grid-column:2;grid-row:7;width:100%;max-width:760px;margin:0 auto;justify-self:center;align-self:center}
+#onlineGameScreen .board-area{width:100%;max-width:760px;margin:0 auto}
+#onlineGameScreen #onlineResult,#onlineGameScreen #rematchBox,#onlineGameScreen #undoBox,
+#onlineGameScreen #tournamentMatchComms,#onlineGameScreen>.game-actions{grid-column:1/-1;grid-row:auto}
+#onlineGameScreen #onlineResult{margin:5px auto}
+#onlineGameScreen #tournamentMatchComms{width:min(100%,900px)}
+#onlineGameScreen #rematchBox,#onlineGameScreen #undoBox{max-width:600px}
+@media(max-width:620px){
+ #onlineGameScreen{grid-template-columns:minmax(48px,.7fr) minmax(0,4.4fr) minmax(48px,.7fr);gap:5px 4px;padding:6px 4px 12px}
+ #onlineGameScreen>.online-showcase-header{padding:7px 8px}
+ #onlineGameScreen .online-brand{font-size:15px}
+ #onlineGameScreen .online-brand small{font-size:9px}
+ #onlineGameScreen .online-live-badges span{font-size:9px;padding:4px 6px}
+ #onlineGameScreen .online-versus-title{font-size:11px;padding:5px 8px}
+ #onlineGameScreen .online-match-camera-panel{padding:6px;gap:5px}
+ #onlineGameScreen .online-match-camera-panel .tournament-camera-tile video{height:clamp(82px,23vw,125px)}
+ #onlineGameScreen .online-camera-heading .tournament-note{font-size:9px}
+ #onlineGameScreen .score-player{padding:6px 2px;font-size:8px;gap:3px}
+ #onlineGameScreen .score-player span{font-size:11px}
+ #onlineGameScreen .player-timer{min-width:105px;padding:6px 8px}
+ #onlineGameScreen .timer-value{font-size:17px}
+ #onlineGameScreen #onlineBoard{width:100%}
+}
+@media(max-width:390px){
+ #onlineGameScreen{grid-template-columns:minmax(43px,.65fr) minmax(0,4.3fr) minmax(43px,.65fr)}
+ #onlineGameScreen .online-match-camera-panel .tournament-camera-tile video{height:82px}
+ #onlineGameScreen .online-camera-heading>strong{font-size:11px}
+ #onlineGameScreen .score-player{font-size:7px}
+}
+</style>
+
 </head>
 
 <body>
@@ -2382,7 +2468,7 @@ td, th { overflow-wrap: anywhere; }
 
 <section id="onlineGameScreen" class="screen">
 
-    <header class="online-showcase-header"><div class="online-brand">👑 MR JERY <span>Gomoku</span><small>Jwe • Konpetisyon • Amize</small></div><div class="online-versus-title">Intel <em>vs</em> Intel</div><div class="online-live-badges"><span>● Match an kou</span><span>👁️ Espektatè</span></div></header>
+    <header class="online-showcase-header"><div class="online-brand">👑 MR JERY <span>Gomoku</span><small>Jwe • Konpetisyon • Amize</small></div><div class="online-versus-title">MATCH EN DIRECT</div><div class="online-live-badges"><span>● Match an kou</span><span>👁️ Espektatè</span></div></header>
 
     <div class="game-info">
 
@@ -7386,26 +7472,61 @@ function closeTournamentCamera(){
   const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop"),local=document.getElementById("onlineTournamentLocalCamera");
   if(local)local.replaceChildren();if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera mwen";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera etenn.");
 }
-async function ensureTournamentCameraPeer(peerId,makeOffer){
-  peerId=String(peerId);if(!peerId||peerId==="undefined")return null;let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
-  pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]});
-  const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});pc.__videoSender=transceiver.sender;
-  if(tournamentCameraStream){const track=tournamentCameraStream.getVideoTracks()[0];if(track)await pc.__videoSender.replaceTrack(track);}
+async async function ensureTournamentCameraPeer(peerId,makeOffer){
+  peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
+  let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
+  pc=new RTCPeerConnection({iceServers:[
+    {urls:"stun:stun.l.google.com:19302"},
+    {urls:"stun:stun1.l.google.com:19302"}
+  ]});
+  const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});
+  pc.__videoSender=transceiver.sender;pc.__pendingIce=[];
+  if(tournamentCameraStream){
+    const track=tournamentCameraStream.getVideoTracks()[0];
+    if(track)await pc.__videoSender.replaceTrack(track);
+  }
   pc.onicecandidate=e=>{if(e.candidate)tournamentCameraSend(peerId,"ice",e.candidate.toJSON());};
   pc.ontrack=e=>{
     let tile=document.getElementById("tournament-camera-"+peerId);
-    if(!tile){tile=document.createElement("div");tile.className="tournament-camera-tile";tile.id="tournament-camera-"+peerId;const video=document.createElement("video");video.autoplay=true;video.playsInline=true;const label=document.createElement("small");label.textContent="Kamera jwè";tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);}
-    const video=tile.querySelector("video");video.srcObject=e.streams[0]||new MediaStream([e.track]);video.play().catch(()=>tournamentCameraStatus("Peze ekran an pou pèmèt videyo a jwe."));
+    if(!tile){
+      tile=document.createElement("div");tile.className="tournament-camera-tile";tile.id="tournament-camera-"+peerId;
+      const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;
+      const label=document.createElement("small");label.textContent="Kamera lòt jwè";
+      tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);
+    }
+    const video=tile.querySelector("video");
+    video.srcObject=e.streams?.[0]||new MediaStream([e.track]);
+    video.play().catch(()=>tournamentCameraStatus("Peze videyo a pou pèmèt li jwe."));
   };
-  pc.onconnectionstatechange=()=>{if(pc.connectionState==="failed"||pc.connectionState==="closed")closeTournamentCameraPeer(peerId);};
+  pc.onconnectionstatechange=()=>{
+    if(pc.connectionState==="failed"||pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
+    else if(pc.connectionState==="connected")tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");
+  };
   tournamentCameraPeers.set(peerId,pc);
-  if(makeOffer&&pc.signalingState==="stable"){const offer=await pc.createOffer();await pc.setLocalDescription(offer);tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());}
+  if(makeOffer&&pc.signalingState==="stable"){
+    const offer=await pc.createOffer();await pc.setLocalDescription(offer);
+    tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
+  }
   return pc;
 }
 async function handleTournamentCameraSignal(data){
-  const peerId=String(data.from_id||"");if(!peerId)return;const pc=await ensureTournamentCameraPeer(peerId,false);if(!pc)return;
-  if(data.signal_type==="description"){const description=data.payload;if(!description||!description.type)return;await pc.setRemoteDescription(description);if(description.type==="offer"){const answer=await pc.createAnswer();await pc.setLocalDescription(answer);tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());}}
-  else if(data.signal_type==="ice"&&data.payload){try{await pc.addIceCandidate(data.payload);}catch(e){console.warn("Camera ICE:",e);}}
+  const peerId=String(data.from_id||"");if(!peerId)return;
+  const pc=await ensureTournamentCameraPeer(peerId,false);if(!pc)return;
+  if(data.signal_type==="description"){
+    const description=data.payload;if(!description||!description.type)return;
+    await pc.setRemoteDescription(description);
+    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("Camera ICE:",e);}}
+    pc.__pendingIce=[];
+    if(description.type==="offer"){
+      const answer=await pc.createAnswer();await pc.setLocalDescription(answer);
+      tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
+    }
+  }else if(data.signal_type==="ice"&&data.payload){
+    try{
+      if(pc.remoteDescription)await pc.addIceCandidate(data.payload);
+      else pc.__pendingIce.push(data.payload);
+    }catch(e){console.warn("Camera ICE:",e);}
+  }
 }
 async function startTournamentCamera(){
   if(onlineConnectionMode==="spectator"){tournamentCameraStatus("Espektatè yo ka gade kamera jwè yo, men se jwè k ap jwe yo ki aktive pa yo.");return;}
