@@ -7606,12 +7606,9 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
   pc.__pendingIce=[];pc.__remoteStream=new MediaStream();pc.__iceRestartAttempted=false;
   const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});
   pc.__videoSender=transceiver.sender;
-  // Register the peer before any await, so two fast signaling events cannot create duplicate PCs.
+  // Register the peer and install every event handler before awaiting anything.
+  // A remote offer/track can arrive while replaceTrack is pending on iOS Safari.
   tournamentCameraPeers.set(peerId,pc);
-  if(tournamentCameraStream){
-    const track=tournamentCameraStream.getVideoTracks()[0];
-    if(track)await pc.__videoSender.replaceTrack(track);
-  }
   pc.onicecandidate=e=>{if(e.candidate)tournamentCameraSend(peerId,"ice",e.candidate.toJSON());};
   pc.ontrack=e=>{
     // Safari/iOS may deliver a streamless track. Build our own stable MediaStream
@@ -7653,6 +7650,11 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
     if(pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
     else if(pc.connectionState==="connected"){pc.__iceRestartAttempted=false;tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");}
   };
+  // Attach our camera only after ontrack and signaling handlers are ready.
+  if(tournamentCameraStream){
+    const track=tournamentCameraStream.getVideoTracks()[0];
+    if(track)await pc.__videoSender.replaceTrack(track);
+  }
   if(makeOffer)await renegotiateTournamentCameraPeer(peerId,pc);
   return pc;
 }
