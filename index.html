@@ -1803,6 +1803,12 @@ td, th { overflow-wrap: anywhere; }
 .camera-mic-state{display:block;margin-top:3px;font-size:11px;font-weight:700;color:#f5ce6a;text-align:center}
 #onlineTournamentVoiceMute{min-width:150px}
 </style>
+
+<style id="mrjery-screen-visibility-fix">
+/* Keep the match layout grid only while the match screen is active. */
+#onlineGameScreen:not(.active){display:none!important}
+#onlineGameScreen.active{display:grid!important}
+</style>
 </head>
 
 <body>
