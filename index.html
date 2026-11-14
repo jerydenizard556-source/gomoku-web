@@ -1037,6 +1037,53 @@ td, th { overflow-wrap: anywhere; }
 @media(max-width:560px){.tournament-page{padding:16px 11px 35px}.tournament-top{flex-wrap:wrap}.tournament-top>div{order:-1;width:100%;text-align:center}.tournament-create-card,.tournament-list-card,.tournament-detail-card,.tournament-admin-card{padding:15px}.tournament-form-grid{grid-template-columns:1fr}.tournament-wide{grid-column:auto}.tournament-prizes{grid-template-columns:1fr}.tournament-prizes>strong,.tournament-prizes>small{grid-column:auto}.tournament-detail-head{display:block}.tournament-admin-row{flex-direction:column}.tournament-chat-compose{flex-direction:column}.tournament-chat-compose button{padding:12px}}
 
 .tournament-launch-box{margin:18px 0;padding:18px;border:1px solid #22c55e;border-radius:12px;background:#10251c;text-align:center}.tournament-launch-box strong{display:block;font-size:20px;color:#86efac}.tournament-launch-box p{margin:8px 0 14px;color:#d1d5db}.tournament-launch-button{width:100%;max-width:420px;font-size:18px;padding:16px;background:#15803d!important;border-color:#22c55e!important}
+
+/* MR_JERY SIMPLE TOURNAMENT HUB */
+#tournamentScreen .mrj-hub{max-width:1180px;margin:12px auto 34px;text-align:left;color:#f8fafc}
+#tournamentScreen .mrj-hub-hero{position:relative;display:flex;align-items:center;gap:22px;padding:25px 30px;border:1px solid rgba(245,184,55,.65);border-radius:22px;background:radial-gradient(circle at 80% 20%,rgba(109,40,217,.28),transparent 35%),linear-gradient(120deg,#080d24,#111a3a 55%,#080d24);box-shadow:0 12px 35px #0008;overflow:hidden}
+#tournamentScreen .mrj-hub-cup{font-size:62px;filter:drop-shadow(0 0 14px #fbbf24)}
+#tournamentScreen .mrj-hub-hero span,.mrj-feature-title small{color:#fbbf24;font-size:11px;font-weight:900;letter-spacing:3px}
+#tournamentScreen .mrj-hub-hero h2{margin:5px 0;color:#ffd36a;font-size:clamp(25px,4vw,42px);font-weight:950;letter-spacing:1px}
+#tournamentScreen .mrj-hub-hero p{margin:0;color:#dbeafe;font-size:15px}
+#tournamentScreen .mrj-hero-spark{margin-left:auto;color:#fbbf24;font-size:65px;opacity:.7}
+#tournamentScreen .mrj-main-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:22px 0}
+#tournamentScreen .mrj-main-card{min-height:245px;padding:23px 20px;border:1px solid;border-radius:20px;color:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:10px;cursor:pointer;transition:transform .18s,box-shadow .18s}
+#tournamentScreen .mrj-main-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px #0008}
+#tournamentScreen .mrj-main-card.gold{background:linear-gradient(145deg,#33230b,#10182d 70%);border-color:#fbbf24;box-shadow:inset 0 0 25px #f59e0b18}
+#tournamentScreen .mrj-main-card.blue{background:linear-gradient(145deg,#092957,#0b142d 75%);border-color:#2697ff}
+#tournamentScreen .mrj-main-card.purple{background:linear-gradient(145deg,#291052,#10132f 75%);border-color:#a855f7}
+#tournamentScreen .mrj-main-icon{font-size:42px;line-height:1.2}
+#tournamentScreen .mrj-main-card strong{font-size:20px;font-weight:900}
+#tournamentScreen .mrj-main-card small{color:#dbeafe;font-size:14px;line-height:1.55}
+#tournamentScreen .mrj-main-card b{margin-top:auto;padding-top:10px;color:#ffd36a;font-size:14px}
+#tournamentScreen .mrj-main-card.blue b{color:#70baff}#tournamentScreen .mrj-main-card.purple b{color:#d8a5ff}
+#tournamentScreen .mrj-main-card i{font-style:normal;margin-left:7px}
+#tournamentScreen .mrj-tools{padding:20px;border:1px solid #35436c;border-radius:20px;background:linear-gradient(145deg,#0a1028,#10172e);box-shadow:0 12px 28px #0006}
+#tournamentScreen .mrj-tools-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:15px}
+#tournamentScreen .mrj-tools-heading span{color:#fbbf24;font-size:10px;font-weight:900;letter-spacing:2px}
+#tournamentScreen .mrj-tools-heading h3{margin:4px 0 0;font-size:22px}
+#tournamentScreen .mrj-tools-heading small{color:#aebcda}
+#tournamentScreen .mrj-feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#tournamentScreen .mrj-feature-grid button{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-height:120px;padding:15px;border:1px solid #34436b;border-radius:14px;background:#0b1430;color:#fff;text-align:left;cursor:pointer}
+#tournamentScreen .mrj-feature-grid button:hover{border-color:#fbbf24;background:#172344}
+#tournamentScreen .mrj-feature-grid button>span{font-size:25px}
+#tournamentScreen .mrj-feature-grid button b{font-size:14px}
+#tournamentScreen .mrj-feature-grid button small{color:#b9c6df;font-size:12px;line-height:1.4}
+#tournamentScreen .mrj-feature-page{max-width:1000px;margin:15px auto 35px;text-align:left}
+#tournamentScreen .mrj-feature-back{padding:10px 15px;border:1px solid #46577f;border-radius:10px;background:#111b38;color:#fff;cursor:pointer}
+#tournamentScreen .mrj-feature-title{display:flex;align-items:center;gap:16px;margin:20px 0;padding:20px;border:1px solid #d49b35;border-radius:16px;background:linear-gradient(120deg,#16152a,#0d1731)}
+#tournamentScreen .mrj-feature-title>span{font-size:42px}
+#tournamentScreen .mrj-feature-title h2{margin:3px 0;font-size:27px;color:#ffd36a}
+#tournamentScreen .mrj-feature-title p{margin:0;color:#dbeafe}
+#tournamentScreen .mrj-feature-content{padding:20px;border:1px solid #35436c;border-radius:16px;background:#0b1228;min-height:180px}
+#tournamentScreen .mrj-feature-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #293653}
+#tournamentScreen .mrj-feature-row:last-child{border-bottom:0}
+#tournamentScreen .mrj-feature-muted{color:#aebcda}
+#tournamentScreen .mrj-feature-cta{padding:10px 15px;border:0;border-radius:9px;background:#d99b1b;color:#111827;font-weight:900;cursor:pointer}
+#tournamentScreen .mrj-feature-empty{padding:25px;text-align:center;color:#cbd5e1}
+@media(max-width:800px){#tournamentScreen .mrj-main-actions{grid-template-columns:1fr}#tournamentScreen .mrj-main-card{min-height:190px}#tournamentScreen .mrj-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#tournamentScreen .mrj-tools-heading{align-items:flex-start;flex-direction:column}}
+@media(max-width:430px){#tournamentScreen .mrj-feature-grid{grid-template-columns:1fr}#tournamentScreen .mrj-hub-hero{padding:18px}.mrj-hub-cup{font-size:42px!important}}
+
 </style>
 
 <style id="tournament-visual-refresh">
@@ -1948,13 +1995,34 @@ td, th { overflow-wrap: anywhere; }
     <button type="button" class="active" data-t-step="2"><span>01</span><b>Chwazi</b></button><i></i><button type="button" data-t-step="3"><span>02</span><b>Kreye</b></button><i></i><button type="button" data-t-step="4"><span>03</span><b>Konfime</b></button><i></i><button type="button" data-t-step="5"><span>04</span><b>Disponib</b></button><i></i><button type="button" data-t-step="6"><span>05</span><b>Detay</b></button>
   </nav>
   <section class="tournament-stage active" data-t-stage="2">
-    <div class="tournament-choice-wrap"><div class="tournament-choice-heading"><span>MR_JERY ARENA</span><h2>Kisa ou vle fè?</h2><p>Chwazi kijan ou vle patisipe nan konpetisyon yo.</p></div>
-      <div class="tournament-choice-grid">
-        <button type="button" class="tournament-choice-card" data-t-go="5"><span>🏆</span><strong>Antre nan yon tounwa</strong><small>Gade tounwa ki disponib yo, chwazi youn, epi enskri.</small><b>Gade tounwa yo →</b></button>
-        <button type="button" class="tournament-choice-card" data-t-go="3"><span>✨</span><strong>Kreye yon tounwa</strong><small>Bay tounwa ou a yon non, chwazi règ jwèt yo, epi lanse li.</small><b>Kreye tounwa →</b></button>
-      </div>
+  <div class="mrj-hub">
+    <header class="mrj-hub-hero"><div class="mrj-hub-cup">🏆</div><div><span>MR_JERY ARENA</span><h2>TOUNWA GOMOKU</h2><p>Chwazi sa ou vle fè a. Tout bagay senp, yon meni alafwa.</p></div><div class="mrj-hero-spark">✦</div></header>
+    <div class="mrj-main-actions">
+      <button type="button" class="mrj-main-card gold" data-t-my="1"><span class="mrj-main-icon">🏆</span><strong>Tounwa mwen ladan yo</strong><small>Wè tout tounwa ou deja enskri ladan yo, estati yo ak match ou.</small><b>Wè lis tounwa yo <i>→</i></b></button>
+      <button type="button" class="mrj-main-card blue" data-t-go="3"><span class="mrj-main-icon">＋</span><strong>Kreye tounwa</strong><small>Kreye pwòp tounwa ou, chwazi non, kantite jwè ak règ yo.</small><b>Kreye tounwa <i>→</i></b></button>
+      <button type="button" class="mrj-main-card purple" data-t-join="1"><span class="mrj-main-icon">👥</span><strong>Rejoindre tounwa</strong><small>Gade tounwa ki ouvè epi enskri nan youn.</small><b>Chèche tounwa <i>→</i></b></button>
     </div>
-  </section>
+    <section class="mrj-tools">
+      <div class="mrj-tools-heading"><div><span>MR_JERY TOOLS</span><h3>Fonksyon avanse</h3></div><small>Tout zouti ou bezwen pou jwe ak kominote a.</small></div>
+      <div class="mrj-feature-grid">
+        <button type="button" data-t-feature="notifications"><span>🔔</span><b>Notifikasyon</b><small>Alèt sou match, tounwa ak rezilta.</small></button>
+        <button type="button" data-t-feature="tracking"><span>🧭</span><b>Swivi tounwa</b><small>Wè wonn ou, advèsè ou ak pwogrè.</small></button>
+        <button type="button" data-t-feature="ranking"><span>🏅</span><b>Klasman</b><small>Gade jwè ki gen plis viktwa.</small></button>
+        <button type="button" data-t-feature="history"><span>🕘</span><b>Istorik match</b><small>Retounen sou match ou te jwe.</small></button>
+        <button type="button" data-t-feature="support"><span>🎧</span><b>Sipò / Rapò pwoblèm</b><small>Jwenn èd epi siyale yon pwoblèm.</small></button>
+        <button type="button" data-t-feature="anticheat"><span>🛡️</span><b>Sistèm anti-triche</b><small>Règ fair-play ak rapò konpòtman.</small></button>
+        <button type="button" data-t-feature="chat"><span>💬</span><b>Chat ant jwè yo</b><small>Diskite ak lòt jwè nan tounwa ou.</small></button>
+      </div>
+    </section>
+  </div>
+</section>
+<section class="tournament-stage" data-t-stage="7">
+  <div class="mrj-feature-page">
+    <button type="button" class="mrj-feature-back" data-t-go="2">← Retounen nan meni tounwa</button>
+    <div class="mrj-feature-title"><span id="mrjFeatureIcon">✨</span><div><small>MR_JERY ARENA</small><h2 id="mrjFeatureTitle">Fonksyon</h2><p id="mrjFeatureDescription"></p></div></div>
+    <div id="mrjFeatureContent" class="mrj-feature-content" aria-live="polite"></div>
+  </div>
+</section>
 <section class="tournament-stage" data-t-stage="3">
   <div class="tournament-create-pro">
     <div class="create-pro-heading">
@@ -6854,7 +6922,7 @@ function applyTournamentModeUI(){
  const confirm=document.getElementById("tournamentConfirmCreate");if(confirm&&tournamentTestMode)confirm.textContent="Kreye tounwa gratis";
 }
 function setTournamentStage(stage){
-  tournamentStage=Math.max(1,Math.min(6,Number(stage)||1));
+  tournamentStage=Math.max(1,Math.min(7,Number(stage)||1));
   document.querySelectorAll("#tournamentScreen [data-t-stage]").forEach(el=>el.classList.toggle("active",Number(el.dataset.tStage)===tournamentStage));
   document.querySelectorAll("#tournamentScreen [data-t-step]").forEach(el=>{
     const n=Number(el.dataset.tStep);el.classList.toggle("active",n===tournamentStage);el.classList.toggle("done",n<tournamentStage);
@@ -6956,11 +7024,15 @@ function loadTournamentList(){
 function loadTournamentState(id){if(id)tournamentSend("tournament_state",{tournament_id:id});}
 function openTournamentScreen(){
   if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Tournoi.",false);return;}
-  showScreen("tournamentScreen");setTournamentStage(5);loadTournamentList();
+  showScreen("tournamentScreen");setTournamentStage(2);tournamentListView="all";loadTournamentList();
 }
 document.getElementById("dashboardTournamentCard")?.addEventListener("click",openTournamentScreen);
 document.getElementById("tournamentBack")?.addEventListener("click",()=>showAccountMenu());
 document.getElementById("tournamentRefresh")?.addEventListener("click",loadTournamentList);
+document.querySelectorAll("[data-t-my]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="mine";setTournamentStage(5);loadTournamentList();}));
+document.querySelectorAll("[data-t-join]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="all";setTournamentStage(5);loadTournamentList();}));
+document.querySelectorAll("[data-t-feature]").forEach(b=>b.addEventListener("click",()=>openTournamentFeature(b.dataset.tFeature)));
+
 
 let tournamentListCache=[];
 let tournamentListView="all";
@@ -6971,6 +7043,52 @@ function tournamentStatusLabel(status){
 function tournamentMethodLabel(method){
   return ({tranzak:"Tranzak",moncash:"MonCash",natcash:"NatCash"})[String(method||"").toLowerCase()]||"Metòd peman";
 }
+
+const MRJ_FEATURES={
+ notifications:{icon:"🔔",title:"Notifikasyon",description:"Alèt sou tounwa, match ak rezilta."},
+ tracking:{icon:"🧭",title:"Swivi tounwa",description:"Swiv tounwa ou, wonn ou ak match ki devan ou."},
+ ranking:{icon:"🏅",title:"Klasman",description:"Klasman baze sou rezilta match ki disponib yo."},
+ history:{icon:"🕘",title:"Istorik match",description:"Rezilta match tounwa ou yo."},
+ support:{icon:"🎧",title:"Sipò / Rapò pwoblèm",description:"Jwenn èd lè ou rankontre yon pwoblèm."},
+ anticheat:{icon:"🛡️",title:"Sistèm anti-triche",description:"Règ fair-play ak rapò konpòtman ki pa kòrèk."},
+ chat:{icon:"💬",title:"Chat ant jwè yo",description:"Pale ak lòt jwè nan chanm chat tounwa yo."}
+};
+function openTournamentFeature(key){
+ const f=MRJ_FEATURES[key];if(!f)return;
+ const icon=document.getElementById("mrjFeatureIcon"),title=document.getElementById("mrjFeatureTitle"),desc=document.getElementById("mrjFeatureDescription"),content=document.getElementById("mrjFeatureContent");
+ if(icon)icon.textContent=f.icon;if(title)title.textContent=f.title;if(desc)desc.textContent=f.description;
+ const mine=tournamentListCache.filter(t=>Array.isArray(t.players)&&t.players.some(p=>String(p.player_id)===String(currentPlayerId)));
+ const allMatches=mine.flatMap(t=>(t.matches||[]).map(m=>({...m,tournament_title:t.title,tournament_id:t.tournament_id})));
+ const esc=escTournament;
+ let html="";
+ if(key==="notifications"){
+   const items=[];
+   mine.forEach(t=>{if(t.status==="live")items.push({name:t.title,msg:"Tounwa sa a ap dewoule kounye a."});if(t.status==="finished")items.push({name:t.title,msg:"Tounwa sa a fini."});});
+   html=items.length?items.map(x=>'<div class="mrj-feature-row"><div><b>'+esc(x.name)+'</b><div class="mrj-feature-muted">'+esc(x.msg)+'</div></div><span>🏆</span></div>').join(""):'<div class="mrj-feature-empty">Ou poko gen nouvo notifikasyon. Lè gen aktivite nan tounwa ou yo, alèt yo ap parèt isit la.</div>';
+ }else if(key==="tracking"){
+   html=mine.length?mine.map(t=>'<div class="mrj-feature-row"><div><b>'+esc(t.title)+'</b><div class="mrj-feature-muted">'+esc(t.status==="live"?"Tounwa an kou":t.status==="finished"?"Tounwa fini":"Enskripsyon ouvè")+' · '+(t.matches||[]).length+' match nan tablo a</div></div><button class="mrj-feature-cta" data-t-open-state="'+esc(t.tournament_id)+'">Wè detay</button></div>').join(""):'<div class="mrj-feature-empty">Ou poko enskri nan okenn tounwa. Ale nan Rejoindre tounwa pou chèche youn.</div>';
+ }else if(key==="ranking"){
+   const wins={};allMatches.forEach(m=>{if(m.winner_id){const id=String(m.winner_id);wins[id]=(wins[id]||0)+1;}});
+   const sorted=Object.entries(wins).sort((a,b)=>b[1]-a[1]);
+   html=sorted.length?sorted.map(([id,n],i)=>'<div class="mrj-feature-row"><b>#'+(i+1)+' · '+esc(findTournamentPlayerName(mine,id))+'</b><strong>'+n+' viktwa</strong></div>').join(""):'<div class="mrj-feature-empty">Klasman an ap parèt lè gen match ki fini ak rezilta ki anrejistre.</div>';
+ }else if(key==="history"){
+   const done=allMatches.filter(m=>m.winner_id||["finished","completed","done"].includes(String(m.status||"").toLowerCase()));
+   html=done.length?done.map(m=>'<div class="mrj-feature-row"><div><b>'+esc(m.tournament_title)+'</b><div class="mrj-feature-muted">'+esc(m.player1_name||"Jwè 1")+' vs '+esc(m.player2_name||"Jwè 2")+'</div></div><strong>'+(m.winner_id?'Gayan: '+esc(findTournamentPlayerName(mine,String(m.winner_id))):'Fini')+'</strong></div>').join(""):'<div class="mrj-feature-empty">Pa gen match fini nan istorik ou pou kounye a.</div>';
+ }else if(key==="chat"){
+   html='<div class="mrj-feature-empty">Chat la disponib andedan detay chak tounwa. Chwazi youn nan tounwa ou yo pou ouvri chat la.<br><br><button class="mrj-feature-cta" data-t-my-open="1">Louvri tounwa mwen yo</button></div>';
+ }else if(key==="support"||key==="anticheat"){
+   html='<div class="mrj-feature-empty">'+(key==="support"?'Pou kounye a, ou ka kontakte òganizatè tounwa a atravè detay tounwa a. Fòm sipò dirèk la poko konekte ak sèvè a.':'Nou ankouraje fair-play: pa itilize èd ekstèn, pa manipile koneksyon, epi respekte desizyon jwèt la. Rapò otomatik anti-triche poko konekte ak sèvè a.')+'</div>';
+ }
+ content.innerHTML=html;
+ content.querySelectorAll("[data-t-open-state]").forEach(b=>b.addEventListener("click",()=>{activeTournamentId=b.dataset.tOpenState;loadTournamentState(activeTournamentId);setTournamentStage(6);}));
+ content.querySelector("[data-t-my-open]")?.addEventListener("click",()=>{tournamentListView="mine";setTournamentStage(5);loadTournamentList();});
+ setTournamentStage(7);
+}
+function findTournamentPlayerName(tournaments,id){
+ for(const t of tournaments){const p=(t.players||[]).find(x=>String(x.player_id)===String(id));if(p)return p.username||("Jwè "+id);}
+ return "Jwè "+id;
+}
+
 function renderTournamentList(items){
   const root=document.getElementById("tournamentList"); if(!root)return;
   tournamentListCache=Array.isArray(items)?items:[];
