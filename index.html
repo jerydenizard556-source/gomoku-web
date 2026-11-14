@@ -5138,7 +5138,7 @@ function connectServer(callback) {
                     onlineConnectionMode="player"; onlinePlayer=Number(data.player); onlineRoom=data.room; activeTournamentMatchRoom=data.room; tournamentVoiceApproved=false;
                     onlineSessionToken=data.session_token || null; onlineGameOver=false; onlineDraw=false; onlineWinner=null;
                     document.getElementById("gameRoomCode").textContent=data.room;
-                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); renderTournamentMatchChat([]);
+                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); showTournamentMatchComms(true); renderTournamentMatchChat([]);
                     tournamentNotice("Ou antre nan match tournoi a.", true); return;
                 }
 
@@ -5257,7 +5257,7 @@ function connectServer(callback) {
                     onlineRoom=data.room; onlinePlayer=Number(data.player); onlineSessionToken=data.session_token||null; onlineConnectionMode="direct_invite"; onlineLastMove=null; onlineRematchRequest=null; onlineUndoRequest=null;
                     const n=document.getElementById("onlineMatchNotice"); if(n){n.textContent=data.message||"🎮 Match accepté ! La partie va commencer.";setTimeout(function(){n.textContent="";},5000);}
                     document.getElementById("roomCode").textContent="Match direct"; document.getElementById("playerNumber").textContent=onlinePlayer; document.getElementById("gameRoomCode").textContent="Direct"; document.getElementById("onlineError").textContent="";
-                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); return;
+                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); return;
                 }
 
                 /* ==================================
@@ -5444,7 +5444,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
 
                     return;
                 }
@@ -5518,7 +5518,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
 
                     return;
                 }
@@ -5589,7 +5589,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
 
                     return;
                 }
@@ -5618,7 +5618,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
                     showTournamentMatchComms(!!activeTournamentMatchRoom);
                     return;
                 }
@@ -5662,7 +5662,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
 
                     return;
                 }
@@ -5795,7 +5795,7 @@ function connectServer(callback) {
                     updateUndoUI();
                     updateOnlineNewGameButton();
 
-                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true);
 
                     return;
                 }
@@ -6821,16 +6821,34 @@ document
 
 document
     .getElementById("onlineGameBack")
-    .addEventListener(
-        "click",
-        function() {
+    .addEventListener("click", function() {
+        leaveCurrentOnlineMatch();
+        showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
+    });
 
-            closeOnlineConnection();
-
-            // Quand le joueur est connecté, Retour ramène au vrai accueil du compte.
-            showScreen(accountConnected ? "accountMenuScreen" : "localScreen");
-        }
-    );
+function leaveCurrentOnlineMatch() {
+    const room=activeTournamentMatchRoom||onlineRoom;
+    if(socket&&socket.readyState===WebSocket.OPEN&&room){
+        if(onlineConnectionMode==="spectator") socket.send(JSON.stringify({type:"stop_watching",room}));
+        else socket.send(JSON.stringify({type:"leave_match",room}));
+    }
+    closeTournamentVoice();
+    closeTournamentCamera();
+    activeTournamentMatchRoom=null;
+    tournamentVoiceApproved=false;
+    showTournamentMatchComms(false);
+    stopOnlineDisplayTimer();
+    onlinePlayer=null;onlineRoom=null;onlineSessionToken=null;onlineConnectionMode=null;
+    onlineBoardState={};onlinePlayersState={};onlineWinner=null;onlineGameOver=false;
+    onlineDraw=false;onlineAbandonment=false;onlineRematchRequest=null;onlineUndoRequest=null;
+    const board=document.getElementById("onlineBoard");if(board)board.replaceChildren();
+    const roomCode=document.getElementById("gameRoomCode");if(roomCode)roomCode.textContent="---";
+    hideGameInvite();
+    if(accountConnected&&socket&&socket.readyState===WebSocket.OPEN){
+        requestOnlinePlayers();
+        setTimeout(requestOnlinePlayers,350);
+    }
+}
 
 /* ==================================================
    FERMER ONLINE
@@ -7662,7 +7680,7 @@ async function ensureTournamentVoicePeer(peerId,makeOffer){
   let pc=tournamentVoicePeers.get(peerId);if(pc)return pc;
   pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]});
   const transceiver=pc.addTransceiver("audio",{direction:"sendrecv"});
-  pc.__audioSender=transceiver.sender;
+  pc.__audioSender=transceiver.sender;pc.__pendingIce=[];
   if(tournamentLocalAudioStream){const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)await pc.__audioSender.replaceTrack(track);}
   pc.onicecandidate=e=>{if(e.candidate)tournamentVoiceSend(peerId,"ice",e.candidate.toJSON());};
   pc.ontrack=e=>{
@@ -7684,11 +7702,13 @@ async function handleTournamentVoiceSignal(data){
     const description=data.payload;
     if(!description||!description.type)return;
     await pc.setRemoteDescription(description);
+    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("Voice ICE:",e);}}
+    pc.__pendingIce=[];
     if(description.type==="offer"){
       const answer=await pc.createAnswer();await pc.setLocalDescription(answer);tournamentVoiceSend(peerId,"description",pc.localDescription.toJSON());
     }
   }else if(data.signal_type==="ice"&&data.payload){
-    try{await pc.addIceCandidate(data.payload);}catch(e){console.warn("ICE candidate:",e);}
+    try{if(pc.remoteDescription)await pc.addIceCandidate(data.payload);else pc.__pendingIce.push(data.payload);}catch(e){console.warn("ICE candidate:",e);}
   }
 }
 async function startTournamentVoice(){
