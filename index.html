@@ -7603,47 +7603,57 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
   if(pc){if(makeOffer)pc.__cameraOfferer=true;return pc;}
   pc=new RTCPeerConnection(tournamentPeerConfiguration());
   pc.__cameraOfferer=!!makeOffer;pc.__cameraOfferInProgress=false;pc.__cameraRenegotiatePending=false;
+  pc.__pendingIce=[];pc.__remoteStream=new MediaStream();pc.__iceRestartAttempted=false;
   const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});
-  pc.__videoSender=transceiver.sender;pc.__pendingIce=[];
+  pc.__videoSender=transceiver.sender;
+  // Register the peer before any await, so two fast signaling events cannot create duplicate PCs.
+  tournamentCameraPeers.set(peerId,pc);
   if(tournamentCameraStream){
     const track=tournamentCameraStream.getVideoTracks()[0];
     if(track)await pc.__videoSender.replaceTrack(track);
   }
   pc.onicecandidate=e=>{if(e.candidate)tournamentCameraSend(peerId,"ice",e.candidate.toJSON());};
   pc.ontrack=e=>{
+    // Safari/iOS may deliver a streamless track. Build our own stable MediaStream
+    // instead of depending on e.streams[0] being populated.
+    if(e.track&& !pc.__remoteStream.getTracks().some(track=>track.id===e.track.id)){
+      pc.__remoteStream.addTrack(e.track);
+    }
     let tile=document.getElementById("tournament-camera-"+peerId);
     if(!tile){
       tile=document.createElement("div");tile.className="tournament-camera-tile";tile.id="tournament-camera-"+peerId;
       const video=document.createElement("video");
-      video.autoplay=true;video.playsInline=true;video.muted=true;
+      video.autoplay=true;video.playsInline=true;video.muted=true;video.controls=true;
       video.setAttribute("autoplay","");video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");
       const label=document.createElement("small");label.textContent="Kamera lòt jwè";
-      tile.append(video,label);document.getElementById("onlineTournamentRemoteCameras")?.appendChild(tile);updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
+      tile.append(video,label);
+      const remoteRoot=document.getElementById("onlineTournamentRemoteCameras");
+      if(remoteRoot)remoteRoot.appendChild(tile);
+      updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
     }
     const video=tile.querySelector("video");
-    let remoteStream=e.streams&&e.streams[0]?e.streams[0]:video.srcObject;
-    if(!remoteStream)remoteStream=new MediaStream();
-    if(!e.streams||!e.streams[0]){
-      if(!remoteStream.getTracks().some(track=>track.id===e.track.id))remoteStream.addTrack(e.track);
-    }
-    video.muted=true;video.srcObject=remoteStream;
-    const playRemoteVideo=()=>video.play().catch(()=>tournamentCameraStatus("Peze videyo lòt jwè a pou aktive imaj la."));
+    if(!video)return;
+    video.muted=true;video.playsInline=true;video.srcObject=pc.__remoteStream;
+    const playRemoteVideo=()=>{if(video.srcObject&&video.srcObject.getVideoTracks().some(t=>t.readyState==="live"))video.play().catch(()=>tournamentCameraStatus("Peze videyo a pou pèmèt Safari montre kamera lòt jwè a."));};
     e.track.addEventListener("unmute",playRemoteVideo);
+    e.track.addEventListener("ended",()=>{video.pause();});
     video.onloadedmetadata=playRemoteVideo;
     playRemoteVideo();
   };
   pc.onsignalingstatechange=()=>{
     if(pc.signalingState==="stable"&&pc.__cameraRenegotiatePending)renegotiateTournamentCameraPeer(peerId,pc);
   };
-  pc.onconnectionstatechange=()=>{
-    if(pc.connectionState==="failed"||pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
-    else if(pc.connectionState==="connected")tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");
+  pc.oniceconnectionstatechange=()=>{
+    if(pc.iceConnectionState==="failed"&&!pc.__iceRestartAttempted){
+      pc.__iceRestartAttempted=true;
+      try{pc.restartIce();renegotiateTournamentCameraPeer(peerId,pc);}catch(error){console.warn("Camera ICE restart:",error);}
+    }
   };
-  tournamentCameraPeers.set(peerId,pc);
-  if(makeOffer&&pc.signalingState==="stable"){
-    const offer=await pc.createOffer();await pc.setLocalDescription(offer);
-    tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
-  }
+  pc.onconnectionstatechange=()=>{
+    if(pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
+    else if(pc.connectionState==="connected"){pc.__iceRestartAttempted=false;tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");}
+  };
+  if(makeOffer)await renegotiateTournamentCameraPeer(peerId,pc);
   return pc;
 }
 async function renegotiateTournamentCameraPeer(peerId,pc){
@@ -7653,7 +7663,7 @@ async function renegotiateTournamentCameraPeer(peerId,pc){
   pc.__cameraRenegotiatePending=false;
   pc.__cameraOfferInProgress=true;
   try{
-    const offer=await pc.createOffer();
+    const offer=await pc.createOffer({iceRestart:!!pc.__iceRestartAttempted});
     await pc.setLocalDescription(offer);
     tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
   }catch(error){
