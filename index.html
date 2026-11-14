@@ -2002,6 +2002,10 @@ td, th { overflow-wrap: anywhere; }
     <section class="tournament-list-card">
       <div class="tournament-section-title"><span>02</span><div><h2>Tournois disponib</h2><p>Chwazi yon tounwa pou wè detay li epi antre ladan l.</p></div></div>
       <div class="tournament-list-tools">
+        <div class="tournament-view-tabs" role="tablist" aria-label="Lis tounwa">
+          <button type="button" class="active" data-t-list-view="all">Tout tounwa</button>
+          <button type="button" data-t-list-view="mine">🏆 Tounwa mwen</button>
+        </div>
         <label class="tournament-search"><span>RECHÈCHE YON TOURNOI</span><input id="tournamentSearch" type="search" maxlength="100" placeholder="Ekri non tournoi oswa òganizatè..."></label>
         <label class="tournament-filter"><span>FILTRE PA ESTATI</span><select id="tournamentStatusFilter"><option value="all">Tout tournoi yo</option><option value="registration">Enskripsyon ouvè</option><option value="live">Tournoi an kou</option><option value="finished">Tournoi fini</option></select></label>
       </div>
@@ -6959,6 +6963,7 @@ document.getElementById("tournamentBack")?.addEventListener("click",()=>showAcco
 document.getElementById("tournamentRefresh")?.addEventListener("click",loadTournamentList);
 
 let tournamentListCache=[];
+let tournamentListView="all";
 applyTournamentModeUI();
 function tournamentStatusLabel(status){
   return ({registration:"Enskripsyon ouvè",live:"Tournoi an kou",finished:"Tournoi fini"})[String(status||"").toLowerCase()]||"Estati pa defini";
@@ -6974,8 +6979,10 @@ function renderTournamentList(items){
   const filtered=tournamentListCache.filter(t=>{
     const matchesStatus=status==="all"||String(t.status||"").toLowerCase()===status;
     const haystack=(String(t.title||"")+" "+String(t.organizer||"")).toLowerCase();
-    return matchesStatus&&haystack.includes(search);
+    const isMine=Array.isArray(t.players)&&t.players.some(p=>String(p.player_id)===String(currentPlayerId));
+    return matchesStatus&&haystack.includes(search)&&(tournamentListView!=="mine"||isMine);
   });
+  document.querySelectorAll("[data-t-list-view]").forEach(b=>b.classList.toggle("active",b.dataset.tListView===tournamentListView));
   const meta=document.getElementById("tournamentListMeta");
   if(meta)meta.textContent=filtered.length+" tournoi jwenn · "+tournamentListCache.length+" nan lis la an total.";
   if(!tournamentListCache.length){
@@ -7009,6 +7016,7 @@ function renderTournamentList(items){
   }).join("");
 }
 document.getElementById("tournamentSearch")?.addEventListener("input",()=>renderTournamentList(tournamentListCache));
+document.querySelectorAll("[data-t-list-view]").forEach(b=>b.addEventListener("click",()=>{tournamentListView=b.dataset.tListView||"all";renderTournamentList(tournamentListCache);}));
 document.getElementById("tournamentStatusFilter")?.addEventListener("change",()=>renderTournamentList(tournamentListCache));
 function renderTournamentDetail(t){
   if(!t)return;
