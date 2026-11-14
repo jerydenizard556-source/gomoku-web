@@ -7652,7 +7652,6 @@ async function renegotiateTournamentCameraPeer(peerId,pc){
     tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
   }catch(error){
     console.warn("Camera renegotiation:",error);
-    pc.__cameraRenegotiatePending=true;
   }finally{
     pc.__cameraOfferInProgress=false;
     if(pc.__cameraRenegotiatePending&&pc.signalingState==="stable"){
