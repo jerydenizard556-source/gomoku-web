@@ -7593,9 +7593,10 @@ function closeTournamentCamera(){
 }
 async function ensureTournamentCameraPeer(peerId,makeOffer){
   peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
-  let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
+  let pc=tournamentCameraPeers.get(peerId);
+  if(pc){if(makeOffer)pc.__cameraOfferer=true;return pc;}
   pc=new RTCPeerConnection(tournamentPeerConfiguration());
-  pc.__cameraOfferer=!!makeOffer;pc.__cameraOfferInProgress=false;
+  pc.__cameraOfferer=!!makeOffer;pc.__cameraOfferInProgress=false;pc.__cameraRenegotiatePending=false;
   const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});
   pc.__videoSender=transceiver.sender;pc.__pendingIce=[];
   if(tournamentCameraStream){
@@ -7625,6 +7626,9 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
     video.onloadedmetadata=playRemoteVideo;
     playRemoteVideo();
   };
+  pc.onsignalingstatechange=()=>{
+    if(pc.signalingState==="stable"&&pc.__cameraRenegotiatePending)renegotiateTournamentCameraPeer(peerId,pc);
+  };
   pc.onconnectionstatechange=()=>{
     if(pc.connectionState==="failed"||pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
     else if(pc.connectionState==="connected")tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");
@@ -7637,14 +7641,24 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
   return pc;
 }
 async function renegotiateTournamentCameraPeer(peerId,pc){
-  if(!pc||!pc.__cameraOfferer||pc.signalingState!=="stable"||pc.__cameraOfferInProgress)return;
+  if(!pc||!pc.__cameraOfferer)return;
+  pc.__cameraRenegotiatePending=true;
+  if(pc.signalingState!=="stable"||pc.__cameraOfferInProgress)return;
+  pc.__cameraRenegotiatePending=false;
   pc.__cameraOfferInProgress=true;
   try{
     const offer=await pc.createOffer();
     await pc.setLocalDescription(offer);
     tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
-  }catch(error){console.warn("Camera renegotiation:",error);}
-  finally{pc.__cameraOfferInProgress=false;}
+  }catch(error){
+    console.warn("Camera renegotiation:",error);
+    pc.__cameraRenegotiatePending=true;
+  }finally{
+    pc.__cameraOfferInProgress=false;
+    if(pc.__cameraRenegotiatePending&&pc.signalingState==="stable"){
+      Promise.resolve().then(()=>renegotiateTournamentCameraPeer(peerId,pc));
+    }
+  }
 }
 async function handleTournamentCameraSignal(data){
   const peerId=String(data.from_id||"");if(!peerId)return;
