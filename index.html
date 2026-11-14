@@ -4650,6 +4650,20 @@ function convertServerBoard(board) {
    CONNECTER SERVEUR
 ================================================== */
 
+let accountReconnectTimer = null;
+function scheduleAccountReconnect() {
+    let token = null;
+    try { token = localStorage.getItem("mrjery_account_token"); } catch(e) {}
+    if (!token || accountReconnectTimer || reconnecting) return;
+    reconnectAttempts = Math.min((reconnectAttempts || 0) + 1, 6);
+    const delay = Math.min(1000 * Math.pow(2, reconnectAttempts - 1), 15000);
+    accountReconnectTimer = setTimeout(function() {
+        accountReconnectTimer = null;
+        if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) return;
+        connectServer();
+    }, delay);
+}
+
 function connectServer(callback) {
 
     if (
@@ -4707,14 +4721,12 @@ function connectServer(callback) {
                 if (restoreSessionTimeout) clearTimeout(restoreSessionTimeout);
                 restoreSessionTimeout = setTimeout(function(){
                     if (!restoringAccountSession) return;
+                    // Erè tanporè: konsève sesyon an epi rekonekte san mande modpas.
                     restoringAccountSession = false;
-                    accountConnected = false;
                     const cb = pendingRestoreCallback;
                     pendingRestoreCallback = null;
-                    const err = document.getElementById("onlineError");
-                    if (err) err.textContent = "Le serveur ne répond pas pour restaurer la session. Connecte-toi à nouveau.";
-                    openAuth("login");
                     if (typeof cb === "function") cb();
+                    scheduleAccountReconnect();
                 }, 7000);
                 socket.send(JSON.stringify({type:"restore_session", account_token:savedToken}));
             } else {
@@ -4746,26 +4758,15 @@ function connectServer(callback) {
             closeTournamentVoice();
             stopOnlineDisplayTimer();
 
-            if (
-                onlineRoom &&
-                onlineSessionToken &&
-                onlinePlayer
-            ) {
-
+            let savedAccountToken = null;
+            try { savedAccountToken = localStorage.getItem("mrjery_account_token"); } catch(e) {}
+            if (onlineRoom && onlineSessionToken && onlinePlayer) {
                 scheduleReconnect();
-
+            } else if (savedAccountToken && !accountRequestInProgress) {
+                scheduleAccountReconnect();
             } else {
-
-                const status =
-                    document.getElementById(
-                        "onlineStatus"
-                    );
-
-                if (status) {
-
-                    status.textContent =
-                        "Serveur déconnecté";
-                }
+                const status = document.getElementById("onlineStatus");
+                if (status) status.textContent = "Serveur déconnecté";
             }
         };
 
@@ -4782,17 +4783,7 @@ function connectServer(callback) {
                     "gameOnlineError"
                 );
 
-            if (onlineError) {
-
-                onlineError.textContent =
-                    "Erreur de connexion.";
-            }
-
-            if (gameError) {
-
-                gameError.textContent =
-                    "Erreur de connexion.";
-            }
+            // Erè rezo tanporè a pa deranje jwè a; onclose jere rekoneksyon an.
         };
 
     socket.onmessage =
