@@ -4543,6 +4543,7 @@ let onlineDisplayInterval = null;
 let onlinePlayersList = [];
 let pendingGameInviteId = null;
 let tournamentVoiceApproved = false;
+let tournamentVoiceJoined = false;
 let tournamentLocalAudioStream = null;
 let tournamentVoiceMuted = false;
 const tournamentVoicePeers = new Map();
@@ -4563,7 +4564,7 @@ function renderOnlinePlayers(list) {
         const row=document.createElement("div"); row.className="online-player-row";
         const name=document.createElement("div"); name.className="online-player-name"; name.textContent="🟢 "+(player.username||player.name||"Joueur");
         const state=document.createElement("span"); state.className="online-player-state"; state.textContent=player.in_game?"En partie":"Disponible"; name.appendChild(state);
-        const btn=document.createElement("button"); btn.type="button"; btn.className="online-player-invite"; btn.textContent="🎮 Envoyer un match"; btn.disabled=Boolean(player.in_game)||!accountConnected;
+        const btn=document.createElement("button"); btn.type="button"; btn.className="online-player-invite"; btn.textContent="🎮 Envoyer un match"; btn.disabled=!accountConnected;
         btn.addEventListener("click",function(){sendGameInvite(Number(player.player_id));}); row.appendChild(name); row.appendChild(btn); container.appendChild(row);
     });
 }
@@ -5121,12 +5122,13 @@ function connectServer(callback) {
                     renderTournamentChat(data.messages || []); return;
                 }
                 if (data.type === "tournament_voice_pending") { addTournamentVoicePending(data); return; }
-                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,false).catch(e=>console.warn(e))); return; }
-                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentCameraPeer(data.peer_id,true).catch(e=>console.warn("Camera peer join:",e)); return; }
+                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e))); return; }
+                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentCameraPeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Camera peer join:",e)); return; }
                 if (data.type === "camera_peer_leave" && data.room===activeTournamentMatchRoom) { closeTournamentCameraPeer(data.peer_id); return; }
                 if (data.type === "camera_signal" && data.room===activeTournamentMatchRoom) { handleTournamentCameraSignal(data).catch(e=>console.warn("Camera signal:",e)); return; }
-                if (data.type === "voice_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentVoicePeer(peer.peer_id,true).catch(e=>console.warn(e))); return; }
-                if (data.type === "voice_peer_join" && data.room===activeTournamentMatchRoom) { return; }
+                if (data.type === "voice_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>{if(peer.muted!==undefined)updateRemoteMicState(peer.peer_id,peer.muted);ensureTournamentVoicePeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e));}); return; }
+                if (data.type === "voice_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentVoicePeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Voice peer join:",e)); updateRemoteMicState(data.peer_id,data.muted!==false); return; }
+                if (data.type === "voice_mute_state" && data.room===activeTournamentMatchRoom) { updateRemoteMicState(data.peer_id,!!data.muted); return; }
                 if (data.type === "voice_peer_leave" && data.room===activeTournamentMatchRoom) { closeTournamentVoicePeer(data.peer_id); return; }
                 if (data.type === "voice_signal" && data.room===activeTournamentMatchRoom) { handleTournamentVoiceSignal(data).catch(e=>console.warn("Voice signal:",e)); return; }
                 if (data.type === "tournament_voice_access") { tournamentVoiceApproved=!!data.approved; if(!data.approved&&tournamentLocalAudioStream)closeTournamentVoice(); const v=document.getElementById("tournamentVoiceStatus"); if(v) v.textContent=data.message || (data.approved ? "Mikwo apwouve." : "Mikwo pa otorize."); tournamentVoiceStatus(data.message || (data.approved ? "Mikwo apwouve. Ou ka aktive li." : "Mikwo pa otorize.")); showTournamentMatchComms(!!activeTournamentMatchRoom); return; }
@@ -7532,7 +7534,13 @@ function joinTournamentCameraRoom(room){
   const start=document.getElementById("onlineTournamentCameraStart");
   if(start)start.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
 }
+function joinTournamentVoiceRoom(){
+  if(!activeTournamentMatchRoom||!socket||socket.readyState!==WebSocket.OPEN||tournamentVoiceJoined)return;
+  socket.send(JSON.stringify({type:"voice_join",room:activeTournamentMatchRoom}));
+  tournamentVoiceJoined=true;
+}
 function showTournamentMatchComms(show){
+  if(show&&activeTournamentMatchRoom)joinTournamentVoiceRoom();
   if(!show&&tournamentCameraJoined&&activeTournamentMatchRoom&&onlineConnectionMode==="spectator-list")closeTournamentCamera();
   const panel=document.getElementById("tournamentMatchComms");
   if(panel)panel.style.display=show?"block":"none";
@@ -7639,7 +7647,7 @@ async function startTournamentCamera(){
     const track=tournamentCameraStream.getVideoTracks()[0];tournamentCameraPeers.forEach(async pc=>{if(pc.__videoSender)await pc.__videoSender.replaceTrack(track);});
     const local=document.getElementById("onlineTournamentLocalCamera");
     if(local){local.replaceChildren();const tile=document.createElement("div");tile.className="tournament-camera-tile";const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=tournamentCameraStream;const label=document.createElement("small");label.textContent="Ou menm";tile.append(video,label);local.appendChild(tile);video.play().catch(()=>{});}
-    const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop");if(start){start.disabled=true;start.textContent="📹 Kamera aktive";}if(stop)stop.disabled=false;tournamentCameraStatus("Kamera ou aktive. Espektatè ak lòt jwè yo ka wè w.");
+    const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop");if(start){start.disabled=true;start.textContent="📹 Kamera aktive";}if(stop)stop.disabled=false;tournamentCameraStatus("Kamera ou aktive. Espektatè ak lòt jwè yo ka wè w.");startTournamentVoice().catch(e=>console.warn("Mic setup:",e));
   }catch(error){tournamentCameraStatus(error?.name==="NotAllowedError"?"Navigatè a pa gen pèmisyon pou itilize kamera a.":"Kamera a pa disponib. Verifye kamera a ak pèmisyon navigatè a.");}
 }
 function stopTournamentCamera(){
@@ -7668,11 +7676,11 @@ function closeTournamentVoice(){
   tournamentVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){};document.getElementById("tournament-audio-"+id)?.remove();});
   tournamentVoicePeers.clear();
   if(tournamentLocalAudioStream)tournamentLocalAudioStream.getTracks().forEach(track=>track.stop());
-  tournamentLocalAudioStream=null;tournamentVoiceMuted=false;
+  tournamentLocalAudioStream=null;tournamentVoiceMuted=false;tournamentVoiceJoined=false;
   const mute=document.getElementById("onlineTournamentVoiceMute"),stop=document.getElementById("onlineTournamentVoiceStop"),start=document.getElementById("onlineTournamentVoiceStart");
-  if(mute){mute.disabled=true;mute.textContent="🔇 Bèbè";}
+  if(mute){mute.disabled=true;mute.textContent="🔇 Mete sou silans";mute.style.display="none";}
   if(stop)stop.disabled=true;
-  if(start){start.disabled=onlineConnectionMode==="spectator"&&!tournamentVoiceApproved;start.textContent="🎙️ Aktive mikwo";}
+  if(start){start.disabled=false;start.style.display="inline-flex";start.textContent="🎙️ Aktive mikwo";}
   tournamentVoiceStatus("Mikwo etenn.");
 }
 async function ensureTournamentVoicePeer(peerId,makeOffer){
@@ -7713,27 +7721,39 @@ async function handleTournamentVoiceSignal(data){
 }
 async function startTournamentVoice(){
   if(!activeTournamentMatchRoom||!socket||socket.readyState!==WebSocket.OPEN){tournamentVoiceStatus("Koneksyon match la poko pare.");return;}
-  if(onlineConnectionMode==="spectator"&&!tournamentVoiceApproved){tournamentVoiceStatus("Ou dwe mande pèmisyon òganizatè a anvan ou pale.");return;}
+  if(tournamentLocalAudioStream){toggleTournamentVoiceMute();return;}
   try{
     tournamentLocalAudioStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-    const track=tournamentLocalAudioStream.getAudioTracks()[0];
-    tournamentVoicePeers.forEach(async pc=>{if(pc.__audioSender)await pc.__audioSender.replaceTrack(track);});
-    socket.send(JSON.stringify({type:"voice_join",room:activeTournamentMatchRoom}));
+    tournamentVoiceMuted=true;
+    const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)track.enabled=false;
+    joinTournamentVoiceRoom();
+    for(const pc of tournamentVoicePeers.values()){if(pc.__audioSender&&track)await pc.__audioSender.replaceTrack(track);}
     const start=document.getElementById("onlineTournamentVoiceStart"),mute=document.getElementById("onlineTournamentVoiceMute"),stop=document.getElementById("onlineTournamentVoiceStop");
-    if(start){start.disabled=true;start.textContent="🎙️ Mikwo aktive";}
-    if(mute)mute.disabled=false;if(stop)stop.disabled=false;
-    tournamentVoiceStatus("Mikwo aktive. Ou ka pale ak lòt moun ki nan match la.");
+    if(start)start.style.display="none";
+    if(mute){mute.disabled=false;mute.style.display="inline-flex";mute.textContent="🔊 Retire silans";}
+    if(stop)stop.disabled=false;
+    socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:true}));
+    tournamentVoiceStatus("Mikwo pare, li sou silans. Peze « Retire silans » pou pale.");
   }catch(error){
+    tournamentLocalAudioStream=null;
     tournamentVoiceStatus(error?.name==="NotAllowedError"?"Navigatè a pa gen pèmisyon pou itilize mikwo a.":"Mikwo a pa disponib. Verifye aparèy la ak pèmisyon navigatè a.");
   }
 }
 function toggleTournamentVoiceMute(){
-  if(!tournamentLocalAudioStream)return;
+  if(!tournamentLocalAudioStream){startTournamentVoice();return;}
   tournamentVoiceMuted=!tournamentVoiceMuted;
   tournamentLocalAudioStream.getAudioTracks().forEach(track=>track.enabled=!tournamentVoiceMuted);
   const btn=document.getElementById("onlineTournamentVoiceMute");
-  if(btn)btn.textContent=tournamentVoiceMuted?"🔊 Retire bèbè":"🔇 Bèbè";
-  tournamentVoiceStatus(tournamentVoiceMuted?"Mikwo sou bèbè.":"Mikwo aktive.");
+  if(btn)btn.textContent=tournamentVoiceMuted?"🔊 Retire silans":"🔇 Mete sou silans";
+  if(socket&&socket.readyState===WebSocket.OPEN&&activeTournamentMatchRoom)socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:tournamentVoiceMuted}));
+  tournamentVoiceStatus(tournamentVoiceMuted?"Mikwo sou silans.":"Mikwo aktive. Ou ka pale.");
+}
+function updateRemoteMicState(peerId,muted){
+  const tile=document.getElementById("tournament-camera-"+String(peerId));
+  if(!tile)return;
+  let badge=tile.querySelector(".camera-mic-state");
+  if(!badge){badge=document.createElement("small");badge.className="camera-mic-state";tile.appendChild(badge);}
+  badge.textContent=muted?"🔇 Sou silans":"🎙️ Ap pale";
 }
 document.getElementById("onlineTournamentChatSend")?.addEventListener("click",sendTournamentMatchChat);
 document.getElementById("onlineTournamentChatInput")?.addEventListener("keydown",e=>{if(e.key==="Enter")sendTournamentMatchChat();});
