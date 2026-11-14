@@ -4553,6 +4553,9 @@ let tournamentVoiceMuted = false;
 const tournamentVoicePeers = new Map();
 const tournamentRemoteMicStates = new Map();
 let tournamentCameraStream=null;
+let tournamentIceServers=[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}];
+function updateTournamentIceServers(servers){if(Array.isArray(servers)&&servers.length)tournamentIceServers=servers.filter(x=>x&&x.urls);}
+function tournamentPeerConfiguration(){return {iceServers:tournamentIceServers,iceCandidatePoolSize:8};}
 let tournamentCameraJoined=false;
 const tournamentCameraPeers=new Map();
 
@@ -5127,12 +5130,12 @@ function connectServer(callback) {
                     renderTournamentChat(data.messages || []); return;
                 }
                 if (data.type === "tournament_voice_pending") { addTournamentVoicePending(data); return; }
-                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e))); return; }
-                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentCameraPeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Camera peer join:",e)); return; }
+                if (data.type === "camera_peer_list" && data.room===activeTournamentMatchRoom) { updateTournamentIceServers(data.ice_servers); (data.peers||[]).forEach(peer=>ensureTournamentCameraPeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e))); return; }
+                if (data.type === "camera_peer_join" && data.room===activeTournamentMatchRoom) { updateTournamentIceServers(data.ice_servers); ensureTournamentCameraPeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Camera peer join:",e)); return; }
                 if (data.type === "camera_peer_leave" && data.room===activeTournamentMatchRoom) { closeTournamentCameraPeer(data.peer_id); return; }
                 if (data.type === "camera_signal" && data.room===activeTournamentMatchRoom) { handleTournamentCameraSignal(data).catch(e=>console.warn("Camera signal:",e)); return; }
-                if (data.type === "voice_peer_list" && data.room===activeTournamentMatchRoom) { (data.peers||[]).forEach(peer=>{if(peer.muted!==undefined)updateRemoteMicState(peer.peer_id,peer.muted);ensureTournamentVoicePeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e));}); return; }
-                if (data.type === "voice_peer_join" && data.room===activeTournamentMatchRoom) { ensureTournamentVoicePeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Voice peer join:",e)); updateRemoteMicState(data.peer_id,data.muted!==false); return; }
+                if (data.type === "voice_peer_list" && data.room===activeTournamentMatchRoom) { updateTournamentIceServers(data.ice_servers); (data.peers||[]).forEach(peer=>{if(peer.muted!==undefined)updateRemoteMicState(peer.peer_id,peer.muted);ensureTournamentVoicePeer(peer.peer_id,!!peer.make_offer).catch(e=>console.warn(e));}); return; }
+                if (data.type === "voice_peer_join" && data.room===activeTournamentMatchRoom) { updateTournamentIceServers(data.ice_servers); ensureTournamentVoicePeer(data.peer_id,!!data.make_offer).catch(e=>console.warn("Voice peer join:",e)); updateRemoteMicState(data.peer_id,data.muted!==false); return; }
                 if (data.type === "voice_mute_state" && data.room===activeTournamentMatchRoom) { updateRemoteMicState(data.peer_id,!!data.muted); return; }
                 if (data.type === "voice_peer_leave" && data.room===activeTournamentMatchRoom) { closeTournamentVoicePeer(data.peer_id); return; }
                 if (data.type === "voice_signal" && data.room===activeTournamentMatchRoom) { handleTournamentVoiceSignal(data).catch(e=>console.warn("Voice signal:",e)); return; }
@@ -7591,10 +7594,7 @@ function closeTournamentCamera(){
 async function ensureTournamentCameraPeer(peerId,makeOffer){
   peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
   let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
-  pc=new RTCPeerConnection({iceServers:[
-    {urls:"stun:stun.l.google.com:19302"},
-    {urls:"stun:stun1.l.google.com:19302"}
-  ]});
+  pc=new RTCPeerConnection(tournamentPeerConfiguration());
   const transceiver=pc.addTransceiver("video",{direction:"sendrecv"});
   pc.__videoSender=transceiver.sender;pc.__pendingIce=[];
   if(tournamentCameraStream){
@@ -7691,7 +7691,7 @@ function closeTournamentVoice(){
 async function ensureTournamentVoicePeer(peerId,makeOffer){
   peerId=String(peerId);if(!peerId||peerId==="undefined")return null;
   let pc=tournamentVoicePeers.get(peerId);if(pc)return pc;
-  pc=new RTCPeerConnection({iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]});
+  pc=new RTCPeerConnection(tournamentPeerConfiguration());
   const transceiver=pc.addTransceiver("audio",{direction:"sendrecv"});
   pc.__audioSender=transceiver.sender;pc.__pendingIce=[];
   if(tournamentLocalAudioStream){const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)await pc.__audioSender.replaceTrack(track);}
