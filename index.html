@@ -1731,6 +1731,74 @@ td, th { overflow-wrap: anywhere; }
 }
 </style>
 
+
+<style id="mrjery-portrait-layout-fix">
+/* Portrait match: camera feeds side-by-side; score cards above; board gets full width */
+#onlineGameScreen{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:7px 8px!important}
+#onlineGameScreen>.online-showcase-header,
+#onlineGameScreen #onlineStatus,#onlineGameScreen #onlineMatchNotice,
+#onlineGameScreen #onlineSpectatorCount,#onlineGameScreen .room{grid-column:1/-1!important}
+#onlineGameScreen .score-board{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ grid-column:1/-1!important;grid-row:4!important;gap:8px!important;
+ width:100%;margin:3px auto!important;align-items:stretch
+}
+#onlineGameScreen .score-player,
+#onlineGameScreen .score-player:first-child,
+#onlineGameScreen .score-player:last-child{
+ grid-column:auto!important;grid-row:auto!important;width:auto;min-width:0;
+ padding:9px 7px!important;font-size:clamp(11px,2.2vw,15px)!important;
+ flex-direction:row!important;flex-wrap:wrap;gap:4px!important;
+ overflow-wrap:normal!important;word-break:normal!important
+}
+#onlineGameScreen .score-player span{font-size:clamp(14px,2.7vw,19px)!important;overflow-wrap:normal!important;word-break:normal!important}
+#onlineGameScreen .timers{grid-column:1/-1!important;grid-row:5!important;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:3px auto 5px!important}
+#onlineGameScreen .online-match-camera-panel{
+ grid-column:1/-1!important;grid-row:6!important;
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ width:100%!important;max-width:900px!important;
+ padding:8px!important;gap:7px 9px!important
+}
+#onlineGameScreen .online-camera-heading,
+#onlineGameScreen .tournament-camera-controls{grid-column:1/-1!important}
+#onlineGameScreen #onlineTournamentLocalCamera{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-column:1!important;grid-row:auto!important;min-width:0!important;width:100%!important
+}
+#onlineGameScreen #onlineTournamentRemoteCameras{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-column:2!important;grid-row:auto!important;min-width:0!important;width:100%!important
+}
+#onlineGameScreen #onlineTournamentLocalCamera .tournament-camera-tile,
+#onlineGameScreen #onlineTournamentRemoteCameras .tournament-camera-tile{
+ width:100%!important;max-width:none!important;min-width:0!important;
+ box-sizing:border-box!important;margin:0!important
+}
+#onlineGameScreen #onlineTournamentLocalCamera .tournament-camera-tile{border:2px solid #1687ff!important}
+#onlineGameScreen #onlineTournamentRemoteCameras .tournament-camera-tile{border:2px solid #fb3152!important}
+#onlineGameScreen .online-match-camera-panel .tournament-camera-tile video{
+ width:100%!important;height:auto!important;max-height:none!important;
+ aspect-ratio:4/3!important;object-fit:cover!important
+}
+#onlineGameScreen #onlineBoard{
+ grid-column:1/-1!important;grid-row:7!important;
+ width:min(100%,760px)!important;max-width:760px!important;
+ justify-self:center!important;margin:0 auto!important
+}
+#onlineGameScreen .board-area{width:min(100%,760px)!important;max-width:760px!important;margin:0 auto!important}
+#onlineGameScreen #onlineResult,#onlineGameScreen #rematchBox,#onlineGameScreen #undoBox,
+#onlineGameScreen #tournamentMatchComms,#onlineGameScreen>.game-actions{grid-column:1/-1!important}
+@media(max-width:620px){
+ #onlineGameScreen{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;padding:6px 5px 12px!important;gap:6px 6px!important}
+ #onlineGameScreen .online-match-camera-panel{padding:6px!important;gap:6px!important}
+ #onlineGameScreen .online-match-camera-panel .tournament-camera-tile video{aspect-ratio:4/3!important}
+ #onlineGameScreen .score-player,#onlineGameScreen .score-player:first-child,#onlineGameScreen .score-player:last-child{padding:8px 4px!important;font-size:11px!important}
+ #onlineGameScreen .score-player span{font-size:14px!important}
+ #onlineGameScreen .player-timer{min-width:105px!important;padding:6px 8px!important}
+ #onlineGameScreen .timer-value{font-size:17px!important}
+}
+</style>
+
 </head>
 
 <body>
