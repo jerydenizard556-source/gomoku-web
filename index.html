@@ -1999,6 +1999,7 @@ td, th { overflow-wrap: anywhere; }
     <header class="mrj-hub-hero"><div class="mrj-hub-cup">🏆</div><div><span>MR_JERY ARENA</span><h2>TOUNWA GOMOKU</h2><p>Chwazi sa ou vle fè a. Tout bagay senp, yon meni alafwa.</p></div><div class="mrj-hero-spark">✦</div></header>
     <div class="mrj-main-actions">
       <button type="button" class="mrj-main-card gold" data-t-created="1" hidden><span class="mrj-main-icon">🎯</span><strong>Tounwa mwen kreye</strong><small>Jere tounwa ou yo epi gade match k ap jwe yo.</small><b>Jere tounwa yo <i>→</i></b></button>
+      <button type="button" class="mrj-main-card blue" data-t-live="1"><span class="mrj-main-icon">📺</span><strong>Gade match an dirèk</strong><small>Wè tout match k ap jwe yo, menm si ou pa enskri nan tounwa a.</small><b>Gade match yo <i>→</i></b></button>
       <button type="button" class="mrj-main-card gold" data-t-my="1"><span class="mrj-main-icon">🏆</span><strong>Tounwa mwen ladan yo</strong><small>Wè tout tounwa ou deja enskri ladan yo, estati yo ak match ou.</small><b>Wè lis tounwa yo <i>→</i></b></button>
       <button type="button" class="mrj-main-card blue" data-t-go="3"><span class="mrj-main-icon">＋</span><strong>Kreye tounwa</strong><small>Kreye pwòp tounwa ou, chwazi non, kantite jwè ak règ yo.</small><b>Kreye tounwa <i>→</i></b></button>
       <button type="button" class="mrj-main-card purple" data-t-join="1"><span class="mrj-main-icon">👥</span><strong>Rejoindre tounwa</strong><small>Gade tounwa ki ouvè epi enskri nan youn.</small><b>Chèche tounwa <i>→</i></b></button>
@@ -7013,12 +7014,13 @@ function loadTournamentList(){
 }
 function loadTournamentState(id){if(id)tournamentSend("tournament_state",{tournament_id:id});}
 function openTournamentScreen(){
-  if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Tournoi.",false);return;}
+  // Lis match an dirèk la piblik; aksyon ki mande kont yo verifye apa.
   showScreen("tournamentScreen");setTournamentStage(2);tournamentListView="all";loadTournamentList();
 }
 document.getElementById("dashboardTournamentCard")?.addEventListener("click",openTournamentScreen);
 document.getElementById("tournamentBack")?.addEventListener("click",()=>showAccountMenu());
 document.getElementById("tournamentRefresh")?.addEventListener("click",loadTournamentList);
+document.querySelectorAll("[data-t-live]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="live";setTournamentStage(5);loadTournamentList();}));
 document.querySelectorAll("[data-t-my]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="mine";setTournamentStage(5);loadTournamentList();}));
 document.querySelectorAll("[data-t-created]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="created";setTournamentStage(5);loadTournamentList();}));
 document.querySelectorAll("[data-t-join]").forEach(b=>b.addEventListener("click",()=>{tournamentListView="all";setTournamentStage(5);loadTournamentList();}));
@@ -7084,10 +7086,10 @@ function renderTournamentList(items){
   const root=document.getElementById("tournamentList"); if(!root)return;
   tournamentListCache=Array.isArray(items)?items:[];
   const heading=document.getElementById("tournamentListHeading"),description=document.getElementById("tournamentListDescription");
-  if(heading)heading.textContent=tournamentListView==="created"?"Tounwa mwen kreye":tournamentListView==="mine"?"Tounwa mwen ladan yo":"Tounwa ki disponib";
-  if(description)description.textContent=tournamentListView==="created"?"Men tounwa ou menm ki kreye yo. Louvri youn pou jere l epi gade match an kou.":tournamentListView==="mine"?"Men tout tounwa kote kont ou deja enskri.":"Men sèlman tounwa ki ouvè pou enskripsyon.";
+  if(heading)heading.textContent=tournamentListView==="live"?"Gade match an dirèk":tournamentListView==="created"?"Tounwa mwen kreye":tournamentListView==="mine"?"Tounwa mwen ladan yo":"Tounwa ki disponib";
+  if(description)description.textContent=tournamentListView==="live"?"Men tout match tounwa ki an kou. Chwazi youn pou antre kòm espektatè.":tournamentListView==="created"?"Men tounwa ou menm ki kreye yo. Louvri youn pou jere l epi gade match an kou.":tournamentListView==="mine"?"Men tout tounwa kote kont ou deja enskri.":"Men sèlman tounwa ki ouvè pou enskripsyon.";
   const statusSelect=document.getElementById("tournamentStatusFilter");
-  if(statusSelect){if(tournamentListView==="mine"||tournamentListView==="created")statusSelect.value="all";else statusSelect.value="registration";statusSelect.disabled=tournamentListView!=="mine"&&tournamentListView!=="created";}
+  if(statusSelect){if(tournamentListView==="mine"||tournamentListView==="created")statusSelect.value="all";else statusSelect.value=tournamentListView==="live"?"live":"registration";statusSelect.disabled=tournamentListView!=="mine"&&tournamentListView!=="created";}
   const search=(document.getElementById("tournamentSearch")?.value||"").trim().toLowerCase();
   const status=document.getElementById("tournamentStatusFilter")?.value||"all";
   const filtered=tournamentListCache.filter(t=>{
@@ -7097,7 +7099,9 @@ function renderTournamentList(items){
     const isOrganizer=String(t.organizer_id)===String(currentPlayerId);
     const available=tournamentListView!=="all"||String(t.status||"").toLowerCase()==="registration";
     const belongs=tournamentListView==="created"?isOrganizer:tournamentListView==="mine"?isMine:true;
-    return matchesStatus&&haystack.includes(search)&&available&&belongs;
+    const hasLiveMatch=Array.isArray(t.matches)&&t.matches.some(m=>m.room_code&&String(m.status||"").toLowerCase()==="playing");
+    const liveOnly=tournamentListView!=="live"||hasLiveMatch;
+    return matchesStatus&&haystack.includes(search)&&available&&belongs&&liveOnly;
   });
   document.querySelectorAll("[data-t-list-view]").forEach(b=>b.classList.toggle("active",b.dataset.tListView===tournamentListView));
   const createdButton=document.querySelector("[data-t-created]");
