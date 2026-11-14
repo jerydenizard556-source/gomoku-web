@@ -7087,7 +7087,7 @@ function renderTournamentList(items){
   if(heading)heading.textContent=tournamentListView==="created"?"Tounwa mwen kreye":tournamentListView==="mine"?"Tounwa mwen ladan yo":"Tounwa ki disponib";
   if(description)description.textContent=tournamentListView==="created"?"Men tounwa ou menm ki kreye yo. Louvri youn pou jere l epi gade match an kou.":tournamentListView==="mine"?"Men tout tounwa kote kont ou deja enskri.":"Men sèlman tounwa ki ouvè pou enskripsyon.";
   const statusSelect=document.getElementById("tournamentStatusFilter");
-  if(statusSelect){if(tournamentListView==="mine")statusSelect.value="all";else statusSelect.value="registration";statusSelect.disabled=tournamentListView!=="mine";}
+  if(statusSelect){if(tournamentListView==="mine"||tournamentListView==="created")statusSelect.value="all";else statusSelect.value="registration";statusSelect.disabled=tournamentListView!=="mine"&&tournamentListView!=="created";}
   const search=(document.getElementById("tournamentSearch")?.value||"").trim().toLowerCase();
   const status=document.getElementById("tournamentStatusFilter")?.value||"all";
   const filtered=tournamentListCache.filter(t=>{
