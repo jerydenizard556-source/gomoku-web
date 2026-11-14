@@ -7553,8 +7553,8 @@ function showTournamentMatchComms(show){
   if(room)room.textContent=show&&onlineRoom?"Chanm "+onlineRoom:"";
   const request=document.getElementById("onlineTournamentVoiceRequest");
   const start=document.getElementById("onlineTournamentVoiceStart");
-  if(request)request.style.display=show&&onlineConnectionMode==="spectator"&&!tournamentVoiceApproved?"block":"none";
-  if(start)start.disabled=!show||(onlineConnectionMode==="spectator"&&!tournamentVoiceApproved)||Boolean(tournamentLocalAudioStream);
+  if(request)request.style.display="none";
+  if(start)start.disabled=!show||Boolean(tournamentLocalAudioStream);
   const cameraStart=document.getElementById("onlineTournamentCameraStart");
   if(cameraStart)cameraStart.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
 }
