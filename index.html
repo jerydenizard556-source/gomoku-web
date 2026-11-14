@@ -346,6 +346,15 @@ h1 {
 .tournament-camera-tile{min-width:0;padding:5px;border:1px solid #344a68;border-radius:10px;background:#101f35}
 .tournament-camera-tile video{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:7px;background:#020617}
 .tournament-camera-tile small{display:block;color:#cbd5e1;text-align:center;padding:5px 2px 1px;overflow-wrap:anywhere}
+.online-match-camera-panel{display:block;width:min(100%,760px);margin:12px auto 16px;padding:12px 14px;border:1px solid rgba(67,224,208,.28);border-radius:14px;background:linear-gradient(145deg,rgba(20,31,52,.96),rgba(10,17,31,.96));text-align:left}
+.online-camera-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.online-camera-heading>strong{color:#e7f7ff;font-size:15px}
+.online-camera-heading .tournament-note{margin:0;font-size:12px}
+.online-match-camera-panel .tournament-camera-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.online-match-camera-panel .tournament-camera-tile video{aspect-ratio:16/10;max-height:190px}
+.online-match-camera-panel:empty{display:none}
+@media(max-width:620px){.online-match-camera-panel{padding:10px;margin:9px auto 12px}.online-match-camera-panel .tournament-camera-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.online-match-camera-panel .tournament-camera-tile video{max-height:125px}}
+
 
 .tournament-voice-pending .tournament-player-row{flex-wrap:wrap}
 @media(max-width:620px){.tournament-comms-grid{grid-template-columns:1fr}.tournament-match-comms{padding:11px}.tournament-comms-heading{align-items:flex-start}}
@@ -2312,6 +2321,16 @@ td, th { overflow-wrap: anywhere; }
 
         </div>
 
+        <section id="onlineMatchCameraPanel" class="tournament-camera-panel online-match-camera-panel" aria-label="Kamera jwè yo">
+          <div class="online-camera-heading"><strong>📹 Kamera jwè yo</strong><span id="onlineTournamentCameraStatus" class="tournament-note" aria-live="polite">Kamera jwè yo ap parèt isit la lè yo aktive yo.</span></div>
+          <div class="tournament-camera-controls">
+            <button id="onlineTournamentCameraStart" type="button" class="tournament-secondary">📹 Aktive kamera mwen</button>
+            <button id="onlineTournamentCameraStop" type="button" class="tournament-secondary" disabled>Fèmen kamera mwen</button>
+          </div>
+          <div id="onlineTournamentLocalCamera" class="tournament-camera-grid"></div>
+          <div id="onlineTournamentRemoteCameras" class="tournament-camera-grid" aria-live="polite"></div>
+        </section>
+
         <div id="onlineResult" class="online-result"></div>
 
         <div id="rematchBox" class="rematch-box">
@@ -2358,16 +2377,7 @@ td, th { overflow-wrap: anywhere; }
           </div>
           <div id="onlineTournamentVoicePending" class="tournament-voice-pending"></div>
           <div id="onlineTournamentRemoteAudio" class="tournament-remote-audio" aria-live="polite"></div>
-          <div class="tournament-camera-panel">
-            <strong>📹 Kamera an dirèk</strong>
-            <p id="onlineTournamentCameraStatus" class="tournament-note" aria-live="polite">Kamera etenn. Jwè yo ka aktive kamera yo pou parèt isit la.</p>
-            <div class="tournament-camera-controls">
-              <button id="onlineTournamentCameraStart" type="button" class="tournament-secondary">📹 Aktive kamera</button>
-              <button id="onlineTournamentCameraStop" type="button" class="tournament-secondary" disabled>Fèmen kamera</button>
-            </div>
-            <div id="onlineTournamentLocalCamera" class="tournament-camera-grid"></div>
-            <div id="onlineTournamentRemoteCameras" class="tournament-camera-grid" aria-live="polite"></div>
-          </div>
+
 
         </div>
       </div>
@@ -4859,7 +4869,7 @@ function connectServer(callback) {
                     onlineConnectionMode="player"; onlinePlayer=Number(data.player); onlineRoom=data.room; activeTournamentMatchRoom=data.room; tournamentVoiceApproved=false;
                     onlineSessionToken=data.session_token || null; onlineGameOver=false; onlineDraw=false; onlineWinner=null;
                     document.getElementById("gameRoomCode").textContent=data.room;
-                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); showTournamentMatchComms(true); renderTournamentMatchChat([]);
+                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); renderTournamentMatchChat([]);
                     tournamentNotice("Ou antre nan match tournoi a.", true); return;
                 }
 
@@ -4978,7 +4988,7 @@ function connectServer(callback) {
                     onlineRoom=data.room; onlinePlayer=Number(data.player); onlineSessionToken=data.session_token||null; onlineConnectionMode="direct_invite"; onlineLastMove=null; onlineRematchRequest=null; onlineUndoRequest=null;
                     const n=document.getElementById("onlineMatchNotice"); if(n){n.textContent=data.message||"🎮 Match accepté ! La partie va commencer.";setTimeout(function(){n.textContent="";},5000);}
                     document.getElementById("roomCode").textContent="Match direct"; document.getElementById("playerNumber").textContent=onlinePlayer; document.getElementById("gameRoomCode").textContent="Direct"; document.getElementById("onlineError").textContent="";
-                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); return;
+                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); return;
                 }
 
                 /* ==================================
@@ -5165,7 +5175,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
 
                     return;
                 }
@@ -5239,7 +5249,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
 
                     return;
                 }
@@ -5310,7 +5320,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
 
                     return;
                 }
@@ -5339,7 +5349,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
                     showTournamentMatchComms(!!activeTournamentMatchRoom);
                     return;
                 }
@@ -5383,7 +5393,7 @@ function connectServer(callback) {
                         onlineClick
                     );
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
 
                     return;
                 }
@@ -5516,7 +5526,7 @@ function connectServer(callback) {
                     updateUndoUI();
                     updateOnlineNewGameButton();
 
-                    startOnlineDisplayTimer();
+                    startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom);
 
                     return;
                 }
@@ -7212,12 +7222,19 @@ function renderTournamentDetail(t){
   if(pRoot)pRoot.innerHTML=players.map(p=>`<div class="tournament-player-row"><strong>${escTournament(p.username||p.player_id)}</strong><span class="tournament-pill">${escTournament(p.payment_status)}</span></div>`).join("")||'<p class="tournament-note">Pa gen jwè ki enskri ankò.</p>';
   tournamentSend("tournament_chat_history",{tournament_id:t.tournament_id});
 }
+function joinTournamentCameraRoom(room){
+  if(!room||!socket||socket.readyState!==WebSocket.OPEN)return;
+  if(tournamentCameraJoined&&activeTournamentMatchRoom===room)return;
+  if(tournamentCameraJoined)closeTournamentCamera();
+  activeTournamentMatchRoom=room;
+  socket.send(JSON.stringify({type:"camera_join",room:room}));
+  tournamentCameraJoined=true;
+  const panel=document.getElementById("onlineMatchCameraPanel");if(panel)panel.style.display="block";
+  const start=document.getElementById("onlineTournamentCameraStart");
+  if(start)start.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
+}
 function showTournamentMatchComms(show){
-  if(show&&activeTournamentMatchRoom&&socket&&socket.readyState===WebSocket.OPEN&&!tournamentCameraJoined){
-    socket.send(JSON.stringify({type:"camera_join",room:activeTournamentMatchRoom}));
-    tournamentCameraJoined=true;
-  }
-  if(!show&&tournamentCameraJoined)closeTournamentCamera();
+  if(!show&&tournamentCameraJoined&&activeTournamentMatchRoom&&onlineConnectionMode==="spectator-list")closeTournamentCamera();
   const panel=document.getElementById("tournamentMatchComms");
   if(panel)panel.style.display=show?"block":"none";
   const room=document.getElementById("tournamentCommsRoom");
@@ -7227,7 +7244,7 @@ function showTournamentMatchComms(show){
   if(request)request.style.display=show&&onlineConnectionMode==="spectator"&&!tournamentVoiceApproved?"block":"none";
   if(start)start.disabled=!show||(onlineConnectionMode==="spectator"&&!tournamentVoiceApproved)||Boolean(tournamentLocalAudioStream);
   const cameraStart=document.getElementById("onlineTournamentCameraStart");
-  if(cameraStart)cameraStart.disabled=!show||onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
+  if(cameraStart)cameraStart.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
 }
 function renderTournamentMatchChat(messages){
   const root=document.getElementById("onlineTournamentChatMessages");if(!root)return;
@@ -7257,7 +7274,7 @@ function closeTournamentCamera(){
   tournamentCameraPeers.forEach((pc,id)=>{try{pc.close();}catch(e){}document.getElementById("tournament-camera-"+id)?.remove();});tournamentCameraPeers.clear();
   if(tournamentCameraStream)tournamentCameraStream.getTracks().forEach(track=>track.stop());tournamentCameraStream=null;tournamentCameraJoined=false;
   const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop"),local=document.getElementById("onlineTournamentLocalCamera");
-  if(local)local.replaceChildren();if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera etenn.");
+  if(local)local.replaceChildren();if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera mwen";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera etenn.");
 }
 async function ensureTournamentCameraPeer(peerId,makeOffer){
   peerId=String(peerId);if(!peerId||peerId==="undefined")return null;let pc=tournamentCameraPeers.get(peerId);if(pc)return pc;
@@ -7294,7 +7311,7 @@ async function startTournamentCamera(){
 function stopTournamentCamera(){
   if(tournamentCameraStream){tournamentCameraPeers.forEach(async pc=>{if(pc.__videoSender)await pc.__videoSender.replaceTrack(null);});tournamentCameraStream.getTracks().forEach(track=>track.stop());}
   tournamentCameraStream=null;const local=document.getElementById("onlineTournamentLocalCamera");if(local)local.replaceChildren();
-  const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop");if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera ou fèmen.");
+  const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop");if(start){start.disabled=onlineConnectionMode==="spectator";start.textContent="📹 Aktive kamera mwen";}if(stop)stop.disabled=true;tournamentCameraStatus("Kamera ou fèmen.");
 }
 document.getElementById("onlineTournamentCameraStart")?.addEventListener("click",startTournamentCamera);
 document.getElementById("onlineTournamentCameraStop")?.addEventListener("click",stopTournamentCamera);
