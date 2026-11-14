@@ -7105,14 +7105,26 @@ const landingTranslations={
  ht:{navHome:'Akèy',navGame:'Jwèt',navAbout:'A Pwopo',heroTitle:'Plis pase yon jwèt... yon kominote!',heroText:'Jwe ak moun ki soti nan tout mond lan, leve defi, fè konpetisyon epi monte nan MR_Jery Morpion.',fGlobal:'Jwè nan tout mond lan',fSecure:'Sekirize & serye',fFast:'Rapid & fluid',fRewards:'Defi & rekonpans',login:'Connexion',register:'Kreye yon kont',about:'A pwopo',cardOnline:'Jwe Anliy',cardOnlineText:'Defi e jwè nan tout peyi.',cardSecurity:'Sekirite',cardSecurityText:'Pwoteksyon pou kont ou ak jwèt yo.',cardCommunity:'Kominote',cardCommunityText:'Rankontre nouvo jwè ak advèsè.',cardFast:'Rapid',cardFastText:'Match fluid, san konplikasyon.',cardChallenge:'Defi',cardChallengeText:'Montre kapasite w sou tablo a.',footer:'Jwe • Defi • Gagne',aboutTitle:'Plis pase yon jwèt... yon kominote!',aboutText:'MR_Jery Morpion se yon platfòm pou jwe, rankontre jwè, leve defi epi suiv pwogrè ou.',vision:'Vizyon',visionText:'Rasanble jwè morpion atravè mond lan.',mission:'Misyon',missionText:'Bay yon eksperyans rapid, senp ak agreyab.',values:'Valè',valuesText:'Respè, fair-play, kominote ak evolisyon.'},
  pt:{navHome:'Início',navGame:'Jogo',navAbout:'Sobre',heroTitle:'Mais que um jogo... uma comunidade!',heroText:'Enfrente jogadores do mundo inteiro, aceite desafios e avance no MR_Jery Morpion.',fGlobal:'Jogadores do mundo inteiro',fSecure:'Seguro e confiável',fFast:'Rápido e fluido',fRewards:'Desafios e recompensas',login:'Entrar',register:'Criar uma conta',about:'Sobre',cardOnline:'Jogar online',cardOnlineText:'Desafie jogadores do mundo inteiro.',cardSecurity:'Segurança',cardSecurityText:'Proteção para sua conta e partidas.',cardCommunity:'Comunidade',cardCommunityText:'Conheça novos jogadores.',cardFast:'Rápido',cardFastText:'Partidas fluidas e simples.',cardChallenge:'Desafios',cardChallengeText:'Mostre suas habilidades.',footer:'Jogue • Desafie • Vença',aboutTitle:'Mais que um jogo... uma comunidade!',aboutText:'MR_Jery Morpion é uma plataforma para jogar, conhecer jogadores, aceitar desafios e acompanhar seu progresso.',vision:'Visão',visionText:'Reunir jogadores de morpion do mundo inteiro.',mission:'Missão',missionText:'Oferecer uma experiência rápida, simples e agradável.',values:'Valores',valuesText:'Respeito, fair play, comunidade e evolução.'}
 };
-function setLanguage(lang){const t=landingTranslations[lang]||landingTranslations.fr;document.documentElement.lang=lang;localStorage.setItem('mrjery_language',lang);document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(t[key])el.textContent=t[key]});const names={fr:'Français',en:'English',es:'Español',ht:'Kreyòl Ayisyen',pt:'Português'};const n=names[lang]||names.fr;['currentLanguage','aboutCurrentLanguage'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});document.getElementById('languageMenu')?.classList.remove('show');}
+function setLanguage(lang){const t=landingTranslations[lang]||landingTranslations.fr;document.documentElement.lang=lang;try{localStorage.setItem('mrjery_language',lang);}catch(error){console.warn('Language preference could not be saved',error);}document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(t[key])el.textContent=t[key]});const names={fr:'Français',en:'English',es:'Español',ht:'Kreyòl Ayisyen',pt:'Português'};const n=names[lang]||names.fr;['currentLanguage','aboutCurrentLanguage'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n});document.getElementById('languageMenu')?.classList.remove('show');}
 function openAuth(mode){showScreen('accountScreen');setAuthMode(mode);}
 function setAuthMode(mode){const login=mode==='login';document.getElementById('loginPanel').style.display=login?'block':'none';document.getElementById('registerPanel').style.display=login?'none':'block';document.getElementById('authLoginTab').classList.toggle('active',login);document.getElementById('authRegisterTab').classList.toggle('active',!login);document.getElementById('authTitle').textContent=login?'Connexion':'Créer un compte';document.getElementById('authSubtitle').textContent=login?'Connecte-toi à ton compte':'Rejoins la communauté MR_Jery Morpion';}
-const savedLang=localStorage.getItem('mrjery_language')||'fr';setLanguage(savedLang);
+// Attach the landing authentication buttons before optional language/storage setup.
+const landingLoginButton=document.getElementById('landingLoginBtn');
+if(landingLoginButton){
+  landingLoginButton.addEventListener('click',function(event){
+    event.preventDefault();
+    try { openAuth('login'); }
+    catch(error) { console.error('Unable to open login screen:',error); const target=document.getElementById('accountScreen'); if(target){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));target.classList.add('active');} }
+  });
+}
+const landingRegisterButton=document.getElementById('landingRegisterBtn');
+if(landingRegisterButton) landingRegisterButton.addEventListener('click',function(event){event.preventDefault();openAuth('register');});
+let savedLang='fr';
+try { savedLang=localStorage.getItem('mrjery_language')||'fr'; } catch(error) { console.warn('Language preference unavailable',error); }
+try { setLanguage(savedLang); } catch(error) { console.warn('Language setup skipped',error); }
 document.getElementById('languageButton')?.addEventListener('click',()=>document.getElementById('languageMenu').classList.toggle('show'));
-document.querySelectorAll('#languageMenu [data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
-document.getElementById('landingLoginBtn')?.addEventListener('click',()=>openAuth('login'));
-document.getElementById('landingRegisterBtn')?.addEventListener('click',()=>openAuth('register'));
+document.querySelectorAll('#languageMenu [data-lang]').forEach(b=>b.addEventListener('click',()=>{try{setLanguage(b.dataset.lang);}catch(error){console.warn(error);}}));
+// Registration button is attached safely above.
 document.getElementById('landingAboutBtn')?.addEventListener('click',()=>showScreen('aboutScreen'));
 document.getElementById('landingAboutPill')?.addEventListener('click',()=>showScreen('aboutScreen'));
 document.getElementById('landingGameBtn')?.addEventListener('click',()=>showScreen('localScreen'));
