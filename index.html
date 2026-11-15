@@ -331,6 +331,21 @@ h1 {
 .tournament-comms-chat,.tournament-comms-voice{min-width:0;padding:11px;border:1px solid #263b58;border-radius:12px;background:#071326}
 #onlineTournamentChatMessages{height:190px;max-height:190px;overflow:auto}
 #onlineTournamentChatMessages .tournament-chat-line{overflow-wrap:anywhere}
+.mrj-reaction-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;padding:10px;border:1px solid #263b58;border-radius:12px;background:#081426}
+.mrj-reaction-bar strong{width:100%;font-size:12px;color:#f5ce6a}
+.mrj-reaction-bar button{border:1px solid #344a68;border-radius:999px;background:#14243b;color:#fff;padding:8px 12px;font-size:18px;cursor:pointer}
+.mrj-reaction-bar button:disabled{opacity:.45;cursor:not-allowed}
+.mrj-reaction-feed{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;min-height:30px}
+.mrj-reaction-feed span{padding:5px 9px;border-radius:999px;background:#172b45;color:#fff;font-size:12px}
+#mrjChatBanner{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99999;width:min( min(92vw,680px), calc(100vw - 24px));pointer-events:none}
+#mrjChatBanner[hidden]{display:none}
+.mrj-chat-banner-card{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid rgba(245,206,106,.75);border-radius:13px;background:linear-gradient(110deg,rgba(9,25,48,.98),rgba(31,23,48,.98));box-shadow:0 12px 35px rgba(0,0,0,.38);color:#fff;pointer-events:auto;animation:mrjBannerIn .22s ease-out}
+.mrj-chat-banner-copy{min-width:0;flex:1;overflow-wrap:anywhere}
+.mrj-chat-banner-copy strong{display:block;color:#f5ce6a;font-size:12px;margin-bottom:3px}
+.mrj-chat-banner-copy span{display:block;font-size:13px;line-height:1.35}
+.mrj-chat-banner-close{flex:0 0 auto;border:0;border-radius:8px;background:rgba(255,255,255,.12);color:#fff;padding:6px 10px;font-size:18px;cursor:pointer}
+.mrj-chat-banner-toggle{border:1px solid #344a68;border-radius:9px;background:#10233d;color:#e8eef8;padding:6px 9px;font-size:11px;cursor:pointer}
+@keyframes mrjBannerIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 .tournament-comms-voice>strong{color:#f3f5fa;font-size:14px}
 .tournament-voice-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .tournament-voice-controls button{min-height:39px;font-size:12px;padding:8px}
@@ -2633,8 +2648,9 @@ td, th { overflow-wrap: anywhere; }
 
     <div id="onlineBoard" class="board-area"></div>
 
+    <div id="mrjChatBanner" hidden role="status" aria-live="polite"><div class="mrj-chat-banner-card"><div class="mrj-chat-banner-copy"><strong id="mrjChatBannerSender">Nouvo mesaj</strong><span id="mrjChatBannerText"></span></div><button id="mrjChatBannerClose" class="mrj-chat-banner-close" type="button" aria-label="Fèmen notifikasyon">×</button></div></div>
     <section id="tournamentMatchComms" class="tournament-match-comms" style="display:none" aria-label="Chat ak vwa pandan match tournoi">
-      <div class="tournament-comms-heading"><div><strong>💬 Kominikasyon match la</strong><small>Chat ak vwa pandan konpetisyon an</small></div><span id="tournamentCommsRoom"></span></div>
+      <div class="tournament-comms-heading"><div><strong>💬 Kominikasyon match la</strong><small>Chat ak vwa pandan konpetisyon an</small></div><span id="tournamentCommsRoom"></span><button id="mrjChatBannerToggle" class="mrj-chat-banner-toggle" type="button" aria-pressed="true">🔔 Banniere: ON</button></div>
       <div class="tournament-comms-grid">
         <div class="tournament-comms-chat">
           <div id="onlineTournamentChatMessages" class="tournament-chat-messages" aria-live="polite"><p class="tournament-note">Mesaj match la ap parèt la.</p></div>
@@ -2655,6 +2671,7 @@ td, th { overflow-wrap: anywhere; }
 
         </div>
       </div>
+      <div class="mrj-reaction-bar" aria-label="Reyaksyon match la"><strong>🌶️ Reyaji pandan match la</strong><button type="button" data-room-reaction="🔥" aria-label="Dife">🔥</button><button type="button" data-room-reaction="👏" aria-label="Bravo">👏</button><button type="button" data-room-reaction="❤️" aria-label="Kè">❤️</button><button type="button" data-room-reaction="😂" aria-label="Ri">😂</button><button type="button" data-room-reaction="😮" aria-label="Sezi">😮</button><button type="button" data-room-reaction="💪" aria-label="Fòs">💪</button><div id="mrjReactionFeed" class="mrj-reaction-feed" aria-live="polite"></div></div>
     </section>
 
     <div class="game-actions">
@@ -4514,6 +4531,10 @@ function clearAuthRequestTimeout() {
 
 let onlinePlayer = null;
 let onlineRoom = null;
+let mrjChatBannerEnabled = true;
+let mrjLastChatFingerprint = null;
+let mrjChatBannerTimer = null;
+try { mrjChatBannerEnabled = localStorage.getItem("mrjChatBannerEnabled") !== "false"; } catch(e) {}
 
 let onlineBoardState = {};
 let onlinePlayersState = {};
@@ -5697,6 +5718,7 @@ function connectServer(callback) {
                             data.board
                         );
 
+                    renderRoomReactions(data.reactions||[]);
                     onlinePlayersState =
                         data.players || {};
                     if (Array.isArray(onlinePlayersState)) {
@@ -5766,6 +5788,7 @@ function connectServer(callback) {
                         data.last_move ||
                         null;
                     if(activeTournamentMatchRoom)renderTournamentMatchChat(data.chat||[]);
+                    observeMrjChatMessages(data.chat||[]);
                     const incomingSize = Array.isArray(data.board) && data.board.length ? data.board.length : BOARD_SIZE;
                     if (incomingSize >= 13 && incomingSize <= 20 && incomingSize !== BOARD_SIZE) {
                         BOARD_SIZE = incomingSize;
@@ -7554,6 +7577,7 @@ function joinTournamentVoiceRoom(){
   tournamentVoiceJoined=true;
 }
 function showTournamentMatchComms(show){
+  updateMrjChatBannerToggle();
   if(show&&activeTournamentMatchRoom)joinTournamentVoiceRoom();
   if(!show&&tournamentCameraJoined&&activeTournamentMatchRoom&&onlineConnectionMode==="spectator-list")closeTournamentCamera();
   const panel=document.getElementById("tournamentMatchComms");
@@ -7567,6 +7591,63 @@ function showTournamentMatchComms(show){
   const cameraStart=document.getElementById("onlineTournamentCameraStart");
   if(cameraStart)cameraStart.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
 }
+function updateMrjChatBannerToggle(){
+  const button=document.getElementById("mrjChatBannerToggle");if(!button)return;
+  button.textContent=mrjChatBannerEnabled?"🔔 Banniere: ON":"🔕 Banniere: OFF";
+  button.setAttribute("aria-pressed",String(mrjChatBannerEnabled));
+}
+function dismissMrjChatBanner(){
+  const banner=document.getElementById("mrjChatBanner");if(banner)banner.hidden=true;
+  if(mrjChatBannerTimer){clearTimeout(mrjChatBannerTimer);mrjChatBannerTimer=null;}
+}
+function showMrjChatBanner(message){
+  if(!mrjChatBannerEnabled||!message||onlineConnectionMode==="spectator")return;
+  const banner=document.getElementById("mrjChatBanner");
+  const sender=document.getElementById("mrjChatBannerSender");
+  const body=document.getElementById("mrjChatBannerText");
+  if(!banner||!sender||!body)return;
+  sender.textContent="💬 "+(message.sender||message.username||"Nouvo mesaj");
+  body.textContent=message.text||message.message||"";
+  banner.hidden=false;
+  if(mrjChatBannerTimer)clearTimeout(mrjChatBannerTimer);
+  mrjChatBannerTimer=setTimeout(dismissMrjChatBanner,6500);
+}
+function observeMrjChatMessages(messages){
+  const list=Array.isArray(messages)?messages:[];
+  const latest=list.length?list[list.length-1]:null;
+  const fingerprint=latest?[latest.sender||latest.username||"",latest.time||"",latest.text||latest.message||""].join("|"):"__empty__";
+  if(mrjLastChatFingerprint===null){mrjLastChatFingerprint=fingerprint;return;}
+  if(latest&&fingerprint!==mrjLastChatFingerprint){mrjLastChatFingerprint=fingerprint;showMrjChatBanner(latest);}
+  else if(!latest)mrjLastChatFingerprint="__empty__";
+}
+document.addEventListener("click",function(event){
+  if(event.target.closest("#mrjChatBannerClose"))dismissMrjChatBanner();
+  const toggle=event.target.closest("#mrjChatBannerToggle");
+  if(toggle){
+    mrjChatBannerEnabled=!mrjChatBannerEnabled;
+    try{localStorage.setItem("mrjChatBannerEnabled",String(mrjChatBannerEnabled));}catch(e){}
+    if(!mrjChatBannerEnabled)dismissMrjChatBanner();
+    updateMrjChatBannerToggle();
+  }
+});
+function sendRoomReaction(emoji){
+  if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN)return;
+  socket.send(JSON.stringify({type:"room_reaction",room:onlineRoom,emoji}));
+}
+function renderRoomReactions(items){
+  const root=document.getElementById("mrjReactionFeed");if(!root)return;
+  root.replaceChildren();
+  (Array.isArray(items)?items:[]).slice(-12).forEach(item=>{
+    const pill=document.createElement("span");
+    pill.textContent=(item.emoji||"")+(item.sender?" "+item.sender:"");
+    root.appendChild(pill);
+  });
+}
+document.addEventListener("click",function(event){
+  const button=event.target.closest("[data-room-reaction]");
+  if(button)sendRoomReaction(button.getAttribute("data-room-reaction"));
+});
+
 function renderTournamentMatchChat(messages){
   const root=document.getElementById("onlineTournamentChatMessages");if(!root)return;
   root.replaceChildren();
