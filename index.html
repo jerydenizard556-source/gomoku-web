@@ -8378,5 +8378,368 @@ document.querySelectorAll("[data-ranking-period]").forEach(button=>button.addEve
 
 </script>
 
+<style id="mrj-faceit-arena-v6">
+
+
+/* MR_JERY FACEIT-INSPIRED ARENA V6 — visual layer only */
+:root{
+  --mrj-v6-bg:#080d17;--mrj-v6-panel:#101a2a;--mrj-v6-panel2:#142238;
+  --mrj-v6-line:rgba(148,170,204,.18);--mrj-v6-text:#f3f6fc;
+  --mrj-v6-muted:#9baac0;--mrj-v6-orange:#ff7138;--mrj-v6-cyan:#42c8e8;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% -18%,rgba(39,94,151,.24),transparent 48%),
+    linear-gradient(180deg,#080e19 0%,#0a1220 48%,#070c15 100%);
+}
+#landingScreen.active,#accountMenuScreen.active,#rankingScreen.active,
+#profileScreen.active,#settingsScreen.active,#walletScreen.active,#premiumScreen.active,
+#spectatorScreen.active,#waitingRoomScreen.active{
+  background:transparent;
+}
+#landingScreen .landing-shell{
+  max-width:1320px;margin:22px auto 34px;padding:18px 24px 34px;
+  border:1px solid var(--mrj-v6-line);border-radius:22px;
+  background:linear-gradient(145deg,rgba(17,29,47,.97),rgba(8,15,27,.98));
+  box-shadow:0 28px 90px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.045);
+  position:relative;overflow:hidden;
+}
+#landingScreen .landing-shell:before,#accountMenuScreen .dashboard-shell:before{
+  content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,transparent,var(--mrj-v6-cyan),var(--mrj-v6-orange),transparent);
+  opacity:.9;pointer-events:none;
+}
+#landingScreen .landing-header{
+  min-height:66px;padding:0 5px 16px;border-bottom:1px solid var(--mrj-v6-line);
+  gap:20px;
+}
+#landingScreen .brand-mini,#accountMenuScreen .dashboard-brand{
+  color:#f5f7fb;font-weight:950;letter-spacing:.3px;
+}
+#landingScreen .brand-mini b,#accountMenuScreen .dashboard-brand b{color:var(--mrj-v6-orange)}
+#landingScreen .brand-crown,#accountMenuScreen .dashboard-crown{
+  color:#ffb35c;text-shadow:0 0 22px rgba(255,113,56,.28)
+}
+#landingScreen .landing-nav{gap:7px}
+#landingScreen .nav-link{
+  border:1px solid transparent;border-radius:10px;padding:10px 14px;
+  color:#aebbd0;font-weight:800;transition:.2s ease;
+}
+#landingScreen .nav-link:hover,#landingScreen .nav-link.active{
+  color:#fff;border-color:rgba(66,200,232,.25);
+  background:rgba(66,200,232,.09);
+}
+#landingScreen .language-button{
+  border:1px solid var(--mrj-v6-line);border-radius:10px;
+  background:#101d30;color:#eaf1fb;padding:10px 13px;
+}
+#landingScreen .landing-hero{
+  min-height:510px;margin-top:20px;padding:clamp(24px,5vw,66px);
+  display:grid;grid-template-columns:minmax(240px,.85fr) minmax(0,1.3fr);
+  align-items:center;gap:clamp(22px,5vw,76px);
+  border:1px solid rgba(112,151,201,.2);border-radius:19px;
+  background:
+   radial-gradient(ellipse at 18% 45%,rgba(44,128,182,.19),transparent 42%),
+   linear-gradient(120deg,rgba(16,34,58,.97),rgba(9,18,32,.98) 65%,rgba(22,29,43,.98));
+  box-shadow:inset 0 1px rgba(255,255,255,.05),0 22px 48px rgba(0,0,0,.2);
+}
+#landingScreen .world-map{opacity:.12;filter:grayscale(1)}
+#landingScreen .hero-logo{transform:scale(1.04);filter:drop-shadow(0 18px 28px rgba(0,0,0,.3))}
+#landingScreen .logo-crown{color:#ffb35c}
+#landingScreen .logo-ring{border-color:rgba(66,200,232,.65);box-shadow:0 0 0 9px rgba(66,200,232,.055),0 0 42px rgba(66,200,232,.16)}
+#landingScreen .logo-title strong{color:var(--mrj-v6-orange)}
+#landingScreen .hero-copy h1{font-size:clamp(34px,4.5vw,58px);line-height:1.08;letter-spacing:-1.8px;color:#f6f8fc}
+#landingScreen .hero-copy h1 em{color:#ff9868;font-style:normal}
+#landingScreen .hero-copy>p{max-width:620px;color:#b4c2d6;font-size:15px;line-height:1.8}
+#landingScreen .hero-features{gap:9px}
+#landingScreen .hero-features span{
+  border:1px solid var(--mrj-v6-line);border-radius:9px;padding:9px 11px;
+  background:rgba(5,13,24,.42);color:#c8d5e7;font-size:11px;
+}
+#landingScreen .hero-btn{
+  min-height:48px;border-radius:10px;padding:13px 20px;font-weight:950;
+  letter-spacing:.2px;transition:transform .2s,filter .2s,box-shadow .2s;
+}
+#landingScreen .hero-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+#landingScreen .hero-btn.gold{
+  background:linear-gradient(110deg,#ff9868,#ff7138 65%,#d94f2a);
+  color:#1a1010;box-shadow:0 10px 26px rgba(255,113,56,.2);
+}
+#landingScreen .hero-btn:not(.gold){border:1px solid rgba(66,200,232,.38);background:#142943;color:#eaf7ff}
+#homeScreen h1{color:#f5f7fc;letter-spacing:2px}
+#homeScreen .main-menu{max-width:900px;gap:16px}
+#homeScreen .menu-button{
+  min-height:84px;border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#14243a,#0d192a);color:#f4f7fc;
+  box-shadow:0 12px 25px rgba(0,0,0,.18);font-weight:900;transition:.2s ease;
+}
+#homeScreen .menu-button:hover{transform:translateY(-3px);border-color:rgba(66,200,232,.55);background:#192d47}
+#accountMenuScreen .dashboard-shell{
+  position:relative;max-width:1380px;margin:22px auto 34px;padding:18px;
+  border:1px solid var(--mrj-v6-line);border-radius:20px;
+  background:linear-gradient(145deg,rgba(14,25,41,.98),rgba(7,13,23,.99));
+  box-shadow:0 28px 80px rgba(0,0,0,.36);overflow:hidden;
+}
+#accountMenuScreen .dashboard-header{
+  min-height:68px;padding:7px 10px 17px;border-bottom:1px solid var(--mrj-v6-line);
+  display:flex;gap:18px;
+}
+#accountMenuScreen .dashboard-nav{gap:5px;flex-wrap:wrap}
+#accountMenuScreen .dash-nav{
+  border:1px solid transparent;border-radius:9px;padding:10px 12px;
+  color:#a9b8cd;font-size:12px;font-weight:850;transition:.2s ease;
+}
+#accountMenuScreen .dash-nav:hover,#accountMenuScreen .dash-nav.active{
+  color:#fff;background:rgba(66,200,232,.09);border-color:rgba(66,200,232,.22);
+}
+#accountMenuScreen .dashboard-user{
+  padding:7px 10px;border:1px solid var(--mrj-v6-line);border-radius:12px;
+  background:#111f33;color:#edf3fb;
+}
+#accountMenuScreen .dash-avatar,#accountMenuScreen .dash-big-avatar{
+  border:1px solid rgba(255,113,56,.42);background:linear-gradient(145deg,#263a54,#111d30);
+  color:#ff9868;box-shadow:0 5px 18px rgba(0,0,0,.2);
+}
+#accountMenuScreen .dashboard-main{padding:22px 4px 5px}
+#accountMenuScreen .welcome-card{
+  position:relative;min-height:205px;padding:clamp(22px,3.5vw,40px);
+  border:1px solid rgba(66,200,232,.24);border-radius:17px;
+  background:
+   radial-gradient(ellipse at 82% 50%,rgba(255,113,56,.13),transparent 34%),
+   linear-gradient(112deg,#142b47,#10223a 55%,#172438);
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 18px 38px rgba(0,0,0,.22);
+  overflow:hidden;
+}
+#accountMenuScreen .welcome-kicker{color:#6dd7ee;letter-spacing:2.3px;font-weight:950;font-size:10px}
+#accountMenuScreen .welcome-copy h1{font-size:clamp(32px,4vw,48px);letter-spacing:-1.5px;color:#f5f7fc}
+#accountMenuScreen .welcome-copy h1 span{color:#ff9868}
+#accountMenuScreen .welcome-copy p{color:#aebfd4;letter-spacing:2px;font-weight:800}
+#accountMenuScreen .welcome-line{width:84px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--mrj-v6-cyan),var(--mrj-v6-orange))}
+#accountMenuScreen .welcome-copy>strong{color:#eaf2fc;font-size:14px}
+#accountMenuScreen .welcome-world{opacity:.23;filter:drop-shadow(0 0 28px rgba(66,200,232,.25))}
+#accountMenuScreen .dashboard-balance-row{gap:13px;margin:16px 0}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+  position:relative;min-height:104px;padding:18px 20px;border:1px solid var(--mrj-v6-line);
+  border-radius:13px;background:linear-gradient(145deg,#14243a,#0d192a);
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+#accountMenuScreen .dash-balance-card:before{
+  content:"";position:absolute;left:0;top:15px;bottom:15px;width:3px;border-radius:4px;background:var(--mrj-v6-cyan)
+}
+#accountMenuScreen .dash-balance-card:nth-child(2):before{background:var(--mrj-v6-orange)}
+#accountMenuScreen .dash-balance-card small,#accountMenuScreen .dash-profile-card small{color:#9eafc5;font-weight:750}
+#accountMenuScreen .dash-balance-card strong{color:#f4f7fc;font-size:24px}
+#accountMenuScreen .dash-balance-card button{
+  border:1px solid rgba(66,200,232,.35);border-radius:9px;background:rgba(66,200,232,.1);color:#8be5f4
+}
+#accountMenuScreen .dashboard-grid{gap:13px}
+#accountMenuScreen .dashboard-card{
+  position:relative;min-height:154px;padding:19px;border:1px solid var(--mrj-v6-line);
+  border-radius:14px;background:linear-gradient(145deg,#14243a,#0c1828);
+  color:#eff4fb;text-align:left;box-shadow:0 10px 25px rgba(0,0,0,.17);
+  transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;
+}
+#accountMenuScreen .dashboard-card:after{
+  content:"";position:absolute;right:14px;top:14px;width:6px;height:6px;border-radius:50%;
+  background:var(--mrj-v6-cyan);box-shadow:0 0 12px var(--mrj-v6-cyan);opacity:.75
+}
+#accountMenuScreen .dashboard-card:hover{
+  transform:translateY(-4px);border-color:rgba(66,200,232,.48);
+  background:linear-gradient(145deg,#1a304b,#102039);box-shadow:0 17px 32px rgba(0,0,0,.26)
+}
+#accountMenuScreen .dash-card-icon{
+  display:grid;place-items:center;width:43px;height:43px;margin-bottom:14px;
+  border:1px solid rgba(66,200,232,.26);border-radius:12px;
+  background:rgba(66,200,232,.08);color:#70d8ec;font-size:20px;
+}
+#accountMenuScreen .dashboard-card strong{color:#f6f8fc;font-size:16px}
+#accountMenuScreen .dashboard-card small{color:#9eafc5;line-height:1.55}
+#accountMenuScreen .dashboard-card.gold-card{border-color:rgba(255,145,83,.28);background:linear-gradient(145deg,#30251f,#171b26)}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:rgba(255,145,83,.3);background:rgba(255,113,56,.1);color:#ff9b70}
+#accountMenuScreen .dashboard-footer-banner{
+  border:1px solid rgba(66,200,232,.22);border-radius:12px;
+  background:linear-gradient(100deg,rgba(30,82,111,.28),rgba(19,31,49,.85));
+}
+#rankingScreen .ranking-screen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{
+  color:var(--mrj-v6-text);
+}
+#rankingScreen .ranking-screen{
+  max-width:1250px;margin:26px auto;padding:clamp(15px,2.4vw,28px);
+  border:1px solid var(--mrj-v6-line);border-radius:19px;
+  background:linear-gradient(145deg,#101c2e,#091321);
+  box-shadow:0 24px 65px rgba(0,0,0,.3);
+}
+#rankingScreen .ranking-head h1{color:#f5f7fc}
+#rankingScreen .ranking-head p,#rankingScreen .ranking-note{color:#9eafc5}
+#rankingScreen .ranking-hero{
+  border:1px solid rgba(255,113,56,.25);border-radius:16px;
+  background:radial-gradient(ellipse at 50% 0,rgba(255,113,56,.13),transparent 55%),linear-gradient(145deg,#182941,#0c1829);
+}
+#rankingScreen .ranking-hero-kicker{color:#ffab7c;letter-spacing:2px;font-weight:950}
+#rankingScreen .ranking-podium-card{
+  border:1px solid var(--mrj-v6-line);border-radius:13px;
+  background:linear-gradient(145deg,#1b304b,#101d30);box-shadow:0 12px 25px rgba(0,0,0,.2)
+}
+#rankingScreen .ranking-medal{filter:drop-shadow(0 4px 8px rgba(255,180,70,.22))}
+#rankingScreen .ranking-podium-name{color:#f3f7fc}
+#rankingScreen .ranking-summary{gap:12px}
+#rankingScreen .ranking-stat{
+  border:1px solid var(--mrj-v6-line);border-radius:12px;
+  background:linear-gradient(145deg,#14243a,#0d192a);box-shadow:0 8px 20px rgba(0,0,0,.15)
+}
+#rankingScreen .ranking-stat strong{color:#ffad82}
+#rankingScreen .ranking-tools{
+  margin-top:18px;padding:14px;border:1px solid var(--mrj-v6-line);border-radius:13px;
+  background:#0d1929
+}
+#rankingScreen .ranking-tab{border-radius:8px;color:#aebdd0}
+#rankingScreen .ranking-tab.active{background:rgba(66,200,232,.13);border-color:rgba(66,200,232,.35);color:#a1edfa}
+#rankingScreen .ranking-search{border:1px solid #334861;border-radius:9px;background:#081321}
+#rankingScreen .ranking-search input{color:#f4f7fc}
+#rankingScreen .ranking-table-wrap{border:1px solid var(--mrj-v6-line);border-radius:13px;background:#0e1a2a;overflow:auto}
+#rankingScreen .ranking-table th{background:#172941;color:#91a9c4}
+#rankingScreen .ranking-table td{border-color:rgba(148,170,204,.12);color:#dce5f1}
+#rankingScreen .ranking-table tr:hover td{background:rgba(66,200,232,.055)}
+#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{
+  max-width:1160px;margin:25px auto;padding:clamp(18px,3vw,32px);
+  border:1px solid var(--mrj-v6-line);border-radius:18px;
+  background:linear-gradient(145deg,#101d30,#091321);
+  box-shadow:0 22px 60px rgba(0,0,0,.27);
+}
+#profileScreen>h1,#settingsScreen>h1,#walletScreen>h1{color:#f5f7fc}
+#profileScreen .profile-box,#settingsScreen .settings-box,#walletScreen .wallet-box,#walletScreen .bet-box,
+#premiumScreen .premium-checkout,#spectatorScreen .spectator-box,#waitingRoomScreen .waiting-box{
+  border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#172840,#101d30);box-shadow:0 10px 26px rgba(0,0,0,.17)
+}
+#walletScreen .wallet-grid{gap:13px}
+#walletScreen .wallet-card{
+  border:1px solid rgba(66,200,232,.24);border-radius:12px;
+  background:linear-gradient(145deg,#122b40,#0c1c2e)
+}
+#walletScreen .wallet-card strong{color:#8fe5f1;font-size:25px}
+#walletScreen .bet-box h2{color:#ffad82}
+#walletScreen .bet-box p,#walletScreen .wallet-subtitle{color:#aabbd0;line-height:1.65}
+#walletScreen input,#walletScreen select,#premiumScreen input,#premiumScreen select{
+  border:1px solid #354b66!important;border-radius:9px!important;background:#091626!important;color:#f2f6fc!important
+}
+#walletScreen button,#premiumScreen button{transition:transform .18s,filter .18s}
+#walletScreen button:hover,#premiumScreen button:hover{transform:translateY(-1px);filter:brightness(1.08)}
+#walletScreen .primary-pay,#premiumScreen .primary-pay{
+  border:0!important;border-radius:10px!important;
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;
+  font-weight:950!important;box-shadow:0 9px 22px rgba(255,113,56,.18)
+}
+#premiumScreen .premium-heading h1{color:#f5f7fc}
+#premiumScreen .premium-heading h1 em{color:#ff9868}
+#premiumScreen .premium-kicker{color:#72d9ed;letter-spacing:2.4px}
+#premiumScreen .premium-plan{
+  border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#182b44,#0d192a);color:#f2f6fc
+}
+#premiumScreen .premium-plan strong{color:#ffad82}
+#premiumScreen .premium-plan-featured{
+  border-color:rgba(255,113,56,.65);
+  box-shadow:0 0 0 1px rgba(255,113,56,.12),0 15px 32px rgba(0,0,0,.22)
+}
+#premiumScreen .premium-popular{background:#ff7138;color:#1b1110}
+#tournamentScreen .tournament-hero-stage{
+  background:
+   radial-gradient(ellipse at 75% 40%,rgba(66,200,232,.14),transparent 36%),
+   radial-gradient(ellipse at 12% 90%,rgba(255,113,56,.12),transparent 38%),
+   linear-gradient(125deg,#101e32,#091321 70%,#14243a)!important;
+  border:1px solid var(--mrj-v6-line)!important;border-radius:18px!important;
+  box-shadow:0 24px 65px rgba(0,0,0,.34)!important;overflow:hidden
+}
+#tournamentScreen .japan-sky,#tournamentScreen .japan-sun,#tournamentScreen .japan-mountain,
+#tournamentScreen .japan-pagoda,#tournamentScreen .japan-blossoms{opacity:0!important}
+#tournamentScreen .japan-brand{color:#f4f7fc}
+#tournamentScreen .japan-brand>span{color:#ff9868}
+#tournamentScreen .japan-brand small{color:#73d9ed;letter-spacing:2px}
+#tournamentScreen .japan-hero-copy{z-index:2}
+#tournamentScreen .japan-eyebrow{color:#76dced;letter-spacing:2px}
+#tournamentScreen .japan-hero-copy h1{color:#f4f7fc;text-shadow:none}
+#tournamentScreen .japan-hero-copy h1 b{color:#ff9868}
+#tournamentScreen .japan-ribbon{
+  border:1px solid rgba(66,200,232,.3);border-radius:8px;
+  background:rgba(66,200,232,.08);color:#b4edf5
+}
+#tournamentScreen .japan-hero-copy p{color:#aebdd0}
+#tournamentScreen .japan-board-scene{filter:drop-shadow(0 20px 25px rgba(0,0,0,.35))}
+#tournamentScreen .japan-board{
+  border:5px solid #647c99!important;border-radius:10px!important;
+  background-color:#c6a36a!important;box-shadow:0 0 0 8px rgba(66,200,232,.07),0 18px 45px rgba(0,0,0,.35)!important
+}
+#tournamentScreen .japan-scroll-hint{color:#8da3be}
+#tournamentScreen .japan-continue-note{color:#aabbd0}
+#tournamentScreen .japan-continue{
+  border:0!important;border-radius:10px!important;
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;
+  box-shadow:0 10px 25px rgba(255,113,56,.2)!important
+}
+#tournamentScreen .tournament-top,#tournamentScreen .tournament-create-card,
+#tournamentScreen .tournament-list-card,#tournamentScreen .tournament-detail-card,
+#tournamentScreen .tournament-admin-card,#tournamentScreen .tournament-panel{
+  border-color:var(--mrj-v6-line)!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#15263d,#0e1a2b)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.2)!important
+}
+#tournamentScreen .tournament-top h1,#tournamentScreen .tournament-detail-head h2{color:#f5f7fc!important}
+#tournamentScreen .tournament-top h1{font-size:clamp(25px,3vw,34px)!important}
+#tournamentScreen .tournament-top>div small{color:#72d9ed!important;letter-spacing:2px!important}
+#tournamentScreen .tournament-subtitle{color:#aebdd0!important}
+#tournamentScreen .tournament-stepper{border-color:var(--mrj-v6-line)!important;background:#0c1929!important}
+#tournamentScreen .tournament-stepper button.active,#tournamentScreen .tournament-primary,
+#tournamentScreen .tournament-actions .gold{
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;border:0!important
+}
+#tournamentScreen .tournament-section-title>span{background:linear-gradient(145deg,#64d7e9,#2389ad)!important;color:#071522!important}
+#tournamentScreen .tournament-pill{background:rgba(66,200,232,.1)!important;border-color:rgba(66,200,232,.28)!important;color:#9cebf5!important}
+#tournamentScreen .tournament-item,#tournamentScreen .tournament-stat,
+#tournamentScreen .tournament-player-row,#tournamentScreen .tournament-admin-entry,
+#tournamentScreen .tournament-match{
+  background:#0c1929!important;border-color:var(--mrj-v6-line)!important
+}
+#tournamentScreen .tournament-page button:focus-visible{outline:2px solid var(--mrj-v6-cyan)!important}
+@media(max-width:900px){
+ #landingScreen .landing-hero{grid-template-columns:1fr;text-align:center}
+ #landingScreen .hero-logo{margin:auto}
+ #landingScreen .hero-copy>p{margin-left:auto;margin-right:auto}
+ #landingScreen .hero-features,#landingScreen .hero-actions{justify-content:center}
+ #accountMenuScreen .dashboard-header{flex-wrap:wrap}
+ #accountMenuScreen .dashboard-nav{order:3;width:100%;justify-content:center}
+}
+@media(max-width:650px){
+ #landingScreen .landing-shell{margin:8px;padding:12px;border-radius:15px}
+ #landingScreen .landing-header{flex-wrap:wrap;justify-content:space-between}
+ #landingScreen .landing-nav{order:3;width:100%;justify-content:center}
+ #landingScreen .landing-hero{min-height:0;padding:24px 15px;gap:24px}
+ #landingScreen .hero-logo{transform:scale(.85)}
+ #landingScreen .hero-copy h1{font-size:34px}
+ #accountMenuScreen .dashboard-shell{margin:8px;padding:10px;border-radius:15px}
+ #accountMenuScreen .dashboard-header{justify-content:center}
+ #accountMenuScreen .dashboard-brand{width:100%;text-align:center}
+ #accountMenuScreen .dashboard-nav{gap:4px}
+ #accountMenuScreen .dash-nav{padding:8px 9px;font-size:11px}
+ #accountMenuScreen .dashboard-user{margin:auto}
+ #accountMenuScreen .welcome-card{min-height:170px;padding:22px 16px}
+ #accountMenuScreen .welcome-world{font-size:55px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #accountMenuScreen .dashboard-card{min-height:130px;padding:14px}
+ #rankingScreen .ranking-screen{margin:8px;padding:12px}
+ #profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{margin:8px;padding:15px;border-radius:14px}
+ #tournamentScreen .tournament-hero-stage{min-height:500px!important;padding:24px 15px!important}
+ #tournamentScreen .japan-hero-copy h1{font-size:clamp(38px,12vw,58px)!important}
+ #tournamentScreen .japan-board-scene{transform:scale(.8)}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+ #accountMenuScreen .dashboard-card{min-height:108px}
+ #landingScreen .hero-copy h1{font-size:29px}
+}
+
+</style>
 </body>
 </html>
