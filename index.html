@@ -2252,15 +2252,44 @@ td, th { overflow-wrap: anywhere; }
   </div>
 </section>
 
-<!-- PROFIL -->
-<section id="profileScreen" class="screen">
-    <h1>👤 Mon profil</h1>
-    <div class="profile-box">
-        <div class="profile-row"><span class="profile-label">Pseudo</span><span id="profileUsername" class="profile-value">---</span></div>
-        <div class="profile-row"><span class="profile-label">Email</span><span id="profileEmail" class="profile-value">---</span></div>
-        <div class="profile-row"><span class="profile-label">ID joueur</span><span id="profilePlayerId" class="profile-value">---</span></div>
+<!-- PROFIL JOUEUR MR_JERY -->
+<section id="profileScreen" class="screen mrj-profile-screen">
+  <div class="mrj-profile-heading">
+    <div><span class="mrj-profile-kicker">MR_JERY PLAYER CENTER</span><h1>Profil du joueur</h1><p>Idantite, pèfòmans ak enfòmasyon kont ou.</p></div>
+    <div class="mrj-profile-mark">♟</div>
+  </div>
+  <div class="mrj-profile-hero">
+    <div class="mrj-profile-avatar" id="profileAvatar">♟</div>
+    <div class="mrj-profile-identity">
+      <span class="mrj-profile-kicker">JWÈ MR_JERY</span>
+      <strong id="profileUsername">---</strong>
+      <span id="profileAccountStatus">Kont jwè</span>
     </div>
-    <button class="back-button" id="profileBack">← Retour</button>
+    <div class="mrj-profile-level"><small>NIVO</small><strong id="profileLevel">1</strong></div>
+  </div>
+  <div class="mrj-profile-stats">
+    <div class="mrj-profile-stat"><small>VIKTWA</small><strong id="profileWins">—</strong></div>
+    <div class="mrj-profile-stat"><small>DEFÈT</small><strong id="profileLosses">—</strong></div>
+    <div class="mrj-profile-stat"><small>MATCH JWE</small><strong id="profileMatches">—</strong></div>
+    <div class="mrj-profile-stat"><small>REYISIT</small><strong id="profileWinRate">—</strong></div>
+  </div>
+  <div class="mrj-profile-columns">
+    <div class="mrj-profile-panel">
+      <div class="mrj-profile-panel-title"><span>ENFÒMASYON KONT</span><span class="mrj-profile-live-dot">● AKTIF</span></div>
+      <div class="mrj-profile-info-row"><span>Pseudo</span><strong id="profileUsernameInfo">---</strong></div>
+      <div class="mrj-profile-info-row"><span>Email</span><strong id="profileEmail">---</strong></div>
+      <div class="mrj-profile-info-row"><span>ID jwè</span><strong id="profilePlayerId">---</strong></div>
+      <p class="mrj-profile-note">Pou sekirite kont ou, enfòmasyon koneksyon yo rete pwoteje.</p>
+    </div>
+    <div class="mrj-profile-panel">
+      <div class="mrj-profile-panel-title">BADJ & REYALIZASYON</div>
+      <div class="mrj-profile-achievement"><span class="mrj-profile-achievement-icon">♟</span><div><strong>Jwè MR_JERY</strong><small>Kont kreye sou platfòm nan</small></div></div>
+      <div class="mrj-profile-achievement"><span class="mrj-profile-achievement-icon">🏆</span><div><strong id="profileAchievementTitle">Premye viktwa</strong><small id="profileAchievementText">Jwe yon match pou debloke reyalizasyon</small></div></div>
+      <div class="mrj-profile-history" id="profileHistoryStatus">Istwa match detaye a ap disponib lè sistèm achiv match pèsonèl la konekte.</div>
+    </div>
+  </div>
+  <div class="mrj-profile-footer"><span>Done estatistik yo baze sou klasman ofisyèl MR_JERY.</span><button class="back-button" id="profileBack">← Retounen nan dashboard</button></div>
+  <div id="profileDataStatus" class="mrj-profile-data-status" role="status" aria-live="polite"></div>
 </section>
 
 <!-- PARAMÈTRES -->
@@ -4651,11 +4680,52 @@ document.getElementById("accountPlayBtn").addEventListener("click", function() {
     showScreen("accountMenuScreen");
 });
 
+function refreshMrjPlayerProfile() {
+    const username = currentUsername || "---";
+    const values = {
+        profileUsername: username,
+        profileUsernameInfo: username,
+        profileEmail: currentEmail || "---",
+        profilePlayerId: currentPlayerId || "---"
+    };
+    Object.entries(values).forEach(([id, value]) => {
+        const node = document.getElementById(id);
+        if (node) node.textContent = value;
+    });
+    const player = leaderboardPlayers.find(p => String(p.player_id) === String(currentPlayerId));
+    const stats = {
+        profileWins: player ? Number(player.wins || 0).toLocaleString() : "—",
+        profileLosses: player ? Number(player.losses || 0).toLocaleString() : "—",
+        profileMatches: player ? Number(player.matches_played || 0).toLocaleString() : "—",
+        profileWinRate: player ? Number(player.win_rate || 0).toFixed(1) + "%" : "—",
+        profileLevel: player ? String(Number(player.level || 1)) : "1"
+    };
+    Object.entries(stats).forEach(([id, value]) => {
+        const node = document.getElementById(id);
+        if (node) node.textContent = value;
+    });
+    const avatar = document.getElementById("profileAvatar");
+    if (avatar) avatar.textContent = (username && username !== "---" ? username.trim().charAt(0).toUpperCase() : "♟");
+    const achievementTitle = document.getElementById("profileAchievementTitle");
+    const achievementText = document.getElementById("profileAchievementText");
+    if (player && Number(player.wins || 0) > 0) {
+        if (achievementTitle) achievementTitle.textContent = "Premye viktwa debloke";
+        if (achievementText) achievementText.textContent = Number(player.wins).toLocaleString() + " viktwa anrejistre";
+    } else {
+        if (achievementTitle) achievementTitle.textContent = "Premye viktwa";
+        if (achievementText) achievementText.textContent = "Jwe epi genyen yon match pou debloke l";
+    }
+    const status = document.getElementById("profileDataStatus");
+    if (status) status.textContent = player ? "Estatistik mete ajou · " + (leaderboardPeriod === "all" ? "Tout tan" : "Peryòd klasman an") : "Estatistik yo ap tann done klasman ofisyèl yo.";
+}
 document.getElementById("profileBtn").addEventListener("click", function() {
-    document.getElementById("profileUsername").textContent = currentUsername || "---";
-    document.getElementById("profileEmail").textContent = currentEmail || "---";
-    document.getElementById("profilePlayerId").textContent = currentPlayerId || "---";
+    refreshMrjPlayerProfile();
     showScreen("profileScreen");
+    if (accountConnected && socket && socket.readyState === WebSocket.OPEN) {
+        const status = document.getElementById("profileDataStatus");
+        if (status) status.textContent = "Ap chaje estatistik jwè a...";
+        loadPlayerLeaderboard("all");
+    }
 });
 
 document.getElementById("accountOnlineBtn").addEventListener("click", function() {
@@ -9375,6 +9445,15 @@ body{
  #accountMenuScreen .mrj-welcome-board{width:164px;height:164px;background-size:10px 10px;background-position:5px 5px}
  #accountMenuScreen .mrj-board-stone{width:12px;height:12px}
 }
+</style>
+<style id="mrj-player-profile-v1">
+#profileScreen.mrj-profile-screen{max-width:1180px;margin:24px auto;padding:clamp(18px,3vw,34px);border:1px solid rgba(232,198,111,.22);background:radial-gradient(ellipse at 90% 0,rgba(22,145,218,.12),transparent 34%),linear-gradient(145deg,#0d1c31,#071326 72%);color:#f5f7fb;box-shadow:0 24px 65px rgba(0,0,0,.3)}
+.mrj-profile-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.mrj-profile-heading h1{margin:5px 0;color:#f3d17a;font-size:clamp(25px,3vw,36px);font-weight:950;letter-spacing:-.7px}.mrj-profile-heading p{margin:0;color:#91a4be;font-size:13px}.mrj-profile-kicker{color:#6bbcff;font-size:10px;font-weight:900;letter-spacing:2px}.mrj-profile-mark{font-size:36px;color:#e8c66f;opacity:.8}
+.mrj-profile-hero{display:flex;align-items:center;gap:18px;padding:22px;border:1px solid rgba(232,198,111,.25);background:linear-gradient(110deg,#172b45,#0b192c 75%);box-shadow:inset 3px 0 #d8ad4c;margin-bottom:14px}.mrj-profile-avatar{width:68px;height:68px;flex:0 0 68px;display:grid;place-items:center;border:1px solid #c59a42;background:linear-gradient(145deg,#253e5c,#0b192c);color:#f2ce70;font-size:27px;font-weight:900}.mrj-profile-identity{display:flex;flex-direction:column;gap:5px;min-width:0}.mrj-profile-identity strong{font-size:clamp(20px,3vw,27px);color:#fff;overflow-wrap:anywhere}.mrj-profile-identity>span:last-child{font-size:12px;color:#8fa4be}.mrj-profile-level{margin-left:auto;text-align:center;padding:10px 18px;border:1px solid rgba(232,198,111,.3);background:#0a1728}.mrj-profile-level small{display:block;color:#9eacc2;font-size:9px;letter-spacing:1.5px}.mrj-profile-level strong{display:block;color:#f3d17a;font-size:27px}
+.mrj-profile-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.mrj-profile-stat{padding:17px;border:1px solid #1a3a5a;background:linear-gradient(145deg,#10243b,#09182a)}.mrj-profile-stat small{display:block;color:#8fa4be;font-size:10px;font-weight:850;letter-spacing:1.2px}.mrj-profile-stat strong{display:block;margin-top:7px;color:#f3d17a;font-size:27px;font-weight:950;font-variant-numeric:tabular-nums}
+.mrj-profile-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mrj-profile-panel{padding:20px;border:1px solid #1b3855;background:#0b1a2d;min-width:0}.mrj-profile-panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;color:#f0d17e;font-size:11px;font-weight:900;letter-spacing:1.1px}.mrj-profile-live-dot{color:#66d7a0;font-size:9px}.mrj-profile-info-row{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)}.mrj-profile-info-row span{color:#8fa4be;font-size:12px}.mrj-profile-info-row strong{color:#f5f7fb;font-size:12px;text-align:right;overflow-wrap:anywhere}.mrj-profile-note{margin:14px 0 0;color:#758ba6;font-size:11px;line-height:1.5}.mrj-profile-achievement{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)}.mrj-profile-achievement-icon{width:38px;height:38px;display:grid;place-items:center;background:#142c46;border:1px solid rgba(232,198,111,.25);color:#f0ce76;font-size:18px}.mrj-profile-achievement strong,.mrj-profile-achievement small{display:block}.mrj-profile-achievement strong{font-size:12px;color:#f5f7fb}.mrj-profile-achievement small{margin-top:4px;color:#8fa4be;font-size:10px}.mrj-profile-history{margin-top:13px;padding:12px;background:#081526;border-left:2px solid #328ac4;color:#8297b1;font-size:11px;line-height:1.5}.mrj-profile-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px}.mrj-profile-footer>span,.mrj-profile-data-status{color:#8195af;font-size:10px}.mrj-profile-screen .back-button,#profileScreen .back-button{border:1px solid rgba(232,198,111,.45);border-radius:3px;background:linear-gradient(180deg,#f0d17d,#bd8c35);color:#101827;padding:12px 17px;font-weight:900;cursor:pointer}.mrj-profile-data-status{margin-top:12px;min-height:14px}
+@media(max-width:720px){.mrj-profile-columns{grid-template-columns:1fr}.mrj-profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.mrj-profile-footer{align-items:flex-start;flex-direction:column}}
+@media(max-width:440px){#profileScreen.mrj-profile-screen{margin:12px 8px;padding:15px}.mrj-profile-hero{padding:15px;gap:12px}.mrj-profile-avatar{width:52px;height:52px;flex-basis:52px}.mrj-profile-level{padding:8px 12px}.mrj-profile-stat{padding:13px}.mrj-profile-stat strong{font-size:23px}.mrj-profile-info-row{flex-direction:column;gap:5px}.mrj-profile-info-row strong{text-align:left}}
 </style>
 </body>
 </html>
