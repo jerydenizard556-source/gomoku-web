@@ -8917,5 +8917,153 @@ body{
 }
 
 </style>
+
+<style id="mrj-account-dashboard-v8">
+/* MR_JERY DASHBOARD V8 — premium competitive account home; visual-only */
+#accountMenuScreen.active{display:block!important;background:#080d16!important;min-height:100vh;color:#edf3fb}
+#accountMenuScreen .dashboard-shell{
+  width:min(100% - 36px,1480px);max-width:1480px;margin:18px auto;padding:0 30px 28px;
+  border:1px solid rgba(145,169,199,.16);border-radius:16px;
+  background:linear-gradient(145deg,#0e1928 0%,#091321 58%,#0c1725 100%);
+  box-shadow:0 28px 80px rgba(0,0,0,.38);overflow:hidden
+}
+#accountMenuScreen .dashboard-header{
+  min-height:82px;padding:0 4px;display:flex;align-items:center;gap:25px;
+  border:0;border-bottom:1px solid rgba(145,169,199,.15);border-radius:0;
+  background:transparent;box-shadow:none
+}
+#accountMenuScreen .dashboard-brand{display:flex;align-items:center;gap:10px;white-space:nowrap;color:#f4f7fb;font-size:19px;font-weight:850;letter-spacing:.1px}
+#accountMenuScreen .dashboard-crown{color:#e5a95f;font-size:23px;text-shadow:none}
+#accountMenuScreen .dashboard-brand b{color:#e5a95f}
+#accountMenuScreen .dashboard-nav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;flex-wrap:wrap}
+#accountMenuScreen .dash-nav{
+  min-height:39px;padding:9px 12px;border:1px solid transparent;border-radius:7px;
+  background:transparent;color:#91a3b9;font-size:12px;font-weight:750;
+  transition:background .18s,color .18s,border-color .18s
+}
+#accountMenuScreen .dash-nav.active,#accountMenuScreen .dash-nav:hover{
+  color:#eff5fc;background:rgba(79,157,194,.12);border-color:rgba(91,178,211,.2)
+}
+#accountMenuScreen .dashboard-user{
+  display:flex;align-items:center;gap:10px;min-width:150px;padding:8px 10px;
+  border:1px solid rgba(145,169,199,.16);border-radius:9px;background:#101e2e
+}
+#accountMenuScreen .dash-avatar,#accountMenuScreen .dash-big-avatar{
+  display:grid;place-items:center;flex:none;border:1px solid rgba(229,169,95,.3);
+  border-radius:50%;background:linear-gradient(145deg,#263b50,#132235);color:#e5b779
+}
+#accountMenuScreen .dash-avatar{width:34px;height:34px;font-size:17px}
+#accountMenuScreen .dashboard-user strong,#accountMenuScreen .dash-profile-card strong{display:block;color:#f1f5fa;font-size:12px}
+#accountMenuScreen .dashboard-user small,#accountMenuScreen .dash-profile-card small{display:block;margin-top:3px;color:#8295ad;font-size:10px}
+#accountMenuScreen .dash-user-more{margin-left:auto;border:0;background:transparent;color:#9db0c6}
+#accountMenuScreen .dashboard-main{max-width:1300px;margin:0 auto;padding:28px 0 0}
+#accountMenuScreen .welcome-card{
+  position:relative;display:flex;align-items:center;justify-content:space-between;min-height:235px;
+  padding:35px 42px;border:1px solid rgba(92,164,198,.24);border-radius:13px;overflow:hidden;
+  background:radial-gradient(ellipse at 78% 50%,rgba(55,144,177,.2),transparent 35%),
+    linear-gradient(110deg,#14263b 0%,#102036 56%,#0c1929 100%);
+  box-shadow:0 18px 42px rgba(0,0,0,.22)
+}
+#accountMenuScreen .welcome-card:after{
+  content:"";position:absolute;right:7%;top:50%;width:205px;aspect-ratio:1;transform:translateY(-50%) rotate(0deg);
+  border:1px solid rgba(121,174,197,.25);border-radius:12px;
+  background-color:rgba(13,29,46,.65);
+  background-image:linear-gradient(rgba(126,169,191,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(126,169,191,.2) 1px,transparent 1px);
+  background-size:20% 20%;box-shadow:inset 0 0 0 8px rgba(5,13,23,.35),0 18px 40px rgba(0,0,0,.25)
+}
+#accountMenuScreen .welcome-card:before{
+  content:"";position:absolute;z-index:1;right:calc(7% + 45px);top:calc(50% - 54px);width:14px;height:14px;border-radius:50%;
+  background:#e9edf3;box-shadow:40px 40px 0 #111d2d,80px 0 0 #e9edf3,120px 80px 0 #111d2d,40px 120px 0 #e9edf3;
+}
+#accountMenuScreen .welcome-copy{position:relative;z-index:2;max-width:650px}
+#accountMenuScreen .welcome-kicker{margin-bottom:13px;color:#7dc8df;font-size:10px;font-weight:900;letter-spacing:2.4px}
+#accountMenuScreen .welcome-copy h1{margin:0;color:#f4f7fb;font-size:clamp(32px,4vw,49px);font-weight:900;line-height:1.05;letter-spacing:-1.8px}
+#accountMenuScreen .welcome-copy h1 span{color:#e6a960}
+#accountMenuScreen .welcome-copy p{margin:12px 0 17px;color:#aab9ca;font-size:14px;letter-spacing:1.2px}
+#accountMenuScreen .welcome-line{width:52px;height:3px;margin:0 0 14px;border-radius:2px;background:linear-gradient(90deg,#e7b36f,#5fc5dd)}
+#accountMenuScreen .welcome-copy>strong{color:#dce7f2;font-size:13px;font-weight:700}
+#accountMenuScreen .welcome-world{display:none}
+#accountMenuScreen .dashboard-balance-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:17px 0}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+  position:relative;display:flex;align-items:center;gap:14px;min-height:91px;padding:18px 20px;
+  border:1px solid rgba(145,169,199,.16);border-radius:10px;
+  background:linear-gradient(145deg,#14243a,#0e1b2c);box-shadow:0 10px 25px rgba(0,0,0,.15)
+}
+#accountMenuScreen .dash-balance-card{display:block}
+#accountMenuScreen .dash-balance-card small{display:block;color:#91a5bc;font-size:11px;font-weight:750;letter-spacing:.7px}
+#accountMenuScreen .dash-balance-card strong{display:block;margin-top:7px;color:#e9f1f8;font-size:23px;font-weight:850;font-variant-numeric:tabular-nums}
+#accountMenuScreen .dash-balance-card button{
+  position:absolute;right:17px;top:50%;transform:translateY(-50%);width:34px;height:34px;
+  border:1px solid rgba(104,192,213,.32);border-radius:8px;background:rgba(74,164,190,.12);
+  color:#91e0ed;font-size:20px;font-weight:600
+}
+#accountMenuScreen .dash-balance-card button:hover{background:rgba(74,164,190,.23)}
+#accountMenuScreen .dash-profile-card{background:linear-gradient(145deg,#192b42,#111e30)}
+#accountMenuScreen .dash-big-avatar{width:48px;height:48px;font-size:22px}
+#accountMenuScreen .dashboard-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+#accountMenuScreen .dashboard-card{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  min-height:158px;padding:19px 17px;text-align:left;
+  border:1px solid rgba(145,169,199,.16);border-radius:10px;
+  background:linear-gradient(145deg,#14243a,#0e1a2a);color:#edf3fa;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);transition:transform .18s,border-color .18s,background .18s
+}
+#accountMenuScreen .dashboard-card:hover{transform:translateY(-3px);border-color:rgba(100,192,218,.45);background:linear-gradient(145deg,#1a3049,#102136)}
+#accountMenuScreen .dashboard-card .dash-card-icon{
+  display:grid;place-items:center;width:39px;height:39px;margin-bottom:14px;
+  border:1px solid rgba(104,183,210,.2);border-radius:9px;background:rgba(67,145,177,.1);
+  color:#80d3e6;font-size:19px
+}
+#accountMenuScreen .dashboard-card strong{margin-bottom:7px;color:#f0f4f9;font-size:14px;font-weight:850}
+#accountMenuScreen .dashboard-card small{color:#91a4ba;font-size:11px;line-height:1.55;font-weight:500}
+#accountMenuScreen .dashboard-card.gold-card{border-color:rgba(224,169,99,.25);background:linear-gradient(145deg,#2a2b2a,#171f2b)}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:rgba(230,177,109,.25);background:rgba(219,159,83,.1);color:#e8b36f}
+#accountMenuScreen .dashboard-card.gold-card:hover{border-color:rgba(230,177,109,.55)}
+#accountMenuScreen .dashboard-footer-banner{
+  display:flex;align-items:center;gap:13px;margin-top:17px;padding:16px 19px;
+  border:1px solid rgba(145,169,199,.15);border-radius:9px;background:#101e2e
+}
+#accountMenuScreen .dashboard-footer-banner>span{color:#e4aa63;font-size:21px}
+#accountMenuScreen .dashboard-footer-banner strong{flex:1;color:#c4d1df;font-size:12px;font-weight:700}
+#accountMenuScreen .dashboard-footer-banner button{
+  padding:9px 13px;border:1px solid rgba(224,120,105,.3);border-radius:7px;
+  background:rgba(224,103,91,.09);color:#f0a49a;font-size:11px;font-weight:800
+}
+#accountMenuScreen .dashboard-footer-banner button:hover{background:rgba(224,103,91,.17)}
+#accountMenuScreen button:focus-visible{outline:2px solid #73d2e6!important;outline-offset:3px}
+@media(max-width:1120px){
+ #accountMenuScreen .dashboard-shell{padding:0 20px 22px}
+ #accountMenuScreen .dashboard-header{gap:13px;flex-wrap:wrap;padding:14px 2px}
+ #accountMenuScreen .dashboard-nav{order:3;width:100%;justify-content:flex-start}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ #accountMenuScreen .dashboard-shell{width:calc(100% - 16px);margin:8px auto;padding:0 12px 15px;border-radius:12px}
+ #accountMenuScreen .dashboard-header{gap:12px}
+ #accountMenuScreen .dashboard-brand{font-size:17px}
+ #accountMenuScreen .dashboard-user{margin-left:auto;min-width:0}
+ #accountMenuScreen .dashboard-nav{gap:4px;overflow-x:auto;flex-wrap:nowrap;padding:2px 0 7px}
+ #accountMenuScreen .dash-nav{flex:none;padding:8px 9px;font-size:11px}
+ #accountMenuScreen .dashboard-main{padding-top:15px}
+ #accountMenuScreen .welcome-card{min-height:205px;padding:25px 21px}
+ #accountMenuScreen .welcome-card:after{right:-40px;width:150px;opacity:.45}
+ #accountMenuScreen .welcome-card:before{right:5px;opacity:.45}
+ #accountMenuScreen .welcome-copy h1{font-size:34px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{min-height:82px;padding:14px}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #accountMenuScreen .dashboard-card{min-height:142px;padding:14px}
+ #accountMenuScreen .dashboard-footer-banner{flex-wrap:wrap}
+ #accountMenuScreen .dashboard-footer-banner strong{min-width:calc(100% - 45px)}
+ #accountMenuScreen .dashboard-footer-banner button{margin-left:auto}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+ #accountMenuScreen .dashboard-card{min-height:112px}
+ #accountMenuScreen .welcome-copy h1{font-size:29px}
+}
+</style>
+
 </body>
 </html>
