@@ -5466,7 +5466,7 @@ function connectServer(callback) {
                     onlineConnectionMode="player"; onlinePlayer=Number(data.player); onlineRoom=data.room; activeTournamentMatchRoom=data.room; tournamentVoiceApproved=false;
                     onlineSessionToken=data.session_token || null; onlineGameOver=false; onlineDraw=false; onlineWinner=null;
                     document.getElementById("gameRoomCode").textContent=data.room;
-                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); showTournamentMatchComms(true); renderTournamentMatchChat([]);
+                    showScreen("onlineGameScreen"); createBoard(document.getElementById("onlineBoard"),onlineClick); startOnlineDisplayTimer(); joinTournamentCameraRoom(onlineRoom); showTournamentMatchComms(true); if(onlineConnectionMode!=="spectator")startTournamentVoice().catch(e=>console.warn("Auto voice:",e)); showTournamentMatchComms(true); startTournamentVoice().catch(e=>console.warn("Auto voice:",e)); renderTournamentMatchChat([]);
                     tournamentNotice("Ou antre nan match tournoi a.", true); return;
                 }
 
@@ -8208,19 +8208,19 @@ async function handleTournamentVoiceSignal(data){
 }
 async function startTournamentVoice(){
   if(!activeTournamentMatchRoom||!socket||socket.readyState!==WebSocket.OPEN){tournamentVoiceStatus("Koneksyon match la poko pare.");return;}
-  if(tournamentLocalAudioStream){toggleTournamentVoiceMute();return;}
+  if(tournamentLocalAudioStream){return;}
   try{
     tournamentLocalAudioStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-    tournamentVoiceMuted=true;
-    const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)track.enabled=false;
+    tournamentVoiceMuted=false;
+    const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)track.enabled=true;
     joinTournamentVoiceRoom();
     for(const pc of tournamentVoicePeers.values()){if(pc.__audioSender&&track)await pc.__audioSender.replaceTrack(track);}
     const start=document.getElementById("onlineTournamentVoiceStart"),mute=document.getElementById("onlineTournamentVoiceMute"),stop=document.getElementById("onlineTournamentVoiceStop");
     if(start)start.style.display="none";
-    if(mute){mute.disabled=false;mute.style.display="inline-flex";mute.textContent="🔊 Retire silans";}
+    if(mute){mute.disabled=false;mute.style.display="inline-flex";mute.textContent="🔇 Mete sou silans";}
     if(stop)stop.disabled=false;
-    socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:true}));
-    tournamentVoiceStatus("Mikwo pare, li sou silans. Peze « Retire silans » pou pale.");
+    socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:false}));
+    tournamentVoiceStatus("🎙️ Mikwo aktif. Advèsè ou ka tande w.");
   }catch(error){
     tournamentLocalAudioStream=null;
     tournamentVoiceStatus(error?.name==="NotAllowedError"?"Navigatè a pa gen pèmisyon pou itilize mikwo a.":"Mikwo a pa disponib. Verifye aparèy la ak pèmisyon navigatè a.");
