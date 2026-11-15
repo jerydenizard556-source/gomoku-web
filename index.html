@@ -4537,6 +4537,8 @@ let mrjChatBannerTimer = null;
 try { mrjChatBannerEnabled = localStorage.getItem("mrjChatBannerEnabled") !== "false"; } catch(e) {}
 
 let onlineBoardState = {};
+let lastRenderedOnlineBoard = Object.create(null);
+let lastRenderedOnlineBoardElement = null;
 let onlinePlayersState = {};
 
 let onlineTurn = 1;
@@ -5704,6 +5706,14 @@ function connectServer(callback) {
                     return;
                 }
 
+                /* Timer ticks are intentionally separate from the full board state. */
+                if (data.type === "timer_update") {
+                    onlineBlackTime = Number.isFinite(Number(data.black_time)) ? Number(data.black_time) : onlineBlackTime;
+                    onlineRedTime = Number.isFinite(Number(data.red_time)) ? Number(data.red_time) : onlineRedTime;
+                    updateOnlineTimers();
+                    return;
+                }
+
                 /* ==================================
                    ÉTAT DU JEU
                 ================================== */
@@ -6186,6 +6196,11 @@ function renderOnlineState() {
         return;
     }
 
+    if (lastRenderedOnlineBoardElement !== boardElement) {
+        lastRenderedOnlineBoard = Object.create(null);
+        lastRenderedOnlineBoardElement = boardElement;
+    }
+
     for (
         let row = 0;
         row < BOARD_SIZE;
@@ -6211,17 +6226,16 @@ function renderOnlineState() {
             const key =
                 row + "," + col;
 
-            cell.innerHTML = "";
-
-            if (
-                onlineBoardState[key]
-            ) {
-
-                drawStone(
-                    cell,
-                    onlineBoardState[key]
-                );
+            const stone = onlineBoardState[key] || null;
+            if (lastRenderedOnlineBoard[key] === stone) {
+                continue;
             }
+
+            cell.innerHTML = "";
+            if (stone) {
+                drawStone(cell, stone);
+            }
+            lastRenderedOnlineBoard[key] = stone;
         }
     }
 
