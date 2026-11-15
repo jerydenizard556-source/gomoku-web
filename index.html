@@ -7588,7 +7588,7 @@ function sendTournamentMatchChat(){
 }
 
 function tournamentCameraStatus(message){const el=document.getElementById("onlineTournamentCameraStatus");if(el)el.textContent=message;}
-function tournamentCameraSend(to,signalType,payload){if(!socket||socket.readyState!==WebSocket.OPEN||!activeTournamentMatchRoom)return;socket.send(JSON.stringify({type:"camera_signal",room:activeTournamentMatchRoom,to,signal_type:signalType,payload}));}
+function tournamentCameraSend(to,signalType,payload){if(!socket||socket.readyState!==WebSocket.OPEN||!activeTournamentMatchRoom){console.warn("[MRJ-CAMERA] signal not sent",signalType,"socket/room unavailable");return;}console.info("[MRJ-CAMERA] signal sent",signalType,"to",to);socket.send(JSON.stringify({type:"camera_signal",room:activeTournamentMatchRoom,to,signal_type:signalType,payload}));}
 function closeTournamentCameraPeer(peerId){const pc=tournamentCameraPeers.get(String(peerId));if(!pc)return;try{pc.close();}catch(e){}tournamentCameraPeers.delete(String(peerId));document.getElementById("tournament-camera-"+String(peerId))?.remove();}
 function closeTournamentCamera(){
   if(activeTournamentMatchRoom&&socket&&socket.readyState===WebSocket.OPEN&&tournamentCameraJoined)socket.send(JSON.stringify({type:"camera_leave",room:activeTournamentMatchRoom}));
@@ -7609,8 +7609,11 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
   // Register the peer and install every event handler before awaiting anything.
   // A remote offer/track can arrive while replaceTrack is pending on iOS Safari.
   tournamentCameraPeers.set(peerId,pc);
-  pc.onicecandidate=e=>{if(e.candidate)tournamentCameraSend(peerId,"ice",e.candidate.toJSON());};
+  pc.onicecandidate=e=>{if(e.candidate){const c=e.candidate;console.info("[MRJ-CAMERA] local ICE candidate",peerId,c.type||"unknown",c.protocol||"");tournamentCameraSend(peerId,"ice",c.toJSON());}else console.info("[MRJ-CAMERA] ICE gathering complete",peerId);};
   pc.ontrack=e=>{
+    console.info("[MRJ-CAMERA] remote track received",peerId,e.track?.kind,e.track?.readyState,"streams",e.streams?.length||0);
+    e.track?.addEventListener("mute",()=>console.warn("[MRJ-CAMERA] remote track muted",peerId));
+    e.track?.addEventListener("unmute",()=>console.info("[MRJ-CAMERA] remote track unmuted",peerId));
     // Safari/iOS may deliver a streamless track. Build our own stable MediaStream
     // instead of depending on e.streams[0] being populated.
     if(e.track&& !pc.__remoteStream.getTracks().some(track=>track.id===e.track.id)){
@@ -7638,15 +7641,18 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
     playRemoteVideo();
   };
   pc.onsignalingstatechange=()=>{
+    console.info("[MRJ-CAMERA] signaling state",peerId,pc.signalingState);
     if(pc.signalingState==="stable"&&pc.__cameraRenegotiatePending)renegotiateTournamentCameraPeer(peerId,pc);
   };
   pc.oniceconnectionstatechange=()=>{
+    console.info("[MRJ-CAMERA] ICE state",peerId,pc.iceConnectionState,"gathering",pc.iceGatheringState);
     if(pc.iceConnectionState==="failed"&&!pc.__iceRestartAttempted){
       pc.__iceRestartAttempted=true;
       try{pc.restartIce();renegotiateTournamentCameraPeer(peerId,pc);}catch(error){console.warn("Camera ICE restart:",error);}
     }
   };
   pc.onconnectionstatechange=()=>{
+    console.info("[MRJ-CAMERA] peer connection state",peerId,pc.connectionState);
     if(pc.connectionState==="closed")closeTournamentCameraPeer(peerId);
     else if(pc.connectionState==="connected"){pc.__iceRestartAttempted=false;tournamentCameraStatus("Kamera konekte. W ap resevwa videyo lòt patisipan yo.");}
   };
@@ -7689,14 +7695,16 @@ async function handleTournamentCameraSignal(data){
   return pc.__signalQueue;
 }
 async function processTournamentCameraSignal(data,peerId,pc){
+  console.info("[MRJ-CAMERA] signal received",data.signal_type,"from",peerId,"signaling",pc.signalingState,"ICE",pc.iceConnectionState);
   if(data.signal_type==="ready"){
     await renegotiateTournamentCameraPeer(peerId,pc);
     return;
   }
   if(data.signal_type==="description"){
     const description=data.payload;if(!description||!description.type)return;
+    console.info("[MRJ-CAMERA] applying remote SDP",peerId,description.type);
     await pc.setRemoteDescription(description);
-    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("Camera ICE:",e);}}
+    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("[MRJ-CAMERA] buffered ICE add failed",peerId,e);}}
     pc.__pendingIce=[];
     if(description.type==="offer"){
       const answer=await pc.createAnswer();await pc.setLocalDescription(answer);
@@ -7706,7 +7714,7 @@ async function processTournamentCameraSignal(data,peerId,pc){
     try{
       if(pc.remoteDescription)await pc.addIceCandidate(data.payload);
       else pc.__pendingIce.push(data.payload);
-    }catch(e){console.warn("Camera ICE:",e);}
+    }catch(e){console.warn("[MRJ-CAMERA] ICE add failed",peerId,e);}
   }
 }
 async function startTournamentCamera(){
