@@ -8741,5 +8741,181 @@ body{
 }
 
 </style>
+<style id="mrj-homepage-refinement-v7">
+
+/* MR_JERY HOMEPAGE REFINEMENT V7 — clean competitive, not cartoon */
+#landingScreen.active{background:#080d16}
+#landingScreen .landing-shell{
+  width:min(100% - 36px,1420px);max-width:1420px;min-height:calc(100vh - 36px);
+  margin:18px auto;padding:0 34px 24px;border:1px solid rgba(155,177,207,.13);
+  border-radius:18px;background:
+    radial-gradient(ellipse at 78% 28%,rgba(45,105,145,.13),transparent 34%),
+    linear-gradient(145deg,#0d1726 0%,#09111d 60%,#0c1725 100%);
+  box-shadow:0 26px 80px rgba(0,0,0,.34);
+}
+#landingScreen .landing-header{
+  height:78px;min-height:78px;padding:0 2px;border:0;border-bottom:1px solid rgba(155,177,207,.13);
+  border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;
+}
+#landingScreen .brand-mini{font-size:19px;letter-spacing:.2px;color:#f3f6fa}
+#landingScreen .brand-crown{font-size:22px;color:#e4a85d;text-shadow:none}
+#landingScreen .brand-mini b{color:#e4a85d}
+#landingScreen .landing-nav{gap:6px}
+#landingScreen .nav-link{
+  padding:10px 14px;border:0;border-radius:7px;color:#98a8bc;
+  font-size:13px;font-weight:700;transition:background .18s,color .18s;
+}
+#landingScreen .nav-link.active,#landingScreen .nav-link:hover{
+  color:#f4f7fb;background:rgba(110,174,211,.1);border:0;
+}
+#landingScreen .language-button{
+  height:39px;border:1px solid rgba(155,177,207,.2);border-radius:8px;
+  background:#111e2e;color:#dce6f2;font-size:12px;
+}
+#landingScreen .landing-hero{
+  min-height:540px;height:auto;margin:0;padding:58px 3.5%;
+  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:6%;
+  border:0;border-radius:0;background:transparent;box-shadow:none;
+}
+#landingScreen .world-map{display:none}
+#landingScreen .hero-copy{max-width:690px;grid-column:1;grid-row:1}
+#landingScreen .hero-copy:before{
+  content:"MR_JERY  /  ONLINE STRATEGY ARENA";
+  display:inline-flex;align-items:center;margin-bottom:24px;padding:8px 11px;
+  border:1px solid rgba(92,181,215,.23);border-radius:5px;
+  background:rgba(55,139,171,.08);color:#7ec6dd;
+  font-size:10px;font-weight:850;letter-spacing:2px;
+}
+#landingScreen .hero-copy h1{
+  max-width:650px;margin:0 0 18px;color:#f3f6fa;
+  font-size:clamp(40px,5.1vw,66px);font-weight:850;line-height:1.04;
+  letter-spacing:-2.7px;
+}
+#landingScreen .hero-copy h1 em{color:#e6a65d;font-style:normal}
+#landingScreen .hero-copy>p{
+  max-width:570px;color:#aab8c9;font-size:16px;line-height:1.8;font-weight:400;
+}
+#landingScreen .hero-features{gap:9px;margin:25px 0 29px}
+#landingScreen .hero-features span{
+  padding:8px 10px;border:1px solid rgba(155,177,207,.14);border-radius:6px;
+  background:rgba(18,31,48,.7);color:#b8c5d4;font-size:11px;
+}
+#landingScreen .hero-features b{font-size:11px;font-weight:650}
+#landingScreen .hero-actions{gap:11px;margin-top:0}
+#landingScreen .hero-btn{
+  min-width:180px;min-height:48px;padding:13px 20px;border-radius:7px;
+  font-size:13px;font-weight:800;letter-spacing:.15px;
+}
+#landingScreen .hero-btn.gold{
+  background:linear-gradient(135deg,#edb66e,#d88a43);color:#171a20;
+  border:1px solid #f1c58c;box-shadow:0 8px 22px rgba(216,138,67,.15);
+}
+#landingScreen .hero-btn.outline{
+  border:1px solid rgba(170,192,215,.3);background:#111e2e;color:#e7edf5;
+}
+#landingScreen .hero-btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+#landingScreen .about-pill{
+  margin:18px 0 0;padding:8px 0;border:0;border-radius:0;
+  background:transparent;color:#8fa2b8;font-size:12px;
+}
+#landingScreen .about-pill:hover{color:#e6a65d}
+#landingScreen .hero-logo{
+  grid-column:2;grid-row:1;align-self:center;justify-self:center;
+  width:min(100%,390px);min-height:390px;padding:32px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1px solid rgba(127,165,195,.2);border-radius:16px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(54,133,167,.17),transparent 55%),
+    linear-gradient(145deg,#14243a,#0b1523 72%);
+  box-shadow:0 24px 55px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.04);
+  filter:none;position:relative;
+}
+#landingScreen .hero-logo:before{
+  content:"THE GOMOKU BOARD";
+  position:absolute;top:19px;left:22px;color:#849bb2;
+  font-size:9px;font-weight:850;letter-spacing:2px;
+}
+#landingScreen .hero-logo:after{
+  content:"THINK AHEAD. PLAY SMART.";
+  position:absolute;bottom:19px;color:#9aabbd;
+  font-size:9px;font-weight:800;letter-spacing:2.1px;
+}
+#landingScreen .hero-logo .logo-crown,#landingScreen .hero-logo .logo-title{display:none}
+#landingScreen .hero-logo .logo-ring{
+  width:min(100%,290px);height:auto;aspect-ratio:1;margin:0;
+  border:1px solid rgba(132,178,204,.28);border-radius:12px;
+  background:linear-gradient(145deg,#172a40,#0c1929);
+  box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 0 0 7px rgba(5,12,21,.38);
+}
+#landingScreen .hero-logo .logo-board-mini{
+  position:relative;width:82%;height:82%;padding:0;display:block;
+  border:0;background-color:#152b40;
+  background-image:
+    linear-gradient(rgba(130,172,196,.36) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(130,172,196,.36) 1px,transparent 1px);
+  background-size:20% 20%;background-position:center;
+}
+#landingScreen .hero-logo .logo-board-mini i{
+  position:absolute;width:19px;height:19px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f8fbff,#aab8c8 62%,#64748b);
+  box-shadow:0 3px 7px rgba(0,0,0,.48);transform:translate(-50%,-50%);
+}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(1){left:20%;top:20%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(2){left:40%;top:40%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(3){left:60%;top:20%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(4){left:60%;top:60%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(5){left:80%;top:80%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(6){left:20%;top:80%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .landing-features{
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:0 0 20px;
+  border:0;background:transparent;
+}
+#landingScreen .landing-features>div{
+  min-height:128px;padding:18px 14px;text-align:left;
+  border:1px solid rgba(155,177,207,.14);border-radius:9px;
+  background:linear-gradient(145deg,rgba(20,36,55,.92),rgba(12,23,37,.95));
+  box-shadow:none;transition:border-color .18s,transform .18s;
+}
+#landingScreen .landing-features>div:hover{transform:translateY(-3px);border-color:rgba(111,187,215,.38)}
+#landingScreen .landing-features span{font-size:19px;color:#e5aa68}
+#landingScreen .landing-features h3{margin:9px 0 6px;color:#e8edf4;font-size:13px;font-weight:800}
+#landingScreen .landing-features p{font-size:11px;line-height:1.55;color:#8fa0b4}
+#landingScreen .landing-footer{
+  height:58px;flex-direction:row;justify-content:space-between;padding:0 4px;
+  border-top:1px solid rgba(155,177,207,.13);background:transparent;
+}
+#landingScreen .landing-footer span{color:#c4d0df;font-size:12px;font-weight:750}
+#landingScreen .landing-footer small{color:#71849a;font-size:10px;letter-spacing:1px}
+@media(max-width:900px){
+ #landingScreen .landing-shell{width:calc(100% - 20px);margin:10px;padding:0 20px 18px}
+ #landingScreen .landing-hero{min-height:0;padding:45px 2%;grid-template-columns:1fr;gap:34px}
+ #landingScreen .hero-copy{grid-column:1;grid-row:2;text-align:center;margin:auto}
+ #landingScreen .hero-copy:before{margin:0 auto 20px}
+ #landingScreen .hero-copy>p{margin-left:auto;margin-right:auto}
+ #landingScreen .hero-features,#landingScreen .hero-actions{justify-content:center}
+ #landingScreen .hero-logo{grid-column:1;grid-row:1;width:min(100%,340px);min-height:340px}
+ #landingScreen .landing-features{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #landingScreen .landing-features>div:last-child{grid-column:1/-1}
+}
+@media(max-width:560px){
+ #landingScreen .landing-shell{width:100%;margin:0;padding:0 15px 14px;border-radius:0;border-left:0;border-right:0}
+ #landingScreen .landing-header{height:auto;min-height:66px;flex-wrap:wrap;padding:12px 0}
+ #landingScreen .brand-mini{font-size:16px}
+ #landingScreen .landing-nav{display:flex;order:3;width:100%;justify-content:center;margin:0}
+ #landingScreen .nav-link{padding:8px 10px;font-size:11px}
+ #landingScreen .language-button{height:34px;font-size:11px}
+ #landingScreen .landing-hero{padding:28px 0 32px;gap:28px}
+ #landingScreen .hero-logo{width:min(100%,280px);min-height:280px;padding:25px}
+ #landingScreen .hero-logo .logo-ring{width:100%}
+ #landingScreen .hero-copy h1{font-size:clamp(34px,10vw,46px);letter-spacing:-1.7px}
+ #landingScreen .hero-copy>p{font-size:14px}
+ #landingScreen .hero-actions{display:grid;grid-template-columns:1fr}
+ #landingScreen .hero-btn{width:100%;min-width:0}
+ #landingScreen .landing-features{grid-template-columns:1fr 1fr;gap:8px}
+ #landingScreen .landing-features>div{min-height:112px;padding:13px 11px}
+ #landingScreen .landing-footer{height:auto;min-height:55px;gap:8px;flex-wrap:wrap}
+}
+
+</style>
 </body>
 </html>
