@@ -5787,7 +5787,8 @@ function connectServer(callback) {
                     onlineLastMove =
                         data.last_move ||
                         null;
-                    if(activeTournamentMatchRoom){renderTournamentMatchChat(data.chat||[]);observeMrjChatMessages(data.chat||[]);}
+                    if(activeTournamentMatchRoom)renderTournamentMatchChat(data.chat||[]);
+                    observeMrjChatMessages(data.chat||[]);
                     const incomingSize = Array.isArray(data.board) && data.board.length ? data.board.length : BOARD_SIZE;
                     if (incomingSize >= 13 && incomingSize <= 20 && incomingSize !== BOARD_SIZE) {
                         BOARD_SIZE = incomingSize;
@@ -7612,11 +7613,12 @@ function showMrjChatBanner(message){
   mrjChatBannerTimer=setTimeout(dismissMrjChatBanner,6500);
 }
 function observeMrjChatMessages(messages){
-  if(!Array.isArray(messages)||!messages.length)return;
-  const latest=messages[messages.length-1];
-  const fingerprint=[latest.sender||latest.username||"",latest.time||"",latest.text||latest.message||""].join("|");
+  const list=Array.isArray(messages)?messages:[];
+  const latest=list.length?list[list.length-1]:null;
+  const fingerprint=latest?[latest.sender||latest.username||"",latest.time||"",latest.text||latest.message||""].join("|"):"__empty__";
   if(mrjLastChatFingerprint===null){mrjLastChatFingerprint=fingerprint;return;}
-  if(fingerprint!==mrjLastChatFingerprint){mrjLastChatFingerprint=fingerprint;showMrjChatBanner(latest);}
+  if(latest&&fingerprint!==mrjLastChatFingerprint){mrjLastChatFingerprint=fingerprint;showMrjChatBanner(latest);}
+  else if(!latest)mrjLastChatFingerprint="__empty__";
 }
 document.addEventListener("click",function(event){
   if(event.target.closest("#mrjChatBannerClose"))dismissMrjChatBanner();
