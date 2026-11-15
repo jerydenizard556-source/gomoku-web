@@ -337,6 +337,15 @@ h1 {
 .mrj-reaction-bar button:disabled{opacity:.45;cursor:not-allowed}
 .mrj-reaction-feed{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;min-height:30px}
 .mrj-reaction-feed span{padding:5px 9px;border-radius:999px;background:#172b45;color:#fff;font-size:12px}
+#mrjChatBanner{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99999;width:min( min(92vw,680px), calc(100vw - 24px));pointer-events:none}
+#mrjChatBanner[hidden]{display:none}
+.mrj-chat-banner-card{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid rgba(245,206,106,.75);border-radius:13px;background:linear-gradient(110deg,rgba(9,25,48,.98),rgba(31,23,48,.98));box-shadow:0 12px 35px rgba(0,0,0,.38);color:#fff;pointer-events:auto;animation:mrjBannerIn .22s ease-out}
+.mrj-chat-banner-copy{min-width:0;flex:1;overflow-wrap:anywhere}
+.mrj-chat-banner-copy strong{display:block;color:#f5ce6a;font-size:12px;margin-bottom:3px}
+.mrj-chat-banner-copy span{display:block;font-size:13px;line-height:1.35}
+.mrj-chat-banner-close{flex:0 0 auto;border:0;border-radius:8px;background:rgba(255,255,255,.12);color:#fff;padding:6px 10px;font-size:18px;cursor:pointer}
+.mrj-chat-banner-toggle{border:1px solid #344a68;border-radius:9px;background:#10233d;color:#e8eef8;padding:6px 9px;font-size:11px;cursor:pointer}
+@keyframes mrjBannerIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 .tournament-comms-voice>strong{color:#f3f5fa;font-size:14px}
 .tournament-voice-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .tournament-voice-controls button{min-height:39px;font-size:12px;padding:8px}
@@ -2639,8 +2648,9 @@ td, th { overflow-wrap: anywhere; }
 
     <div id="onlineBoard" class="board-area"></div>
 
+    <div id="mrjChatBanner" hidden role="status" aria-live="polite"><div class="mrj-chat-banner-card"><div class="mrj-chat-banner-copy"><strong id="mrjChatBannerSender">Nouvo mesaj</strong><span id="mrjChatBannerText"></span></div><button id="mrjChatBannerClose" class="mrj-chat-banner-close" type="button" aria-label="Fèmen notifikasyon">×</button></div></div>
     <section id="tournamentMatchComms" class="tournament-match-comms" style="display:none" aria-label="Chat ak vwa pandan match tournoi">
-      <div class="tournament-comms-heading"><div><strong>💬 Kominikasyon match la</strong><small>Chat ak vwa pandan konpetisyon an</small></div><span id="tournamentCommsRoom"></span></div>
+      <div class="tournament-comms-heading"><div><strong>💬 Kominikasyon match la</strong><small>Chat ak vwa pandan konpetisyon an</small></div><span id="tournamentCommsRoom"></span><button id="mrjChatBannerToggle" class="mrj-chat-banner-toggle" type="button" aria-pressed="true">🔔 Banniere: ON</button></div>
       <div class="tournament-comms-grid">
         <div class="tournament-comms-chat">
           <div id="onlineTournamentChatMessages" class="tournament-chat-messages" aria-live="polite"><p class="tournament-note">Mesaj match la ap parèt la.</p></div>
@@ -4521,6 +4531,10 @@ function clearAuthRequestTimeout() {
 
 let onlinePlayer = null;
 let onlineRoom = null;
+let mrjChatBannerEnabled = true;
+let mrjLastChatFingerprint = null;
+let mrjChatBannerTimer = null;
+try { mrjChatBannerEnabled = localStorage.getItem("mrjChatBannerEnabled") !== "false"; } catch(e) {}
 
 let onlineBoardState = {};
 let onlinePlayersState = {};
@@ -5773,7 +5787,7 @@ function connectServer(callback) {
                     onlineLastMove =
                         data.last_move ||
                         null;
-                    if(activeTournamentMatchRoom)renderTournamentMatchChat(data.chat||[]);
+                    if(activeTournamentMatchRoom){renderTournamentMatchChat(data.chat||[]);observeMrjChatMessages(data.chat||[]);}
                     const incomingSize = Array.isArray(data.board) && data.board.length ? data.board.length : BOARD_SIZE;
                     if (incomingSize >= 13 && incomingSize <= 20 && incomingSize !== BOARD_SIZE) {
                         BOARD_SIZE = incomingSize;
@@ -7562,6 +7576,7 @@ function joinTournamentVoiceRoom(){
   tournamentVoiceJoined=true;
 }
 function showTournamentMatchComms(show){
+  updateMrjChatBannerToggle();
   if(show&&activeTournamentMatchRoom)joinTournamentVoiceRoom();
   if(!show&&tournamentCameraJoined&&activeTournamentMatchRoom&&onlineConnectionMode==="spectator-list")closeTournamentCamera();
   const panel=document.getElementById("tournamentMatchComms");
@@ -7575,6 +7590,44 @@ function showTournamentMatchComms(show){
   const cameraStart=document.getElementById("onlineTournamentCameraStart");
   if(cameraStart)cameraStart.disabled=onlineConnectionMode==="spectator"||Boolean(tournamentCameraStream);
 }
+function updateMrjChatBannerToggle(){
+  const button=document.getElementById("mrjChatBannerToggle");if(!button)return;
+  button.textContent=mrjChatBannerEnabled?"🔔 Banniere: ON":"🔕 Banniere: OFF";
+  button.setAttribute("aria-pressed",String(mrjChatBannerEnabled));
+}
+function dismissMrjChatBanner(){
+  const banner=document.getElementById("mrjChatBanner");if(banner)banner.hidden=true;
+  if(mrjChatBannerTimer){clearTimeout(mrjChatBannerTimer);mrjChatBannerTimer=null;}
+}
+function showMrjChatBanner(message){
+  if(!mrjChatBannerEnabled||!message||onlineConnectionMode==="spectator")return;
+  const banner=document.getElementById("mrjChatBanner");
+  const sender=document.getElementById("mrjChatBannerSender");
+  const body=document.getElementById("mrjChatBannerText");
+  if(!banner||!sender||!body)return;
+  sender.textContent="💬 "+(message.sender||message.username||"Nouvo mesaj");
+  body.textContent=message.text||message.message||"";
+  banner.hidden=false;
+  if(mrjChatBannerTimer)clearTimeout(mrjChatBannerTimer);
+  mrjChatBannerTimer=setTimeout(dismissMrjChatBanner,6500);
+}
+function observeMrjChatMessages(messages){
+  if(!Array.isArray(messages)||!messages.length)return;
+  const latest=messages[messages.length-1];
+  const fingerprint=[latest.sender||latest.username||"",latest.time||"",latest.text||latest.message||""].join("|");
+  if(mrjLastChatFingerprint===null){mrjLastChatFingerprint=fingerprint;return;}
+  if(fingerprint!==mrjLastChatFingerprint){mrjLastChatFingerprint=fingerprint;showMrjChatBanner(latest);}
+}
+document.addEventListener("click",function(event){
+  if(event.target.closest("#mrjChatBannerClose"))dismissMrjChatBanner();
+  const toggle=event.target.closest("#mrjChatBannerToggle");
+  if(toggle){
+    mrjChatBannerEnabled=!mrjChatBannerEnabled;
+    try{localStorage.setItem("mrjChatBannerEnabled",String(mrjChatBannerEnabled));}catch(e){}
+    if(!mrjChatBannerEnabled)dismissMrjChatBanner();
+    updateMrjChatBannerToggle();
+  }
+});
 function sendRoomReaction(emoji){
   if(!onlineRoom||!socket||socket.readyState!==WebSocket.OPEN)return;
   socket.send(JSON.stringify({type:"room_reaction",room:onlineRoom,emoji}));
