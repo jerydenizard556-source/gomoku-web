@@ -7708,6 +7708,21 @@ async function processTournamentCameraSignal(data,peerId,pc){
     for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("[MRJ-CAMERA] buffered ICE add failed",peerId,e);}}
     pc.__pendingIce=[];
     if(description.type==="offer"){
+      // Bind the camera sender to the transceiver that actually belongs to the
+      // incoming video m-line. A pre-created transceiver can remain unassociated
+      // (mid=null), while the browser creates a second transceiver for the offer.
+      const negotiatedVideo=pc.getTransceivers().find(t=>t.mid!==null&&t.receiver?.track?.kind==="video");
+      if(negotiatedVideo){
+        const previousSender=pc.__videoSender;
+        pc.__videoSender=negotiatedVideo.sender;
+        if(previousSender&&previousSender!==negotiatedVideo.sender){
+          try{await previousSender.replaceTrack(null);}catch(error){console.warn("[MRJ-CAMERA] unused sender cleanup:",error);}
+        }
+        if(negotiatedVideo.direction!=="sendrecv")negotiatedVideo.direction="sendrecv";
+        const localTrack=tournamentCameraStream?.getVideoTracks?.()[0];
+        if(localTrack)await negotiatedVideo.sender.replaceTrack(localTrack);
+        console.info("[MRJ-CAMERA] bound local camera to negotiated video m-line",peerId,"mid",negotiatedVideo.mid,"track",negotiatedVideo.sender.track?.readyState||"none");
+      }
       const answer=await pc.createAnswer();await pc.setLocalDescription(answer);
       tournamentCameraSend(peerId,"description",pc.localDescription.toJSON());
     }
