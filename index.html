@@ -1992,6 +1992,16 @@ td, th { overflow-wrap: anywhere; }
 #onlineGameScreen:not(.active){display:none!important}
 #onlineGameScreen.active{display:grid!important}
 </style>
+<style id="mrj-tiktok-style-camera-controls-v1">
+/* Per-player camera controls: presentation only; existing WebRTC streams stay untouched. */
+#onlineGameScreen .mrj-camera-tile-controls{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:7px 3px 3px}
+#onlineGameScreen .mrj-camera-control{min-height:32px;padding:6px 9px;border:1px solid #38547b;border-radius:9px;background:linear-gradient(145deg,#142b4b,#0a172c);color:#eaf2ff;font-size:11px;font-weight:800;cursor:pointer}
+#onlineGameScreen .mrj-camera-control:hover{border-color:#e4b94f;background:#1b3558}
+#onlineGameScreen .mrj-camera-control.is-active{border-color:#d7a83e;color:#ffdc83;background:#382a13}
+#onlineGameScreen .mrj-camera-volume{width:76px;max-width:24%;accent-color:#e4b94f;cursor:pointer}
+#onlineGameScreen video.mrj-camera-video-hidden{visibility:hidden;min-height:0!important;height:0!important;aspect-ratio:auto!important}
+@media(max-width:430px){#onlineGameScreen .mrj-camera-tile-controls{gap:4px;padding:5px 1px 2px}#onlineGameScreen .mrj-camera-control{min-height:29px;padding:5px 6px;font-size:10px}#onlineGameScreen .mrj-camera-volume{width:54px}}
+</style>
 </head>
 
 <body>
@@ -8001,6 +8011,7 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
       video.setAttribute("autoplay","");video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");
       const label=document.createElement("small");label.textContent="Kamera lòt jwè";
       tile.append(video,label);
+      tile.appendChild(createTournamentRemoteCameraControls(peerId,video));
       updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
     }
     // Keep the remote tile attached even if the match UI rerendered after ontrack.
@@ -8122,7 +8133,7 @@ async function startTournamentCamera(){
       }
     }));
     const local=document.getElementById("onlineTournamentLocalCamera");
-    if(local){local.replaceChildren();const tile=document.createElement("div");tile.className="tournament-camera-tile";const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=tournamentCameraStream;const label=document.createElement("small");label.textContent="Ou menm";tile.append(video,label);local.appendChild(tile);video.play().catch(()=>{});}
+    if(local){local.replaceChildren();const tile=document.createElement("div");tile.className="tournament-camera-tile";const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=tournamentCameraStream;const label=document.createElement("small");label.textContent="Ou menm";tile.append(video,label);tile.appendChild(createTournamentLocalCameraControls(video));local.appendChild(tile);video.play().catch(()=>{});}
     const start=document.getElementById("onlineTournamentCameraStart"),stop=document.getElementById("onlineTournamentCameraStop");if(start){start.disabled=true;start.textContent="📹 Kamera aktive";}if(stop)stop.disabled=false;tournamentCameraStatus("Kamera ou aktive. Espektatè ak lòt jwè yo ka wè w.");startTournamentVoice().catch(e=>console.warn("Mic setup:",e));
   }catch(error){tournamentCameraStatus(error?.name==="NotAllowedError"?"Navigatè a pa gen pèmisyon pou itilize kamera a.":"Kamera a pa disponib. Verifye kamera a ak pèmisyon navigatè a.");}
 }
@@ -8223,6 +8234,34 @@ function toggleTournamentVoiceMute(){
   if(btn)btn.textContent=tournamentVoiceMuted?"🔊 Retire silans":"🔇 Mete sou silans";
   if(socket&&socket.readyState===WebSocket.OPEN&&activeTournamentMatchRoom)socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:tournamentVoiceMuted}));
   tournamentVoiceStatus(tournamentVoiceMuted?"Mikwo sou silans.":"Mikwo aktive. Ou ka pale.");
+}
+function createTournamentCameraControl(label,title,onClick){
+  const button=document.createElement("button");button.type="button";button.className="mrj-camera-control";button.textContent=label;button.title=title;button.setAttribute("aria-label",title);button.addEventListener("click",onClick);return button;
+}
+function createTournamentRemoteCameraControls(peerId,video){
+  const controls=document.createElement("div");controls.className="mrj-camera-tile-controls";
+  const audioId="tournament-audio-"+String(peerId);
+  const mute=createTournamentCameraControl("🔇 Silans","Mete son jwè sa a sou silans pou ou sèlman",()=>{
+    const audio=document.getElementById(audioId);if(!audio)return;
+    audio.muted=!audio.muted;mute.textContent=audio.muted?"🔊 Son ON":"🔇 Silans";
+    mute.classList.toggle("is-active",audio.muted);
+  });
+  const hide=createTournamentCameraControl("👁 Kache","Kache oswa montre videyo jwè sa a",()=>{
+    video.classList.toggle("mrj-camera-video-hidden");hide.textContent=video.classList.contains("mrj-camera-video-hidden")?"👁 Montre":"👁 Kache";
+  });
+  const volume=document.createElement("input");volume.type="range";volume.min="0";volume.max="100";volume.value="100";volume.step="1";volume.className="mrj-camera-volume";volume.title="Volim jwè sa a";volume.setAttribute("aria-label","Volim jwè sa a");
+  volume.addEventListener("input",()=>{const audio=document.getElementById(audioId);if(audio){audio.volume=Number(volume.value)/100;if(audio.volume>0&&audio.muted){audio.muted=false;mute.textContent="🔇 Silans";mute.classList.remove("is-active");}}});
+  const full=createTournamentCameraControl("⛶","Agrandi videyo jwè sa a",()=>{if(video.requestFullscreen)video.requestFullscreen().catch(()=>{});else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();});
+  controls.append(mute,hide,volume,full);return controls;
+}
+function createTournamentLocalCameraControls(video){
+  const controls=document.createElement("div");controls.className="mrj-camera-tile-controls";
+  const toggle=createTournamentCameraControl("📹 Kamera ON","Etenn oswa aktive kamera ou san kite match la",()=>{
+    const track=tournamentCameraStream?.getVideoTracks?.()[0];if(!track)return;
+    track.enabled=!track.enabled;toggle.textContent=track.enabled?"📹 Kamera ON":"🚫 Kamera OFF";toggle.classList.toggle("is-active",!track.enabled);
+  });
+  const full=createTournamentCameraControl("⛶","Agrandi kamera pa ou",()=>{if(video.requestFullscreen)video.requestFullscreen().catch(()=>{});else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();});
+  controls.append(toggle,full);return controls;
 }
 function updateRemoteMicState(peerId,muted){
   tournamentRemoteMicStates.set(String(peerId),!!muted);
