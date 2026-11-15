@@ -9174,5 +9174,136 @@ body{
 }
 </style>
 
+
+<style id="mrj-account-dashboard-v10">
+/* MR_JERY V10 — bold, restrained esports command center; visual-only */
+#accountMenuScreen.active{background:#060a11!important;color:#eef3f8}
+#accountMenuScreen .dashboard-shell{
+ width:min(100% - 24px,1580px);max-width:1580px;margin:10px auto;padding:0 38px 34px;
+ border:1px solid #26364a;border-radius:4px;
+ background:linear-gradient(135deg,#0d1725 0%,#09111c 52%,#0d1826 100%);
+ box-shadow:0 30px 90px rgba(0,0,0,.52)
+}
+#accountMenuScreen .dashboard-header{
+ min-height:82px;padding:0 2px;border:0;border-bottom:1px solid #29394c;border-radius:0;
+ background:transparent;box-shadow:none;backdrop-filter:none
+}
+#accountMenuScreen .dashboard-brand{font-size:22px;font-weight:950;letter-spacing:1.1px}
+#accountMenuScreen .dashboard-crown{font-size:0;filter:none}
+#accountMenuScreen .dashboard-crown:after{content:"M";font-size:20px;font-weight:950;color:#d8ad68}
+#accountMenuScreen .dashboard-brand b{color:#d8ad68}
+#accountMenuScreen .dashboard-nav{gap:3px}
+#accountMenuScreen .dash-nav{
+ min-height:42px;padding:10px 13px;border:0;border-bottom:2px solid transparent;border-radius:0;
+ color:#9aaabe;background:transparent;font-size:11px;font-weight:850;letter-spacing:.55px;text-transform:uppercase
+}
+#accountMenuScreen .dash-nav.active,#accountMenuScreen .dash-nav:hover{
+ color:#f4f7fa;background:rgba(102,166,196,.08);border-color:#d8ad68;box-shadow:none
+}
+#accountMenuScreen .dashboard-user{border:1px solid #304158;border-radius:3px;background:#111e2d;box-shadow:none}
+#accountMenuScreen .dash-avatar{border-radius:3px;background:#1b3045;border-color:#496078}
+#accountMenuScreen .dashboard-main{max-width:1400px;padding:34px 0 8px}
+#accountMenuScreen .welcome-card{
+ min-height:280px;padding:48px 54px;border:1px solid #3a5369;border-left:4px solid #d8ad68;border-radius:3px;
+ background:linear-gradient(105deg,#14283d 0%,#102135 54%,#0a1725 100%);
+ box-shadow:inset 0 1px rgba(255,255,255,.035),0 22px 46px rgba(0,0,0,.28)
+}
+#accountMenuScreen .welcome-card:after{
+ right:7%;width:238px;border-radius:2px;border:1px solid rgba(125,169,194,.34);
+ background-color:#0b1b2a;background-image:linear-gradient(rgba(131,171,193,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(131,171,193,.18) 1px,transparent 1px);
+ box-shadow:inset 0 0 0 8px rgba(3,10,17,.3),0 18px 40px rgba(0,0,0,.32)
+}
+#accountMenuScreen .welcome-card:before{
+ right:calc(7% + 48px);border-radius:2px;background:#e6edf2;
+ box-shadow:40px 40px 0 #16283a,80px 0 0 #e6edf2,120px 80px 0 #16283a,40px 120px 0 #e6edf2
+}
+#accountMenuScreen .welcome-kicker{color:#82c9dc;font-size:10px;letter-spacing:3.2px}
+#accountMenuScreen .welcome-copy h1{font-size:clamp(40px,4.7vw,60px);font-weight:950;letter-spacing:-2.4px}
+#accountMenuScreen .welcome-copy h1 span{color:#e2b66f}
+#accountMenuScreen .welcome-copy p{font-size:13px;color:#aebdcb;letter-spacing:2px;text-transform:uppercase}
+#accountMenuScreen .welcome-line{width:74px;height:3px;border-radius:0;background:#d8ad68;box-shadow:none}
+#accountMenuScreen .welcome-copy>strong{font-size:13px;letter-spacing:.3px;color:#e0e7ed}
+#accountMenuScreen .dashboard-balance-row{grid-template-columns:1fr 1fr 1.25fr;gap:12px;margin:16px 0 23px}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+ min-height:104px;padding:20px 23px;border:1px solid #2b4055;border-radius:3px;
+ background:#101e2d;box-shadow:none
+}
+#accountMenuScreen .dash-balance-card small{font-size:10px;color:#91a7bc;letter-spacing:1.5px}
+#accountMenuScreen .dash-balance-card strong{font-size:28px;font-weight:950;color:#f0f3f6;letter-spacing:.2px}
+#accountMenuScreen .dash-balance-card button{
+ width:32px;height:32px;border:1px solid #54748a;border-radius:2px;background:#172c40;color:#91d8e7;box-shadow:none
+}
+#accountMenuScreen .dash-profile-card{background:#14263a}
+#accountMenuScreen .dash-big-avatar{
+ width:48px;height:48px;border-radius:3px;border:1px solid #7b6749;background:#202f3d;color:#e2b66f;
+ font-size:0;box-shadow:none
+}
+#accountMenuScreen .dash-big-avatar:after{content:"MR";font-size:15px;font-weight:950;letter-spacing:1px}
+#accountMenuScreen .dashboard-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+#accountMenuScreen .dashboard-card{
+ min-height:164px;padding:19px 18px;border:1px solid #2c4054;border-radius:3px;
+ background:#101e2d;color:#edf2f6;box-shadow:none;text-align:left
+}
+#accountMenuScreen .dashboard-card:after{border-radius:0;background:linear-gradient(110deg,rgba(255,255,255,.025),transparent 55%);opacity:1}
+#accountMenuScreen .dashboard-card:hover{
+ transform:translateY(-2px);border-color:#8ba9bd;background:#15283b;
+ box-shadow:0 12px 25px rgba(0,0,0,.24)
+}
+#accountMenuScreen .dashboard-card .dash-card-icon{
+ width:39px;height:39px;margin-bottom:15px;border:1px solid #40576d;border-radius:3px;
+ background:#172b3e;color:#9ed8e4;font-size:0;box-shadow:none
+}
+#accountMenuScreen .dashboard-card .dash-card-icon:after{font-size:12px;font-weight:950;letter-spacing:1px;color:#9ed8e4}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(1) .dash-card-icon:after{content:"01"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(2) .dash-card-icon:after{content:"02"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(3) .dash-card-icon:after{content:"03"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(4) .dash-card-icon:after{content:"04"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(5) .dash-card-icon:after{content:"05"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(6) .dash-card-icon:after{content:"06"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(7) .dash-card-icon:after{content:"07"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(8) .dash-card-icon:after{content:"08"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(9) .dash-card-icon:after{content:"09"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(10) .dash-card-icon:after{content:"10"}
+#accountMenuScreen .dashboard-card strong{font-size:14px;font-weight:900;letter-spacing:.15px;color:#f1f4f7}
+#accountMenuScreen .dashboard-card small{font-size:11px;line-height:1.55;color:#9eafbf}
+#accountMenuScreen .dashboard-card.gold-card{
+ border-color:#66563f;background:linear-gradient(145deg,#28271f,#151f2b);box-shadow:none
+}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:#756044;background:#302a20;color:#e4bd7d}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon:after{color:#e4bd7d}
+#accountMenuScreen .dashboard-card.gold-card:hover{border-color:#d4ad70;background:linear-gradient(145deg,#342d22,#172332)}
+#accountMenuScreen .dashboard-footer-banner{
+ border:1px solid #2c4054;border-radius:3px;background:#101e2d;box-shadow:none
+}
+#accountMenuScreen .dashboard-footer-banner>span{font-size:0}
+#accountMenuScreen .dashboard-footer-banner>span:after{content:"MR";font-size:15px;font-weight:950;color:#d8ad68}
+#accountMenuScreen .dashboard-footer-banner strong{color:#c2ced8}
+#accountMenuScreen .dashboard-footer-banner button{border-radius:2px}
+@media(max-width:1120px){
+ #accountMenuScreen .dashboard-shell{padding:0 22px 25px}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #accountMenuScreen .welcome-card{padding:35px}
+}
+@media(max-width:700px){
+ #accountMenuScreen .dashboard-shell{width:calc(100% - 10px);margin:5px auto;padding:0 10px 13px;border-radius:2px}
+ #accountMenuScreen .dashboard-header{min-height:72px}
+ #accountMenuScreen .dashboard-main{padding-top:15px}
+ #accountMenuScreen .welcome-card{min-height:195px;padding:24px 18px}
+ #accountMenuScreen .welcome-card:after{right:-45px;width:145px;opacity:.4}
+ #accountMenuScreen .welcome-card:before{right:0;opacity:.35}
+ #accountMenuScreen .welcome-copy h1{font-size:32px;letter-spacing:-1.2px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{min-height:78px;padding:12px}
+ #accountMenuScreen .dash-balance-card strong{font-size:20px}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #accountMenuScreen .dashboard-card{min-height:137px;padding:13px 11px}
+ #accountMenuScreen .dashboard-card .dash-card-icon{width:34px;height:34px;margin-bottom:10px}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+}
+</style>
+
 </body>
 </html>
