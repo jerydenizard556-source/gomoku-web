@@ -7627,10 +7627,11 @@ async function ensureTournamentCameraPeer(peerId,makeOffer){
       video.setAttribute("autoplay","");video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");
       const label=document.createElement("small");label.textContent="Kamera lòt jwè";
       tile.append(video,label);
-      const remoteRoot=document.getElementById("onlineTournamentRemoteCameras");
-      if(remoteRoot)remoteRoot.appendChild(tile);
       updateRemoteMicState(peerId,tournamentRemoteMicStates.get(peerId)!==false);
     }
+    // Keep the remote tile attached even if the match UI rerendered after ontrack.
+    const remoteRoot=document.getElementById("onlineTournamentRemoteCameras");
+    if(remoteRoot && tile.parentElement!==remoteRoot)remoteRoot.appendChild(tile);
     const video=tile.querySelector("video");
     if(!video)return;
     video.muted=true;video.playsInline=true;video.srcObject=pc.__remoteStream;
