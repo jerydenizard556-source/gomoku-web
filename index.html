@@ -1229,6 +1229,43 @@ td, th { overflow-wrap: anywhere; }
  #onlineGameScreen .score-player span{font-size:13px}
 }
 
+
+/* MR_JERY PROFESSIONAL PLAYER LEADERBOARD */
+.ranking-screen{width:min(1120px,100%);margin:0 auto;padding:24px 16px 44px;text-align:left;color:#f8fafc}
+.ranking-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.ranking-head h1{margin:0;color:#f7d77c;font-size:clamp(24px,4vw,34px)}
+.ranking-head p{margin:6px 0 0;color:#aebbd0;font-size:13px}
+.ranking-back,.ranking-refresh{border:1px solid #52627b;border-radius:10px;background:#14243b;color:#f8fafc;padding:10px 14px;font-weight:700;cursor:pointer}
+.ranking-hero{position:relative;overflow:hidden;border:1px solid rgba(231,190,87,.42);border-radius:20px;padding:22px;background:radial-gradient(circle at 85% 10%,rgba(212,175,55,.2),transparent 35%),linear-gradient(135deg,#14243b,#081426 70%);box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.ranking-hero-kicker{font-size:11px;letter-spacing:2px;color:#d9bc72;font-weight:800}
+.ranking-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin-top:18px}
+.ranking-podium-card{min-width:0;text-align:center;padding:15px 10px;border:1px solid #34445c;border-radius:15px;background:rgba(5,15,30,.72)}
+.ranking-podium-card.first{border-color:#d6b65e;background:linear-gradient(180deg,rgba(212,175,55,.18),rgba(5,15,30,.8));transform:translateY(-7px)}
+.ranking-medal{font-size:26px;line-height:1.2}
+.ranking-avatar{width:48px;height:48px;margin:9px auto;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#e7c66e,#8c6825);color:#101827;font-size:17px;font-weight:900;border:2px solid rgba(255,255,255,.65)}
+.ranking-podium-name{display:block;overflow-wrap:anywhere;font-size:13px;font-weight:800;color:#fff}
+.ranking-podium-points{display:block;margin-top:6px;color:#f4d57e;font-size:18px;font-weight:900}
+.ranking-podium-label{display:block;margin-top:3px;color:#9eacc2;font-size:10px}
+.ranking-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 12px}
+.ranking-tabs{display:flex;gap:7px;flex-wrap:wrap}
+.ranking-tab{border:1px solid #34445c;border-radius:999px;background:#101f35;color:#cbd5e1;padding:9px 15px;font-size:12px;font-weight:800;cursor:pointer}
+.ranking-tab.active{background:#d4af37;border-color:#d4af37;color:#101827}
+.ranking-meta{font-size:12px;color:#9eacc2}
+.ranking-table-wrap{overflow-x:auto;border:1px solid #263b58;border-radius:15px;background:#0b1729}
+.ranking-table{width:100%;border-collapse:collapse;min-width:650px;text-align:left}
+.ranking-table th{padding:13px 12px;background:#14243b;color:#9eacc2;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.ranking-table td{padding:12px;border-top:1px solid #1e3048;font-size:13px}
+.ranking-table tr.current-player{background:rgba(212,175,55,.09)}
+.ranking-position{font-weight:900;color:#f4d57e}
+.ranking-player-cell{display:flex;align-items:center;gap:10px;min-width:170px}
+.ranking-mini-avatar{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:#263b58;color:#f8fafc;font-weight:900}
+.ranking-player-name{font-weight:800;color:#f8fafc}
+.ranking-player-sub{display:block;margin-top:2px;color:#8191aa;font-size:10px}
+.ranking-points-cell{font-weight:900;color:#f4d57e}
+.ranking-empty{padding:25px;text-align:center;color:#aebbd0}
+.ranking-note{margin-top:12px;color:#8191aa;font-size:11px;line-height:1.5}
+@media(max-width:560px){.ranking-screen{padding:16px 8px 30px}.ranking-hero{padding:15px}.ranking-podium{gap:7px}.ranking-podium-card{padding:12px 5px}.ranking-podium-card.first{transform:translateY(-3px)}.ranking-avatar{width:40px;height:40px}.ranking-podium-name{font-size:11px}.ranking-podium-points{font-size:15px}.ranking-head{align-items:flex-start}}
+
 </style>
 
 <style id="tournament-visual-refresh">
@@ -2044,6 +2081,30 @@ td, th { overflow-wrap: anywhere; }
   </div>
 </section>
 
+<!-- KLASMAN JWÈ YO -->
+<section id="rankingScreen" class="screen">
+  <div class="ranking-screen">
+    <div class="ranking-head">
+      <div><h1>🏆 Klasman MR_JERY</h1><p>Mezi pwogrè, viktwa ak pèfòmans tout jwè yo.</p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="ranking-refresh" id="rankingRefresh">↻ Rafrechi</button><button type="button" class="ranking-back" id="rankingBack">← Retounen</button></div>
+    </div>
+    <div class="ranking-hero">
+      <div class="ranking-hero-kicker">🏅 PI BON JWÈ YO</div>
+      <div id="rankingPodium" class="ranking-podium"><div class="ranking-empty" style="grid-column:1/-1">Ap chaje klasman an...</div></div>
+    </div>
+    <div class="ranking-tools">
+      <div class="ranking-tabs" role="group" aria-label="Peryòd klasman">
+        <button type="button" class="ranking-tab active" data-ranking-period="all">Tout tan</button>
+        <button type="button" class="ranking-tab" data-ranking-period="month">30 dènye jou</button>
+        <button type="button" class="ranking-tab" data-ranking-period="week">7 dènye jou</button>
+      </div>
+      <div id="rankingMeta" class="ranking-meta">Ap chaje done yo...</div>
+    </div>
+    <div id="rankingTable" class="ranking-table-wrap"><div class="ranking-empty">Ap chaje klasman an...</div></div>
+    <p class="ranking-note">Pwen: viktwa = 3 pwen · match nil = 1 pwen · defèt = 0 pwen. Klasman peryodik yo konte rezilta ki anrejistre depi sistèm swivi match la aktive. Klasman jeneral la sèvi ak total kont jwè yo.</p>
+  </div>
+</section>
+
 <!-- PROFIL -->
 <section id="profileScreen" class="screen">
     <h1>👤 Mon profil</h1>
@@ -2816,8 +2877,8 @@ document.getElementById('dashboardOnlineCard')?.addEventListener('click',()=>doc
 document.getElementById('dashboardFriendCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
 document.getElementById('dashboardRobotCard')?.addEventListener('click',()=>showScreen('localScreen'));
 document.getElementById('dashboardSpectatorCard')?.addEventListener('click',()=>document.getElementById('accountOnlineBtn')?.click());
-document.getElementById('dashboardRankingBtn')?.addEventListener('click',()=>alert('🏆 Classement : cette section sera ajoutée dans la prochaine étape.'));
-document.getElementById('dashboardRankingCard')?.addEventListener('click',()=>document.getElementById('dashboardRankingBtn')?.click());
+document.getElementById('dashboardRankingBtn')?.addEventListener('click',openRankingScreen);
+document.getElementById('dashboardRankingCard')?.addEventListener('click',openRankingScreen);
 document.getElementById('dashboardDepositUsd')?.addEventListener('click',openWalletFromDashboard);
 document.getElementById('dashboardDepositHtg')?.addEventListener('click',openWalletFromDashboard);
 
@@ -5137,6 +5198,7 @@ function connectServer(callback) {
                         event.data
                     );
 
+                if (data.type === "leaderboard_result") { renderPlayerLeaderboard(data); return; }
                 if (data.type === "server_config") { tournamentTestMode=String(data.gomoku_mode||"live").toLowerCase()==="test"; applyTournamentModeUI(); if(tournamentTestMode)updateTournamentCreationFeePreview(); return; }
                 if (data.type === "tournament_list_result") { renderTournamentList(data.tournaments || []); return; }
                 if (data.type === "tournament_create_result") {
@@ -8100,6 +8162,69 @@ document.getElementById("tournamentScreen")?.addEventListener("click",e=>{
     tournamentPendingVoice.splice(Number(btn.dataset.index),1);addTournamentVoicePending({}); 
   }
 });
+
+
+/* ==================================================
+   MR_JERY PLAYER LEADERBOARD
+================================================== */
+let leaderboardPeriod="all";
+let leaderboardPlayers=[];
+function rankingEscape(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function rankingInitials(name){
+  const parts=String(name||"J").trim().split(/\s+/).filter(Boolean);
+  return (parts.length>1?parts[0][0]+parts[1][0]:parts[0]?.slice(0,2)||"J").toUpperCase();
+}
+function openRankingScreen(){
+  if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou wè klasman an.",false);return;}
+  showScreen("rankingScreen");
+  loadPlayerLeaderboard(leaderboardPeriod);
+}
+function loadPlayerLeaderboard(period){
+  leaderboardPeriod=["all","week","month"].includes(period)?period:"all";
+  document.querySelectorAll("[data-ranking-period]").forEach(button=>button.classList.toggle("active",button.dataset.rankingPeriod===leaderboardPeriod));
+  const meta=document.getElementById("rankingMeta"),table=document.getElementById("rankingTable"),podium=document.getElementById("rankingPodium");
+  if(meta)meta.textContent="Ap mete done yo ajou...";
+  if(table)table.innerHTML='<div class="ranking-empty">⏳ Ap chaje klasman an...</div>';
+  if(podium)podium.innerHTML='<div class="ranking-empty" style="grid-column:1/-1">Ap chaje Top 3 la...</div>';
+  if(!socket||socket.readyState!==WebSocket.OPEN){
+    if(meta)meta.textContent="Koneksyon ak sèvè a pa disponib.";
+    if(table)table.innerHTML='<div class="ranking-empty">Rekonekte ak sèvè a epi peze Rafrechi.</div>';
+    return;
+  }
+  socket.send(JSON.stringify({type:"leaderboard",period:leaderboardPeriod}));
+}
+function renderPlayerLeaderboard(data){
+  const meta=document.getElementById("rankingMeta"),table=document.getElementById("rankingTable"),podium=document.getElementById("rankingPodium");
+  if(!data.success){
+    if(meta)meta.textContent="Klasman pa disponib";
+    if(table)table.innerHTML='<div class="ranking-empty">'+rankingEscape(data.message||"Pa kapab chaje klasman an.")+'</div>';
+    if(podium)podium.innerHTML='<div class="ranking-empty" style="grid-column:1/-1">Eseye rafrechi paj la.</div>';
+    return;
+  }
+  leaderboardPlayers=Array.isArray(data.players)?data.players:[];
+  const periodLabel={all:"Tout tan",month:"30 dènye jou",week:"7 dènye jou"}[data.period]||"Tout tan";
+  if(meta)meta.textContent=leaderboardPlayers.length+" jwè klase · "+periodLabel;
+  const top=leaderboardPlayers.slice(0,3);
+  if(podium){
+    const order=top.length===3?[top[1],top[0],top[2]]:top;
+    const medals={"1":"🥇","2":"🥈","3":"🥉"};
+    podium.innerHTML=order.length?order.map(p=>{
+      const pos=leaderboardPlayers.indexOf(p)+1;
+      return '<div class="ranking-podium-card '+(pos===1?"first":"")+'"><div class="ranking-medal">'+medals[pos]+'</div><div class="ranking-avatar">'+rankingEscape(rankingInitials(p.username))+'</div><strong class="ranking-podium-name">'+rankingEscape(p.username)+'</strong><span class="ranking-podium-points">'+Number(p.points||0).toLocaleString()+"</span><small class="ranking-podium-label">Pwen · #"+pos+'</small></div>';
+    }).join(""):'<div class="ranking-empty" style="grid-column:1/-1">Pa gen jwè klase pou peryòd sa a ankò.</div>';
+  }
+  if(table){
+    table.innerHTML=leaderboardPlayers.length?'<table class="ranking-table"><thead><tr><th>Rang</th><th>Jwè</th><th>Pwen</th><th>Match</th><th>Viktwa</th><th>Defèt</th><th>Nil</th><th>Viktwa %</th></tr></thead><tbody>'+leaderboardPlayers.map((p,i)=>{
+      const current=String(p.player_id)===String(currentPlayerId);
+      return '<tr class="'+(current?"current-player":"")+'"><td class="ranking-position">#'+(i+1)+'</td><td><div class="ranking-player-cell"><span class="ranking-mini-avatar">'+rankingEscape(rankingInitials(p.username))+'</span><span><span class="ranking-player-name">'+rankingEscape(p.username)+(current?" · Ou":"")+'</span><small class="ranking-player-sub">Nivo '+Number(p.level||1)+'</small></span></div></td><td class="ranking-points-cell">'+Number(p.points||0).toLocaleString()+'</td><td>'+Number(p.matches_played||0)+'</td><td>'+Number(p.wins||0)+'</td><td>'+Number(p.losses||0)+'</td><td>'+Number(p.draws||0)+'</td><td>'+Number(p.win_rate||0).toFixed(1)+'%</td></tr>';
+    }).join("")+'</tbody></table>':'<div class="ranking-empty">Pa gen rezilta pou peryòd sa a ankò. Jwe kèk match pou antre nan klasman an.</div>';
+  }
+}
+document.getElementById("rankingBack")?.addEventListener("click",showAccountMenu);
+document.getElementById("rankingRefresh")?.addEventListener("click",()=>loadPlayerLeaderboard(leaderboardPeriod));
+document.querySelectorAll("[data-ranking-period]").forEach(button=>button.addEventListener("click",()=>loadPlayerLeaderboard(button.dataset.rankingPeriod)));
 
 </script>
 
