@@ -1397,6 +1397,59 @@ td, th { overflow-wrap: anywhere; }
  #landingScreen .hero-features{gap:7px}
 }
 
+
+/* MODEL 1 — LUXURY BLUE & GOLD: COMPLETE NON-GAME SCREEN COVERAGE */
+:root{
+ --mrj-blue:#0b1d36;--mrj-blue-deep:#061225;--mrj-blue-card:#142a46;
+ --mrj-gold:#edcf7b;--mrj-gold-bright:#f7df9b;--mrj-gold-dark:#ad7f2c;
+ --mrj-border:rgba(237,207,123,.28);
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen){
+ color:#f7f9fd;
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(h1,h2,h3,h4){
+ text-wrap:balance;
+}
+:is(#homeScreen,#aboutScreen,#onlineScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#waitingRoomScreen,#spectatorScreen) :is(.card,.panel,.box,.section,.content-card,.menu-card,.option-card,.stat-card,.form-card){
+ border:1px solid var(--mrj-border);
+ border-radius:17px;
+ background:linear-gradient(145deg,rgba(20,42,70,.97),rgba(7,20,39,.98));
+ box-shadow:0 14px 34px rgba(0,0,0,.2);
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) button{
+ transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,filter .18s ease;
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) button:not(:disabled):hover{
+ border-color:var(--mrj-gold)!important;
+ box-shadow:0 9px 24px rgba(0,0,0,.22);
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(input,select,textarea){
+ color:#f8fafc;
+ border-color:#38516f;
+ background-color:#08172b;
+ border-radius:10px;
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(input,select,textarea):focus{
+ outline:2px solid rgba(237,207,123,.3);
+ border-color:var(--mrj-gold);
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(a,.link,.muted,.subtitle,.description){
+ text-decoration-color:rgba(237,207,123,.45);
+}
+:is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(.primary,.primary-button,.btn-primary,.action-primary,.gold-button){
+ color:#101827;
+ border:1px solid #f3d994;
+ background:linear-gradient(135deg,#f5dfa0,#c2943b);
+ font-weight:850;
+}
+@media(max-width:700px){
+ :is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen){
+  max-width:100%;box-sizing:border-box;
+ }
+ :is(#landingScreen,#homeScreen,#aboutScreen,#accountScreen,#accountMenuScreen,#rankingScreen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#tournamentScreen,#onlineScreen,#waitingRoomScreen,#spectatorScreen) :is(.card,.panel,.box,.section,.content-card,.menu-card,.option-card,.stat-card,.form-card){
+  border-radius:14px;
+ }
+}
 </style>
 
 <style id="tournament-visual-refresh">
