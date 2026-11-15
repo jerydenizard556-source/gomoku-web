@@ -8422,6 +8422,7 @@ function renderPlayerLeaderboard(data){
     return;
   }
   leaderboardPlayers=Array.isArray(data.players)?data.players:[];
+  if(document.getElementById("profileScreen")?.classList.contains("active")) refreshMrjPlayerProfile();
   const periodLabel={all:"Tout tan",month:"30 dènye jou",week:"7 dènye jou"}[data.period]||"Tout tan";
   const totalMatches=leaderboardPlayers.reduce((n,p)=>n+Number(p.matches_played||0),0);
   const totalWins=leaderboardPlayers.reduce((n,p)=>n+Number(p.wins||0),0);
