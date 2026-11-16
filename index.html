@@ -7483,15 +7483,26 @@ async function confirmWalletExchange(){
   if(!confirm("Èske ou konfime konvèsyon sa a? Balans lan ap chanje touswit."))return;
   setWalletBusy(true);try{const d=await walletRequest("/fx/confirm",{method:"POST",body:JSON.stringify({quote_id:walletQuoteId})});walletQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(`Konvèsyon fini: ${money(d.from_amount,d.from_currency)} → ${money(d.to_amount,d.to_currency)}.`,true);await renderWallet();}
   catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false)async function ensureTranzakCardSdk(){
-  if(window.TranzakCard)return;
+  if(window.TranzakCard&&typeof window.TranzakCard.mount==="function"&&typeof window.TranzakCard.confirm==="function")return;
+  let script=document.querySelector('script[data-tranzak-card-sdk="1"]');
+  // A previous failed or half-loaded script can leave a tag behind without the SDK.
+  if(script&&!window.TranzakCard){script.remove();script=null;}
   await new Promise((resolve,reject)=>{
-    const existing=document.querySelector('script[data-tranzak-card-sdk="1"]');
-    if(existing){existing.addEventListener("load",resolve,{once:true});existing.addEventListener("error",reject,{once:true});return;}
-    const script=document.createElement("script");
-    script.src="https://api.tranzak.co/js/tranzak-card.js";
-    script.async=true;script.dataset.tranzakCardSdk="1";
-    script.onload=resolve;script.onerror=()=>reject(new Error("Widget kat Tranzak la pa kapab chaje."));
-    document.head.appendChild(script);
+    const next=document.createElement("script");
+    next.src="https://api.tranzak.co/js/tranzak-card.js";
+    next.async=true;next.dataset.tranzakCardSdk="1";
+    let settled=false;
+    const finish=(error)=>{
+      if(settled)return;settled=true;clearTimeout(timeout);
+      if(error)reject(error);else resolve();
+    };
+    const timeout=setTimeout(()=>finish(new Error("Widget kat Tranzak la pran twòp tan pou chaje. Verifye koneksyon an epi eseye ankò.")),15000);
+    next.onload=()=>{
+      if(window.TranzakCard&&typeof window.TranzakCard.mount==="function"&&typeof window.TranzakCard.confirm==="function")finish();
+      else finish(new Error("Tranzak pa t chaje zouti peman kat la kòrèkteman."));
+    };
+    next.onerror=()=>finish(new Error("Widget kat Tranzak la pa kapab chaje. Verifye koneksyon an epi eseye ankò."));
+    document.head.appendChild(next);
   });
 }
 async function waitForTranzakTransaction(transactionId){
@@ -7518,9 +7529,14 @@ async function openTranzakCardWidget(payment,description,onCompleted){
   message.textContent="Antre enfòmasyon kat ou nan espas sekirize Tranzak la.";
   element.replaceChildren();
   modal.style.display="flex";modal.setAttribute("aria-hidden","false");
-  await ensureTranzakCardSdk();
-  window.TranzakCard.mount({containerId:"tranzakCardElement",clientSecret:payment.client_secret,publishableKey:payment.publishable_key});
-  payButton.disabled=false;
+  try{
+    await ensureTranzakCardSdk();
+    window.TranzakCard.mount({containerId:"tranzakCardElement",clientSecret:payment.client_secret,publishableKey:payment.publishable_key});
+    payButton.disabled=false;
+  }catch(error){
+    modal.style.display="none";modal.setAttribute("aria-hidden","true");
+    throw error;
+  }
   payButton.onclick=()=>{
     payButton.disabled=true;
     message.textContent="⏳ Nap voye peman an. Pa fèmen paj la...";
