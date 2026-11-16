@@ -7498,7 +7498,9 @@ async function confirmWalletExchange(){
   if(!walletQuoteId){walletNotice("Mande yon nouvo kalkil anvan konfimasyon.");return;}
   if(!confirm("Èske ou konfime konvèsyon sa a? Balans lan ap chanje touswit."))return;
   setWalletBusy(true);try{const d=await walletRequest("/fx/confirm",{method:"POST",body:JSON.stringify({quote_id:walletQuoteId})});walletQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(`Konvèsyon fini: ${money(d.from_amount,d.from_currency)} → ${money(d.to_amount,d.to_currency)}.`,true);await renderWallet();}
-  catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false)async function ensureTranzakCardSdk(){
+  catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false);}
+}
+async function ensureTranzakCardSdk(){
   if(window.TranzakCard&&typeof window.TranzakCard.mount==="function"&&typeof window.TranzakCard.confirm==="function")return;
   let script=document.querySelector('script[data-tranzak-card-sdk="1"]');
   // A previous failed or half-loaded script can leave a tag behind without the SDK.
