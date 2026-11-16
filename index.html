@@ -7604,8 +7604,7 @@ async function startPremiumCheckout(){
     walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
   }catch(e){walletNotice(e.message||"Checkout Premium lan pa t kapab kòmanse.");setWalletBusy(false);}
 }
-;}
-}
+;
 bindProofPreview("walletDepositProof","walletDepositPreview");bindProofPreview("walletPremiumProof","walletPremiumPreview");
 document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Wallet.",false);return;}showScreen("walletScreen");renderWallet();});
 document.getElementById("premiumBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Premium.",false);return;}showScreen("premiumScreen");});
