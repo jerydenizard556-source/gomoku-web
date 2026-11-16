@@ -6669,9 +6669,18 @@ async function confirmWalletExchange(){
 }
 async function startPremiumCheckout(){
   const premium_type=document.getElementById("walletPremiumPlan").value,payment_method=document.getElementById("walletPremiumMethod").value;
-  if(!confirm("Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
+  if(!confirm(payment_method==="card"?"Ou pral antre enfòmasyon Visa/Mastercard ou nan espas sekirize Tranzak la. Kontinye?":"Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
   setWalletBusy(true);walletNotice("⏳ Nap prepare peman Premium ou...");
-  try{const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
+  try{
+    const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
+    if(d.client_secret){
+      setWalletBusy(false);
+      await openTranzakCardWidget(d,"Peman plan Premium "+premium_type.toUpperCase(),()=>{
+        walletNotice("Peman Premium konfime! Nap mete ajou kont ou.",true);
+        renderWallet();
+      });
+      return;
+    }
     if(!d.payment_url)throw new Error("Tranzak pa retounen lyen peman an.");
     walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
   }catch(e){walletNotice(e.message||"Checkout Premium lan pa t kapab kòmanse.");setWalletBusy(false);}
