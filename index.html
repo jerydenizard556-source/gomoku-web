@@ -2404,6 +2404,7 @@ td, th { overflow-wrap: anywhere; }
         </select>
         <label for="walletPremiumMethod">Metòd peman</label>
         <select id="walletPremiumMethod">
+                        <option value="card">Visa / Mastercard</option>
             <option value="moncash">MonCash</option>
             <option value="natcash">NatCash</option>
         </select>
@@ -2983,7 +2984,7 @@ const SERVER_URL =
     "wss://gomoku-server-5h60.onrender.com";
 
 // API Wallet la sèvi ak menm sesyon kont MR_Jery a; pa gen dezyèm kont.
-const WALLET_API_URL = "https://mr-jery-wallet.onrender.com";
+const WALLET_API_URL = "https://mr-jery-wallet-test.onrender.com";
 
 let BOARD_SIZE = 20;
 const START_TIME = 10 * 60;
@@ -7481,16 +7482,95 @@ async function confirmWalletExchange(){
   if(!walletQuoteId){walletNotice("Mande yon nouvo kalkil anvan konfimasyon.");return;}
   if(!confirm("Èske ou konfime konvèsyon sa a? Balans lan ap chanje touswit."))return;
   setWalletBusy(true);try{const d=await walletRequest("/fx/confirm",{method:"POST",body:JSON.stringify({quote_id:walletQuoteId})});walletQuoteId=null;document.getElementById("walletExchangeConfirmBtn").disabled=true;walletNotice(`Konvèsyon fini: ${money(d.from_amount,d.from_currency)} → ${money(d.to_amount,d.to_currency)}.`,true);await renderWallet();}
-  catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false);}
+  catch(e){walletNotice(e.message||"Konvèsyon an pa t kapab fèt.");}finally{setWalletBusy(false)async function ensureTranzakCardSdk(){
+  if(window.TranzakCard)return;
+  await new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-tranzak-card-sdk="1"]');
+    if(existing){existing.addEventListener("load",resolve,{once:true});existing.addEventListener("error",reject,{once:true});return;}
+    const script=document.createElement("script");
+    script.src="https://api.tranzak.co/js/tranzak-card.js";
+    script.async=true;script.dataset.tranzakCardSdk="1";
+    script.onload=resolve;script.onerror=()=>reject(new Error("Widget kat Tranzak la pa kapab chaje."));
+    document.head.appendChild(script);
+  });
 }
+async function waitForTranzakTransaction(transactionId){
+  for(let i=0;i<30;i++){
+    try{
+      const result=await walletRequest("/transactions");
+      const rows=Array.isArray(result.transactions)?result.transactions:[];
+      const tx=rows.find(item=>String(item.transaction_id)===String(transactionId));
+      if(tx&&tx.status==="completed")return true;
+      if(tx&&["failed","refunded"].includes(String(tx.status)))return false;
+    }catch(e){}
+    await new Promise(resolve=>setTimeout(resolve,2000));
+  }
+  return null;
+}
+async function openTranzakCardWidget(payment,description,onCompleted){
+  if(!payment?.client_secret||!payment?.publishable_key||!payment?.transaction_id)
+    throw new Error("Tranzak pa retounen enfòmasyon sekirize pou kat la.");
+  const modal=document.getElementById("tranzakCardModal");
+  const message=document.getElementById("tranzakCardMessage");
+  const payButton=document.getElementById("tranzakCardPayButton");
+  const element=document.getElementById("tranzakCardElement");
+  document.getElementById("tranzakCardDescription").textContent=description||"Peye ak Visa oswa Mastercard";
+  message.textContent="Antre enfòmasyon kat ou nan espas sekirize Tranzak la.";
+  element.replaceChildren();
+  modal.style.display="flex";modal.setAttribute("aria-hidden","false");
+  await ensureTranzakCardSdk();
+  window.TranzakCard.mount({containerId:"tranzakCardElement",clientSecret:payment.client_secret,publishableKey:payment.publishable_key});
+  payButton.disabled=false;
+  payButton.onclick=()=>{
+    payButton.disabled=true;
+    message.textContent="⏳ Nap voye peman an. Pa fèmen paj la...";
+    window.TranzakCard.confirm({
+      onSuccess:async()=>{
+        message.textContent="Kat la aksepte. Nap tann konfimasyon ofisyèl sou sèvè a...";
+        const verified=await waitForTranzakTransaction(payment.transaction_id);
+        if(verified===true){
+          message.textContent="Peman an konfime!";
+          modal.style.display="none";modal.setAttribute("aria-hidden","true");
+          if(typeof onCompleted==="function")onCompleted();
+        }else if(verified===false){
+          message.textContent="Peman an pa valide. Eseye yon lòt kat oswa yon lòt metòd.";
+          payButton.disabled=false;
+        }else{
+          message.textContent="Peman an poko konfime sou sèvè a. Pa repete peman an; rafrechi tounwa a pita.";
+        }
+      },
+      onError:error=>{
+        message.textContent=error?.message||"Kat la pa t pase. Verifye enfòmasyon yo oswa eseye yon lòt kat.";
+        payButton.disabled=false;
+      }
+    });
+  };
+}
+function closeTranzakCardWidget(){
+  const modal=document.getElementById("tranzakCardModal");
+  if(modal){modal.style.display="none";modal.setAttribute("aria-hidden","true");}
+}
+
+
 async function startPremiumCheckout(){
   const premium_type=document.getElementById("walletPremiumPlan").value,payment_method=document.getElementById("walletPremiumMethod").value;
-  if(!confirm("Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
+  if(!confirm(payment_method==="card"?"Ou pral antre enfòmasyon Visa/Mastercard ou nan espas sekirize Tranzak la. Kontinye?":"Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
   setWalletBusy(true);walletNotice("⏳ Nap prepare peman Premium ou...");
-  try{const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
+  try{
+    const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
+    if(d.client_secret){
+      setWalletBusy(false);
+      await openTranzakCardWidget(d,"Peman plan Premium "+premium_type.toUpperCase(),()=>{
+        walletNotice("Peman Premium konfime! Nap mete ajou kont ou.",true);
+        renderWallet();
+      });
+      return;
+    }
     if(!d.payment_url)throw new Error("Tranzak pa retounen lyen peman an.");
     walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
   }catch(e){walletNotice(e.message||"Checkout Premium lan pa t kapab kòmanse.");setWalletBusy(false);}
+}
+;}
 }
 bindProofPreview("walletDepositProof","walletDepositPreview");bindProofPreview("walletPremiumProof","walletPremiumPreview");
 document.getElementById("walletBtn")?.addEventListener("click",()=>{if(!accountConnected){showScreen("accountScreen");showAccountMessage("Konekte pou antre nan Wallet.",false);return;}showScreen("walletScreen");renderWallet();});
@@ -9495,5 +9575,15 @@ body{
 @media(max-width:720px){.mrj-profile-columns{grid-template-columns:1fr}.mrj-profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.mrj-profile-footer{align-items:flex-start;flex-direction:column}}
 @media(max-width:440px){#profileScreen.mrj-profile-screen{margin:12px 8px;padding:15px}.mrj-profile-hero{padding:15px;gap:12px}.mrj-profile-avatar{width:52px;height:52px;flex-basis:52px}.mrj-profile-level{padding:8px 12px}.mrj-profile-stat{padding:13px}.mrj-profile-stat strong{font-size:23px}.mrj-profile-info-row{flex-direction:column;gap:5px}.mrj-profile-info-row strong{text-align:left}}
 </style>
+<div id="tranzakCardModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);align-items:center;justify-content:center;padding:18px">
+  <div style="width:min(520px,100%);max-height:90vh;overflow:auto;background:#111827;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:22px;box-shadow:0 24px 80px rgba(0,0,0,.5)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:0">💳 Visa / Mastercard</h2><button type="button" onclick="closeTranzakCardWidget()" aria-label="Fèmen fenèt la">✕</button></div>
+    <p id="tranzakCardDescription" style="margin:12px 0">Peye ak kat ou</p>
+    <div id="tranzakCardElement" style="min-height:110px;background:#fff;border-radius:12px;padding:12px;color:#111"></div>
+    <p id="tranzakCardMessage" role="status" aria-live="polite" style="font-size:14px"></p>
+    <button id="tranzakCardPayButton" type="button" class="tournament-primary" style="width:100%">Konfime peman an</button>
+    <small style="display:block;margin-top:12px;opacity:.8">Kat ou trete dirèkteman nan widget sekirize Tranzak. MR_JERY pa resevwa nimewo kat ou ni CVV.</small>
+  </div>
+</div>
 </body>
 </html>
