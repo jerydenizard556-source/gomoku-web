@@ -4659,7 +4659,8 @@ document.getElementById("registerBtn").addEventListener("click", function() {
     });
 });
 
-document.getElementById("loginBtn").addEventListener("click", function() {
+document.getElementById("loginBtn").addEventListener("click", function(event) {
+    if(event) event.preventDefault();
     const login = document.getElementById("loginInput").value.trim();
     const password = document.getElementById("loginPassword").value;
 
@@ -4667,22 +4668,28 @@ document.getElementById("loginBtn").addEventListener("click", function() {
         showAccountMessage("⚠️ Entrez votre pseudo/email et votre mot de passe.", false);
         return;
     }
+    if (accountRequestInProgress) return;
 
     accountRequestInProgress = true;
     startAuthRequestTimeout();
-    showAccountMessage("⏳ Connexion...", true);
+    showAccountMessage("⏳ Connexion au serveur...", true);
 
     connectServer(function() {
         if (!socket || socket.readyState !== WebSocket.OPEN) {
             accountRequestInProgress = false;
-            showAccountMessage("❌ Serveur non disponible.", false);
+            clearAuthRequestTimeout();
+            showAccountMessage("❌ Serveur non disponible. Rechargez la page et réessayez.", false);
             return;
         }
-        socket.send(JSON.stringify({
-            type: "login",
-            login: login,
-            password: password
-        }));
+        try {
+            showAccountMessage("⏳ Vérification du compte...", true);
+            socket.send(JSON.stringify({type:"login",login:login,password:password}));
+        } catch(sendError) {
+            accountRequestInProgress = false;
+            clearAuthRequestTimeout();
+            console.error("Envoi login impossible:",sendError);
+            showAccountMessage("❌ Envoi impossible. Vérifiez Internet puis réessayez.", false);
+        }
     });
 });
 
@@ -7634,13 +7641,26 @@ function openAuth(mode){showScreen('accountScreen');setAuthMode(mode);}
 function setAuthMode(mode){const login=mode==='login';document.getElementById('loginPanel').style.display=login?'block':'none';document.getElementById('registerPanel').style.display=login?'none':'block';document.getElementById('authLoginTab').classList.toggle('active',login);document.getElementById('authRegisterTab').classList.toggle('active',!login);document.getElementById('authTitle').textContent=login?'Connexion':'Créer un compte';document.getElementById('authSubtitle').textContent=login?'Connecte-toi à ton compte':'Rejoins la communauté MR_Jery Morpion';}
 // Attach the landing authentication buttons before optional language/storage setup.
 const landingLoginButton=document.getElementById('landingLoginBtn');
-if(landingLoginButton){
-  landingLoginButton.addEventListener('click',function(event){
-    event.preventDefault();
-    try { openAuth('login'); }
-    catch(error) { console.error('Unable to open login screen:',error); const target=document.getElementById('accountScreen'); if(target){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));target.classList.add('active');} }
-  });
+function forceOpenLoginScreen(event){
+  if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation();}
+  try {
+    const target=document.getElementById('accountScreen');
+    document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+    if(target) target.classList.add('active');
+    if(typeof setAuthMode==='function') setAuthMode('login');
+    const panel=document.getElementById('loginPanel');
+    if(panel) panel.style.display='block';
+    const register=document.getElementById('registerPanel');
+    if(register) register.style.display='none';
+    const input=document.getElementById('loginInput');
+    if(input) setTimeout(()=>input.focus(),50);
+  } catch(error) {
+    console.error('Unable to open login screen:',error);
+    const target=document.getElementById('accountScreen');
+    if(target) target.classList.add('active');
+  }
 }
+if(landingLoginButton) landingLoginButton.addEventListener('click',forceOpenLoginScreen,true);
 const landingRegisterButton=document.getElementById('landingRegisterBtn');
 if(landingRegisterButton) landingRegisterButton.addEventListener('click',function(event){event.preventDefault();openAuth('register');});
 let savedLang='fr';
