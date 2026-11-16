@@ -1960,8 +1960,8 @@ td, th { overflow-wrap: anywhere; }
         <label class="create-pro-field create-pro-field-wide"><span>NON TOURNOI A</span><input id="tournamentTitle" maxlength="100" required placeholder="Egzanp: MR_Jery Championship"><small>Chwazi yon non ki fasil pou jwè yo rekonèt.</small></label>
         <div class="create-pro-field"><label for="tournamentFee">FRÈ PATISIPASYON</label><div class="create-pro-money"><input id="tournamentFee" type="number" min="1" max="1000" step="0.01" value="5"><select id="tournamentCurrency" aria-label="Monnen"><option value="USD">USD $</option><option value="HTG">HTG G</option></select></div><small>Pri chak jwè ap peye pou antre.</small><small id="tournamentEntryFxEquivalent" class="create-pro-fx">Ekivalan lòt lajan an ap parèt isit la.</small></div>
         <div class="create-pro-field"><label for="tournamentCapacity">KANTITE JWÈ MAXIMUM</label><input id="tournamentCapacity" type="number" min="2" max="10000" step="1" value="10"><small>Chwazi kantite maksimòm jwè ki ka enskri.</small></div>
-        <div class="create-pro-field"><label for="tournamentMethod">MWAYEN PEMAN POU ENSKRIPSYON</label><select id="tournamentMethod"><option value="tranzak">Tranzak</option><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Chwazi mwayen peman ki disponib pou tounwa sa a.</small></div>
-        <div class="create-pro-field"><label for="tournamentCreationPaymentMethod">MWAYEN POU PEYE FRÈ PLATFÒM NAN</label><select id="tournamentCreationPaymentMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><small>Ou peye frè kreyasyon an anvan tournoi a parèt.</small></div>
+        <div class="create-pro-field"><label for="tournamentMethod">MWAYEN PEMAN POU ENSKRIPSYON</label><select id="tournamentMethod"><option value="tranzak">Tranzak</option><option value="moncash">MonCash</option><option value="natcash">NatCash</option><option value="card">Visa / Mastercard</option></select><small>Chwazi mwayen peman ki disponib pou tounwa sa a.</small></div>
+        <div class="create-pro-field"><label for="tournamentCreationPaymentMethod">MWAYEN POU PEYE FRÈ PLATFÒM NAN</label><select id="tournamentCreationPaymentMethod"><option value="moncash">MonCash</option><option value="natcash">NatCash</option><option value="card">Visa / Mastercard</option></select><small>Ou peye frè kreyasyon an anvan tournoi a parèt.</small></div>
         <div class="create-pro-field"><label for="tournamentCommission">AVANTAJ ÒGANIZATÈ A (%)</label><input id="tournamentCommission" type="number" min="2" max="15" step="1" value="10"><small>Ou ka chwazi ant 2% ak 15%. Rès la sèvi pou prim gayan yo.</small></div>
         <div class="create-pro-field"><label for="tournamentWinnerCount">KONBYEN GAYAN?</label><select id="tournamentWinnerCount"><option value="1">1 gayan</option><option value="2">2 gayan</option><option value="3" selected>3 gayan</option></select><small>Chwazi konbyen plas k ap resevwa prim.</small></div>
         <div class="create-pro-field"><label for="tournamentPrize1">PREMYE PLAS (%)</label><input id="tournamentPrize1" type="number" min="60" max="100" step="1" value="70"><small>Premye plas dwe resevwa omwen 60% nan fon prim lan.</small></div>
@@ -6856,7 +6856,7 @@ function tournamentStatusLabel(status){
   return ({registration:"Enskripsyon ouvè",live:"Tournoi an kou",finished:"Tournoi fini"})[String(status||"").toLowerCase()]||"Estati pa defini";
 }
 function tournamentMethodLabel(method){
-  return ({tranzak:"Tranzak",moncash:"MonCash",natcash:"NatCash"})[String(method||"").toLowerCase()]||"Metòd peman";
+  return ({tranzak:"Tranzak",moncash:"MonCash",natcash:"NatCash",card:"Visa / Mastercard"})[String(method||"").toLowerCase()]||"Metòd peman";
 }
 function renderTournamentList(items){
   const root=document.getElementById("tournamentList"); if(!root)return;
@@ -6921,7 +6921,7 @@ function renderTournamentDetail(t){
       <div class="tournament-stat"><small>Prize pool</small><strong>${pool.toFixed(2)}</strong></div>
     </div>
     <p class="tournament-note">Total peman verifye: ${gross.toFixed(2)} ${escTournament(t.currency||"USD")} · Avantaj òganizatè: ${commission.toFixed(2)} · Pòtay pri: ${prizeText}</p>
-    ${t.status==="registration"&&!isOrganizer?`<div class="tournament-register"><h3>Antre nan tournoi sa a</h3><div class="tournament-join-steps"><strong>Kondisyon tounwa a — verifye anvan ou peye:</strong><ol><li>Frè enskripsyon: <b>${escTournament(t.entry_fee)} ${escTournament(t.currency||"USD")}</b>.</li><li>Mwayen peman: <b>${escTournament(t.payment_method||"")}</b>.</li><li>Avantaj òganizatè a: <b>${escTournament(t.commission_percent)}%</b>.</li><li>Prim gayan yo: <b>${escTournament(prizeText)}</b>.</li><li>Distribisyon sa a fikse davans; li pa ka chanje apre enskripsyon kòmanse.</li></ol></div><label for="tournamentPaymentMethod">Chwazi mwayen peman ou</label><select id="tournamentPaymentMethod" class="tournament-payment-method"><option value="moncash">MonCash</option><option value="natcash">NatCash</option></select><label class="tournament-terms-accept"><input id="tournamentTermsAccepted" type="checkbox"> Mwen li epi mwen aksepte frè enskripsyon an, avantaj òganizatè a, distribisyon prim yo ak tout règ tounwa sa a.</label><button type="button" class="tournament-primary" data-t-action="register" data-id="${escTournament(t.tournament_id)}">Peye kounye a →</button><small class="tournament-note">Enskripsyon an rete an atant jiskaske peman an verifye. Pa janm pataje modpas oswa PIN peman ou.</small></div>`:""}
+    ${t.status==="registration"&&!isOrganizer?`<div class="tournament-register"><h3>Antre nan tournoi sa a</h3><div class="tournament-join-steps"><strong>Kondisyon tounwa a — verifye anvan ou peye:</strong><ol><li>Frè enskripsyon: <b>${escTournament(t.entry_fee)} ${escTournament(t.currency||"USD")}</b>.</li><li>Mwayen peman: <b>${escTournament(t.payment_method||"")}</b>.</li><li>Avantaj òganizatè a: <b>${escTournament(t.commission_percent)}%</b>.</li><li>Prim gayan yo: <b>${escTournament(prizeText)}</b>.</li><li>Distribisyon sa a fikse davans; li pa ka chanje apre enskripsyon kòmanse.</li></ol></div><label for="tournamentPaymentMethod">Chwazi mwayen peman ou</label><select id="tournamentPaymentMethod" class="tournament-payment-method"><option value="moncash">MonCash</option><option value="natcash">NatCash</option><option value="card">Visa / Mastercard</option></select><label class="tournament-terms-accept"><input id="tournamentTermsAccepted" type="checkbox"> Mwen li epi mwen aksepte frè enskripsyon an, avantaj òganizatè a, distribisyon prim yo ak tout règ tounwa sa a.</label><button type="button" class="tournament-primary" data-t-action="register" data-id="${escTournament(t.tournament_id)}">Peye kounye a →</button><small class="tournament-note">Enskripsyon an rete an atant jiskaske peman an verifye. Pa janm pataje modpas oswa PIN peman ou.</small></div>`:""}
     ${isOrganizer&&t.status==="registration"?`<button class="tournament-primary" data-t-action="start" data-id="${escTournament(t.tournament_id)}">Lanse tournoi a (minimòm 2 jwè verifye)</button>`:""}
     ${canDelete?`<div class="tournament-delete-zone"><p>Ou ka efase tournoi sa a paske poko gen okenn jwè ki enskri.</p><button type="button" class="tournament-delete-button" data-t-action="delete" data-id="${escTournament(t.tournament_id)}">🗑️ Efacer ce tournoi</button></div>`:""}
     <h3 style="margin-top:22px">Bracket / Match yo</h3>
@@ -7088,6 +7088,75 @@ function addTournamentVoicePending(data){
   if(root)root.innerHTML=tournamentPendingVoice.map((p,i)=>`<div class="tournament-player-row"><strong>${escTournament(p.username)} mande mikwo</strong><span><button class="tournament-secondary" data-t-action="voice" data-index="${i}" data-approve="1">Aksepte</button><button class="tournament-secondary" data-t-action="voice" data-index="${i}" data-approve="0">Refize</button></span></div>`).join("");
   renderTournamentMatchVoicePending();
 }
+async function ensureTranzakCardSdk(){
+  if(window.TranzakCard)return;
+  await new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-tranzak-card-sdk="1"]');
+    if(existing){existing.addEventListener("load",resolve,{once:true});existing.addEventListener("error",reject,{once:true});return;}
+    const script=document.createElement("script");
+    script.src="https://api.tranzak.co/js/tranzak-card.js";
+    script.async=true;script.dataset.tranzakCardSdk="1";
+    script.onload=resolve;script.onerror=()=>reject(new Error("Widget kat Tranzak la pa kapab chaje."));
+    document.head.appendChild(script);
+  });
+}
+async function waitForTranzakTransaction(transactionId){
+  for(let i=0;i<30;i++){
+    try{
+      const result=await walletRequest("/transactions");
+      const rows=Array.isArray(result.transactions)?result.transactions:[];
+      const tx=rows.find(item=>String(item.transaction_id)===String(transactionId));
+      if(tx&&tx.status==="completed")return true;
+      if(tx&&["failed","refunded"].includes(String(tx.status)))return false;
+    }catch(e){}
+    await new Promise(resolve=>setTimeout(resolve,2000));
+  }
+  return null;
+}
+async function openTranzakCardWidget(payment,description,onCompleted){
+  if(!payment?.client_secret||!payment?.publishable_key||!payment?.transaction_id)
+    throw new Error("Tranzak pa retounen enfòmasyon sekirize pou kat la.");
+  const modal=document.getElementById("tranzakCardModal");
+  const message=document.getElementById("tranzakCardMessage");
+  const payButton=document.getElementById("tranzakCardPayButton");
+  const element=document.getElementById("tranzakCardElement");
+  document.getElementById("tranzakCardDescription").textContent=description||"Peye ak Visa oswa Mastercard";
+  message.textContent="Antre enfòmasyon kat ou nan espas sekirize Tranzak la.";
+  element.replaceChildren();
+  modal.style.display="flex";modal.setAttribute("aria-hidden","false");
+  await ensureTranzakCardSdk();
+  window.TranzakCard.mount({containerId:"tranzakCardElement",clientSecret:payment.client_secret,publishableKey:payment.publishable_key});
+  payButton.disabled=false;
+  payButton.onclick=()=>{
+    payButton.disabled=true;
+    message.textContent="⏳ Nap voye peman an. Pa fèmen paj la...";
+    window.TranzakCard.confirm({
+      onSuccess:async()=>{
+        message.textContent="Kat la aksepte. Nap tann konfimasyon ofisyèl sou sèvè a...";
+        const verified=await waitForTranzakTransaction(payment.transaction_id);
+        if(verified===true){
+          message.textContent="Peman an konfime!";
+          modal.style.display="none";modal.setAttribute("aria-hidden","true");
+          if(typeof onCompleted==="function")onCompleted();
+        }else if(verified===false){
+          message.textContent="Peman an pa valide. Eseye yon lòt kat oswa yon lòt metòd.";
+          payButton.disabled=false;
+        }else{
+          message.textContent="Peman an poko konfime sou sèvè a. Pa repete peman an; rafrechi tounwa a pita.";
+        }
+      },
+      onError:error=>{
+        message.textContent=error?.message||"Kat la pa t pase. Verifye enfòmasyon yo oswa eseye yon lòt kat.";
+        payButton.disabled=false;
+      }
+    });
+  };
+}
+function closeTranzakCardWidget(){
+  const modal=document.getElementById("tranzakCardModal");
+  if(modal){modal.style.display="none";modal.setAttribute("aria-hidden","true");}
+}
+
 async function sendTournamentRegister(tid){
   const method=document.getElementById("tournamentPaymentMethod")?.value||"moncash";
   const accepted=!!document.getElementById("tournamentTermsAccepted")?.checked;
@@ -7099,6 +7168,10 @@ async function sendTournamentRegister(tid){
     const result=await walletRequest("/tournaments/entry/checkout",{method:"POST",body:JSON.stringify({
       tournament_id:tid,payment_method:method,terms_accepted:true,customer_name:currentUsername||"MR Jery Customer"
     })});
+    if(result.client_secret){
+      await openTranzakCardWidget(result,"Frè enskripsyon tounwa a",()=>{tournamentNotice("Peman an konfime. Enskripsyon ou aktive.",true);openTournamentScreen();});
+      return;
+    }
     if(!result.payment_url)throw new Error("Wallet la pa retounen lyen peman an.");
     tournamentNotice("Peman an pare. Nap redirije ou sou paj peman an...",true);
     window.location.assign(result.payment_url);
@@ -7133,6 +7206,10 @@ document.getElementById("tournamentCreateBtn")?.addEventListener("click",async()
       prize_shares:getTournamentPrizeShares(),max_participants:capacity,
       customer_name:currentUsername||"MR Jery Customer"
     })});
+    if(result.client_secret){
+      await openTranzakCardWidget(result,"Frè kreyasyon tounwa a",()=>{tournamentNotice("Peman an konfime. Tounwa a ap parèt nan lis la.",true);openTournamentScreen();});
+      return;
+    }
     if(!result.payment_url)throw new Error("Wallet la pa retounen lyen peman an.");
     tournamentNotice("Peman an pare. Apre Tranzak konfime li, tournoi a ap kreye otomatikman.",true);
     window.location.assign(result.payment_url);
@@ -7184,5 +7261,15 @@ document.getElementById("tournamentScreen")?.addEventListener("click",e=>{
 
 </script>
 
+<div id="tranzakCardModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.78);align-items:center;justify-content:center;padding:18px">
+  <div style="width:min(520px,100%);max-height:90vh;overflow:auto;background:#111827;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:22px;box-shadow:0 24px 80px rgba(0,0,0,.5)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:0">💳 Visa / Mastercard</h2><button type="button" onclick="closeTranzakCardWidget()" aria-label="Fèmen fenèt la">✕</button></div>
+    <p id="tranzakCardDescription" style="margin:12px 0">Peye ak kat ou</p>
+    <div id="tranzakCardElement" style="min-height:110px;background:#fff;border-radius:12px;padding:12px;color:#111"></div>
+    <p id="tranzakCardMessage" role="status" aria-live="polite" style="font-size:14px"></p>
+    <button id="tranzakCardPayButton" type="button" class="tournament-primary" style="width:100%">Konfime peman an</button>
+    <small style="display:block;margin-top:12px;opacity:.8">Kat ou trete dirèkteman nan widget sekirize Tranzak. MR_JERY pa resevwa nimewo kat ou ni CVV.</small>
+  </div>
+</div>
 </body>
 </html>
