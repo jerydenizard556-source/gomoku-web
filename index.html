@@ -2002,6 +2002,15 @@ td, th { overflow-wrap: anywhere; }
 #onlineGameScreen video.mrj-camera-video-hidden{visibility:hidden;min-height:0!important;height:0!important;aspect-ratio:auto!important}
 @media(max-width:430px){#onlineGameScreen .mrj-camera-tile-controls{gap:4px;padding:5px 1px 2px}#onlineGameScreen .mrj-camera-control{min-height:29px;padding:5px 6px;font-size:10px}#onlineGameScreen .mrj-camera-volume{width:54px}}
 </style>
+
+<style id="mrj-login-click-reliability-fix">
+/* Keep the landing login action above decorative layers and clickable on touch devices. */
+#landingScreen .hero-copy{position:relative!important;z-index:50!important;pointer-events:auto!important}
+#landingScreen .hero-actions{position:relative!important;z-index:60!important;pointer-events:auto!important}
+#landingScreen #landingLoginBtn{position:relative!important;z-index:61!important;pointer-events:auto!important;touch-action:manipulation}
+#landingScreen .hero-copy:before{pointer-events:none!important}
+</style>
+
 </head>
 
 <body>
@@ -2051,7 +2060,7 @@ td, th { overflow-wrap: anywhere; }
                     <span>♛ <b data-i18n="fRewards">Defi &amp; rekonpans</b></span>
                 </div>
                 <div class="hero-actions">
-                    <button class="hero-btn gold" id="landingLoginBtn">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
+                    <button type="button" class="hero-btn gold" id="landingLoginBtn" onclick="event.preventDefault();document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});var a=document.getElementById('accountScreen');if(a)a.classList.add('active');var l=document.getElementById('loginPanel');if(l)l.style.display='block';var r=document.getElementById('registerPanel');if(r)r.style.display='none';var t=document.getElementById('authLoginTab');if(t)t.classList.add('active');var tr=document.getElementById('authRegisterTab');if(tr)tr.classList.remove('active');var h=document.getElementById('authTitle');if(h)h.textContent='Connexion';var sub=document.getElementById('authSubtitle');if(sub)sub.textContent='Connecte-toi à ton compte';">👤 <span data-i18n="login">Connexion</span> <b>›</b></button>
                     <button class="hero-btn outline" id="landingRegisterBtn">👥 <span data-i18n="register">Créer un compte</span> <b>›</b></button>
                 </div>
                 <button class="about-pill" id="landingAboutPill">ⓘ <span data-i18n="about">À propos</span> <b>›</b></button>
