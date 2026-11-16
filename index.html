@@ -2146,7 +2146,7 @@ td, th { overflow-wrap: anywhere; }
                 <label>Mot de passe</label>
                 <input id="loginPassword" type="password" placeholder="Mot de passe">
                 <div class="auth-options"><label class="check"><input type="checkbox"> <span>Se souvenir de moi</span></label><button type="button" class="link-btn">Mot de passe oublié ?</button></div>
-                <button class="auth-main-btn" id="loginBtn" type="button">Se connecter <b>›</b></button>
+                <button class="auth-main-btn" id="loginBtn" type="button" onclick="return mrjDirectLogin(event)">Se connecter <b>›</b></button>
                 <div class="auth-or"><span>OU</span></div>
                 <button class="google-btn" type="button">G <span>Se connecter avec Google</span></button>
                 <p class="switch-line">Vous n'avez pas de compte ? <button type="button" id="goRegisterBtn" class="link-btn">Créer un compte</button></p>
@@ -9630,5 +9630,49 @@ body{
     <small style="display:block;margin-top:12px;opacity:.8">Kat ou trete dirèkteman nan widget sekirize Tranzak. MR_JERY pa resevwa nimewo kat ou ni CVV.</small>
   </div>
 </div>
+
+<script id="mrj-direct-login-click-fix">
+/* Independent click fallback for the account login button. */
+window.mrjDirectLogin = function(event) {
+  if (event) { event.preventDefault(); event.stopPropagation(); if (event.stopImmediatePropagation) event.stopImmediatePropagation(); }
+  var loginEl=document.getElementById("loginInput");
+  var passwordEl=document.getElementById("loginPassword");
+  var status=document.getElementById("accountStatus");
+  var login=(loginEl && loginEl.value || "").trim();
+  var password=passwordEl && passwordEl.value || "";
+  function message(value,ok){
+    if(status){status.textContent=value;status.style.color=ok?"#86efac":"#fca5a5";}
+  }
+  if(!login || !password){message("Entrez votre pseudo/email et votre mot de passe.",false);if(!loginEl || !loginEl.value)loginEl&&loginEl.focus();else passwordEl&&passwordEl.focus();return false;}
+  if(window.__mrjDirectLoginPending){message("Connexion en cours, patientez...",true);return false;}
+  if(typeof connectServer!=="function"){message("Le module de connexion n'est pas chargé. Rechargez la page.",false);return false;}
+  window.__mrjDirectLoginPending=true;
+  message("Connexion au serveur...",true);
+  try {
+    connectServer(function(){
+      try {
+        if(typeof socket==="undefined" || !socket || socket.readyState!==WebSocket.OPEN){
+          window.__mrjDirectLoginPending=false;
+          message("Serveur non disponible. Réessayez dans un instant.",false);
+          return;
+        }
+        message("Vérification du compte...",true);
+        socket.send(JSON.stringify({type:"login",login:login,password:password}));
+        window.setTimeout(function(){window.__mrjDirectLoginPending=false;},12000);
+      } catch(err) {
+        window.__mrjDirectLoginPending=false;
+        console.error("MR_JERY direct login failed:",err);
+        message("Impossible d'envoyer la demande. Vérifiez Internet.",false);
+      }
+    });
+  } catch(err) {
+    window.__mrjDirectLoginPending=false;
+    console.error("MR_JERY direct login error:",err);
+    message("Erreur de connexion. Rechargez la page puis réessayez.",false);
+  }
+  return false;
+};
+</script>
+
 </body>
 </html>
