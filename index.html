@@ -1810,6 +1810,7 @@ td, th { overflow-wrap: anywhere; }
         </select>
         <label for="walletPremiumMethod">Chwazi mwayen peman ou</label>
         <select id="walletPremiumMethod" class="premium-hidden-select" aria-label="Metòd peman">
+            <option value="" selected>Chwazi yon metòd peman</option>
             <option value="moncash">MonCash</option>
             <option value="natcash">NatCash</option>
             <option value="card">Visa / Mastercard</option>
@@ -1828,9 +1829,11 @@ td, th { overflow-wrap: anywhere; }
                 <small>Visa / Mastercard</small>
             </button>
         </div>
-        <label for="walletPremiumProof">Prèv peman (si administrasyon an mande li)</label>
-        <input id="walletPremiumProof" type="file" accept="image/jpeg,image/png">
-        <img id="walletPremiumPreview" alt="Aperçu prèv Premium" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
+        <div id="walletPremiumProofGroup" class="premium-proof-group" hidden>
+            <label for="walletPremiumProof">Prèv peman (si administrasyon an mande li)</label>
+            <input id="walletPremiumProof" type="file" accept="image/jpeg,image/png">
+            <img id="walletPremiumPreview" alt="Aperçu prèv Premium" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
+        </div>
         <button id="walletPremiumSubmit" class="primary-pay premium-submit" type="button">Kontinye pou peye →</button>
         <small class="premium-footnote">Abònman an pa aktive otomatikman sou baz yon foto. Li aktive sèlman apre konfimasyon peman ofisyèl Tranzak oswa verifikasyon prive pa administrasyon an.</small>
     </div>
@@ -6740,10 +6743,12 @@ document.getElementById("walletExchangeConfirmBtn")?.addEventListener("click",co
 document.getElementById("walletPremiumSubmit")?.addEventListener("click",startPremiumCheckout);
 const premiumMethodSelect=document.getElementById("walletPremiumMethod");
 function syncPremiumPaymentOptions(){
-  const selected=premiumMethodSelect?.value||"moncash";
+  const selected=premiumMethodSelect?.value||"";
   document.querySelectorAll("[data-premium-method]").forEach(option=>{
     option.setAttribute("aria-pressed",option.dataset.premiumMethod===selected?"true":"false");
   });
+  const proofGroup=document.getElementById("walletPremiumProofGroup");
+  if(proofGroup)proofGroup.hidden=!(selected==="moncash"||selected==="natcash");
 }
 document.querySelectorAll("[data-premium-method]").forEach(option=>option.addEventListener("click",()=>{
   if(!premiumMethodSelect)return;
