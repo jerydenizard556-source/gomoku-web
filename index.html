@@ -7290,5 +7290,997 @@ body{
 }
 </style>
 
+
+<style id="mrj-faceit-arena-v6">
+
+
+/* MR_JERY FACEIT-INSPIRED ARENA V6 — visual layer only */
+:root{
+  --mrj-v6-bg:#080d17;--mrj-v6-panel:#101a2a;--mrj-v6-panel2:#142238;
+  --mrj-v6-line:rgba(148,170,204,.18);--mrj-v6-text:#f3f6fc;
+  --mrj-v6-muted:#9baac0;--mrj-v6-orange:#ff7138;--mrj-v6-cyan:#42c8e8;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% -18%,rgba(39,94,151,.24),transparent 48%),
+    linear-gradient(180deg,#080e19 0%,#0a1220 48%,#070c15 100%);
+}
+#landingScreen.active,#accountMenuScreen.active,#rankingScreen.active,
+#profileScreen.active,#settingsScreen.active,#walletScreen.active,#premiumScreen.active,
+#spectatorScreen.active,#waitingRoomScreen.active{
+  background:transparent;
+}
+#landingScreen .landing-shell{
+  max-width:1320px;margin:22px auto 34px;padding:18px 24px 34px;
+  border:1px solid var(--mrj-v6-line);border-radius:22px;
+  background:linear-gradient(145deg,rgba(17,29,47,.97),rgba(8,15,27,.98));
+  box-shadow:0 28px 90px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.045);
+  position:relative;overflow:hidden;
+}
+#landingScreen .landing-shell:before,#accountMenuScreen .dashboard-shell:before{
+  content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,transparent,var(--mrj-v6-cyan),var(--mrj-v6-orange),transparent);
+  opacity:.9;pointer-events:none;
+}
+#landingScreen .landing-header{
+  min-height:66px;padding:0 5px 16px;border-bottom:1px solid var(--mrj-v6-line);
+  gap:20px;
+}
+#landingScreen .brand-mini,#accountMenuScreen .dashboard-brand{
+  color:#f5f7fb;font-weight:950;letter-spacing:.3px;
+}
+#landingScreen .brand-mini b,#accountMenuScreen .dashboard-brand b{color:var(--mrj-v6-orange)}
+#landingScreen .brand-crown,#accountMenuScreen .dashboard-crown{
+  color:#ffb35c;text-shadow:0 0 22px rgba(255,113,56,.28)
+}
+#landingScreen .landing-nav{gap:7px}
+#landingScreen .nav-link{
+  border:1px solid transparent;border-radius:10px;padding:10px 14px;
+  color:#aebbd0;font-weight:800;transition:.2s ease;
+}
+#landingScreen .nav-link:hover,#landingScreen .nav-link.active{
+  color:#fff;border-color:rgba(66,200,232,.25);
+  background:rgba(66,200,232,.09);
+}
+#landingScreen .language-button{
+  border:1px solid var(--mrj-v6-line);border-radius:10px;
+  background:#101d30;color:#eaf1fb;padding:10px 13px;
+}
+#landingScreen .landing-hero{
+  min-height:510px;margin-top:20px;padding:clamp(24px,5vw,66px);
+  display:grid;grid-template-columns:minmax(240px,.85fr) minmax(0,1.3fr);
+  align-items:center;gap:clamp(22px,5vw,76px);
+  border:1px solid rgba(112,151,201,.2);border-radius:19px;
+  background:
+   radial-gradient(ellipse at 18% 45%,rgba(44,128,182,.19),transparent 42%),
+   linear-gradient(120deg,rgba(16,34,58,.97),rgba(9,18,32,.98) 65%,rgba(22,29,43,.98));
+  box-shadow:inset 0 1px rgba(255,255,255,.05),0 22px 48px rgba(0,0,0,.2);
+}
+#landingScreen .world-map{opacity:.12;filter:grayscale(1)}
+#landingScreen .hero-logo{transform:scale(1.04);filter:drop-shadow(0 18px 28px rgba(0,0,0,.3))}
+#landingScreen .logo-crown{color:#ffb35c}
+#landingScreen .logo-ring{border-color:rgba(66,200,232,.65);box-shadow:0 0 0 9px rgba(66,200,232,.055),0 0 42px rgba(66,200,232,.16)}
+#landingScreen .logo-title strong{color:var(--mrj-v6-orange)}
+#landingScreen .hero-copy h1{font-size:clamp(34px,4.5vw,58px);line-height:1.08;letter-spacing:-1.8px;color:#f6f8fc}
+#landingScreen .hero-copy h1 em{color:#ff9868;font-style:normal}
+#landingScreen .hero-copy>p{max-width:620px;color:#b4c2d6;font-size:15px;line-height:1.8}
+#landingScreen .hero-features{gap:9px}
+#landingScreen .hero-features span{
+  border:1px solid var(--mrj-v6-line);border-radius:9px;padding:9px 11px;
+  background:rgba(5,13,24,.42);color:#c8d5e7;font-size:11px;
+}
+#landingScreen .hero-btn{
+  min-height:48px;border-radius:10px;padding:13px 20px;font-weight:950;
+  letter-spacing:.2px;transition:transform .2s,filter .2s,box-shadow .2s;
+}
+#landingScreen .hero-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+#landingScreen .hero-btn.gold{
+  background:linear-gradient(110deg,#ff9868,#ff7138 65%,#d94f2a);
+  color:#1a1010;box-shadow:0 10px 26px rgba(255,113,56,.2);
+}
+#landingScreen .hero-btn:not(.gold){border:1px solid rgba(66,200,232,.38);background:#142943;color:#eaf7ff}
+#homeScreen h1{color:#f5f7fc;letter-spacing:2px}
+#homeScreen .main-menu{max-width:900px;gap:16px}
+#homeScreen .menu-button{
+  min-height:84px;border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#14243a,#0d192a);color:#f4f7fc;
+  box-shadow:0 12px 25px rgba(0,0,0,.18);font-weight:900;transition:.2s ease;
+}
+#homeScreen .menu-button:hover{transform:translateY(-3px);border-color:rgba(66,200,232,.55);background:#192d47}
+#accountMenuScreen .dashboard-shell{
+  position:relative;max-width:1380px;margin:22px auto 34px;padding:18px;
+  border:1px solid var(--mrj-v6-line);border-radius:20px;
+  background:linear-gradient(145deg,rgba(14,25,41,.98),rgba(7,13,23,.99));
+  box-shadow:0 28px 80px rgba(0,0,0,.36);overflow:hidden;
+}
+#accountMenuScreen .dashboard-header{
+  min-height:68px;padding:7px 10px 17px;border-bottom:1px solid var(--mrj-v6-line);
+  display:flex;gap:18px;
+}
+#accountMenuScreen .dashboard-nav{gap:5px;flex-wrap:wrap}
+#accountMenuScreen .dash-nav{
+  border:1px solid transparent;border-radius:9px;padding:10px 12px;
+  color:#a9b8cd;font-size:12px;font-weight:850;transition:.2s ease;
+}
+#accountMenuScreen .dash-nav:hover,#accountMenuScreen .dash-nav.active{
+  color:#fff;background:rgba(66,200,232,.09);border-color:rgba(66,200,232,.22);
+}
+#accountMenuScreen .dashboard-user{
+  padding:7px 10px;border:1px solid var(--mrj-v6-line);border-radius:12px;
+  background:#111f33;color:#edf3fb;
+}
+#accountMenuScreen .dash-avatar,#accountMenuScreen .dash-big-avatar{
+  border:1px solid rgba(255,113,56,.42);background:linear-gradient(145deg,#263a54,#111d30);
+  color:#ff9868;box-shadow:0 5px 18px rgba(0,0,0,.2);
+}
+#accountMenuScreen .dashboard-main{padding:22px 4px 5px}
+#accountMenuScreen .welcome-card{
+  position:relative;min-height:205px;padding:clamp(22px,3.5vw,40px);
+  border:1px solid rgba(66,200,232,.24);border-radius:17px;
+  background:
+   radial-gradient(ellipse at 82% 50%,rgba(255,113,56,.13),transparent 34%),
+   linear-gradient(112deg,#142b47,#10223a 55%,#172438);
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 18px 38px rgba(0,0,0,.22);
+  overflow:hidden;
+}
+#accountMenuScreen .welcome-kicker{color:#6dd7ee;letter-spacing:2.3px;font-weight:950;font-size:10px}
+#accountMenuScreen .welcome-copy h1{font-size:clamp(32px,4vw,48px);letter-spacing:-1.5px;color:#f5f7fc}
+#accountMenuScreen .welcome-copy h1 span{color:#ff9868}
+#accountMenuScreen .welcome-copy p{color:#aebfd4;letter-spacing:2px;font-weight:800}
+#accountMenuScreen .welcome-line{width:84px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--mrj-v6-cyan),var(--mrj-v6-orange))}
+#accountMenuScreen .welcome-copy>strong{color:#eaf2fc;font-size:14px}
+#accountMenuScreen .welcome-world{opacity:.23;filter:drop-shadow(0 0 28px rgba(66,200,232,.25))}
+#accountMenuScreen .dashboard-balance-row{gap:13px;margin:16px 0}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+  position:relative;min-height:104px;padding:18px 20px;border:1px solid var(--mrj-v6-line);
+  border-radius:13px;background:linear-gradient(145deg,#14243a,#0d192a);
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+#accountMenuScreen .dash-balance-card:before{
+  content:"";position:absolute;left:0;top:15px;bottom:15px;width:3px;border-radius:4px;background:var(--mrj-v6-cyan)
+}
+#accountMenuScreen .dash-balance-card:nth-child(2):before{background:var(--mrj-v6-orange)}
+#accountMenuScreen .dash-balance-card small,#accountMenuScreen .dash-profile-card small{color:#9eafc5;font-weight:750}
+#accountMenuScreen .dash-balance-card strong{color:#f4f7fc;font-size:24px}
+#accountMenuScreen .dash-balance-card button{
+  border:1px solid rgba(66,200,232,.35);border-radius:9px;background:rgba(66,200,232,.1);color:#8be5f4
+}
+#accountMenuScreen .dashboard-grid{gap:13px}
+#accountMenuScreen .dashboard-card{
+  position:relative;min-height:154px;padding:19px;border:1px solid var(--mrj-v6-line);
+  border-radius:14px;background:linear-gradient(145deg,#14243a,#0c1828);
+  color:#eff4fb;text-align:left;box-shadow:0 10px 25px rgba(0,0,0,.17);
+  transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;
+}
+#accountMenuScreen .dashboard-card:after{
+  content:"";position:absolute;right:14px;top:14px;width:6px;height:6px;border-radius:50%;
+  background:var(--mrj-v6-cyan);box-shadow:0 0 12px var(--mrj-v6-cyan);opacity:.75
+}
+#accountMenuScreen .dashboard-card:hover{
+  transform:translateY(-4px);border-color:rgba(66,200,232,.48);
+  background:linear-gradient(145deg,#1a304b,#102039);box-shadow:0 17px 32px rgba(0,0,0,.26)
+}
+#accountMenuScreen .dash-card-icon{
+  display:grid;place-items:center;width:43px;height:43px;margin-bottom:14px;
+  border:1px solid rgba(66,200,232,.26);border-radius:12px;
+  background:rgba(66,200,232,.08);color:#70d8ec;font-size:20px;
+}
+#accountMenuScreen .dashboard-card strong{color:#f6f8fc;font-size:16px}
+#accountMenuScreen .dashboard-card small{color:#9eafc5;line-height:1.55}
+#accountMenuScreen .dashboard-card.gold-card{border-color:rgba(255,145,83,.28);background:linear-gradient(145deg,#30251f,#171b26)}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:rgba(255,145,83,.3);background:rgba(255,113,56,.1);color:#ff9b70}
+#accountMenuScreen .dashboard-footer-banner{
+  border:1px solid rgba(66,200,232,.22);border-radius:12px;
+  background:linear-gradient(100deg,rgba(30,82,111,.28),rgba(19,31,49,.85));
+}
+#rankingScreen .ranking-screen,#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{
+  color:var(--mrj-v6-text);
+}
+#rankingScreen .ranking-screen{
+  max-width:1250px;margin:26px auto;padding:clamp(15px,2.4vw,28px);
+  border:1px solid var(--mrj-v6-line);border-radius:19px;
+  background:linear-gradient(145deg,#101c2e,#091321);
+  box-shadow:0 24px 65px rgba(0,0,0,.3);
+}
+#rankingScreen .ranking-head h1{color:#f5f7fc}
+#rankingScreen .ranking-head p,#rankingScreen .ranking-note{color:#9eafc5}
+#rankingScreen .ranking-hero{
+  border:1px solid rgba(255,113,56,.25);border-radius:16px;
+  background:radial-gradient(ellipse at 50% 0,rgba(255,113,56,.13),transparent 55%),linear-gradient(145deg,#182941,#0c1829);
+}
+#rankingScreen .ranking-hero-kicker{color:#ffab7c;letter-spacing:2px;font-weight:950}
+#rankingScreen .ranking-podium-card{
+  border:1px solid var(--mrj-v6-line);border-radius:13px;
+  background:linear-gradient(145deg,#1b304b,#101d30);box-shadow:0 12px 25px rgba(0,0,0,.2)
+}
+#rankingScreen .ranking-medal{filter:drop-shadow(0 4px 8px rgba(255,180,70,.22))}
+#rankingScreen .ranking-podium-name{color:#f3f7fc}
+#rankingScreen .ranking-summary{gap:12px}
+#rankingScreen .ranking-stat{
+  border:1px solid var(--mrj-v6-line);border-radius:12px;
+  background:linear-gradient(145deg,#14243a,#0d192a);box-shadow:0 8px 20px rgba(0,0,0,.15)
+}
+#rankingScreen .ranking-stat strong{color:#ffad82}
+#rankingScreen .ranking-tools{
+  margin-top:18px;padding:14px;border:1px solid var(--mrj-v6-line);border-radius:13px;
+  background:#0d1929
+}
+#rankingScreen .ranking-tab{border-radius:8px;color:#aebdd0}
+#rankingScreen .ranking-tab.active{background:rgba(66,200,232,.13);border-color:rgba(66,200,232,.35);color:#a1edfa}
+#rankingScreen .ranking-search{border:1px solid #334861;border-radius:9px;background:#081321}
+#rankingScreen .ranking-search input{color:#f4f7fc}
+#rankingScreen .ranking-table-wrap{border:1px solid var(--mrj-v6-line);border-radius:13px;background:#0e1a2a;overflow:auto}
+#rankingScreen .ranking-table th{background:#172941;color:#91a9c4}
+#rankingScreen .ranking-table td{border-color:rgba(148,170,204,.12);color:#dce5f1}
+#rankingScreen .ranking-table tr:hover td{background:rgba(66,200,232,.055)}
+#profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{
+  max-width:1160px;margin:25px auto;padding:clamp(18px,3vw,32px);
+  border:1px solid var(--mrj-v6-line);border-radius:18px;
+  background:linear-gradient(145deg,#101d30,#091321);
+  box-shadow:0 22px 60px rgba(0,0,0,.27);
+}
+#profileScreen>h1,#settingsScreen>h1,#walletScreen>h1{color:#f5f7fc}
+#profileScreen .profile-box,#settingsScreen .settings-box,#walletScreen .wallet-box,#walletScreen .bet-box,
+#premiumScreen .premium-checkout,#spectatorScreen .spectator-box,#waitingRoomScreen .waiting-box{
+  border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#172840,#101d30);box-shadow:0 10px 26px rgba(0,0,0,.17)
+}
+#walletScreen .wallet-grid{gap:13px}
+#walletScreen .wallet-card{
+  border:1px solid rgba(66,200,232,.24);border-radius:12px;
+  background:linear-gradient(145deg,#122b40,#0c1c2e)
+}
+#walletScreen .wallet-card strong{color:#8fe5f1;font-size:25px}
+#walletScreen .bet-box h2{color:#ffad82}
+#walletScreen .bet-box p,#walletScreen .wallet-subtitle{color:#aabbd0;line-height:1.65}
+#walletScreen input,#walletScreen select,#premiumScreen input,#premiumScreen select{
+  border:1px solid #354b66!important;border-radius:9px!important;background:#091626!important;color:#f2f6fc!important
+}
+#walletScreen button,#premiumScreen button{transition:transform .18s,filter .18s}
+#walletScreen button:hover,#premiumScreen button:hover{transform:translateY(-1px);filter:brightness(1.08)}
+#walletScreen .primary-pay,#premiumScreen .primary-pay{
+  border:0!important;border-radius:10px!important;
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;
+  font-weight:950!important;box-shadow:0 9px 22px rgba(255,113,56,.18)
+}
+#premiumScreen .premium-heading h1{color:#f5f7fc}
+#premiumScreen .premium-heading h1 em{color:#ff9868}
+#premiumScreen .premium-kicker{color:#72d9ed;letter-spacing:2.4px}
+#premiumScreen .premium-plan{
+  border:1px solid var(--mrj-v6-line);border-radius:14px;
+  background:linear-gradient(145deg,#182b44,#0d192a);color:#f2f6fc
+}
+#premiumScreen .premium-plan strong{color:#ffad82}
+#premiumScreen .premium-plan-featured{
+  border-color:rgba(255,113,56,.65);
+  box-shadow:0 0 0 1px rgba(255,113,56,.12),0 15px 32px rgba(0,0,0,.22)
+}
+#premiumScreen .premium-popular{background:#ff7138;color:#1b1110}
+#tournamentScreen .tournament-hero-stage{
+  background:
+   radial-gradient(ellipse at 75% 40%,rgba(66,200,232,.14),transparent 36%),
+   radial-gradient(ellipse at 12% 90%,rgba(255,113,56,.12),transparent 38%),
+   linear-gradient(125deg,#101e32,#091321 70%,#14243a)!important;
+  border:1px solid var(--mrj-v6-line)!important;border-radius:18px!important;
+  box-shadow:0 24px 65px rgba(0,0,0,.34)!important;overflow:hidden
+}
+#tournamentScreen .japan-sky,#tournamentScreen .japan-sun,#tournamentScreen .japan-mountain,
+#tournamentScreen .japan-pagoda,#tournamentScreen .japan-blossoms{opacity:0!important}
+#tournamentScreen .japan-brand{color:#f4f7fc}
+#tournamentScreen .japan-brand>span{color:#ff9868}
+#tournamentScreen .japan-brand small{color:#73d9ed;letter-spacing:2px}
+#tournamentScreen .japan-hero-copy{z-index:2}
+#tournamentScreen .japan-eyebrow{color:#76dced;letter-spacing:2px}
+#tournamentScreen .japan-hero-copy h1{color:#f4f7fc;text-shadow:none}
+#tournamentScreen .japan-hero-copy h1 b{color:#ff9868}
+#tournamentScreen .japan-ribbon{
+  border:1px solid rgba(66,200,232,.3);border-radius:8px;
+  background:rgba(66,200,232,.08);color:#b4edf5
+}
+#tournamentScreen .japan-hero-copy p{color:#aebdd0}
+#tournamentScreen .japan-board-scene{filter:drop-shadow(0 20px 25px rgba(0,0,0,.35))}
+#tournamentScreen .japan-board{
+  border:5px solid #647c99!important;border-radius:10px!important;
+  background-color:#c6a36a!important;box-shadow:0 0 0 8px rgba(66,200,232,.07),0 18px 45px rgba(0,0,0,.35)!important
+}
+#tournamentScreen .japan-scroll-hint{color:#8da3be}
+#tournamentScreen .japan-continue-note{color:#aabbd0}
+#tournamentScreen .japan-continue{
+  border:0!important;border-radius:10px!important;
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;
+  box-shadow:0 10px 25px rgba(255,113,56,.2)!important
+}
+#tournamentScreen .tournament-top,#tournamentScreen .tournament-create-card,
+#tournamentScreen .tournament-list-card,#tournamentScreen .tournament-detail-card,
+#tournamentScreen .tournament-admin-card,#tournamentScreen .tournament-panel{
+  border-color:var(--mrj-v6-line)!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#15263d,#0e1a2b)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.2)!important
+}
+#tournamentScreen .tournament-top h1,#tournamentScreen .tournament-detail-head h2{color:#f5f7fc!important}
+#tournamentScreen .tournament-top h1{font-size:clamp(25px,3vw,34px)!important}
+#tournamentScreen .tournament-top>div small{color:#72d9ed!important;letter-spacing:2px!important}
+#tournamentScreen .tournament-subtitle{color:#aebdd0!important}
+#tournamentScreen .tournament-stepper{border-color:var(--mrj-v6-line)!important;background:#0c1929!important}
+#tournamentScreen .tournament-stepper button.active,#tournamentScreen .tournament-primary,
+#tournamentScreen .tournament-actions .gold{
+  background:linear-gradient(110deg,#ff9868,#ff7138)!important;color:#1b1110!important;border:0!important
+}
+#tournamentScreen .tournament-section-title>span{background:linear-gradient(145deg,#64d7e9,#2389ad)!important;color:#071522!important}
+#tournamentScreen .tournament-pill{background:rgba(66,200,232,.1)!important;border-color:rgba(66,200,232,.28)!important;color:#9cebf5!important}
+#tournamentScreen .tournament-item,#tournamentScreen .tournament-stat,
+#tournamentScreen .tournament-player-row,#tournamentScreen .tournament-admin-entry,
+#tournamentScreen .tournament-match{
+  background:#0c1929!important;border-color:var(--mrj-v6-line)!important
+}
+#tournamentScreen .tournament-page button:focus-visible{outline:2px solid var(--mrj-v6-cyan)!important}
+@media(max-width:900px){
+ #landingScreen .landing-hero{grid-template-columns:1fr;text-align:center}
+ #landingScreen .hero-logo{margin:auto}
+ #landingScreen .hero-copy>p{margin-left:auto;margin-right:auto}
+ #landingScreen .hero-features,#landingScreen .hero-actions{justify-content:center}
+ #accountMenuScreen .dashboard-header{flex-wrap:wrap}
+ #accountMenuScreen .dashboard-nav{order:3;width:100%;justify-content:center}
+}
+@media(max-width:650px){
+ #landingScreen .landing-shell{margin:8px;padding:12px;border-radius:15px}
+ #landingScreen .landing-header{flex-wrap:wrap;justify-content:space-between}
+ #landingScreen .landing-nav{order:3;width:100%;justify-content:center}
+ #landingScreen .landing-hero{min-height:0;padding:24px 15px;gap:24px}
+ #landingScreen .hero-logo{transform:scale(.85)}
+ #landingScreen .hero-copy h1{font-size:34px}
+ #accountMenuScreen .dashboard-shell{margin:8px;padding:10px;border-radius:15px}
+ #accountMenuScreen .dashboard-header{justify-content:center}
+ #accountMenuScreen .dashboard-brand{width:100%;text-align:center}
+ #accountMenuScreen .dashboard-nav{gap:4px}
+ #accountMenuScreen .dash-nav{padding:8px 9px;font-size:11px}
+ #accountMenuScreen .dashboard-user{margin:auto}
+ #accountMenuScreen .welcome-card{min-height:170px;padding:22px 16px}
+ #accountMenuScreen .welcome-world{font-size:55px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #accountMenuScreen .dashboard-card{min-height:130px;padding:14px}
+ #rankingScreen .ranking-screen{margin:8px;padding:12px}
+ #profileScreen,#settingsScreen,#walletScreen,#premiumScreen,#spectatorScreen,#waitingRoomScreen{margin:8px;padding:15px;border-radius:14px}
+ #tournamentScreen .tournament-hero-stage{min-height:500px!important;padding:24px 15px!important}
+ #tournamentScreen .japan-hero-copy h1{font-size:clamp(38px,12vw,58px)!important}
+ #tournamentScreen .japan-board-scene{transform:scale(.8)}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+ #accountMenuScreen .dashboard-card{min-height:108px}
+ #landingScreen .hero-copy h1{font-size:29px}
+}
+
+</style>
+<style id="mrj-homepage-refinement-v7">
+
+/* MR_JERY HOMEPAGE REFINEMENT V7 — clean competitive, not cartoon */
+#landingScreen.active{background:#080d16}
+#landingScreen .landing-shell{
+  width:min(100% - 36px,1420px);max-width:1420px;min-height:calc(100vh - 36px);
+  margin:18px auto;padding:0 34px 24px;border:1px solid rgba(155,177,207,.13);
+  border-radius:18px;background:
+    radial-gradient(ellipse at 78% 28%,rgba(45,105,145,.13),transparent 34%),
+    linear-gradient(145deg,#0d1726 0%,#09111d 60%,#0c1725 100%);
+  box-shadow:0 26px 80px rgba(0,0,0,.34);
+}
+#landingScreen .landing-header{
+  height:78px;min-height:78px;padding:0 2px;border:0;border-bottom:1px solid rgba(155,177,207,.13);
+  border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;
+}
+#landingScreen .brand-mini{font-size:19px;letter-spacing:.2px;color:#f3f6fa}
+#landingScreen .brand-crown{font-size:22px;color:#e4a85d;text-shadow:none}
+#landingScreen .brand-mini b{color:#e4a85d}
+#landingScreen .landing-nav{gap:6px}
+#landingScreen .nav-link{
+  padding:10px 14px;border:0;border-radius:7px;color:#98a8bc;
+  font-size:13px;font-weight:700;transition:background .18s,color .18s;
+}
+#landingScreen .nav-link.active,#landingScreen .nav-link:hover{
+  color:#f4f7fb;background:rgba(110,174,211,.1);border:0;
+}
+#landingScreen .language-button{
+  height:39px;border:1px solid rgba(155,177,207,.2);border-radius:8px;
+  background:#111e2e;color:#dce6f2;font-size:12px;
+}
+#landingScreen .landing-hero{
+  min-height:540px;height:auto;margin:0;padding:58px 3.5%;
+  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:6%;
+  border:0;border-radius:0;background:transparent;box-shadow:none;
+}
+#landingScreen .world-map{display:none}
+#landingScreen .hero-copy{max-width:690px;grid-column:1;grid-row:1}
+#landingScreen .hero-copy:before{
+  content:"MR_JERY  /  ONLINE STRATEGY ARENA";
+  display:inline-flex;align-items:center;margin-bottom:24px;padding:8px 11px;
+  border:1px solid rgba(92,181,215,.23);border-radius:5px;
+  background:rgba(55,139,171,.08);color:#7ec6dd;
+  font-size:10px;font-weight:850;letter-spacing:2px;
+}
+#landingScreen .hero-copy h1{
+  max-width:650px;margin:0 0 18px;color:#f3f6fa;
+  font-size:clamp(40px,5.1vw,66px);font-weight:850;line-height:1.04;
+  letter-spacing:-2.7px;
+}
+#landingScreen .hero-copy h1 em{color:#e6a65d;font-style:normal}
+#landingScreen .hero-copy>p{
+  max-width:570px;color:#aab8c9;font-size:16px;line-height:1.8;font-weight:400;
+}
+#landingScreen .hero-features{gap:9px;margin:25px 0 29px}
+#landingScreen .hero-features span{
+  padding:8px 10px;border:1px solid rgba(155,177,207,.14);border-radius:6px;
+  background:rgba(18,31,48,.7);color:#b8c5d4;font-size:11px;
+}
+#landingScreen .hero-features b{font-size:11px;font-weight:650}
+#landingScreen .hero-actions{gap:11px;margin-top:0}
+#landingScreen .hero-btn{
+  min-width:180px;min-height:48px;padding:13px 20px;border-radius:7px;
+  font-size:13px;font-weight:800;letter-spacing:.15px;
+}
+#landingScreen .hero-btn.gold{
+  background:linear-gradient(135deg,#edb66e,#d88a43);color:#171a20;
+  border:1px solid #f1c58c;box-shadow:0 8px 22px rgba(216,138,67,.15);
+}
+#landingScreen .hero-btn.outline{
+  border:1px solid rgba(170,192,215,.3);background:#111e2e;color:#e7edf5;
+}
+#landingScreen .hero-btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+#landingScreen .about-pill{
+  margin:18px 0 0;padding:8px 0;border:0;border-radius:0;
+  background:transparent;color:#8fa2b8;font-size:12px;
+}
+#landingScreen .about-pill:hover{color:#e6a65d}
+#landingScreen .hero-logo{
+  grid-column:2;grid-row:1;align-self:center;justify-self:center;
+  width:min(100%,390px);min-height:390px;padding:32px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1px solid rgba(127,165,195,.2);border-radius:16px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(54,133,167,.17),transparent 55%),
+    linear-gradient(145deg,#14243a,#0b1523 72%);
+  box-shadow:0 24px 55px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.04);
+  filter:none;position:relative;
+}
+#landingScreen .hero-logo:before{
+  content:"THE GOMOKU BOARD";
+  position:absolute;top:19px;left:22px;color:#849bb2;
+  font-size:9px;font-weight:850;letter-spacing:2px;
+}
+#landingScreen .hero-logo:after{
+  content:"THINK AHEAD. PLAY SMART.";
+  position:absolute;bottom:19px;color:#9aabbd;
+  font-size:9px;font-weight:800;letter-spacing:2.1px;
+}
+#landingScreen .hero-logo .logo-crown,#landingScreen .hero-logo .logo-title{display:none}
+#landingScreen .hero-logo .logo-ring{
+  width:min(100%,290px);height:auto;aspect-ratio:1;margin:0;
+  border:1px solid rgba(132,178,204,.28);border-radius:12px;
+  background:linear-gradient(145deg,#172a40,#0c1929);
+  box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 0 0 7px rgba(5,12,21,.38);
+}
+#landingScreen .hero-logo .logo-board-mini{
+  position:relative;width:82%;height:82%;padding:0;display:block;
+  border:0;background-color:#152b40;
+  background-image:
+    linear-gradient(rgba(130,172,196,.36) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(130,172,196,.36) 1px,transparent 1px);
+  background-size:20% 20%;background-position:center;
+}
+#landingScreen .hero-logo .logo-board-mini i{
+  position:absolute;width:19px;height:19px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f8fbff,#aab8c8 62%,#64748b);
+  box-shadow:0 3px 7px rgba(0,0,0,.48);transform:translate(-50%,-50%);
+}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(1){left:20%;top:20%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(2){left:40%;top:40%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(3){left:60%;top:20%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(4){left:60%;top:60%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(5){left:80%;top:80%}
+#landingScreen .hero-logo .logo-board-mini i:nth-child(6){left:20%;top:80%;background:radial-gradient(circle at 35% 30%,#4b5d70,#101a28 68%)}
+#landingScreen .landing-features{
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:0 0 20px;
+  border:0;background:transparent;
+}
+#landingScreen .landing-features>div{
+  min-height:128px;padding:18px 14px;text-align:left;
+  border:1px solid rgba(155,177,207,.14);border-radius:9px;
+  background:linear-gradient(145deg,rgba(20,36,55,.92),rgba(12,23,37,.95));
+  box-shadow:none;transition:border-color .18s,transform .18s;
+}
+#landingScreen .landing-features>div:hover{transform:translateY(-3px);border-color:rgba(111,187,215,.38)}
+#landingScreen .landing-features span{font-size:19px;color:#e5aa68}
+#landingScreen .landing-features h3{margin:9px 0 6px;color:#e8edf4;font-size:13px;font-weight:800}
+#landingScreen .landing-features p{font-size:11px;line-height:1.55;color:#8fa0b4}
+#landingScreen .landing-footer{
+  height:58px;flex-direction:row;justify-content:space-between;padding:0 4px;
+  border-top:1px solid rgba(155,177,207,.13);background:transparent;
+}
+#landingScreen .landing-footer span{color:#c4d0df;font-size:12px;font-weight:750}
+#landingScreen .landing-footer small{color:#71849a;font-size:10px;letter-spacing:1px}
+@media(max-width:900px){
+ #landingScreen .landing-shell{width:calc(100% - 20px);margin:10px;padding:0 20px 18px}
+ #landingScreen .landing-hero{min-height:0;padding:45px 2%;grid-template-columns:1fr;gap:34px}
+ #landingScreen .hero-copy{grid-column:1;grid-row:2;text-align:center;margin:auto}
+ #landingScreen .hero-copy:before{margin:0 auto 20px}
+ #landingScreen .hero-copy>p{margin-left:auto;margin-right:auto}
+ #landingScreen .hero-features,#landingScreen .hero-actions{justify-content:center}
+ #landingScreen .hero-logo{grid-column:1;grid-row:1;width:min(100%,340px);min-height:340px}
+ #landingScreen .landing-features{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #landingScreen .landing-features>div:last-child{grid-column:1/-1}
+}
+@media(max-width:560px){
+ #landingScreen .landing-shell{width:100%;margin:0;padding:0 15px 14px;border-radius:0;border-left:0;border-right:0}
+ #landingScreen .landing-header{height:auto;min-height:66px;flex-wrap:wrap;padding:12px 0}
+ #landingScreen .brand-mini{font-size:16px}
+ #landingScreen .landing-nav{display:flex;order:3;width:100%;justify-content:center;margin:0}
+ #landingScreen .nav-link{padding:8px 10px;font-size:11px}
+ #landingScreen .language-button{height:34px;font-size:11px}
+ #landingScreen .landing-hero{padding:28px 0 32px;gap:28px}
+ #landingScreen .hero-logo{width:min(100%,280px);min-height:280px;padding:25px}
+ #landingScreen .hero-logo .logo-ring{width:100%}
+ #landingScreen .hero-copy h1{font-size:clamp(34px,10vw,46px);letter-spacing:-1.7px}
+ #landingScreen .hero-copy>p{font-size:14px}
+ #landingScreen .hero-actions{display:grid;grid-template-columns:1fr}
+ #landingScreen .hero-btn{width:100%;min-width:0}
+ #landingScreen .landing-features{grid-template-columns:1fr 1fr;gap:8px}
+ #landingScreen .landing-features>div{min-height:112px;padding:13px 11px}
+ #landingScreen .landing-footer{height:auto;min-height:55px;gap:8px;flex-wrap:wrap}
+}
+
+</style>
+<style id="mrj-account-dashboard-v8">
+/* MR_JERY DASHBOARD V8 — premium competitive account home; visual-only */
+#accountMenuScreen.active{display:block!important;background:#080d16!important;min-height:100vh;color:#edf3fb}
+#accountMenuScreen .dashboard-shell{
+  width:min(100% - 36px,1480px);max-width:1480px;margin:18px auto;padding:0 30px 28px;
+  border:1px solid rgba(145,169,199,.16);border-radius:16px;
+  background:linear-gradient(145deg,#0e1928 0%,#091321 58%,#0c1725 100%);
+  box-shadow:0 28px 80px rgba(0,0,0,.38);overflow:hidden
+}
+#accountMenuScreen .dashboard-header{
+  min-height:82px;padding:0 4px;display:flex;align-items:center;gap:25px;
+  border:0;border-bottom:1px solid rgba(145,169,199,.15);border-radius:0;
+  background:transparent;box-shadow:none
+}
+#accountMenuScreen .dashboard-brand{display:flex;align-items:center;gap:10px;white-space:nowrap;color:#f4f7fb;font-size:19px;font-weight:850;letter-spacing:.1px}
+#accountMenuScreen .dashboard-crown{color:#e5a95f;font-size:23px;text-shadow:none}
+#accountMenuScreen .dashboard-brand b{color:#e5a95f}
+#accountMenuScreen .dashboard-nav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;flex-wrap:wrap}
+#accountMenuScreen .dash-nav{
+  min-height:39px;padding:9px 12px;border:1px solid transparent;border-radius:7px;
+  background:transparent;color:#91a3b9;font-size:12px;font-weight:750;
+  transition:background .18s,color .18s,border-color .18s
+}
+#accountMenuScreen .dash-nav.active,#accountMenuScreen .dash-nav:hover{
+  color:#eff5fc;background:rgba(79,157,194,.12);border-color:rgba(91,178,211,.2)
+}
+#accountMenuScreen .dashboard-user{
+  display:flex;align-items:center;gap:10px;min-width:150px;padding:8px 10px;
+  border:1px solid rgba(145,169,199,.16);border-radius:9px;background:#101e2e
+}
+#accountMenuScreen .dash-avatar,#accountMenuScreen .dash-big-avatar{
+  display:grid;place-items:center;flex:none;border:1px solid rgba(229,169,95,.3);
+  border-radius:50%;background:linear-gradient(145deg,#263b50,#132235);color:#e5b779
+}
+#accountMenuScreen .dash-avatar{width:34px;height:34px;font-size:17px}
+#accountMenuScreen .dashboard-user strong,#accountMenuScreen .dash-profile-card strong{display:block;color:#f1f5fa;font-size:12px}
+#accountMenuScreen .dashboard-user small,#accountMenuScreen .dash-profile-card small{display:block;margin-top:3px;color:#8295ad;font-size:10px}
+#accountMenuScreen .dash-user-more{margin-left:auto;border:0;background:transparent;color:#9db0c6}
+#accountMenuScreen .dashboard-main{max-width:1300px;margin:0 auto;padding:28px 0 0}
+#accountMenuScreen .welcome-card{
+  position:relative;display:flex;align-items:center;justify-content:space-between;min-height:235px;
+  padding:35px 42px;border:1px solid rgba(92,164,198,.24);border-radius:13px;overflow:hidden;
+  background:radial-gradient(ellipse at 78% 50%,rgba(55,144,177,.2),transparent 35%),
+    linear-gradient(110deg,#14263b 0%,#102036 56%,#0c1929 100%);
+  box-shadow:0 18px 42px rgba(0,0,0,.22)
+}
+#accountMenuScreen .welcome-card:after{
+  content:"";position:absolute;right:7%;top:50%;width:205px;aspect-ratio:1;transform:translateY(-50%) rotate(0deg);
+  border:1px solid rgba(121,174,197,.25);border-radius:12px;
+  background-color:rgba(13,29,46,.65);
+  background-image:linear-gradient(rgba(126,169,191,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(126,169,191,.2) 1px,transparent 1px);
+  background-size:20% 20%;box-shadow:inset 0 0 0 8px rgba(5,13,23,.35),0 18px 40px rgba(0,0,0,.25)
+}
+#accountMenuScreen .welcome-card:before{
+  content:"";position:absolute;z-index:1;right:calc(7% + 45px);top:calc(50% - 54px);width:14px;height:14px;border-radius:50%;
+  background:#e9edf3;box-shadow:40px 40px 0 #111d2d,80px 0 0 #e9edf3,120px 80px 0 #111d2d,40px 120px 0 #e9edf3;
+}
+#accountMenuScreen .welcome-copy{position:relative;z-index:2;max-width:650px}
+#accountMenuScreen .welcome-kicker{margin-bottom:13px;color:#7dc8df;font-size:10px;font-weight:900;letter-spacing:2.4px}
+#accountMenuScreen .welcome-copy h1{margin:0;color:#f4f7fb;font-size:clamp(32px,4vw,49px);font-weight:900;line-height:1.05;letter-spacing:-1.8px}
+#accountMenuScreen .welcome-copy h1 span{color:#e6a960}
+#accountMenuScreen .welcome-copy p{margin:12px 0 17px;color:#aab9ca;font-size:14px;letter-spacing:1.2px}
+#accountMenuScreen .welcome-line{width:52px;height:3px;margin:0 0 14px;border-radius:2px;background:linear-gradient(90deg,#e7b36f,#5fc5dd)}
+#accountMenuScreen .welcome-copy>strong{color:#dce7f2;font-size:13px;font-weight:700}
+#accountMenuScreen .welcome-world{display:none}
+#accountMenuScreen .dashboard-balance-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:17px 0}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+  position:relative;display:flex;align-items:center;gap:14px;min-height:91px;padding:18px 20px;
+  border:1px solid rgba(145,169,199,.16);border-radius:10px;
+  background:linear-gradient(145deg,#14243a,#0e1b2c);box-shadow:0 10px 25px rgba(0,0,0,.15)
+}
+#accountMenuScreen .dash-balance-card{display:block}
+#accountMenuScreen .dash-balance-card small{display:block;color:#91a5bc;font-size:11px;font-weight:750;letter-spacing:.7px}
+#accountMenuScreen .dash-balance-card strong{display:block;margin-top:7px;color:#e9f1f8;font-size:23px;font-weight:850;font-variant-numeric:tabular-nums}
+#accountMenuScreen .dash-balance-card button{
+  position:absolute;right:17px;top:50%;transform:translateY(-50%);width:34px;height:34px;
+  border:1px solid rgba(104,192,213,.32);border-radius:8px;background:rgba(74,164,190,.12);
+  color:#91e0ed;font-size:20px;font-weight:600
+}
+#accountMenuScreen .dash-balance-card button:hover{background:rgba(74,164,190,.23)}
+#accountMenuScreen .dash-profile-card{background:linear-gradient(145deg,#192b42,#111e30)}
+#accountMenuScreen .dash-big-avatar{width:48px;height:48px;font-size:22px}
+#accountMenuScreen .dashboard-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+#accountMenuScreen .dashboard-card{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  min-height:158px;padding:19px 17px;text-align:left;
+  border:1px solid rgba(145,169,199,.16);border-radius:10px;
+  background:linear-gradient(145deg,#14243a,#0e1a2a);color:#edf3fa;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);transition:transform .18s,border-color .18s,background .18s
+}
+#accountMenuScreen .dashboard-card:hover{transform:translateY(-3px);border-color:rgba(100,192,218,.45);background:linear-gradient(145deg,#1a3049,#102136)}
+#accountMenuScreen .dashboard-card .dash-card-icon{
+  display:grid;place-items:center;width:39px;height:39px;margin-bottom:14px;
+  border:1px solid rgba(104,183,210,.2);border-radius:9px;background:rgba(67,145,177,.1);
+  color:#80d3e6;font-size:19px
+}
+#accountMenuScreen .dashboard-card strong{margin-bottom:7px;color:#f0f4f9;font-size:14px;font-weight:850}
+#accountMenuScreen .dashboard-card small{color:#91a4ba;font-size:11px;line-height:1.55;font-weight:500}
+#accountMenuScreen .dashboard-card.gold-card{border-color:rgba(224,169,99,.25);background:linear-gradient(145deg,#2a2b2a,#171f2b)}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:rgba(230,177,109,.25);background:rgba(219,159,83,.1);color:#e8b36f}
+#accountMenuScreen .dashboard-card.gold-card:hover{border-color:rgba(230,177,109,.55)}
+#accountMenuScreen .dashboard-footer-banner{
+  display:flex;align-items:center;gap:13px;margin-top:17px;padding:16px 19px;
+  border:1px solid rgba(145,169,199,.15);border-radius:9px;background:#101e2e
+}
+#accountMenuScreen .dashboard-footer-banner>span{color:#e4aa63;font-size:21px}
+#accountMenuScreen .dashboard-footer-banner strong{flex:1;color:#c4d1df;font-size:12px;font-weight:700}
+#accountMenuScreen .dashboard-footer-banner button{
+  padding:9px 13px;border:1px solid rgba(224,120,105,.3);border-radius:7px;
+  background:rgba(224,103,91,.09);color:#f0a49a;font-size:11px;font-weight:800
+}
+#accountMenuScreen .dashboard-footer-banner button:hover{background:rgba(224,103,91,.17)}
+#accountMenuScreen button:focus-visible{outline:2px solid #73d2e6!important;outline-offset:3px}
+@media(max-width:1120px){
+ #accountMenuScreen .dashboard-shell{padding:0 20px 22px}
+ #accountMenuScreen .dashboard-header{gap:13px;flex-wrap:wrap;padding:14px 2px}
+ #accountMenuScreen .dashboard-nav{order:3;width:100%;justify-content:flex-start}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ #accountMenuScreen .dashboard-shell{width:calc(100% - 16px);margin:8px auto;padding:0 12px 15px;border-radius:12px}
+ #accountMenuScreen .dashboard-header{gap:12px}
+ #accountMenuScreen .dashboard-brand{font-size:17px}
+ #accountMenuScreen .dashboard-user{margin-left:auto;min-width:0}
+ #accountMenuScreen .dashboard-nav{gap:4px;overflow-x:auto;flex-wrap:nowrap;padding:2px 0 7px}
+ #accountMenuScreen .dash-nav{flex:none;padding:8px 9px;font-size:11px}
+ #accountMenuScreen .dashboard-main{padding-top:15px}
+ #accountMenuScreen .welcome-card{min-height:205px;padding:25px 21px}
+ #accountMenuScreen .welcome-card:after{right:-40px;width:150px;opacity:.45}
+ #accountMenuScreen .welcome-card:before{right:5px;opacity:.45}
+ #accountMenuScreen .welcome-copy h1{font-size:34px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{min-height:82px;padding:14px}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #accountMenuScreen .dashboard-card{min-height:142px;padding:14px}
+ #accountMenuScreen .dashboard-footer-banner{flex-wrap:wrap}
+ #accountMenuScreen .dashboard-footer-banner strong{min-width:calc(100% - 45px)}
+ #accountMenuScreen .dashboard-footer-banner button{margin-left:auto}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+ #accountMenuScreen .dashboard-card{min-height:112px}
+ #accountMenuScreen .welcome-copy h1{font-size:29px}
+}
+</style>
+<style id="mrj-account-dashboard-v9">
+/* MR_JERY DASHBOARD V9 — premium arena polish; CSS-only, preserves all existing controls */
+#accountMenuScreen.active{background:
+ radial-gradient(ellipse at 50% -18%,rgba(33,101,135,.22),transparent 48%),
+ radial-gradient(ellipse at 100% 40%,rgba(139,99,48,.08),transparent 34%),#070c14!important}
+#accountMenuScreen .dashboard-shell{
+ width:min(100% - 28px,1510px);max-width:1510px;margin:14px auto;padding:0 34px 32px;
+ border:1px solid rgba(134,171,202,.2);border-radius:13px;
+ background:linear-gradient(135deg,rgba(17,30,47,.98),rgba(8,17,29,.99) 54%,rgba(13,25,40,.98));
+ box-shadow:0 32px 90px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.035)
+}
+#accountMenuScreen .dashboard-header{min-height:88px;border-bottom-color:rgba(132,171,198,.2)}
+#accountMenuScreen .dashboard-brand{font-size:21px;letter-spacing:.7px;text-shadow:0 2px 18px rgba(93,192,219,.12)}
+#accountMenuScreen .dashboard-crown{filter:drop-shadow(0 0 9px rgba(230,177,109,.3))}
+#accountMenuScreen .dashboard-brand b{color:#efbd78}
+#accountMenuScreen .dash-nav{position:relative;border-radius:5px;letter-spacing:.15px}
+#accountMenuScreen .dash-nav.active{background:linear-gradient(180deg,rgba(74,164,194,.19),rgba(47,115,145,.08));border-color:rgba(102,194,219,.28);box-shadow:inset 0 -2px #65c5dc}
+#accountMenuScreen .dashboard-user{border-radius:6px;background:linear-gradient(120deg,#172a40,#101c2d);border-color:rgba(135,177,204,.24);box-shadow:0 8px 25px rgba(0,0,0,.18)}
+#accountMenuScreen .dashboard-main{max-width:1340px;padding-top:31px}
+#accountMenuScreen .welcome-card{
+ min-height:258px;padding:42px 48px;border-radius:8px;border-color:rgba(99,183,211,.3);
+ background:radial-gradient(ellipse at 83% 48%,rgba(43,147,181,.23),transparent 31%),
+ linear-gradient(105deg,#172b42 0%,#10233a 48%,#0b192a 100%);
+ box-shadow:0 22px 48px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.055)
+}
+#accountMenuScreen .welcome-card:after{
+ right:8%;width:224px;border-radius:5px;border-color:rgba(119,192,212,.34);
+ background-color:rgba(8,22,36,.84);
+ background-image:linear-gradient(rgba(124,184,204,.19) 1px,transparent 1px),linear-gradient(90deg,rgba(124,184,204,.19) 1px,transparent 1px);
+ box-shadow:inset 0 0 0 7px rgba(5,13,23,.38),0 0 55px rgba(48,157,191,.12),0 22px 45px rgba(0,0,0,.34)
+}
+#accountMenuScreen .welcome-card:before{
+ right:calc(8% + 49px);filter:drop-shadow(0 0 8px rgba(235,190,127,.38))
+}
+#accountMenuScreen .welcome-kicker{color:#8bd8e9;letter-spacing:3px}
+#accountMenuScreen .welcome-copy h1{font-size:clamp(36px,4.2vw,54px);letter-spacing:-2px}
+#accountMenuScreen .welcome-copy h1 span{color:#efbd78;text-shadow:0 5px 25px rgba(218,164,95,.13)}
+#accountMenuScreen .welcome-copy p{color:#b5c5d5}
+#accountMenuScreen .welcome-line{width:68px;background:linear-gradient(90deg,#efbd78,#64d0e3);box-shadow:0 0 16px rgba(95,198,219,.22)}
+#accountMenuScreen .dashboard-balance-row{gap:15px;margin:19px 0 22px}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+ min-height:102px;padding:20px 22px;border-radius:7px;border-color:rgba(131,171,200,.2);
+ background:linear-gradient(145deg,rgba(24,43,65,.96),rgba(13,26,42,.98));
+ box-shadow:0 12px 28px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035)
+}
+#accountMenuScreen .dash-balance-card small{color:#9eb4c9;text-transform:uppercase;letter-spacing:1px}
+#accountMenuScreen .dash-balance-card strong{font-size:26px;letter-spacing:.1px}
+#accountMenuScreen .dash-balance-card button{border-radius:5px;background:linear-gradient(145deg,rgba(76,171,198,.2),rgba(55,117,149,.1));box-shadow:inset 0 1px rgba(255,255,255,.07)}
+#accountMenuScreen .dash-profile-card{background:linear-gradient(120deg,#1a3048,#14243a)}
+#accountMenuScreen .dash-big-avatar{border-radius:8px;background:linear-gradient(145deg,#304d66,#172b40);box-shadow:0 0 22px rgba(80,177,205,.12)}
+#accountMenuScreen .dashboard-grid{gap:14px}
+#accountMenuScreen .dashboard-card{
+ min-height:170px;padding:20px 19px;border-radius:7px;border-color:rgba(125,165,194,.2);
+ background:linear-gradient(145deg,rgba(24,43,64,.97),rgba(12,25,40,.99));
+ box-shadow:0 13px 28px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035);
+ transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease
+}
+#accountMenuScreen .dashboard-card:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.035),transparent 43%);opacity:.7}
+#accountMenuScreen .dashboard-card:hover{
+ transform:translateY(-4px);border-color:rgba(105,207,228,.58);
+ background:linear-gradient(145deg,#1b3852,#10283d);
+ box-shadow:0 20px 36px rgba(0,0,0,.3),0 0 0 1px rgba(85,185,211,.08),0 0 25px rgba(69,165,193,.09)
+}
+#accountMenuScreen .dashboard-card .dash-card-icon{
+ width:43px;height:43px;margin-bottom:16px;border-radius:7px;
+ background:linear-gradient(145deg,rgba(74,166,195,.19),rgba(46,107,138,.08));
+ border-color:rgba(109,195,218,.27);box-shadow:inset 0 1px rgba(255,255,255,.06)
+}
+#accountMenuScreen .dashboard-card strong{font-size:14px;letter-spacing:.1px}
+#accountMenuScreen .dashboard-card small{color:#a1b3c6;line-height:1.6}
+#accountMenuScreen .dashboard-card.gold-card{
+ border-color:rgba(226,177,111,.31);
+ background:linear-gradient(145deg,rgba(54,47,39,.97),rgba(25,29,35,.99));
+ box-shadow:0 13px 28px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035)
+}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{
+ background:linear-gradient(145deg,rgba(225,171,99,.2),rgba(147,104,55,.09));border-color:rgba(235,187,119,.32);color:#f0c486
+}
+#accountMenuScreen .dashboard-card.gold-card:hover{border-color:rgba(239,190,121,.66);box-shadow:0 20px 36px rgba(0,0,0,.3),0 0 24px rgba(203,150,82,.1)}
+#accountMenuScreen .dashboard-footer-banner{border-radius:6px;border-color:rgba(132,171,199,.2);background:linear-gradient(100deg,#14263a,#101d2d);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+#accountMenuScreen .dashboard-footer-banner button{border-radius:5px}
+#accountMenuScreen button:focus-visible{outline-offset:4px!important;box-shadow:0 0 0 4px rgba(98,201,225,.12)}
+@media(max-width:1120px){
+ #accountMenuScreen .dashboard-shell{padding:0 22px 25px}
+ #accountMenuScreen .dashboard-main{padding-top:24px}
+ #accountMenuScreen .welcome-card{padding:32px 30px}
+}
+@media(max-width:700px){
+ #accountMenuScreen .dashboard-shell{width:calc(100% - 12px);margin:6px auto;padding:0 11px 14px;border-radius:9px}
+ #accountMenuScreen .dashboard-header{min-height:74px}
+ #accountMenuScreen .dashboard-main{padding-top:14px}
+ #accountMenuScreen .welcome-card{min-height:198px;padding:23px 18px;border-radius:6px}
+ #accountMenuScreen .welcome-card:after{right:-43px;width:145px;opacity:.42}
+ #accountMenuScreen .welcome-card:before{right:2px;opacity:.45}
+ #accountMenuScreen .welcome-copy h1{font-size:33px}
+ #accountMenuScreen .dashboard-balance-row{gap:8px;margin:12px 0 15px}
+ #accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{min-height:79px;padding:12px;border-radius:6px}
+ #accountMenuScreen .dash-balance-card strong{font-size:20px}
+ #accountMenuScreen .dashboard-grid{gap:9px}
+ #accountMenuScreen .dashboard-card{min-height:145px;padding:14px 12px;border-radius:6px}
+ #accountMenuScreen .dashboard-card .dash-card-icon{width:36px;height:36px;margin-bottom:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ #accountMenuScreen .dashboard-card{transition:none}
+ #accountMenuScreen .dashboard-card:hover{transform:none}
+}
+</style>
+<style id="mrj-account-dashboard-v10">
+/* MR_JERY V10 — bold, restrained esports command center; visual-only */
+#accountMenuScreen.active{background:#060a11!important;color:#eef3f8}
+#accountMenuScreen .dashboard-shell{
+ width:min(100% - 24px,1580px);max-width:1580px;margin:10px auto;padding:0 38px 34px;
+ border:1px solid #26364a;border-radius:4px;
+ background:linear-gradient(135deg,#0d1725 0%,#09111c 52%,#0d1826 100%);
+ box-shadow:0 30px 90px rgba(0,0,0,.52)
+}
+#accountMenuScreen .dashboard-header{
+ min-height:82px;padding:0 2px;border:0;border-bottom:1px solid #29394c;border-radius:0;
+ background:transparent;box-shadow:none;backdrop-filter:none
+}
+#accountMenuScreen .dashboard-brand{font-size:22px;font-weight:950;letter-spacing:1.1px}
+#accountMenuScreen .dashboard-crown{font-size:0;filter:none}
+#accountMenuScreen .dashboard-crown:after{content:"M";font-size:20px;font-weight:950;color:#d8ad68}
+#accountMenuScreen .dashboard-brand b{color:#d8ad68}
+#accountMenuScreen .dashboard-nav{gap:3px}
+#accountMenuScreen .dash-nav{
+ min-height:42px;padding:10px 13px;border:0;border-bottom:2px solid transparent;border-radius:0;
+ color:#9aaabe;background:transparent;font-size:11px;font-weight:850;letter-spacing:.55px;text-transform:uppercase
+}
+#accountMenuScreen .dash-nav.active,#accountMenuScreen .dash-nav:hover{
+ color:#f4f7fa;background:rgba(102,166,196,.08);border-color:#d8ad68;box-shadow:none
+}
+#accountMenuScreen .dashboard-user{border:1px solid #304158;border-radius:3px;background:#111e2d;box-shadow:none}
+#accountMenuScreen .dash-avatar{border-radius:3px;background:#1b3045;border-color:#496078}
+#accountMenuScreen .dashboard-main{max-width:1400px;padding:34px 0 8px}
+#accountMenuScreen .welcome-card{
+ min-height:280px;padding:48px 54px;border:1px solid #3a5369;border-left:4px solid #d8ad68;border-radius:3px;
+ background:linear-gradient(105deg,#14283d 0%,#102135 54%,#0a1725 100%);
+ box-shadow:inset 0 1px rgba(255,255,255,.035),0 22px 46px rgba(0,0,0,.28)
+}
+#accountMenuScreen .welcome-card:after{
+ right:7%;width:238px;border-radius:2px;border:1px solid rgba(125,169,194,.34);
+ background-color:#0b1b2a;background-image:linear-gradient(rgba(131,171,193,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(131,171,193,.18) 1px,transparent 1px);
+ box-shadow:inset 0 0 0 8px rgba(3,10,17,.3),0 18px 40px rgba(0,0,0,.32)
+}
+#accountMenuScreen .welcome-card:before{
+ right:calc(7% + 48px);border-radius:2px;background:#e6edf2;
+ box-shadow:40px 40px 0 #16283a,80px 0 0 #e6edf2,120px 80px 0 #16283a,40px 120px 0 #e6edf2
+}
+#accountMenuScreen .welcome-kicker{color:#82c9dc;font-size:10px;letter-spacing:3.2px}
+#accountMenuScreen .welcome-copy h1{font-size:clamp(40px,4.7vw,60px);font-weight:950;letter-spacing:-2.4px}
+#accountMenuScreen .welcome-copy h1 span{color:#e2b66f}
+#accountMenuScreen .welcome-copy p{font-size:13px;color:#aebdcb;letter-spacing:2px;text-transform:uppercase}
+#accountMenuScreen .welcome-line{width:74px;height:3px;border-radius:0;background:#d8ad68;box-shadow:none}
+#accountMenuScreen .welcome-copy>strong{font-size:13px;letter-spacing:.3px;color:#e0e7ed}
+#accountMenuScreen .dashboard-balance-row{grid-template-columns:1fr 1fr 1.25fr;gap:12px;margin:16px 0 23px}
+#accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{
+ min-height:104px;padding:20px 23px;border:1px solid #2b4055;border-radius:3px;
+ background:#101e2d;box-shadow:none
+}
+#accountMenuScreen .dash-balance-card small{font-size:10px;color:#91a7bc;letter-spacing:1.5px}
+#accountMenuScreen .dash-balance-card strong{font-size:28px;font-weight:950;color:#f0f3f6;letter-spacing:.2px}
+#accountMenuScreen .dash-balance-card button{
+ width:32px;height:32px;border:1px solid #54748a;border-radius:2px;background:#172c40;color:#91d8e7;box-shadow:none
+}
+#accountMenuScreen .dash-profile-card{background:#14263a}
+#accountMenuScreen .dash-big-avatar{
+ width:48px;height:48px;border-radius:3px;border:1px solid #7b6749;background:#202f3d;color:#e2b66f;
+ font-size:0;box-shadow:none
+}
+#accountMenuScreen .dash-big-avatar:after{content:"MR";font-size:15px;font-weight:950;letter-spacing:1px}
+#accountMenuScreen .dashboard-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+#accountMenuScreen .dashboard-card{
+ min-height:164px;padding:19px 18px;border:1px solid #2c4054;border-radius:3px;
+ background:#101e2d;color:#edf2f6;box-shadow:none;text-align:left
+}
+#accountMenuScreen .dashboard-card:after{border-radius:0;background:linear-gradient(110deg,rgba(255,255,255,.025),transparent 55%);opacity:1}
+#accountMenuScreen .dashboard-card:hover{
+ transform:translateY(-2px);border-color:#8ba9bd;background:#15283b;
+ box-shadow:0 12px 25px rgba(0,0,0,.24)
+}
+#accountMenuScreen .dashboard-card .dash-card-icon{
+ width:39px;height:39px;margin-bottom:15px;border:1px solid #40576d;border-radius:3px;
+ background:#172b3e;color:#9ed8e4;font-size:0;box-shadow:none
+}
+#accountMenuScreen .dashboard-card .dash-card-icon:after{font-size:12px;font-weight:950;letter-spacing:1px;color:#9ed8e4}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(1) .dash-card-icon:after{content:"01"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(2) .dash-card-icon:after{content:"02"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(3) .dash-card-icon:after{content:"03"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(4) .dash-card-icon:after{content:"04"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(5) .dash-card-icon:after{content:"05"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(6) .dash-card-icon:after{content:"06"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(7) .dash-card-icon:after{content:"07"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(8) .dash-card-icon:after{content:"08"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(9) .dash-card-icon:after{content:"09"}
+#accountMenuScreen .dashboard-grid>.dashboard-card:nth-child(10) .dash-card-icon:after{content:"10"}
+#accountMenuScreen .dashboard-card strong{font-size:14px;font-weight:900;letter-spacing:.15px;color:#f1f4f7}
+#accountMenuScreen .dashboard-card small{font-size:11px;line-height:1.55;color:#9eafbf}
+#accountMenuScreen .dashboard-card.gold-card{
+ border-color:#66563f;background:linear-gradient(145deg,#28271f,#151f2b);box-shadow:none
+}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon{border-color:#756044;background:#302a20;color:#e4bd7d}
+#accountMenuScreen .dashboard-card.gold-card .dash-card-icon:after{color:#e4bd7d}
+#accountMenuScreen .dashboard-card.gold-card:hover{border-color:#d4ad70;background:linear-gradient(145deg,#342d22,#172332)}
+#accountMenuScreen .dashboard-footer-banner{
+ border:1px solid #2c4054;border-radius:3px;background:#101e2d;box-shadow:none
+}
+#accountMenuScreen .dashboard-footer-banner>span{font-size:0}
+#accountMenuScreen .dashboard-footer-banner>span:after{content:"MR";font-size:15px;font-weight:950;color:#d8ad68}
+#accountMenuScreen .dashboard-footer-banner strong{color:#c2ced8}
+#accountMenuScreen .dashboard-footer-banner button{border-radius:2px}
+@media(max-width:1120px){
+ #accountMenuScreen .dashboard-shell{padding:0 22px 25px}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #accountMenuScreen .welcome-card{padding:35px}
+}
+@media(max-width:700px){
+ #accountMenuScreen .dashboard-shell{width:calc(100% - 10px);margin:5px auto;padding:0 10px 13px;border-radius:2px}
+ #accountMenuScreen .dashboard-header{min-height:72px}
+ #accountMenuScreen .dashboard-main{padding-top:15px}
+ #accountMenuScreen .welcome-card{min-height:195px;padding:24px 18px}
+ #accountMenuScreen .welcome-card:after{right:-45px;width:145px;opacity:.4}
+ #accountMenuScreen .welcome-card:before{right:0;opacity:.35}
+ #accountMenuScreen .welcome-copy h1{font-size:32px;letter-spacing:-1.2px}
+ #accountMenuScreen .dashboard-balance-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #accountMenuScreen .dash-profile-card{grid-column:1/-1}
+ #accountMenuScreen .dash-balance-card,#accountMenuScreen .dash-profile-card{min-height:78px;padding:12px}
+ #accountMenuScreen .dash-balance-card strong{font-size:20px}
+ #accountMenuScreen .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #accountMenuScreen .dashboard-card{min-height:137px;padding:13px 11px}
+ #accountMenuScreen .dashboard-card .dash-card-icon{width:34px;height:34px;margin-bottom:10px}
+}
+@media(max-width:390px){
+ #accountMenuScreen .dashboard-grid{grid-template-columns:1fr}
+}
+</style>
+<style id="mrj-account-dashboard-v11">
+/* V11 — category-matched pictogram artwork replaces numeric labels; no JS or markup changes */
+#accountMenuScreen .dashboard-card .dash-card-icon{display:grid;place-items:center;overflow:hidden;font-size:0!important;color:transparent!important}
+#accountMenuScreen .dashboard-card .dash-card-icon:after{content:none!important;display:none!important}
+#accountMenuScreen .dashboard-card .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background-position:center;background-repeat:no-repeat;background-size:contain}
+#accountMenuScreen #dashboardOnlineCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%237dd3fc'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Ccircle%20cx%3D'23'%20cy%3D'20'%20r%3D'8'%2F%3E%3Ccircle%20cx%3D'44'%20cy%3D'23'%20r%3D'6'%2F%3E%3Cpath%20d%3D'M7%2049c1-10%207-15%2016-15s15%205%2016%2015M37%2038c8-3%2017%202%2019%2011'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardFriendCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%2398e4d2'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M18%2035l10-10a7%207%200%200%201%2010%2010l-5%205M46%2029L36%2019a7%207%200%200%200-10%200l-5%205M24%2041l-4%204a6%206%200%200%201-9-8l8-8M40%2023l4-4a6%206%200%200%201%209%208l-8%208'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardChallengeCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20d%3D'M32%207l20%208v15c0%2013-8%2022-20%2028C20%2052%2012%2043%2012%2030V15z'%20fill%3D'none'%20stroke%3D'%2399baff'%20stroke-width%3D'3'%20stroke-linejoin%3D'round'%2F%3E%3Cpath%20d%3D'M22%2032h20M32%2022v20'%20stroke%3D'%2399baff'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%2F%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardTournamentCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23f1c879'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M20%2010h24v12a12%2012%200%200%201-24%200zM20%2016H9v5a11%2011%200%200%200%2011%2011M44%2016h11v5a11%2011%200%200%201-11%2011M32%2034v12M22%2054h20M26%2046h12'%2F%3E%3Cpath%20d%3D'M26%2017l6%204%206-4'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardBetCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%23f1c879'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Crect%20x%3D'8'%20y%3D'15'%20width%3D'48'%20height%3D'34'%20rx%3D'5'%2F%3E%3Ccircle%20cx%3D'32'%20cy%3D'32'%20r%3D'10'%2F%3E%3Cpath%20d%3D'M32%2025v14M36%2028c-1-3-9-3-9%201s9%202%209%205-8%204-10%200M14%2022h4M46%2042h4'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardSpectatorCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%237dd3fc'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M5%2032s10-17%2027-17%2027%2017%2027%2017-10%2017-27%2017S5%2032%205%2032z'%2F%3E%3Ccircle%20cx%3D'32'%20cy%3D'32'%20r%3D'8'%2F%3E%3Ccircle%20cx%3D'32'%20cy%3D'32'%20r%3D'2'%20fill%3D'%237dd3fc'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardRobotCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%2399baff'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Crect%20x%3D'13'%20y%3D'19'%20width%3D'38'%20height%3D'31'%20rx%3D'7'%2F%3E%3Cpath%20d%3D'M32%2010v9M8%2029h5M51%2029h5M22%2050v5M42%2050v5'%2F%3E%3Ccircle%20cx%3D'24'%20cy%3D'33'%20r%3D'3'%20fill%3D'%2399baff'%2F%3E%3Ccircle%20cx%3D'40'%20cy%3D'33'%20r%3D'3'%20fill%3D'%2399baff'%2F%3E%3Cpath%20d%3D'M24%2042h16'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #dashboardRankingCard .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%237dd3fc'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Cpath%20d%3D'M10%2053V37h12v16M26%2053V25h12v28M42%2053V14h12v39M7%2053h50'%2F%3E%3Cpath%20d%3D'M16%2029l12-9%2010%204%2013-13'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #walletBtn .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cg%20fill%3D'none'%20stroke%3D'%237dd3fc'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%3E%3Crect%20x%3D'8'%20y%3D'15'%20width%3D'48'%20height%3D'36'%20rx%3D'5'%2F%3E%3Cpath%20d%3D'M8%2023h48M39%2034h17v11H39a5%205%200%200%201%200-11z'%2F%3E%3Ccircle%20cx%3D'44'%20cy%3D'39.5'%20r%3D'1.5'%20fill%3D'%237dd3fc'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
+#accountMenuScreen #premiumBtn .dash-card-icon:before{content:"";display:block;width:31px;height:31px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Cpath%20d%3D'M9%2019l13%2010%2010-17%2010%2017%2013-10-6%2031H15z'%20fill%3D'none'%20stroke%3D'%23f1c879'%20stroke-width%3D'3'%20stroke-linejoin%3D'round'%2F%3E%3Cpath%20d%3D'M17%2043h30'%20stroke%3D'%23f1c879'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%2F%3E%3C%2Fsvg%3E")}
+
+@media(max-width:700px){#accountMenuScreen .dashboard-card .dash-card-icon:before{width:28px;height:28px}}
+</style>
+<style id="mrj-account-dashboard-v12">
+/* V12 — decorative Gomoku board in signed-in welcome hero; visual only */
+#accountMenuScreen .welcome-card{position:relative;overflow:hidden}
+#accountMenuScreen .welcome-world.mrj-welcome-board-wrap{
+ display:flex!important;position:absolute!important;right:clamp(24px,6%,90px)!important;top:50%!important;
+ transform:translateY(-50%)!important;width:260px!important;height:auto!important;flex-direction:column;align-items:center;gap:11px;
+ z-index:2;opacity:1!important;visibility:visible!important
+}
+#accountMenuScreen .mrj-welcome-board{
+ position:relative;width:224px;height:224px;flex:none;border:1px solid rgba(222,177,105,.68);
+ border-radius:3px;background-color:#b88b55;
+ background-image:linear-gradient(to right,rgba(35,29,23,.72) 1px,transparent 1px),linear-gradient(to bottom,rgba(35,29,23,.72) 1px,transparent 1px);
+ background-size:14px 14px;background-position:7px 7px;
+ box-shadow:0 12px 35px rgba(0,0,0,.42),0 0 0 7px rgba(216,173,104,.07),inset 0 0 24px rgba(55,34,14,.18)
+}
+#accountMenuScreen .mrj-board-stone{position:absolute;width:16px;height:16px;border-radius:50%;z-index:2;transform:translate(-50%,-50%);box-shadow:0 2px 5px rgba(0,0,0,.45)}
+#accountMenuScreen .mrj-board-stone.black{background:radial-gradient(circle at 32% 27%,#66717c 0,#171d26 38%,#030609 78%);border:1px solid #111}
+#accountMenuScreen .mrj-board-stone.white{background:radial-gradient(circle at 32% 27%,#fff 0,#e9edf0 48%,#aeb8c2 100%);border:1px solid #87919a}
+#accountMenuScreen .mrj-board-stone.s1{left:21%;top:21%}
+#accountMenuScreen .mrj-board-stone.s2{left:35%;top:21%}
+#accountMenuScreen .mrj-board-stone.s3{left:49%;top:35%}
+#accountMenuScreen .mrj-board-stone.s4{left:63%;top:35%}
+#accountMenuScreen .mrj-board-stone.s5{left:49%;top:49%}
+#accountMenuScreen .mrj-board-stone.s6{left:35%;top:63%}
+#accountMenuScreen .mrj-board-stone.s7{left:63%;top:63%}
+#accountMenuScreen .mrj-board-stone.s8{left:77%;top:49%}
+#accountMenuScreen .mrj-board-stone.s9{left:49%;top:77%}
+#accountMenuScreen .mrj-board-caption{display:flex;align-items:center;gap:7px;color:#a9b8c9;font-size:9px;font-weight:900;letter-spacing:2px}
+#accountMenuScreen .mrj-board-caption span{width:6px;height:6px;border-radius:50%;background:#d8ad68;box-shadow:0 0 10px #d8ad68}
+#accountMenuScreen .mrj-board-caption b{color:#e6bd7e}
+@media(max-width:850px){
+ #accountMenuScreen .welcome-card{padding-right:240px!important}
+ #accountMenuScreen .welcome-world.mrj-welcome-board-wrap{right:18px!important;width:190px!important}
+ #accountMenuScreen .mrj-welcome-board{width:174px;height:174px;background-size:11px 11px;background-position:5px 5px}
+ #accountMenuScreen .mrj-board-stone{width:13px;height:13px}
+}
+@media(max-width:600px){
+ #accountMenuScreen .welcome-card{padding:28px 22px 210px!important;min-height:440px!important}
+ #accountMenuScreen .welcome-world.mrj-welcome-board-wrap{top:auto!important;bottom:18px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:180px!important}
+ #accountMenuScreen .mrj-welcome-board{width:164px;height:164px;background-size:10px 10px;background-position:5px 5px}
+ #accountMenuScreen .mrj-board-stone{width:12px;height:12px}
+}
+</style>
+<style id="mrj-player-profile-v1">
+#profileScreen.mrj-profile-screen{max-width:1180px;margin:24px auto;padding:clamp(18px,3vw,34px);border:1px solid rgba(232,198,111,.22);background:radial-gradient(ellipse at 90% 0,rgba(22,145,218,.12),transparent 34%),linear-gradient(145deg,#0d1c31,#071326 72%);color:#f5f7fb;box-shadow:0 24px 65px rgba(0,0,0,.3)}
+.mrj-profile-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.mrj-profile-heading h1{margin:5px 0;color:#f3d17a;font-size:clamp(25px,3vw,36px);font-weight:950;letter-spacing:-.7px}.mrj-profile-heading p{margin:0;color:#91a4be;font-size:13px}.mrj-profile-kicker{color:#6bbcff;font-size:10px;font-weight:900;letter-spacing:2px}.mrj-profile-mark{font-size:36px;color:#e8c66f;opacity:.8}
+.mrj-profile-hero{display:flex;align-items:center;gap:18px;padding:22px;border:1px solid rgba(232,198,111,.25);background:linear-gradient(110deg,#172b45,#0b192c 75%);box-shadow:inset 3px 0 #d8ad4c;margin-bottom:14px}.mrj-profile-avatar{width:68px;height:68px;flex:0 0 68px;display:grid;place-items:center;border:1px solid #c59a42;background:linear-gradient(145deg,#253e5c,#0b192c);color:#f2ce70;font-size:27px;font-weight:900}.mrj-profile-identity{display:flex;flex-direction:column;gap:5px;min-width:0}.mrj-profile-identity strong{font-size:clamp(20px,3vw,27px);color:#fff;overflow-wrap:anywhere}.mrj-profile-identity>span:last-child{font-size:12px;color:#8fa4be}.mrj-profile-level{margin-left:auto;text-align:center;padding:10px 18px;border:1px solid rgba(232,198,111,.3);background:#0a1728}.mrj-profile-level small{display:block;color:#9eacc2;font-size:9px;letter-spacing:1.5px}.mrj-profile-level strong{display:block;color:#f3d17a;font-size:27px}
+.mrj-profile-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.mrj-profile-stat{padding:17px;border:1px solid #1a3a5a;background:linear-gradient(145deg,#10243b,#09182a)}.mrj-profile-stat small{display:block;color:#8fa4be;font-size:10px;font-weight:850;letter-spacing:1.2px}.mrj-profile-stat strong{display:block;margin-top:7px;color:#f3d17a;font-size:27px;font-weight:950;font-variant-numeric:tabular-nums}
+.mrj-profile-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mrj-profile-panel{padding:20px;border:1px solid #1b3855;background:#0b1a2d;min-width:0}.mrj-profile-panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;color:#f0d17e;font-size:11px;font-weight:900;letter-spacing:1.1px}.mrj-profile-live-dot{color:#66d7a0;font-size:9px}.mrj-profile-info-row{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)}.mrj-profile-info-row span{color:#8fa4be;font-size:12px}.mrj-profile-info-row strong{color:#f5f7fb;font-size:12px;text-align:right;overflow-wrap:anywhere}.mrj-profile-note{margin:14px 0 0;color:#758ba6;font-size:11px;line-height:1.5}.mrj-profile-achievement{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)}.mrj-profile-achievement-icon{width:38px;height:38px;display:grid;place-items:center;background:#142c46;border:1px solid rgba(232,198,111,.25);color:#f0ce76;font-size:18px}.mrj-profile-achievement strong,.mrj-profile-achievement small{display:block}.mrj-profile-achievement strong{font-size:12px;color:#f5f7fb}.mrj-profile-achievement small{margin-top:4px;color:#8fa4be;font-size:10px}.mrj-profile-history{margin-top:13px;padding:12px;background:#081526;border-left:2px solid #328ac4;color:#8297b1;font-size:11px;line-height:1.5}.mrj-profile-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px}.mrj-profile-footer>span,.mrj-profile-data-status{color:#8195af;font-size:10px}.mrj-profile-screen .back-button,#profileScreen .back-button{border:1px solid rgba(232,198,111,.45);border-radius:3px;background:linear-gradient(180deg,#f0d17d,#bd8c35);color:#101827;padding:12px 17px;font-weight:900;cursor:pointer}.mrj-profile-data-status{margin-top:12px;min-height:14px}
+@media(max-width:720px){.mrj-profile-columns{grid-template-columns:1fr}.mrj-profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.mrj-profile-footer{align-items:flex-start;flex-direction:column}}
+@media(max-width:440px){#profileScreen.mrj-profile-screen{margin:12px 8px;padding:15px}.mrj-profile-hero{padding:15px;gap:12px}.mrj-profile-avatar{width:52px;height:52px;flex-basis:52px}.mrj-profile-level{padding:8px 12px}.mrj-profile-stat{padding:13px}.mrj-profile-stat strong{font-size:23px}.mrj-profile-info-row{flex-direction:column;gap:5px}.mrj-profile-info-row strong{text-align:left}}
+</style>
 </body>
 </html>
