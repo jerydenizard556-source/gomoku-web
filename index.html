@@ -1835,7 +1835,7 @@ td, th { overflow-wrap: anywhere; }
             <img id="walletPremiumPreview" alt="Aperçu prèv Premium" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
         </div>
         <button id="walletPremiumSubmit" class="primary-pay premium-submit" type="button">Kontinye pou peye →</button>
-        <small class="premium-footnote">Abònman an pa aktive otomatikman sou baz yon foto. Li aktive sèlman apre konfimasyon peman ofisyèl Tranzak oswa verifikasyon prive pa administrasyon an.</small>
+        <small class="premium-footnote">Abònman an pa aktive otomatikman sou baz yon foto. Sou TEST, Visa/Mastercard se yon simulation sèlman; li pa aktive yon abònman reyèl. Sou LIVE, li aktive sèlman apre konfimasyon peman ofisyèl Tranzak oswa verifikasyon prive pa administrasyon an.</small>
     </div>
     <button class="back-button" id="premiumBack" type="button">← Retounen</button>
 </section>
@@ -6702,7 +6702,7 @@ async function confirmWalletExchange(){
 }
 async function startPremiumCheckout(){
   const premium_type=document.getElementById("walletPremiumPlan").value,payment_method=document.getElementById("walletPremiumMethod").value;
-  if(!confirm(payment_method==="card"?"Ou pral antre enfòmasyon Visa/Mastercard ou nan espas sekirize Tranzak la. Kontinye?":"Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
+  if(!confirm(payment_method==="card"?"Sou sit TEST la, Visa/Mastercard ap pase nan mòd simulation. Pa antre enfòmasyon kat reyèl. Kontinye?":"Ou pral ale sou Tranzak pou peye plan Premium ou chwazi a. Kontinye?"))return;
   setWalletBusy(true);walletNotice("⏳ Nap prepare peman Premium ou...");
   try{
     const d=await walletRequest("/premium/checkout",{method:"POST",body:JSON.stringify({premium_type,payment_method,customer_name:currentUsername||"MR Jery Customer"})});
@@ -6715,7 +6715,7 @@ async function startPremiumCheckout(){
       return;
     }
     if(!d.payment_url)throw new Error("Tranzak pa retounen lyen peman an.");
-    walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
+    if(d.simulated){walletNotice(`Simulation Visa/Mastercard ${premium_type.toUpperCase()} la pare.`,true);window.location.assign(d.payment_url);return;}walletNotice(`Peman ${premium_type.toUpperCase()} la kreye. Nap ouvri Tranzak...`,true);window.location.assign(d.payment_url);
   }catch(e){walletNotice(e.message||"Checkout Premium lan pa t kapab kòmanse.");setWalletBusy(false);}
 }
 bindProofPreview("walletDepositProof","walletDepositPreview");bindProofPreview("walletPremiumProof","walletPremiumPreview");
