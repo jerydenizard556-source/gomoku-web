@@ -1050,7 +1050,7 @@ td, th { overflow-wrap: anywhere; }
 @media(max-width:850px){.tournament-layout{grid-template-columns:1fr}.tournament-stat-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.tournament-page{padding:16px 11px 35px}.tournament-top{flex-wrap:wrap}.tournament-top>div{order:-1;width:100%;text-align:center}.tournament-create-card,.tournament-list-card,.tournament-detail-card,.tournament-admin-card{padding:15px}.tournament-form-grid{grid-template-columns:1fr}.tournament-wide{grid-column:auto}.tournament-prizes{grid-template-columns:1fr}.tournament-prizes>strong,.tournament-prizes>small{grid-column:auto}.tournament-detail-head{display:block}.tournament-admin-row{flex-direction:column}.tournament-chat-compose{flex-direction:column}.tournament-chat-compose button{padding:12px}}
 
-</style>
+.premium-extra-methods{margin:16px 0;padding:14px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:rgba(255,255,255,.035)}.premium-extra-title{margin:0 0 10px;color:#dce5f5;font-weight:700;font-size:13px}.premium-extra-logos{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.premium-extra-logo{display:inline-flex;align-items:center;gap:5px;padding:9px 13px;border-radius:9px;background:#fff;color:#111827;font-size:16px;font-weight:800;min-width:92px;justify-content:center}.premium-extra-logo.apple-pay{color:#050505}.premium-extra-logo.apple-pay b{font-size:19px}.premium-extra-logo.paypal{color:#003087}.premium-extra-logo.paypal b{font-size:22px;color:#009cde;font-style:italic}.premium-extra-logo.zelle{color:#6d1ed4}.premium-extra-logo.zelle b{font-size:20px}.premium-extra-note{display:block;text-align:center;color:#aebbd0;font-size:11px;margin-top:9px}</style>
 
 <style id="tournament-visual-refresh">
 /* TOURNOI ONLY — redesign visuel, sans toucher au jeu ni au JavaScript */
@@ -1829,7 +1829,16 @@ td, th { overflow-wrap: anywhere; }
                 <small>Visa / Mastercard</small>
             </button>
         </div>
-        <div id="walletPremiumProofGroup" class="premium-proof-group" hidden>
+        <div class="premium-extra-methods" aria-label="Lòt mwayen peman">
+<p class="premium-extra-title">Lòt mwayen peman</p>
+<div class="premium-extra-logos">
+<span class="premium-extra-logo apple-pay"><b>●</b> Pay</span>
+<span class="premium-extra-logo paypal"><b>P</b> PayPal</span>
+<span class="premium-extra-logo zelle"><b>❯</b> Zelle</span>
+</div>
+<small class="premium-extra-note">Byento disponib — metòd sa yo poko aktive pou peman.</small>
+</div>
+<div id="walletPremiumProofGroup" class="premium-proof-group" hidden>
             <label for="walletPremiumProof">Prèv peman (si administrasyon an mande li)</label>
             <input id="walletPremiumProof" type="file" accept="image/jpeg,image/png">
             <img id="walletPremiumPreview" alt="Aperçu prèv Premium" style="display:none;max-width:180px;max-height:180px;object-fit:contain;margin-top:10px;border-radius:10px">
