@@ -42,3 +42,27 @@
 .mrjg-snake-controls{justify-content:center}
 .mrjg-snake-controls span{display:flex;gap:8px}
 .mrjg-snake-controls button{min-width:48px;min-height:44px;font-size:20px}
+
+
+/* Snake: polished arcade presentation */
+.snake-intro{max-width:620px;margin:0 auto 14px;text-align:center;color:#a9bad0}
+.snake-intro p{margin:0;line-height:1.55}
+.snake-toolbar{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0;color:#dbe7f5;font-weight:700}
+.snake-level{min-width:145px;padding:10px 14px;border:1px solid #b78b2d;border-radius:10px;background:#14243a;color:#fff;font:inherit;cursor:pointer}
+.snake-stats{width:min(100%,430px);margin:0 auto 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.snake-stats>div{padding:10px 8px;border:1px solid #29425f;border-radius:11px;background:linear-gradient(145deg,#152a43,#0d1b2c);text-align:center}
+.snake-stats small{display:block;color:#9fb1c8;font-size:10px;letter-spacing:.09em;font-weight:800}
+.snake-stats strong{display:block;margin-top:4px;color:#f5bd32;font-size:22px;font-variant-numeric:tabular-nums}
+.mrjg-snake{width:min(100%,430px);aspect-ratio:1;display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:2px;padding:8px;margin:14px auto;border:1px solid #3a506b;border-radius:15px;background:linear-gradient(145deg,#20354d,#142438);box-shadow:0 14px 36px #0005;touch-action:manipulation}
+.mrjg-snake i{display:block;min-width:0;aspect-ratio:1;border-radius:3px;background:#0c1928}
+.mrjg-snake i.snake-head{background:#ffe08a;border-radius:5px;box-shadow:0 0 10px #f5bd32aa}
+.mrjg-snake i.snake-body{background:linear-gradient(145deg,#45c18a,#20815e);border-radius:4px}
+.mrjg-snake i.snake-food{display:grid;place-items:center;background:#0c1928;color:#ff6464;font-size:clamp(9px,2.1vw,17px);font-style:normal;text-shadow:0 0 9px #ff6464}
+.snake-message{min-height:25px;text-align:center;color:#f5bd32;font-weight:700;margin:9px auto}
+.snake-actions{justify-content:center}
+.snake-actions button{min-width:130px}
+.mrjg-snake-controls{justify-content:center;align-items:center}
+.mrjg-snake-controls span{display:flex;gap:8px}
+.mrjg-snake-controls button{min-width:50px;min-height:46px;font-size:21px;touch-action:manipulation}
+.snake-help{text-align:center}
+@media(max-width:520px){.snake-stats strong{font-size:19px}.mrjg-snake{gap:1px;padding:5px;border-radius:10px}.mrjg-snake-controls button{min-width:54px;min-height:48px}}
