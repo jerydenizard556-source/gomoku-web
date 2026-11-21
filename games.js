@@ -4,6 +4,7 @@
  const $=id=>document.getElementById(id);
  const hub=$('mrjGamesScreen');
  if(!hub) return;
+ $('dashboardGamesHubCard')?.addEventListener('click',()=>showScreen('mrjGamesScreen'));
  const panel=$('mrjgPlayArea');
  const status=$('mrjgStatus');
  let cleanup=null;
