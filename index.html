@@ -623,7 +623,26 @@ h1 {
 }
 
 .undo-box {
-    margin-top: 12px;
+    position: fixed;
+    right: 16px;
+    bottom: 92px;
+    z-index: 10000;
+    width: auto;
+    max-width: min(320px, calc(100vw - 24px));
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    padding: 5px 8px;
+    border: 1px solid rgba(37,99,235,.8);
+    border-radius: 999px;
+    background: rgba(15,23,42,.96);
+    box-shadow: 0 8px 24px rgba(0,0,0,.38);
+    overflow: visible;
+}
+.undo-box .rematch-message { margin: 0 4px 3px; font-size: 12px; }
+.undo-box .rematch-actions { display: flex; align-items: center; justify-content: center; gap: 4px; }
+@media(max-width:620px){
+    .undo-box { right: 8px; bottom: 76px; max-width: calc(100vw - 16px); padding: 4px 6px; }
 }
 
 .undo-button {
@@ -6666,6 +6685,7 @@ function updateUndoUI() {
 
     if (!box || !message || !actions) return;
 
+    box.style.display = "none";
     box.style.visibility = "hidden";
     message.textContent = "";
     actions.innerHTML = "";
@@ -6675,6 +6695,7 @@ function updateUndoUI() {
     }
 
     if (onlineUndoRequest !== null) {
+        box.style.display = "block";
         box.style.visibility = "visible";
 
         if (Number(onlineUndoRequest) === Number(onlinePlayer)) {
