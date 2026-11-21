@@ -4891,6 +4891,7 @@ let onlineStarter = 1;
 let onlineWinningLine = null;
 
 let onlineLastMove = null;
+let onlineOpponentLastMoveKey = null;
 let onlineRematchRequest = null;
 let onlineUndoRequest = null;
 
@@ -6556,6 +6557,7 @@ function renderOnlineState() {
     if (lastRenderedOnlineBoardElement !== boardElement) {
         lastRenderedOnlineBoard = Object.create(null);
         lastRenderedOnlineBoardElement = boardElement;
+        onlineOpponentLastMoveKey = null;
     }
 
     for (
@@ -6584,13 +6586,23 @@ function renderOnlineState() {
                 row + "," + col;
 
             const stone = onlineBoardState[key] || null;
-            if (lastRenderedOnlineBoard[key] === stone) {
+            const previousStone = lastRenderedOnlineBoard[key] || null;
+            const opponentColor = Number(onlinePlayer) === 1 ? "red" : (Number(onlinePlayer) === 2 ? "black" : null);
+
+            // Keep the newest newly placed opponent stone highlighted.
+            if (stone && stone !== previousStone && opponentColor && stone === opponentColor) {
+                onlineOpponentLastMoveKey = key;
+            }
+
+            const shouldHighlight = key === onlineOpponentLastMoveKey;
+            const wasHighlighted = cell.querySelector(".stone.last-move") !== null;
+            if (previousStone === stone && shouldHighlight === wasHighlighted) {
                 continue;
             }
 
             cell.innerHTML = "";
             if (stone) {
-                drawStone(cell, stone, isOnlineLastMoveCell(row, col, index));
+                drawStone(cell, stone, shouldHighlight);
             }
             lastRenderedOnlineBoard[key] = stone;
         }
