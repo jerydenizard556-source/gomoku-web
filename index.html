@@ -639,6 +639,10 @@ h1 {
 .undo-request {
     background: #2563EB;
     color: #FFFFFF;
+    padding: 6px 11px;
+    font-size: 13px;
+    border-radius: 999px;
+    margin: 2px;
 }
 
 .undo-accept {
@@ -6700,12 +6704,12 @@ function updateUndoUI() {
     }
 
     box.style.display = "block";
-    message.textContent = "Vous pouvez demander l'annulation de votre dernier pion.";
+    message.textContent = "";
 
     const request = document.createElement("button");
     request.type = "button";
     request.className = "undo-button undo-request";
-    request.textContent = "🔄 Demande rejwe";
+    request.textContent = "↩️ Annuler dernier pion";
     request.addEventListener("click", requestUndo);
     actions.appendChild(request);
 }
