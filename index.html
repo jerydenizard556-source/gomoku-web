@@ -8301,13 +8301,14 @@ function tournamentVoiceSend(to,signalType,payload){
   socket.send(JSON.stringify({type:"voice_signal",room:activeTournamentMatchRoom,to,signal_type:signalType,payload}));
 }
 function closeTournamentVoicePeer(peerId){
-  const pc=tournamentVoicePeers.get(String(peerId));if(!pc)return;
+  peerId=String(peerId);
+  const pc=tournamentVoicePeers.get(peerId);if(!pc)return;
   try{pc.close();}catch(e){}
-  tournamentVoicePeers.delete(String(peerId));
-  document.getElementById("tournament-audio-"+String(peerId))?.remove();
+  tournamentVoicePeers.delete(peerId);
+  document.getElementById("tournament-audio-"+peerId)?.remove();
 }
 function closeTournamentVoice(){
-  if(activeTournamentMatchRoom&&socket&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:"voice_leave",room:activeTournamentMatchRoom}));
+  if(activeTournamentMatchRoom&&socket&&socket.readyState===WebSocket.OPEN&&tournamentVoiceJoined)socket.send(JSON.stringify({type:"voice_leave",room:activeTournamentMatchRoom}));
   tournamentVoicePeers.forEach((pc,id)=>{try{pc.close();}catch(e){};document.getElementById("tournament-audio-"+id)?.remove();});
   tournamentVoicePeers.clear();
   if(tournamentLocalAudioStream)tournamentLocalAudioStream.getTracks().forEach(track=>track.stop());
@@ -8319,60 +8320,137 @@ function closeTournamentVoice(){
   tournamentVoiceStatus("Mikwo etenn.");
 }
 async function ensureTournamentVoicePeer(peerId,makeOffer){
-  peerId=String(peerId);if(!peerId||peerId==="undefined")return null;
-  let pc=tournamentVoicePeers.get(peerId);if(pc)return pc;
+  peerId=String(peerId||"");if(!peerId||peerId==="undefined")return null;
+  let pc=tournamentVoicePeers.get(peerId);
+  if(pc){if(makeOffer&&!pc.__voiceOfferer){pc.__voiceOfferer=true;Promise.resolve().then(()=>renegotiateTournamentVoicePeer(peerId,pc));}return pc;}
   pc=new RTCPeerConnection(tournamentPeerConfiguration());
+  pc.__voiceOfferer=!!makeOffer;pc.__voiceOfferInProgress=false;pc.__voiceRenegotiatePending=false;
+  pc.__pendingIce=[];pc.__remoteStream=new MediaStream();pc.__iceRestartAttempted=false;
   const transceiver=pc.addTransceiver("audio",{direction:"sendrecv"});
-  pc.__audioSender=transceiver.sender;pc.__pendingIce=[];
-  if(tournamentLocalAudioStream){const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)await pc.__audioSender.replaceTrack(track);}
+  pc.__audioSender=transceiver.sender;
+  // Register handlers before awaiting track replacement or SDP operations.
+  tournamentVoicePeers.set(peerId,pc);
   pc.onicecandidate=e=>{if(e.candidate)tournamentVoiceSend(peerId,"ice",e.candidate.toJSON());};
   pc.ontrack=e=>{
+    console.info("[MRJ-VOICE] remote audio track",peerId,e.track?.readyState);
+    e.track?.addEventListener("mute",()=>console.warn("[MRJ-VOICE] remote audio muted",peerId));
+    e.track?.addEventListener("unmute",()=>{console.info("[MRJ-VOICE] remote audio unmuted",peerId);playTournamentRemoteAudio(peerId);});
+    if(e.track&&!pc.__remoteStream.getTracks().some(track=>track.id===e.track.id))pc.__remoteStream.addTrack(e.track);
     let audio=document.getElementById("tournament-audio-"+peerId);
-    if(!audio){audio=document.createElement("audio");audio.id="tournament-audio-"+peerId;audio.autoplay=true;audio.playsInline=true;document.getElementById("onlineTournamentRemoteAudio")?.appendChild(audio);}
-    audio.srcObject=e.streams[0]||new MediaStream([e.track]);audio.play().catch(()=>tournamentVoiceStatus("Peze ekran an yon fwa pou aktive son lòt jwè yo."));
+    if(!audio){
+      audio=document.createElement("audio");audio.id="tournament-audio-"+peerId;
+      audio.autoplay=true;audio.playsInline=true;audio.setAttribute("autoplay","");audio.setAttribute("playsinline","");
+      document.getElementById("onlineTournamentRemoteAudio")?.appendChild(audio);
+    }
+    audio.srcObject=pc.__remoteStream;
+    audio.onloadedmetadata=()=>playTournamentRemoteAudio(peerId);
+    audio.oncanplay=()=>playTournamentRemoteAudio(peerId);
+    playTournamentRemoteAudio(peerId);
   };
-  pc.onconnectionstatechange=()=>{if(["failed","closed","disconnected"].includes(pc.connectionState)&&pc.connectionState!=="disconnected")closeTournamentVoicePeer(peerId);};
-  tournamentVoicePeers.set(peerId,pc);
-  if(makeOffer&&pc.signalingState==="stable"){
-    const offer=await pc.createOffer();await pc.setLocalDescription(offer);tournamentVoiceSend(peerId,"description",pc.localDescription.toJSON());
+  pc.onsignalingstatechange=()=>{
+    if(pc.signalingState==="stable"&&pc.__voiceRenegotiatePending)renegotiateTournamentVoicePeer(peerId,pc);
+  };
+  pc.oniceconnectionstatechange=()=>{
+    console.info("[MRJ-VOICE] ICE state",peerId,pc.iceConnectionState);
+    if(pc.iceConnectionState==="failed"&&!pc.__iceRestartAttempted){
+      pc.__iceRestartAttempted=true;
+      try{pc.restartIce();renegotiateTournamentVoicePeer(peerId,pc);}catch(error){console.warn("[MRJ-VOICE] ICE restart:",error);}
+    }
+  };
+  pc.onconnectionstatechange=()=>{
+    console.info("[MRJ-VOICE] connection state",peerId,pc.connectionState);
+    if(pc.connectionState==="closed")closeTournamentVoicePeer(peerId);
+    else if(pc.connectionState==="connected"){pc.__iceRestartAttempted=false;tournamentVoiceStatus("🔊 Son konekte ak lòt jwè a.");}
+    else if(pc.connectionState==="failed"&&!pc.__iceRestartAttempted){
+      pc.__iceRestartAttempted=true;
+      try{pc.restartIce();renegotiateTournamentVoicePeer(peerId,pc);}catch(error){console.warn("[MRJ-VOICE] connection recovery:",error);}
+    }
+  };
+  if(tournamentLocalAudioStream){
+    const track=tournamentLocalAudioStream.getAudioTracks()[0];
+    if(track)await pc.__audioSender.replaceTrack(track);
   }
+  if(makeOffer)await renegotiateTournamentVoicePeer(peerId,pc);
   return pc;
+}
+async function renegotiateTournamentVoicePeer(peerId,pc){
+  if(!pc||!pc.__voiceOfferer)return;
+  pc.__voiceRenegotiatePending=true;
+  if(pc.signalingState!=="stable"||pc.__voiceOfferInProgress)return;
+  pc.__voiceRenegotiatePending=false;pc.__voiceOfferInProgress=true;
+  try{
+    const offer=await pc.createOffer({iceRestart:!!pc.__iceRestartAttempted});
+    await pc.setLocalDescription(offer);
+    tournamentVoiceSend(peerId,"description",pc.localDescription.toJSON());
+  }catch(error){console.warn("[MRJ-VOICE] renegotiation:",error);}
+  finally{
+    pc.__voiceOfferInProgress=false;
+    if(pc.__voiceRenegotiatePending&&pc.signalingState==="stable")Promise.resolve().then(()=>renegotiateTournamentVoicePeer(peerId,pc));
+  }
+}
+function playTournamentRemoteAudio(peerId){
+  const audio=document.getElementById("tournament-audio-"+String(peerId));
+  if(!audio||!audio.srcObject)return;
+  audio.play().catch(()=>tournamentVoiceStatus("Peze ekran an yon fwa pou pèmèt navigatè a jwe son advèsè a."));
 }
 async function handleTournamentVoiceSignal(data){
   const peerId=String(data.from_id||"");if(!peerId)return;
   const pc=await ensureTournamentVoicePeer(peerId,false);if(!pc)return;
+  pc.__signalQueue=pc.__signalQueue||Promise.resolve();
+  pc.__signalQueue=pc.__signalQueue.then(()=>processTournamentVoiceSignal(data,peerId,pc)).catch(error=>console.warn("[MRJ-VOICE] signal queue:",error));
+  return pc.__signalQueue;
+}
+async function processTournamentVoiceSignal(data,peerId,pc){
+  if(data.signal_type==="ready"){await renegotiateTournamentVoicePeer(peerId,pc);return;}
   if(data.signal_type==="description"){
-    const description=data.payload;
-    if(!description||!description.type)return;
+    const description=data.payload;if(!description||!description.type)return;
     await pc.setRemoteDescription(description);
-    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("Voice ICE:",e);}}
+    for(const candidate of (pc.__pendingIce||[])){try{await pc.addIceCandidate(candidate);}catch(e){console.warn("[MRJ-VOICE] buffered ICE failed",peerId,e);}}
     pc.__pendingIce=[];
     if(description.type==="offer"){
-      const answer=await pc.createAnswer();await pc.setLocalDescription(answer);tournamentVoiceSend(peerId,"description",pc.localDescription.toJSON());
+      const negotiatedAudio=pc.getTransceivers().find(t=>t.mid!==null&&t.receiver?.track?.kind==="audio");
+      if(negotiatedAudio){
+        const previousSender=pc.__audioSender;pc.__audioSender=negotiatedAudio.sender;
+        if(previousSender&&previousSender!==negotiatedAudio.sender){try{await previousSender.replaceTrack(null);}catch(error){console.warn("[MRJ-VOICE] unused sender cleanup:",error);}}
+        if(negotiatedAudio.direction!=="sendrecv")negotiatedAudio.direction="sendrecv";
+        const localTrack=tournamentLocalAudioStream?.getAudioTracks?.()[0];
+        if(localTrack)await negotiatedAudio.sender.replaceTrack(localTrack);
+      }
+      const answer=await pc.createAnswer();await pc.setLocalDescription(answer);
+      tournamentVoiceSend(peerId,"description",pc.localDescription.toJSON());
     }
   }else if(data.signal_type==="ice"&&data.payload){
-    try{if(pc.remoteDescription)await pc.addIceCandidate(data.payload);else pc.__pendingIce.push(data.payload);}catch(e){console.warn("ICE candidate:",e);}
+    try{if(pc.remoteDescription)await pc.addIceCandidate(data.payload);else pc.__pendingIce.push(data.payload);}catch(e){console.warn("[MRJ-VOICE] ICE candidate:",peerId,e);}
   }
 }
+let tournamentVoiceStarting=false;
 async function startTournamentVoice(){
   if(!activeTournamentMatchRoom||!socket||socket.readyState!==WebSocket.OPEN){tournamentVoiceStatus("Koneksyon match la poko pare.");return;}
-  if(tournamentLocalAudioStream){return;}
+  if(tournamentLocalAudioStream||tournamentVoiceStarting)return;
+  tournamentVoiceStarting=true;
   try{
-    tournamentLocalAudioStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
-    tournamentVoiceMuted=false;
-    const track=tournamentLocalAudioStream.getAudioTracks()[0];if(track)track.enabled=true;
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
+    if(!activeTournamentMatchRoom||!socket||socket.readyState!==WebSocket.OPEN){stream.getTracks().forEach(track=>track.stop());return;}
+    tournamentLocalAudioStream=stream;tournamentVoiceMuted=false;
+    const track=stream.getAudioTracks()[0];if(track)track.enabled=true;
     joinTournamentVoiceRoom();
-    for(const pc of tournamentVoicePeers.values()){if(pc.__audioSender&&track)await pc.__audioSender.replaceTrack(track);}
+    await Promise.all(Array.from(tournamentVoicePeers.entries()).map(async([peerId,pc])=>{
+      if(pc.__audioSender&&track){
+        await pc.__audioSender.replaceTrack(track);
+        tournamentVoiceSend(peerId,"ready",{});
+        await renegotiateTournamentVoicePeer(peerId,pc);
+      }
+    }));
     const start=document.getElementById("onlineTournamentVoiceStart"),mute=document.getElementById("onlineTournamentVoiceMute"),stop=document.getElementById("onlineTournamentVoiceStop");
     if(start)start.style.display="none";
     if(mute){mute.disabled=false;mute.style.display="inline-flex";mute.textContent="🔇 Mete sou silans";}
     if(stop)stop.disabled=false;
     socket.send(JSON.stringify({type:"voice_mute",room:activeTournamentMatchRoom,muted:false}));
-    tournamentVoiceStatus("🎙️ Mikwo aktif. Advèsè ou ka tande w.");
+    tournamentVoiceStatus("🎙️ Mikwo aktif. Son an ap konekte ak lòt jwè yo.");
   }catch(error){
     tournamentLocalAudioStream=null;
     tournamentVoiceStatus(error?.name==="NotAllowedError"?"Navigatè a pa gen pèmisyon pou itilize mikwo a.":"Mikwo a pa disponib. Verifye aparèy la ak pèmisyon navigatè a.");
-  }
+  }finally{tournamentVoiceStarting=false;}
 }
 function toggleTournamentVoiceMute(){
   if(!tournamentLocalAudioStream){startTournamentVoice();return;}
