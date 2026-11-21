@@ -1,0 +1,34 @@
+
+/* MR JERY GAMES HUB */
+.mrjg-screen{width:min(1100px,100%);margin:0 auto;padding:22px 14px;color:#f8fafc;text-align:left}
+.mrjg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.mrjg-head h1{margin:0;color:#f5bd32;font-size:clamp(25px,4vw,36px)}
+.mrjg-head p{margin:5px 0 0;color:#9fb1c8}
+.mrjg-back{border:1px solid #38506d;border-radius:10px;background:#14243a;color:#fff;padding:10px 14px;cursor:pointer}
+.mrjg-section-title{font-size:17px;color:#f5bd32;margin:22px 0 10px}
+.mrjg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:13px}
+.mrjg-card{min-height:150px;border:1px solid #234365;border-radius:15px;padding:17px;background:linear-gradient(145deg,#10233a,#081322);color:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:7px;cursor:pointer}
+.mrjg-card:hover{border-color:#f5bd32;transform:translateY(-2px)}
+.mrjg-card:disabled{opacity:.48;cursor:not-allowed;transform:none}
+.mrjg-card .emoji{font-size:30px}
+.mrjg-card strong{font-size:17px}
+.mrjg-card small{color:#a9bad0;line-height:1.4}
+.mrjg-tag{font-size:10px;font-weight:800;letter-spacing:.07em;color:#f5bd32;border:1px solid #725a25;border-radius:30px;padding:4px 8px}
+.mrjg-play{margin-top:18px;padding:18px;border:1px solid #234365;border-radius:16px;background:#081322}
+.mrjg-play h2{margin:0 0 8px;color:#f5bd32}
+.mrjg-muted{color:#a9bad0}
+.mrjg-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.mrjg-controls button,.mrjg-primary{border:1px solid #a17c28;border-radius:9px;background:#273449;color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}
+.mrjg-primary{background:#8a6517}
+.mrjg-status{min-height:26px;color:#f5bd32;font-weight:700;margin:8px 0}
+.mrjg-board{display:grid;gap:7px;width:min(100%,420px);margin:14px auto}
+.mrjg-tic{grid-template-columns:repeat(3,1fr)}
+.mrjg-tic button{aspect-ratio:1;border:1px solid #52647b;border-radius:12px;background:#14243a;color:#f5bd32;font-size:clamp(38px,10vw,64px);font-weight:900;cursor:pointer}
+.mrjg-tic button:disabled{cursor:default}
+.mrjg-2048{grid-template-columns:repeat(4,1fr);padding:9px;border-radius:12px;background:#34445a}
+.mrjg-2048 div{aspect-ratio:1;display:grid;place-items:center;border-radius:8px;background:#17263a;font-size:clamp(18px,4vw,27px);font-weight:900;color:#fff}
+.mrjg-memory{grid-template-columns:repeat(4,1fr);max-width:460px}
+.mrjg-memory button{aspect-ratio:1;border:1px solid #52647b;border-radius:10px;background:#172b45;color:#fff;font-size:clamp(22px,6vw,36px);cursor:pointer}
+.mrjg-memory button.matched{background:#174b39;border-color:#3b9c70}
+.mrjg-note{font-size:12px;color:#91a5c1;margin-top:12px}
+@media(max-width:520px){.mrjg-screen{padding:16px 8px}.mrjg-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.mrjg-card{min-height:142px;padding:12px}.mrjg-play{padding:12px}}
