@@ -6570,7 +6570,7 @@ function updateRematchUI() {
     message.textContent = "";
     actions.innerHTML = "";
 
-    if (onlineConnectionMode === "spectator" || !onlineGameOver || onlineDraw || !onlineWinner) {
+    if (onlineConnectionMode === "spectator" || !onlineGameOver) {
         return;
     }
 
@@ -6602,9 +6602,9 @@ function updateRematchUI() {
         return;
     }
 
-    if (Number(onlineWinner) !== Number(onlinePlayer)) {
+    {
         box.style.visibility = "visible";
-        message.textContent = "Vous avez perdu. Demandez une revanche à votre adversaire.";
+        message.textContent = "🔄 Vous pouvez demander une revanche à votre adversaire.";
 
         const request = document.createElement("button");
         request.type = "button";
@@ -6706,6 +6706,7 @@ function updateUndoUI() {
     }
 
     box.style.display = "block";
+    box.style.visibility = "visible";
     message.textContent = "";
 
     const request = document.createElement("button");
