@@ -575,6 +575,22 @@ h1 {
     z-index: 5;
 }
 
+/* Make the most recent online move easy to spot without changing the board logic. */
+#onlineBoard .stone.last-move {
+    width: 92%;
+    height: 92%;
+    flex-basis: 92%;
+    z-index: 8;
+    outline: 2px solid #FBBF24;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(251,191,36,.22), 0 0 13px rgba(251,191,36,.85);
+    animation: onlineLastMovePulse 1.15s ease-in-out infinite alternate;
+}
+@keyframes onlineLastMovePulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+
 .black {
     background: #111111;
 }
@@ -3279,7 +3295,7 @@ function createBoard(container, clickFunction) {
    PION
 ================================================== */
 
-function drawStone(cell, color) {
+function drawStone(cell, color, isLastMove) {
 
     if (!cell) {
         return;
@@ -3291,7 +3307,7 @@ function drawStone(cell, color) {
         document.createElement("div");
 
     stone.className =
-        "stone " + color;
+        "stone " + color + (isLastMove ? " last-move" : "");
 
     cell.appendChild(stone);
 }
@@ -6478,6 +6494,32 @@ function updateOnlineNewGameButton() {
    RENDER ONLINE
 ================================================== */
 
+function isOnlineLastMoveCell(row, col, index) {
+    const move = onlineLastMove;
+    if (!move || typeof move !== "object") return false;
+
+    const candidates = [
+        [move.row, move.col],
+        [move.r, move.c],
+        [move.x, move.y],
+        [move.y, move.x],
+        [move.position && move.position.row, move.position && move.position.col],
+        [move.position && move.position.x, move.position && move.position.y],
+        [move.coordinates && move.coordinates[0], move.coordinates && move.coordinates[1]]
+    ];
+
+    for (const pair of candidates) {
+        if (pair[0] === undefined || pair[1] === undefined || pair[0] === null || pair[1] === null) continue;
+        const a = Number(pair[0]);
+        const b = Number(pair[1]);
+        if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
+        if ((a === row && b === col) || (a === row + 1 && b === col + 1)) return true;
+    }
+
+    const moveIndex = Number(move.index !== undefined ? move.index : move.position);
+    return Number.isInteger(moveIndex) && moveIndex === index;
+}
+
 function renderOnlineState() {
 
     const container =
@@ -6548,7 +6590,7 @@ function renderOnlineState() {
 
             cell.innerHTML = "";
             if (stone) {
-                drawStone(cell, stone);
+                drawStone(cell, stone, isOnlineLastMoveCell(row, col, index));
             }
             lastRenderedOnlineBoard[key] = stone;
         }
