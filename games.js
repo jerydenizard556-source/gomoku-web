@@ -16,6 +16,7 @@
  $('mrjgMorpion').addEventListener('click',startTic);
  $('mrjg2048').addEventListener('click',start2048);
  $('mrjgMemory').addEventListener('click',startMemory);
+ $('mrjgSnake').addEventListener('click',startSnake);
  function startTic(){
   showPanel('⭕ 3×3 MORPION','<p class="mrjg-muted">De jwè sou menm aparèy la. X kòmanse.</p><div id="ticStatus" class="mrjg-status">Tou pa X</div><div id="ticBoard" class="mrjg-board mrjg-tic">'+Array.from({length:9},(_,i)=>'<button type="button" data-i="'+i+'" aria-label="Case '+(i+1)+'"></button>').join('')+'</div><div class="mrjg-controls"><button id="ticReset" type="button">↻ Rekòmanse</button></div>');
   let board=Array(9).fill(''),turn='X',done=false;const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -34,6 +35,23 @@
   const key=e=>{let d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];if(d){e.preventDefault();move(d);}};
   document.addEventListener('keydown',key);cleanup=()=>document.removeEventListener('keydown',key);
   panel.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>move(b.dataset.dir)));$('reset2048').addEventListener('click',reset);reset();
+ }
+ function startSnake(){
+  showPanel('🐍 SNAKE','<p class="mrjg-muted">Manje pòm yo, grandi, epi pa frape miray oswa kò koulèv la. Flèch klavye yo oswa bouton yo mache.</p><div class="mrjg-status" id="snakeStatus">Pwen: 0 · Pi bon: 0</div><div id="snakeBoard" class="mrjg-snake" role="img" aria-label="Tablo jwèt Snake"></div><div class="mrjg-controls mrjg-snake-controls"><button type="button" data-snake="up">↑</button><span><button type="button" data-snake="left">←</button><button type="button" data-snake="down">↓</button><button type="button" data-snake="right">→</button></span></div><div class="mrjg-controls"><button type="button" id="snakeStart" class="mrjg-primary">▶ Kòmanse</button><button type="button" id="snakeReset">↻ Rekòmanse</button></div>');
+  const boardEl=$('snakeBoard'),statusEl=$('snakeStatus');const size=18;
+  let snake,food,dir,nextDir,score,best=0,running=false,ended=false,tick=null;
+  try{best=Number(localStorage.getItem('mrjgSnakeBest')||0)||0;}catch(e){}
+  function placeFood(){let p;do{p={x:Math.floor(Math.random()*size),y:Math.floor(Math.random()*size)};}while(snake.some(s=>s.x===p.x&&s.y===p.y));return p;}
+  function reset(){if(tick)clearInterval(tick);running=false;ended=false;score=0;snake=[{x:8,y:9},{x:7,y:9},{x:6,y:9}];dir={x:1,y:0};nextDir=dir;food=placeFood();$('snakeStart').textContent='▶ Kòmanse';draw();}
+  function draw(){boardEl.innerHTML='';const cells=Array.from({length:size*size},()=>'<i></i>');cells[food.y*size+food.x]='<i class="snake-food">🍎</i>';snake.forEach((p,i)=>cells[p.y*size+p.x]=i===0?'<i class="snake-head">●</i>':'<i class="snake-body"></i>');boardEl.innerHTML=cells.join('');statusEl.textContent='Pwen: '+score+' · Pi bon: '+best+(ended?' · Fin jwèt!':'');}
+  function finish(){running=false;ended=true;if(tick)clearInterval(tick);$('snakeStart').textContent='▶ Eseye ankò';draw();}
+  function step(){dir=nextDir;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};const eating=head.x===food.x&&head.y===food.y;const body=eating?snake:snake.slice(0,-1);if(head.x<0||head.y<0||head.x>=size||head.y>=size||body.some(p=>p.x===head.x&&p.y===head.y)){finish();return;}snake.unshift(head);if(eating){score+=10;if(score>best){best=score;try{localStorage.setItem('mrjgSnakeBest',String(best));}catch(e){}}food=placeFood();}else snake.pop();draw();}
+  function setDir(name){const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const d=dirs[name];if(!d||d.x===-dir.x&&d.y===-dir.y)return;nextDir=d;}
+  function start(){if(running)return;if(ended)reset();running=true;$('snakeStart').textContent='⏸ An poz';tick=setInterval(step,125);}
+  function toggle(){if(running){running=false;clearInterval(tick);$('snakeStart').textContent='▶ Kontinye';}else start();}
+  const key=e=>{const map={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};const d=map[e.key];if(d){e.preventDefault();setDir(d);}if(e.key===' '){e.preventDefault();toggle();}};
+  document.addEventListener('keydown',key);panel.querySelectorAll('[data-snake]').forEach(b=>b.addEventListener('click',()=>setDir(b.dataset.snake)));$('snakeStart').addEventListener('click',toggle);$('snakeReset').addEventListener('click',reset);
+  cleanup=()=>{document.removeEventListener('keydown',key);if(tick)clearInterval(tick);};reset();
  }
  function startMemory(){
   showPanel('🧠 MEMORY MATCH','<p class="mrjg-muted">Jwenn tout pè imaj ki menm yo.</p><div id="memoryStatus" class="mrjg-status">Pè jwenn: 0 / 8</div><div id="memoryBoard" class="mrjg-board mrjg-memory"></div><div class="mrjg-controls"><button id="memoryReset">↻ Nouvo jwèt</button></div>');
