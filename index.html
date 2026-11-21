@@ -575,20 +575,12 @@ h1 {
     z-index: 5;
 }
 
-/* Make the most recent online move easy to spot without changing the board logic. */
+/* Make only the latest opponent stone slightly larger. */
 #onlineBoard .stone.last-move {
-    width: 92%;
-    height: 92%;
-    flex-basis: 92%;
+    width: 90%;
+    height: 90%;
+    flex-basis: 90%;
     z-index: 8;
-    outline: 2px solid #FBBF24;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(251,191,36,.22), 0 0 13px rgba(251,191,36,.85);
-    animation: onlineLastMovePulse 1.15s ease-in-out infinite alternate;
-}
-@keyframes onlineLastMovePulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.08); }
 }
 
 .black {
