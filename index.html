@@ -2033,6 +2033,7 @@ td, th { overflow-wrap: anywhere; }
 #onlineGameScreen video.mrj-camera-video-hidden{visibility:hidden;min-height:0!important;height:0!important;aspect-ratio:auto!important}
 @media(max-width:430px){#onlineGameScreen .mrj-camera-tile-controls{gap:4px;padding:5px 1px 2px}#onlineGameScreen .mrj-camera-control{min-height:29px;padding:5px 6px;font-size:10px}#onlineGameScreen .mrj-camera-volume{width:54px}}
 </style>
+    <link rel="stylesheet" href="/games.css">
 </head>
 
 <body>
@@ -2263,10 +2264,40 @@ td, th { overflow-wrap: anywhere; }
         <button class="dashboard-card" id="dashboardRankingCard"><span class="dash-card-icon">🏆</span><strong>Classement</strong><small>Gade pi bon jwè yo.</small></button>
         <button class="dashboard-card" id="walletBtn"><span class="dash-card-icon">👛</span><strong>Wallet</strong><small>Jere balans ak tranzaksyon ou yo.</small></button>
         <button class="dashboard-card gold-card" id="premiumBtn"><span class="dash-card-icon">⭐</span><strong>Premium</strong><small>Chwazi oswa jere abònman Premium ou.</small></button>
+        <button class="dashboard-card gold-card" id="dashboardGamesHubCard" type="button"><span class="dash-card-icon">🎮</span><strong>MR JERY GAMES</strong><small>Jwèt multiplayer ak jwèt solo.</small></button>
       </section>
 
       <section class="dashboard-footer-banner"><span>♛</span><strong>Rantre nan kominote a epi vin yon lejand!</strong><button type="button" id="logoutBtn">🚪 Déconnexion</button></section>
     </main>
+  </div>
+</section>
+
+
+<!-- MR JERY GAMES HUB -->
+<section id="mrjGamesScreen" class="screen">
+  <div class="mrjg-screen">
+    <header class="mrjg-head">
+      <div><h1>♛ MR JERY GAMES</h1><p>Chwazi jwèt ou vle jwe. Gen jwèt solo ak jwèt pou plizyè jwè.</p></div>
+      <button id="mrjgBack" class="mrjg-back" type="button">← Retounen</button>
+    </header>
+    <h2 class="mrjg-section-title">🌍 MULTIPLAYER</h2>
+    <div class="mrjg-grid">
+      <button class="mrjg-card" id="mrjgGomoku" type="button"><span class="emoji">⚫</span><span class="mrjg-tag">ONLINE</span><strong>MR_JERY Gomoku</strong><small>Jwe anliy kont lòt jwè yo.</small></button>
+      <button class="mrjg-card" id="mrjgMorpion" type="button"><span class="emoji">❎</span><span class="mrjg-tag">2 JWÈ • MENM APARÈY</span><strong>3×3 Morpion</strong><small>X kont O, youn apre lòt sou menm ekran an.</small></button>
+      <button class="mrjg-card" type="button" disabled><span class="emoji">♟️</span><span class="mrjg-tag">AP VINI</span><strong>Chess</strong><small>Echèk pou de jwè.</small></button>
+      <button class="mrjg-card" type="button" disabled><span class="emoji">🁫</span><span class="mrjg-tag">AP VINI</span><strong>Domino</strong><small>Jwèt domino ak zanmi.</small></button>
+    </div>
+    <h2 class="mrjg-section-title">🧩 JWE SOLO</h2>
+    <div class="mrjg-grid">
+      <button class="mrjg-card" id="mrjg2048" type="button"><span class="emoji">🔢</span><span class="mrjg-tag">DISPONIB</span><strong>2048</strong><small>Rasanble menm nimewo yo pou rive 2048.</small></button>
+      <button class="mrjg-card" id="mrjgMemory" type="button"><span class="emoji">🧠</span><span class="mrjg-tag">DISPONIB</span><strong>Memory Match</strong><small>Jwenn tout pè kat ki menm yo.</small></button>
+      <button class="mrjg-card" type="button" disabled><span class="emoji">🐍</span><span class="mrjg-tag">AP VINI</span><strong>Snake</strong><small>Kontwole koulèv la epi fè pi bon nòt.</small></button>
+      <button class="mrjg-card" type="button" disabled><span class="emoji">🔢</span><span class="mrjg-tag">AP VINI</span><strong>Sudoku</strong><small>Rezoud devinèt nimewo yo.</small></button>
+    </div>
+    <div id="mrjgPlayArea" class="mrjg-play" hidden></div>
+    <div id="mrjgStatus" class="mrjg-status" aria-live="polite"></div>
+    <div class="mrjg-controls"><button id="mrjgBackTop" type="button">↑ Retounen nan lis jwèt yo</button></div>
+    <p class="mrjg-note">N ap ajoute lòt jwèt yo etap pa etap. Bouton ki make “Ap vini” yo poko aktive.</p>
   </div>
 </section>
 
@@ -3007,6 +3038,7 @@ td, th { overflow-wrap: anywhere; }
 
 </div>
 
+<script src="/games.js"></script>
 <script>
 
 /* ==================================================
