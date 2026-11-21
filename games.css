@@ -32,3 +32,13 @@
 .mrjg-memory button.matched{background:#174b39;border-color:#3b9c70}
 .mrjg-note{font-size:12px;color:#91a5c1;margin-top:12px}
 @media(max-width:520px){.mrjg-screen{padding:16px 8px}.mrjg-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.mrjg-card{min-height:142px;padding:12px}.mrjg-play{padding:12px}}
+
+
+.mrjg-snake{width:min(100%,430px);aspect-ratio:1;display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:2px;padding:7px;margin:14px auto;border-radius:12px;background:#26364a;touch-action:manipulation}
+.mrjg-snake i{display:block;min-width:0;aspect-ratio:1;border-radius:3px;background:#101d2d}
+.mrjg-snake i.snake-head{background:#f5bd32;border-radius:5px;box-shadow:0 0 8px #f5bd3280}
+.mrjg-snake i.snake-body{background:#3aa879}
+.mrjg-snake i.snake-food{display:grid;place-items:center;background:#101d2d;font-style:normal;font-size:clamp(8px,2vw,16px)}
+.mrjg-snake-controls{justify-content:center}
+.mrjg-snake-controls span{display:flex;gap:8px}
+.mrjg-snake-controls button{min-width:48px;min-height:44px;font-size:20px}
