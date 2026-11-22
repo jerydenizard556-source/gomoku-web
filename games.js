@@ -17,7 +17,7 @@
  $('mrjg2048').addEventListener('click',start2048);
  $('mrjgMemory').addEventListener('click',startMemory);
  $('mrjgSnake').addEventListener('click',startSnake);
- $('mrjgTemple').addEventListener('click',()=>startRunner('temple'));
+ $('mrjgTemple').addEventListener('click',startTempleRun);
  $('mrjgSubway').addEventListener('click',()=>startRunner('subway'));
  function startTic(){
   showPanel('⭕ 3×3 MORPION','<p class="mrjg-muted">De jwè sou menm aparèy la. X kòmanse.</p><div id="ticStatus" class="mrjg-status">Tou pa X</div><div id="ticBoard" class="mrjg-board mrjg-tic">'+Array.from({length:9},(_,i)=>'<button type="button" data-i="'+i+'" aria-label="Case '+(i+1)+'"></button>').join('')+'</div><div class="mrjg-controls"><button id="ticReset" type="button">↻ Rekòmanse</button></div>');
@@ -37,6 +37,68 @@
   const key=e=>{let d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];if(d){e.preventDefault();move(d);}};
   document.addEventListener('keydown',key);cleanup=()=>document.removeEventListener('keydown',key);
   panel.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>move(b.dataset.dir)));$('reset2048').addEventListener('click',reset);reset();
+ }
+
+
+ function startTempleRun(){
+  showPanel('🏛️ MR JERY TEMPLE RUN','<p class="mrjg-muted">Kouri nan ansyen tanp lan. Chanje liy, sote pyè ak twou, glise anba baryè epi ranmase pyès lò.</p><div class="runner-stats temple-hud"><span>DISTANS <b id="templeDistance">0 m</b></span><span>PYÈS <b id="templeCoins">0</b></span><span>VITÈS <b id="templeSpeed">1×</b></span></div><canvas id="templeCanvas" class="mrjg-runner temple-canvas" width="900" height="560" aria-label="MR JERY Temple Run"></canvas><div class="mrjg-status" id="templeStatus">Pare pou kouri nan tanp lan?</div><div class="mrjg-controls runner-controls"><button id="templeStart" class="mrjg-primary">▶ KÒMANSE</button><button id="templeLeft">← AGOCH</button><button id="templeJump">↑ SOTE</button><button id="templeSlide">↓ GLISE</button><button id="templeRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou.</p>');
+  const canvas=$('templeCanvas'),ctx=canvas.getContext('2d'),status=$('templeStatus'),startBtn=$('templeStart');
+  const W=900,H=560,lanes=[-1,0,1];let lane=0,items=[],distance=0,coins=0,speed=0.34,active=false,dead=false,jump=0,slide=0,spawn=0,last=0,raf=0,runPhase=0;
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
+  function laneX(l,p){const horizon=170,base=450;return W/2+l*(26+(p*170));}
+  function move(n){lane=Math.max(-1,Math.min(1,lane+n));}
+  function action(a){if(!active||dead)return;if(a==='jump'&&jump<=0&&slide<=0)jump=1;if(a==='slide'&&jump<=0)slide=1;}
+  function reset(){lane=0;items=[];distance=0;coins=0;speed=.34;jump=0;slide=0;spawn=.3;dead=false;runPhase=0;$('templeDistance').textContent='0 m';$('templeCoins').textContent='0';$('templeSpeed').textContent='1×';status.textContent='Pare pou kouri nan tanp lan?';startBtn.textContent='▶ KÒMANSE';draw(0);}
+  function draw(p){
+   ctx.clearRect(0,0,W,H);
+   const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#143b39');sky.addColorStop(.42,'#527b58');sky.addColorStop(1,'#d1a96c');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+   // distant jungle canopy and mist
+   for(let i=0;i<13;i++){let x=i*82-18;ctx.fillStyle=i%2?'#173d2d':'#24543a';ctx.beginPath();ctx.arc(x,178+(i%3)*12,68,0,Math.PI*2);ctx.fill();}
+   ctx.fillStyle='#d8c18a';ctx.globalAlpha=.22;ctx.fillRect(0,195,W,52);ctx.globalAlpha=1;
+   // ancient temple gate in the distance
+   ctx.fillStyle='#5c4a32';ctx.fillRect(365,93,170,105);ctx.fillStyle='#92734b';ctx.fillRect(385,112,130,86);ctx.fillStyle='#243b30';ctx.fillRect(422,125,56,73);ctx.fillStyle='#c5a36a';ctx.fillRect(352,91,196,13);ctx.fillRect(375,77,150,12);
+   // jungle cliffs and ruins at sides
+   for(let side of [-1,1]){ctx.fillStyle='#354c32';ctx.beginPath();ctx.moveTo(side<0?0:900,120);ctx.lineTo(side<0?175:725,195);ctx.lineTo(side<0?240:660,560);ctx.lineTo(side<0?0:900,560);ctx.closePath();ctx.fill();for(let k=0;k<4;k++){let x=side<0?28+k*37:872-k*37;let y=240+k*70;ctx.fillStyle='#92744b';ctx.fillRect(x,y,22,95);ctx.fillStyle='#b69a68';ctx.fillRect(x-5,y-8,32,10);}}
+   // stone running path with depth
+   ctx.fillStyle='#382f25';ctx.beginPath();ctx.moveTo(420,185);ctx.lineTo(480,185);ctx.lineTo(850,560);ctx.lineTo(50,560);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#66513a';ctx.beginPath();ctx.moveTo(431,190);ctx.lineTo(469,190);ctx.lineTo(795,560);ctx.lineTo(105,560);ctx.closePath();ctx.fill();
+   // stone seams flow toward player
+   for(let i=0;i<9;i++){let z=((i/9+(distance*.003)%1));let y=190+z*z*370;let half=25+z*340;ctx.strokeStyle='#b69a70';ctx.globalAlpha=.12+z*.2;ctx.lineWidth=1+z*2;ctx.beginPath();ctx.moveTo(W/2-half,y);ctx.lineTo(W/2+half,y);ctx.stroke();ctx.globalAlpha=1;}
+   for(let l of [-1,1]){ctx.strokeStyle='#d7bd8b';ctx.globalAlpha=.45;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2+l*20,190);ctx.lineTo(W/2+l*345,560);ctx.stroke();ctx.globalAlpha=1;}
+   // torches
+   for(let side of [-1,1]){let x=side<0?300:600;ctx.fillStyle='#4c3826';ctx.fillRect(x,185,8,54);ctx.fillStyle='#ffb43b';ctx.shadowColor='#ff9c2e';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(x+4,177,9,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+   // approaching objects, drawn from far to near
+   items.slice().sort((a,b)=>a.z-b.z).forEach(o=>{let z=Math.max(.02,Math.min(1.15,o.z)),x=laneX(o.lane,z),y=190+z*z*355,s=.25+z*1.25;
+    if(o.type==='coin'){ctx.save();ctx.translate(x,y-18*s);ctx.scale(s,s);ctx.fillStyle='#ffdc67';ctx.shadowColor='#ffca3a';ctx.shadowBlur=15;ctx.beginPath();ctx.ellipse(0,0,10,14,0,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#9a641e';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#fff0a7';ctx.fillRect(-2,-8,3,16);ctx.restore();}
+    else if(o.type==='rock'){ctx.fillStyle='#443a2e';ctx.beginPath();ctx.moveTo(x-24*s,y);ctx.lineTo(x-19*s,y-31*s);ctx.lineTo(x+4*s,y-45*s);ctx.lineTo(x+29*s,y-20*s);ctx.lineTo(x+25*s,y);ctx.closePath();ctx.fill();ctx.strokeStyle='#8f8065';ctx.lineWidth=3*s;ctx.stroke();}
+    else if(o.type==='gap'){ctx.fillStyle='#161b16';ctx.beginPath();ctx.ellipse(x,y,38*s,13*s,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b49a70';ctx.lineWidth=4*s;ctx.stroke();}
+    else{rounded(x-37*s,y-54*s,74*s,18*s,5*s,'#6e4529');rounded(x-31*s,y-48*s,62*s,8*s,3*s,'#d0a15e');}
+   });
+   // runner shadow and animated adventurer
+   const px=laneX(lane,1),lift=jump>0?Math.sin((1-jump)*Math.PI)*82:0,py=473-lift;
+   ctx.fillStyle='#160f0a66';ctx.beginPath();ctx.ellipse(px,493,32,9,0,0,Math.PI*2);ctx.fill();
+   ctx.save();ctx.translate(px,py);if(slide>0){ctx.rotate(-.13);rounded(-28,-22,55,27,13,'#b97832');ctx.fillStyle='#e7bd87';ctx.beginPath();ctx.arc(23,-20,13,0,Math.PI*2);ctx.fill();}else{
+    const swing=Math.sin(runPhase)*9;ctx.strokeStyle='#39251b';ctx.lineWidth=10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-9,22);ctx.lineTo(-15+swing,46);ctx.moveTo(9,22);ctx.lineTo(16-swing,46);ctx.stroke();
+    rounded(-18,-29,36,54,12,'#a95d2b');ctx.strokeStyle='#e1b47b';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-14,-17);ctx.lineTo(-27-swing,-1);ctx.moveTo(14,-17);ctx.lineTo(26+swing,-2);ctx.stroke();
+    ctx.fillStyle='#eac69a';ctx.beginPath();ctx.arc(0,-43,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#49301e';ctx.beginPath();ctx.arc(0,-49,17,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(-16,-49,32,7);
+    ctx.fillStyle='#d8b36d';ctx.fillRect(-17,-3,34,8);
+   }ctx.restore();
+   // vignette and game title
+   const vg=ctx.createRadialGradient(450,270,180,450,270,560);vg.addColorStop(.55,'#0000');vg.addColorStop(1,'#07130dbb');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+   ctx.fillStyle='#fff2d0';ctx.font='900 22px system-ui';ctx.fillText('MR JERY',24,38);ctx.fillStyle='#f3c66e';ctx.font='800 13px system-ui';ctx.fillText('TEMPLE RUN',24,58);
+  }
+  function finish(){active=false;dead=true;cancelAnimationFrame(raf);status.textContent='🏁 Kouri a fini! '+Math.floor(distance)+' m • '+coins+' pyès. Eseye bat rekò ou!';startBtn.textContent='↻ REKÒMANSE';}
+  function frame(t){if(!active)return;let dt=Math.min(2,(t-last)/16.67||1);last=t;distance+=speed*dt*1.8;speed=Math.min(.68,.34+distance/18000);runPhase+=dt*.28;if(jump>0)jump=Math.min(1,jump+dt*.055);if(slide>0)slide=Math.max(0,slide-dt*.06);
+   spawn+=dt;if(spawn>Math.max(27,53-distance/800)){spawn=0;let l=lanes[Math.floor(Math.random()*3)],r=Math.random();items.push({lane:l,z:.02,type:r<.25?'coin':r<.52?'rock':r<.73?'barrier':'gap'});if(Math.random()<.45){let other=lanes.filter(x=>x!==l)[Math.floor(Math.random()*2)];items.push({lane:other,z:.02,type:'coin'});}}
+   for(let o of items){o.z+=speed*dt*.013;if(o.lane===lane&&o.z>.87&&o.z<1.04){if(o.type==='coin'){o.hit=true;coins++;}else if((o.type==='rock'||o.type==='gap')&&jump>.18){o.hit=true;}else if(o.type==='barrier'&&slide>.18){o.hit=true;}else{finish();return;}}}
+   items=items.filter(o=>o.z<1.15&&!o.hit);$('templeDistance').textContent=Math.floor(distance)+' m';$('templeCoins').textContent=coins;$('templeSpeed').textContent=(speed/.34).toFixed(1)+'×';draw(dt);raf=requestAnimationFrame(frame);
+  }
+  function start(){if(active)return;if(dead)reset();active=true;last=performance.now();status.textContent='Kouri! Rete vijilan, vitès la ap monte.';startBtn.textContent='▶ AN KOU';raf=requestAnimationFrame(frame);}
+  const key=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='ArrowUp'||e.key===' ')action('jump');if(e.key==='ArrowDown')action('slide');}};
+  let touch=null;canvas.addEventListener('pointerdown',e=>{touch={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',e=>{if(!touch)return;let dx=e.clientX-touch.x,dy=e.clientY-touch.y;touch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;if(Math.abs(dx)>Math.abs(dy))move(dx>0?1:-1);else action(dy<0?'jump':'slide');});
+  document.addEventListener('keydown',key);startBtn.addEventListener('click',start);$('templeLeft').addEventListener('click',()=>move(-1));$('templeRight').addEventListener('click',()=>move(1));$('templeJump').addEventListener('click',()=>action('jump'));$('templeSlide').addEventListener('click',()=>action('slide'));
+  cleanup=()=>{active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);};reset();
  }
 
  function startRunner(kind){
