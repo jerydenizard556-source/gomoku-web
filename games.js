@@ -44,78 +44,31 @@
   function bestKey(){return 'mrjgSnakeBest_'+level;}
   function loadBest(){try{return Number(localStorage.getItem(bestKey())||0)||0;}catch(e){return 0;}}
   let snakeAudio=null;
-  function prepareSnakeAudio(){
+  function beepEat(){
    try{
     const AudioCtx=window.AudioContext||window.webkitAudioContext;
     if(!AudioCtx)return;
     if(!snakeAudio)snakeAudio=new AudioCtx();
-    if(snakeAudio.state==='suspended')snakeAudio.resume().catch(()=>{});
-   }catch(e){}
-  }
-  function beepEat(){
-   try{
-    prepareSnakeAudio();
-    if(!snakeAudio||snakeAudio.state!=='running')return;
+    if(snakeAudio.state==='suspended')snakeAudio.resume();
     const now=snakeAudio.currentTime,osc=snakeAudio.createOscillator(),gain=snakeAudio.createGain();
-    osc.type='triangle';
-    osc.frequency.setValueAtTime(740,now);
-    osc.frequency.exponentialRampToValueAtTime(1180,now+.085);
-    gain.gain.setValueAtTime(.0001,now);
-    gain.gain.exponentialRampToValueAtTime(.24,now+.012);
-    gain.gain.exponentialRampToValueAtTime(.0001,now+.19);
-    osc.connect(gain);gain.connect(snakeAudio.destination);
-    osc.start(now);osc.stop(now+.2);
+    osc.type='sine';osc.frequency.setValueAtTime(880,now);osc.frequency.exponentialRampToValueAtTime(1320,now+.075);
+    gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.16,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+.13);
+    osc.connect(gain);gain.connect(snakeAudio.destination);osc.start(now);osc.stop(now+.14);
    }catch(e){}
   }
   function placeFood(){let free=[];for(let y=0;y<size;y++)for(let x=0;x<size;x++)if(!snake.some(s=>s.x===x&&s.y===y))free.push({x,y});return free.length?free[Math.floor(Math.random()*free.length)]:null;}
   function draw(){
    const pts=snake.map(p=>({x:p.x+.5,y:p.y+.5}));
-   // Each edge crossing is a visual break: the Nokia-style wrap never stretches the body.
+   // Split the body wherever it crosses an edge: wrapping teleports the head,
+   // so the artwork must never draw a long connecting line across the board.
    const paths=[];let segment=[];
-   pts.forEach((p,i)=>{
-    if(i&&(Math.abs(p.x-pts[i-1].x)>1||Math.abs(p.y-pts[i-1].y)>1)){
-     if(segment.length)paths.push(segment);segment=[];
-    }
-    segment.push(p);
-   });
+   pts.forEach((p,i)=>{if(i&& (Math.abs(p.x-pts[i-1].x)>1||Math.abs(p.y-pts[i-1].y)>1)){if(segment.length)paths.push(segment);segment=[];}segment.push(p);});
    if(segment.length)paths.push(segment);
-   const pathData=paths.map(points=>{
-    let d='M '+points[0].x+' '+points[0].y;
-    for(let i=1;i<points.length-1;i++){
-     const mx=(points[i].x+points[i+1].x)/2,my=(points[i].y+points[i+1].y)/2;
-     d+=' Q '+points[i].x+' '+points[i].y+' '+mx+' '+my;
-    }
-    if(points.length>1)d+=' L '+points[points.length-1].x+' '+points[points.length-1].y;
-    return d;
-   });
+   const pathData=paths.map(points=>{let d='M '+points[0].x+' '+points[0].y;for(let i=1;i<points.length-1;i++){const mx=(points[i].x+points[i+1].x)/2,my=(points[i].y+points[i+1].y)/2;d+=' Q '+points[i].x+' '+points[i].y+' '+mx+' '+my;}if(points.length>1)d+=' L '+points[points.length-1].x+' '+points[points.length-1].y;return d;});
    const angle=Math.atan2(dir.y,dir.x)*180/Math.PI;
-   const defs='<defs>'+
-    '<linearGradient id="snakeSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b7ff69"/><stop offset=".28" stop-color="#35d94c"/><stop offset=".72" stop-color="#07943e"/><stop offset="1" stop-color="#04552e"/></linearGradient>'+
-    '<linearGradient id="snakeBelly" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4a5"/><stop offset=".55" stop-color="#ffd34f"/><stop offset="1" stop-color="#d98a20"/></linearGradient>'+
-    '<radialGradient id="snakeHead" cx=".32" cy=".22" r=".82"><stop stop-color="#e0ff8b"/><stop offset=".42" stop-color="#69ef43"/><stop offset="1" stop-color="#07823b"/></radialGradient>'+
-    '<pattern id="snakeScales" width=".34" height=".3" patternUnits="userSpaceOnUse"><path d="M-.17 .15 Q0 -.07 .17 .15 Q.34 .37 .51 .15" fill="none" stroke="#d4ff82" stroke-width=".045" opacity=".9"/><path d="M-.17 .15 Q0 .37 .17 .15 Q.34 -.07 .51 .15" fill="none" stroke="#075b2d" stroke-width=".035" opacity=".9"/></pattern>'+
-    '</defs>';
-   const apple=food?'<g class="snake-apple" transform="translate('+(food.x+.5)+' '+(food.y+.5)+')"><ellipse cy=".22" rx=".29" ry=".11" fill="#4b1718" opacity=".35"/><path d="M0 -.28 C-.35 -.4 -.39 -.05 -.31 .19 C-.21 .48 .19 .5 .31 .17 C.42 -.12 .27 -.39 0 -.28Z" fill="url(#appleRed)" stroke="#9e1025" stroke-width=".055"/><path d="M.02 -.28 Q.12 -.54 .29 -.49" fill="none" stroke="#70401e" stroke-width=".065" stroke-linecap="round"/><path d="M.12 -.42 Q.3 -.57 .4 -.39 Q.28 -.25 .12 -.42Z" fill="#65c94c" stroke="#286e36" stroke-width=".025"/><path d="M-.2 -.16 Q-.08 -.31 .02 -.25" fill="none" stroke="#fff2d4" stroke-width=".055" stroke-linecap="round" opacity=".9"/></g>':'';
-   const bodyArt=pathData.map(d=>
-    '<path class="snake-belly-art" d="'+d+'"/>'+
-    '<path class="snake-outline" d="'+d+'"/>'+
-    '<path class="snake-body-art" d="'+d+'"/>'+
-    '<path class="snake-scale-art" d="'+d+'"/>'
-   ).join('');
-   const head='<g class="snake-head-art" transform="translate('+pts[0].x+' '+pts[0].y+') rotate('+angle+')">'+
-    '<ellipse class="snake-head-shadow" cx="0" cy=".04" rx=".64" ry=".48"/>'+
-    '<path class="snake-neck-belly" d="M-.36 .02 Q-.05 .34 .42 .2 Q.53 .08 .46 -.03 Q.05 .12 -.36 -.12Z"/>'+
-    '<path class="snake-head-shape" d="M-.48 -.28 Q-.22 -.52 .13 -.42 Q.36 -.39 .48 -.2 Q.7 -.12 .66 .08 Q.61 .29 .34 .31 Q.03 .48 -.29 .28 Q-.57 .17 -.48 -.28Z"/>'+
-    '<ellipse class="snake-eye-white" cx=".12" cy="-.29" rx=".105" ry=".13"/><ellipse class="snake-eye-white" cx=".12" cy=".29" rx=".105" ry=".13"/>'+
-    '<ellipse class="snake-pupil" cx=".16" cy="-.29" rx=".045" ry=".075"/><ellipse class="snake-pupil" cx=".16" cy=".29" rx=".045" ry=".075"/>'+
-    '<circle cx=".175" cy="-.32" r=".018" fill="#fff"/><circle cx=".175" cy=".26" r=".018" fill="#fff"/>'+
-    '<path class="snake-smile" d="M.39 .02 Q.54 .12 .65 .03"/>'+
-    '<path class="snake-tongue" d="M.61 .12 Q.82 .13 .91 .1 M.83 .11 l.1 -.1 M.83 .11 l.1 .1"/>'+
-    '<path class="snake-head-scale" d="M-.28 -.31 Q-.15 -.43 -.02 -.35 M-.28 .3 Q-.15 .42 -.02 .34"/>'+
-    '</g>';
-   boardEl.innerHTML='<svg class="snake-art" viewBox="0 0 18 18" aria-hidden="true" preserveAspectRatio="none">'+
-    '<defs><linearGradient id="appleRed" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff9b83"/><stop offset=".4" stop-color="#ff273f"/><stop offset="1" stop-color="#a90026"/></linearGradient></defs>'+
-    defs+apple+bodyArt+head+'</svg>';
+   const apple=food?'<g class="snake-apple" transform="translate('+(food.x+.5)+' '+(food.y+.5)+')"><circle r=".34"/><path d="M .02 -.29 Q .12 -.53 .31 -.48"/><ellipse cx=".22" cy="-.42" rx=".14" ry=".07" transform="rotate(-25 .22 -.42)"/></g>':'';
+   const bodyArt=pathData.map(d=>'<path class="snake-outline" d="'+d+'"/><path class="snake-body-art" d="'+d+'"/>').join('');
+   boardEl.innerHTML='<svg class="snake-art" viewBox="0 0 18 18" aria-hidden="true" preserveAspectRatio="none">'+apple+bodyArt+'<g class="snake-head-art" transform="translate('+pts[0].x+' '+pts[0].y+') rotate('+angle+')"><ellipse class="snake-head-shape" cx="0" cy="0" rx=".58" ry=".43"/><ellipse class="snake-eye" cx=".19" cy="-.25" rx=".075" ry=".09"/><ellipse class="snake-eye" cx=".19" cy=".25" rx=".075" ry=".09"/><circle class="snake-pupil" cx=".22" cy="-.25" r=".035"/><circle class="snake-pupil" cx=".22" cy=".25" r=".035"/><path class="snake-tongue" d="M .48 0 L .83 0 M .83 0 l .16 -.12 M .83 0 l .16 .12"/></g></svg>';
    scoreEl.textContent=score;bestEl.textContent=best;levelNameEl.textContent=levels[level].label;
   }
   function stop(){running=false;if(tick){clearInterval(tick);tick=null;}}
@@ -124,7 +77,7 @@
   function valid(p){return p.x>=0&&p.y>=0&&p.x<size&&p.y<size;}
   function step(){dir=nextDir;const raw={x:snake[0].x+dir.x,y:snake[0].y+dir.y};const head={x:(raw.x+size)%size,y:(raw.y+size)%size};const eating=food&&head.x===food.x&&head.y===food.y;const body=eating?snake:snake.slice(0,-1);if(body.some(p=>p.x===head.x&&p.y===head.y)){finish();return;}snake.unshift(head);if(eating){beepEat();score+=10;if(score>best){best=score;try{localStorage.setItem(bestKey(),String(best));}catch(e){}}food=placeFood();if(!food){finish();return;}}else snake.pop();draw();}
   function setDir(name){const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const d=dirs[name];if(!d||d.x===-dir.x&&d.y===-dir.y)return;nextDir=d;draw();}
-  function start(){if(running)return;prepareSnakeAudio();if(ended)reset();running=true;messageEl.textContent='Bon jwèt! Se ou menm k ap dirije koulèv la.';$('snakeStart').textContent='Ⅱ Poz';tick=setInterval(step,levels[level].speed);}
+  function start(){if(running)return;if(ended)reset();running=true;messageEl.textContent='Bon jwèt! Se ou menm k ap dirije koulèv la.';$('snakeStart').textContent='Ⅱ Poz';tick=setInterval(step,levels[level].speed);}
   function toggle(){if(running){stop();$('snakeStart').textContent='▶ Kontinye';messageEl.textContent='Jwèt la an poz.';}else start();}
   const key=e=>{const map={ArrowUp:'up',w:'up',ArrowDown:'down',s:'down',ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right'};const d=map[e.key];if(d){e.preventDefault();setDir(d);}if(e.key===' '){e.preventDefault();toggle();}};
   let swipeStart=null;
