@@ -8,7 +8,7 @@
  const panel=$('mrjgPlayArea');
  const status=$('mrjgStatus');
  let cleanup=null;
- function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}panel.hidden=false;panel.innerHTML='<h2>'+title+'</h2>'+html;status.textContent='';panel.scrollIntoView({behavior:'smooth',block:'start'});}
+ function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}panel.removeAttribute('hidden');panel.hidden=false;panel.style.display='block';panel.style.visibility='visible';panel.innerHTML='<h2>'+title+'</h2>'+html;status.textContent='';requestAnimationFrame(()=>{panel.scrollIntoView({behavior:'smooth',block:'start'});});}
  function backHub(){if(cleanup){cleanup();cleanup=null;}panel.hidden=true;panel.innerHTML='';status.textContent='';}
  $('mrjgBack').addEventListener('click',()=>showScreen('accountMenuScreen'));
  $('mrjgBackTop').addEventListener('click',backHub);
@@ -18,7 +18,7 @@
  $('mrjgMemory').addEventListener('click',startMemory);
  $('mrjgSnake').addEventListener('click',startSnake);
  $('mrjgTemple').addEventListener('click',startTempleRun);
- $('mrjgAriana').addEventListener('click',startCarRacing);
+ $('mrjgAriana').addEventListener('click',()=>{try{startCarRacing();}catch(err){console.error('Classic Racing failed to open:',err);panel.removeAttribute('hidden');panel.hidden=false;panel.style.display='block';panel.innerHTML='<h2>🏁 MR JERY CLASSIC RACING</h2><p style="color:#ffd36a">Gen yon erè ki anpeche jwèt la louvri. Rafrechi paj la epi eseye ankò.</p>';status.textContent='Erè ouvèti jwèt la: '+(err&&err.message?err.message:'erè enkoni');panel.scrollIntoView({behavior:'smooth',block:'start'});}});
  $('mrjgSubway').addEventListener('click',()=>startRunner('subway'));
  function startTic(){
   showPanel('⭕ 3×3 MORPION','<p class="mrjg-muted">De jwè sou menm aparèy la. X kòmanse.</p><div id="ticStatus" class="mrjg-status">Tou pa X</div><div id="ticBoard" class="mrjg-board mrjg-tic">'+Array.from({length:9},(_,i)=>'<button type="button" data-i="'+i+'" aria-label="Case '+(i+1)+'"></button>').join('')+'</div><div class="mrjg-controls"><button id="ticReset" type="button">↻ Rekòmanse</button></div>');
