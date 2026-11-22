@@ -8,7 +8,7 @@
  const panel=$('mrjgPlayArea');
  const status=$('mrjgStatus');
  let cleanup=null;
- function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}panel.hidden=false;panel.innerHTML='<h2>'+title+'</h2>'+html;status.textContent='';}
+ function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}panel.hidden=false;panel.innerHTML='<h2>'+title+'</h2>'+html;status.textContent='';panel.scrollIntoView({behavior:'smooth',block:'start'});}
  function backHub(){if(cleanup){cleanup();cleanup=null;}panel.hidden=true;panel.innerHTML='';status.textContent='';}
  $('mrjgBack').addEventListener('click',()=>showScreen('accountMenuScreen'));
  $('mrjgBackTop').addEventListener('click',backHub);
