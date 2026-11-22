@@ -17,9 +17,9 @@
  $('mrjg2048').addEventListener('click',start2048);
  $('mrjgMemory').addEventListener('click',startMemory);
  $('mrjgSnake').addEventListener('click',startSnake);
- $('mrjgTemple').addEventListener('click',startTempleRun);
+ $('mrjgSudoku').addEventListener('click',startSudoku);
+ $('mrjgQuiz').addEventListener('click',startQuiz);
  $('mrjgAriana').addEventListener('click',()=>{try{startCarRacing();}catch(err){console.error('Classic Racing failed to open:',err);panel.removeAttribute('hidden');panel.hidden=false;panel.style.display='block';panel.innerHTML='<h2>🏁 MR JERY CLASSIC RACING</h2><p style="color:#ffd36a">Gen yon erè ki anpeche jwèt la louvri. Rafrechi paj la epi eseye ankò.</p>';status.textContent='Erè ouvèti jwèt la: '+(err&&err.message?err.message:'erè enkoni');panel.scrollIntoView({behavior:'smooth',block:'start'});}});
- $('mrjgSubway').addEventListener('click',()=>startRunner('subway'));
  function startTic(){
   showPanel('⭕ 3×3 MORPION','<p class="mrjg-muted">De jwè sou menm aparèy la. X kòmanse.</p><div id="ticStatus" class="mrjg-status">Tou pa X</div><div id="ticBoard" class="mrjg-board mrjg-tic">'+Array.from({length:9},(_,i)=>'<button type="button" data-i="'+i+'" aria-label="Case '+(i+1)+'"></button>').join('')+'</div><div class="mrjg-controls"><button id="ticReset" type="button">↻ Rekòmanse</button></div>');
   let board=Array(9).fill(''),turn='X',done=false;const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -334,6 +334,43 @@
   let touchX=null;canvas.addEventListener('pointerdown',e=>{touchX=e.clientX;});canvas.addEventListener('pointerup',e=>{if(touchX!==null){const dx=e.clientX-touchX;if(Math.abs(dx)>25)changeLane(dx<0?-1:1);touchX=null;}});$('carSteal').addEventListener('click',steal);
   $('carStart').addEventListener('click',start);$('carPause').addEventListener('click',()=>{if(!run)return;paused=!paused;$('carPause').textContent=paused?'▶ KONTINYE':'Ⅱ POZ';});$('carReset').addEventListener('click',()=>{run=false;cancelAnimationFrame(raf);reset();});
   window.addEventListener('resize',resize);resize();updateHud();draw();cleanup=()=>{disposed=true;run=false;cancelAnimationFrame(raf);window.removeEventListener('resize',resize);document.removeEventListener('keydown',keyDown);document.removeEventListener('keyup',keyUp);};
+ }
+
+ function startSudoku(){
+  showPanel('🔢 SUDOKU MASTER','<p class="mrjg-muted">Ranpli chak liy, kolòn ak kare 3×3 avèk chif 1 rive 9. Chak chif dwe parèt yon sèl fwa.</p><div id="sdkInfo" class="mrjg-status">Chwazi yon kare vid, epi antre yon chif.</div><div id="sdkBoard" style="width:min(94vw,450px);margin:12px auto;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border:3px solid #d4af37;border-radius:8px;overflow:hidden;background:#111827;aspect-ratio:1"></div><div id="sdkKeys" class="mrjg-controls" style="max-width:450px;margin:10px auto;display:grid;grid-template-columns:repeat(9,1fr);gap:5px"></div><div class="mrjg-controls"><button id="sdkCheck">✓ Verifye repons</button><button id="sdkErase">⌫ Efase</button><button id="sdkReset">↻ Rekòmanse</button></div>');
+  const puzzle=['530070000','600195000','098000060','800060003','400803001','700020006','060000280','000419005','000080079'];
+  const solution=['534678912','672195348','198342567','859761423','426853791','713924856','961537284','287419635','345286179'];
+  const board=puzzle.map(r=>r.split('').map(Number)),fixed=board.map(r=>r.map(Boolean));let selected=-1;
+  const el=$('sdkBoard'),info=$('sdkInfo'),keys=$('sdkKeys');
+  function draw(){el.innerHTML='';board.forEach((row,r)=>row.forEach((v,c)=>{const i=r*9+c,b=document.createElement('button');b.type='button';b.textContent=v||'';b.style.cssText='aspect-ratio:1;border:0;border-right:'+(c===2||c===5?'3px solid #d4af37':'1px solid #64748b')+';border-bottom:'+(r===2||r===5?'3px solid #d4af37':'1px solid #64748b')+';background:'+(i===selected?'#785d20':fixed[r][c]?'#26364b':'#172235')+';color:'+(fixed[r][c]?'#fff':'#f5ce6a')+';font-size:clamp(14px,3.4vw,22px);font-weight:'+(fixed[r][c]?'900':'600')+';cursor:pointer;padding:0';b.addEventListener('click',()=>{selected=i;draw();});el.appendChild(b);}));}
+  function enter(n){if(selected<0){info.textContent='Chwazi yon kare vid anvan.';return;}const r=Math.floor(selected/9),c=selected%9;if(fixed[r][c])return;board[r][c]=n;draw();}
+  for(let n=1;n<=9;n++){const b=document.createElement('button');b.type='button';b.textContent=n;b.style.cssText='padding:10px 0;border:1px solid #b58a35;border-radius:8px;background:#26364b;color:#fff;font-weight:800;font-size:17px';b.addEventListener('click',()=>enter(n));keys.appendChild(b);}
+  $('sdkErase').addEventListener('click',()=>enter(0));
+  $('sdkCheck').addEventListener('click',()=>{let empty=0,wrong=0;board.forEach((row,r)=>row.forEach((v,c)=>{if(!v)empty++;else if(v!==solution[r][c])wrong++;}));if(!empty&&!wrong)info.textContent='🏆 Ekselan! Ou rezoud Sudoku a nèt!';else info.textContent=wrong+' move chif • '+empty+' kare vid. Kontinye!';});
+  $('sdkReset').addEventListener('click',()=>{puzzle.forEach((r,i)=>board[i]=r.split('').map(Number));selected=-1;info.textContent='Nou rekòmanse. Bon chans!';draw();});
+  draw();cleanup=()=>{};
+ }
+ function startQuiz(){
+  const questions=[
+   ['Ki planèt yo rele Planèt Wouj la?',['Mas','Venis','Jipitè','Mèki'],0,'Syans'],
+   ['Konbyen jwè yon ekip foutbòl genyen sou teren an?',['9','10','11','12'],2,'Espò'],
+   ['Ki oseyan ki pi gwo sou Latè?',['Atlantik','Pasifik','Endyen','Aktik'],1,'Jewografi'],
+   ['Ki gaz plant yo absòbe pou fotosentèz?',['Oksijèn','Azòt','Kabòn diyoksid','Idwojèn'],2,'Syans'],
+   ['Ki peyi ki gen vil Tokyo kòm kapital?',['Lachin','Japon','Kore di Sid','Thailand'],1,'Jewografi'],
+   ['Konbyen kote yon triyang genyen?',['2','3','4','5'],1,'Matematik'],
+   ['Ki ògàn ki ponpe san nan kò moun?',['Poumon','Fwa','Kè','Ren'],2,'Syans'],
+   ['Nan ki kontinan peyi Ajantin ye?',['Ewòp','Afrik','Azi','Amerik di Sid'],3,'Jewografi'],
+   ['Ki lang prensipal yo pale ann Ayiti ansanm ak kreyòl?',['Panyòl','Fransè','Anglè','Pòtigè'],1,'Kilti'],
+   ['Konbyen minit ki genyen nan yon èdtan?',['30','45','60','90'],2,'Matematik']
+  ];
+  showPanel('🧠 QUIZ CHALLENGE','<p class="mrjg-muted">Teste konesans ou nan 10 kesyon. Chak bon repons ba ou 10 pwen.</p><div id="quizProgress" class="mrjg-status"></div><div id="quizQuestion" style="max-width:650px;margin:16px auto;padding:22px;border:1px solid #b58a35;border-radius:16px;background:linear-gradient(145deg,#1c2c43,#101827);font-size:clamp(18px,3vw,24px);font-weight:800"></div><div id="quizAnswers" style="max-width:650px;margin:12px auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div><div id="quizFeedback" class="mrjg-status" aria-live="polite"></div><div class="mrjg-controls"><button id="quizNext" disabled>Kesyon apre →</button><button id="quizRestart">↻ Rekòmanse</button></div>');
+  let order=questions.map((_,i)=>i).sort(()=>Math.random()-.5),pos=0,score=0,answered=false;
+  const q=$('quizQuestion'),answers=$('quizAnswers'),progress=$('quizProgress'),feedback=$('quizFeedback'),next=$('quizNext');
+  function draw(){answered=false;next.disabled=true;feedback.textContent='';const item=questions[order[pos]];progress.textContent='KESYON '+(pos+1)+' / '+questions.length+' • PWEN: '+score+' • '+item[3];q.textContent=item[0];answers.innerHTML='';item[1].forEach((choice,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+choice;b.style.cssText='min-height:58px;padding:12px;border:1px solid #52647d;border-radius:11px;background:#1d2c42;color:#fff;font-weight:700;font-size:15px;cursor:pointer';b.addEventListener('click',()=>answer(i,b));answers.appendChild(b);});next.textContent=pos===questions.length-1?'Gade rezilta':'Kesyon apre →';}
+  function answer(i,btn){if(answered)return;answered=true;const item=questions[order[pos]],correct=i===item[2];if(correct)score+=10;[...answers.children].forEach((b,k)=>{b.disabled=true;if(k===item[2])b.style.background='#17633f';else if(k===i)b.style.background='#873737';});feedback.textContent=correct?'✓ Bon repons! +10 pwen':'✗ Se pa sa. Bon repons lan: '+item[1][item[2]];next.disabled=false;progress.textContent='KESYON '+(pos+1)+' / '+questions.length+' • PWEN: '+score;}
+  next.addEventListener('click',()=>{if(!answered)return;if(pos<questions.length-1){pos++;draw();}else{q.textContent='🏆 Ou fini defi a!';answers.innerHTML='';progress.textContent='REZILTA FINAL';feedback.textContent='Ou fè '+score+' sou 100 pwen.';next.disabled=true;next.textContent='Defi fini';}});
+  $('quizRestart').addEventListener('click',()=>{order=questions.map((_,i)=>i).sort(()=>Math.random()-.5);pos=0;score=0;draw();});
+  draw();cleanup=()=>{};
  }
  function startMemory(){
   showPanel('🧠 MEMORY MATCH','<p class="mrjg-muted">Jwenn tout pè imaj ki menm yo.</p><div id="memoryStatus" class="mrjg-status">Pè jwenn: 0 / 8</div><div id="memoryBoard" class="mrjg-board mrjg-memory"></div><div class="mrjg-controls"><button id="memoryReset">↻ Nouvo jwèt</button></div>');
