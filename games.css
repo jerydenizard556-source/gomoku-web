@@ -66,3 +66,7 @@
 .mrjg-snake-controls button{min-width:50px;min-height:46px;font-size:21px;touch-action:manipulation}
 .snake-help{text-align:center}
 @media(max-width:520px){.snake-stats strong{font-size:19px}.mrjg-snake{gap:1px;padding:5px;border-radius:10px}.mrjg-snake-controls button{min-width:54px;min-height:48px}}
+
+/* Snake automatic pilot toggle */
+.snake-auto-on{background:linear-gradient(135deg,#14532d,#166534)!important;border-color:#4ade80!important;color:#dcfce7!important}
+.snake-auto-off{background:#273449!important;border-color:#64748b!important;color:#e2e8f0!important}
