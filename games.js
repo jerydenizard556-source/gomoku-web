@@ -40,103 +40,72 @@
  }
 
 
- function startTempleRun(){
-  showPanel('🏛️ MR JERY TEMPLE RUN','<p class="mrjg-muted">Kouri nan ansyen tanp lan. Chanje liy, sote pyè ak twou, glise anba baryè epi ranmase pyès lò.</p><div class="runner-stats temple-hud"><span>DISTANS <b id="templeDistance">0 m</b></span><span>PYÈS <b id="templeCoins">0</b></span><span>VITÈS <b id="templeSpeed">1×</b></span></div><canvas id="templeCanvas" class="mrjg-runner temple-canvas" width="900" height="560" aria-label="MR JERY Temple Run"></canvas><div class="mrjg-status" id="templeStatus">Pare pou kouri nan tanp lan?</div><div class="mrjg-controls runner-controls"><button id="templeStart" class="mrjg-primary">▶ KÒMANSE</button><button id="templeLeft">← AGOCH</button><button id="templeJump">↑ SOTE</button><button id="templeSlide">↓ GLISE</button><button id="templeRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou.</p>');
-  const canvas=$('templeCanvas'),ctx=canvas.getContext('2d'),status=$('templeStatus'),startBtn=$('templeStart');
-  const W=900,H=560,lanes=[-1,0,1];let lane=0,items=[],distance=0,coins=0,speed=0.34,active=false,dead=false,jump=0,slide=0,spawn=0,last=0,raf=0,runPhase=0;
+ function startTempleRun(){ startImmersiveRunner('temple'); }
+ function startRunner(kind){ startImmersiveRunner(kind==='temple'?'temple':'subway'); }
+ function startImmersiveRunner(kind){
+  const temple=kind==='temple', title=temple?'MR JERY TEMPLE RUN':'MR JERY SUBWAY SURFERS';
+  const intro=temple?'Kouri nan forè tanp lan, evite gwo wòch, twou ak baryè, epi ranmase pyès lò.':'Kouri sou ray tren yo, evite tren, baryè ak siy, epi ranmase pyès lò.';
+  showPanel((temple?'🏛️ ':'🚆 ')+title,'<p class="mrjg-muted">'+intro+'</p><div class="runner-stats temple-hud"><span>DISTANS <b id="irDistance">0 m</b></span><span>PYÈS <b id="irCoins">0</b></span><span>VITÈS <b id="irSpeed">1×</b></span></div><canvas id="irCanvas" class="mrjg-runner immersive-runner" width="960" height="600" aria-label="'+title+'"></canvas><div class="mrjg-status" id="irStatus">Pare pou kouri?</div><div class="mrjg-controls runner-controls"><button id="irStart" class="mrjg-primary">▶ KÒMANSE</button><button id="irLeft">← AGOCH</button><button id="irJump">↑ SOTE</button><button id="irSlide">↓ GLISE</button><button id="irRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou sou jwèt la.</p>');
+  const canvas=$('irCanvas'),ctx=canvas.getContext('2d'),status=$('irStatus'),startBtn=$('irStart');
+  const W=960,H=600,lanes=[-1,0,1];let lane=0,items=[],distance=0,coins=0,speed=.32,active=false,dead=false,jump=0,slide=0,spawn=0,last=0,raf=0,phase=0,audio=null;
   const rand=(a,b)=>a+Math.random()*(b-a);
-  function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
-  function laneX(l,p){const horizon=170,base=450;return W/2+l*(26+(p*170));}
+  function project(l,z){const q=Math.max(0,Math.min(1.15,z)),y=168+q*q*410,half=30+q*390;return {x:W/2+l*half*.59,y,scale:.22+q*1.18,half};}
+  function round(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
+  function soundCoin(){try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return;if(!audio)audio=new A();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime;o.type='sine';o.frequency.setValueAtTime(920,t);o.frequency.exponentialRampToValueAtTime(1480,t+.08);g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.12,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.15);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.16);}catch(e){}}
   function move(n){lane=Math.max(-1,Math.min(1,lane+n));}
-  function action(a){if(!active||dead)return;if(a==='jump'&&jump<=0&&slide<=0)jump=1;if(a==='slide'&&jump<=0)slide=1;}
-  function reset(){lane=0;items=[];distance=0;coins=0;speed=.34;jump=0;slide=0;spawn=.3;dead=false;runPhase=0;$('templeDistance').textContent='0 m';$('templeCoins').textContent='0';$('templeSpeed').textContent='1×';status.textContent='Pare pou kouri nan tanp lan?';startBtn.textContent='▶ KÒMANSE';draw(0);}
-  function draw(p){
-   ctx.clearRect(0,0,W,H);
-   const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#143b39');sky.addColorStop(.42,'#527b58');sky.addColorStop(1,'#d1a96c');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-   // distant jungle canopy and mist
-   for(let i=0;i<13;i++){let x=i*82-18;ctx.fillStyle=i%2?'#173d2d':'#24543a';ctx.beginPath();ctx.arc(x,178+(i%3)*12,68,0,Math.PI*2);ctx.fill();}
-   ctx.fillStyle='#d8c18a';ctx.globalAlpha=.22;ctx.fillRect(0,195,W,52);ctx.globalAlpha=1;
-   // ancient temple gate in the distance
-   ctx.fillStyle='#5c4a32';ctx.fillRect(365,93,170,105);ctx.fillStyle='#92734b';ctx.fillRect(385,112,130,86);ctx.fillStyle='#243b30';ctx.fillRect(422,125,56,73);ctx.fillStyle='#c5a36a';ctx.fillRect(352,91,196,13);ctx.fillRect(375,77,150,12);
-   // jungle cliffs and ruins at sides
-   for(let side of [-1,1]){ctx.fillStyle='#354c32';ctx.beginPath();ctx.moveTo(side<0?0:900,120);ctx.lineTo(side<0?175:725,195);ctx.lineTo(side<0?240:660,560);ctx.lineTo(side<0?0:900,560);ctx.closePath();ctx.fill();for(let k=0;k<4;k++){let x=side<0?28+k*37:872-k*37;let y=240+k*70;ctx.fillStyle='#92744b';ctx.fillRect(x,y,22,95);ctx.fillStyle='#b69a68';ctx.fillRect(x-5,y-8,32,10);}}
-   // stone running path with depth
-   ctx.fillStyle='#382f25';ctx.beginPath();ctx.moveTo(420,185);ctx.lineTo(480,185);ctx.lineTo(850,560);ctx.lineTo(50,560);ctx.closePath();ctx.fill();
-   ctx.fillStyle='#66513a';ctx.beginPath();ctx.moveTo(431,190);ctx.lineTo(469,190);ctx.lineTo(795,560);ctx.lineTo(105,560);ctx.closePath();ctx.fill();
-   // stone seams flow toward player
-   for(let i=0;i<9;i++){let z=((i/9+(distance*.003)%1));let y=190+z*z*370;let half=25+z*340;ctx.strokeStyle='#b69a70';ctx.globalAlpha=.12+z*.2;ctx.lineWidth=1+z*2;ctx.beginPath();ctx.moveTo(W/2-half,y);ctx.lineTo(W/2+half,y);ctx.stroke();ctx.globalAlpha=1;}
-   for(let l of [-1,1]){ctx.strokeStyle='#d7bd8b';ctx.globalAlpha=.45;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2+l*20,190);ctx.lineTo(W/2+l*345,560);ctx.stroke();ctx.globalAlpha=1;}
-   // torches
-   for(let side of [-1,1]){let x=side<0?300:600;ctx.fillStyle='#4c3826';ctx.fillRect(x,185,8,54);ctx.fillStyle='#ffb43b';ctx.shadowColor='#ff9c2e';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(x+4,177,9,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
-   // approaching objects, drawn from far to near
-   items.slice().sort((a,b)=>a.z-b.z).forEach(o=>{let z=Math.max(.02,Math.min(1.15,o.z)),x=laneX(o.lane,z),y=190+z*z*355,s=.25+z*1.25;
-    if(o.type==='coin'){ctx.save();ctx.translate(x,y-18*s);ctx.scale(s,s);ctx.fillStyle='#ffdc67';ctx.shadowColor='#ffca3a';ctx.shadowBlur=15;ctx.beginPath();ctx.ellipse(0,0,10,14,0,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#9a641e';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#fff0a7';ctx.fillRect(-2,-8,3,16);ctx.restore();}
-    else if(o.type==='rock'){ctx.fillStyle='#443a2e';ctx.beginPath();ctx.moveTo(x-24*s,y);ctx.lineTo(x-19*s,y-31*s);ctx.lineTo(x+4*s,y-45*s);ctx.lineTo(x+29*s,y-20*s);ctx.lineTo(x+25*s,y);ctx.closePath();ctx.fill();ctx.strokeStyle='#8f8065';ctx.lineWidth=3*s;ctx.stroke();}
-    else if(o.type==='gap'){ctx.fillStyle='#161b16';ctx.beginPath();ctx.ellipse(x,y,38*s,13*s,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b49a70';ctx.lineWidth=4*s;ctx.stroke();}
-    else{rounded(x-37*s,y-54*s,74*s,18*s,5*s,'#6e4529');rounded(x-31*s,y-48*s,62*s,8*s,3*s,'#d0a15e');}
-   });
-   // runner shadow and animated adventurer
-   const px=laneX(lane,1),lift=jump>0?Math.sin((1-jump)*Math.PI)*82:0,py=473-lift;
-   ctx.fillStyle='#160f0a66';ctx.beginPath();ctx.ellipse(px,493,32,9,0,0,Math.PI*2);ctx.fill();
-   ctx.save();ctx.translate(px,py);if(slide>0){ctx.rotate(-.13);rounded(-28,-22,55,27,13,'#b97832');ctx.fillStyle='#e7bd87';ctx.beginPath();ctx.arc(23,-20,13,0,Math.PI*2);ctx.fill();}else{
-    const swing=Math.sin(runPhase)*9;ctx.strokeStyle='#39251b';ctx.lineWidth=10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-9,22);ctx.lineTo(-15+swing,46);ctx.moveTo(9,22);ctx.lineTo(16-swing,46);ctx.stroke();
-    rounded(-18,-29,36,54,12,'#a95d2b');ctx.strokeStyle='#e1b47b';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(-14,-17);ctx.lineTo(-27-swing,-1);ctx.moveTo(14,-17);ctx.lineTo(26+swing,-2);ctx.stroke();
-    ctx.fillStyle='#eac69a';ctx.beginPath();ctx.arc(0,-43,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#49301e';ctx.beginPath();ctx.arc(0,-49,17,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(-16,-49,32,7);
-    ctx.fillStyle='#d8b36d';ctx.fillRect(-17,-3,34,8);
-   }ctx.restore();
-   // vignette and game title
-   const vg=ctx.createRadialGradient(450,270,180,450,270,560);vg.addColorStop(.55,'#0000');vg.addColorStop(1,'#07130dbb');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-   ctx.fillStyle='#fff2d0';ctx.font='900 22px system-ui';ctx.fillText('MR JERY',24,38);ctx.fillStyle='#f3c66e';ctx.font='800 13px system-ui';ctx.fillText('TEMPLE RUN',24,58);
+  function action(type){if(!active||dead)return;if(type==='jump'&&jump<=0&&slide<=0)jump=1;if(type==='slide'&&jump<=0)slide=1;}
+  function reset(){lane=0;items=[];distance=0;coins=0;speed=.32;jump=0;slide=0;spawn=0;phase=0;dead=false;$('irDistance').textContent='0 m';$('irCoins').textContent='0';$('irSpeed').textContent='1×';status.textContent='Pare pou kouri?';startBtn.textContent='▶ KÒMANSE';draw();}
+  function drawBackground(){
+   const sky=ctx.createLinearGradient(0,0,0,H);if(temple){sky.addColorStop(0,'#173d37');sky.addColorStop(.48,'#7d9b69');sky.addColorStop(1,'#d4ae70');}else{sky.addColorStop(0,'#1595d1');sky.addColorStop(.48,'#73c9e9');sky.addColorStop(1,'#f1c58c');}ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+   if(temple){
+    // Layered jungle canopy and distant waterfalls
+    for(let i=0;i<17;i++){let x=i*66-24,yy=140+(i%4)*15;ctx.fillStyle=['#123c2b','#1b5136','#2d6741'][i%3];ctx.beginPath();ctx.arc(x,yy,58+(i%3)*9,0,Math.PI*2);ctx.fill();}
+    ctx.fillStyle='#d9e9d6';ctx.globalAlpha=.5;ctx.fillRect(42,180,12,160);ctx.fillRect(900,185,10,170);ctx.globalAlpha=1;
+    // monumental temple entrance
+    ctx.fillStyle='#6b5738';ctx.fillRect(354,82,252,126);ctx.fillStyle='#b0915d';ctx.fillRect(338,76,284,22);ctx.fillRect(370,99,220,15);ctx.fillStyle='#233a2c';ctx.fillRect(423,119,114,89);ctx.fillStyle='#c4a06a';ctx.fillRect(365,101,22,108);ctx.fillRect(573,101,22,108);
+    ctx.fillStyle='#bda06a';for(let i=0;i<5;i++)ctx.fillRect(367+i*48,84,13,12);
+   }else{
+    // Bright city skyline and overhead rail cables
+    for(let i=0;i<11;i++){let x=i*96-18,hh=90+(i*37%95);ctx.fillStyle=['#f07843','#edb34c','#d95e62','#55a8b7'][i%4];ctx.fillRect(x,205-hh,82,hh+65);ctx.fillStyle='#b9e9f5';for(let r=0;r<3;r++)for(let c=0;c<2;c++)ctx.fillRect(x+13+c*31,220-hh+r*30,17,18);}
+    ctx.strokeStyle='#33485a';ctx.lineWidth=4;for(let x of [170,790]){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,210);ctx.stroke();}ctx.strokeStyle='#35495a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(80,95);ctx.lineTo(880,95);ctx.moveTo(80,130);ctx.lineTo(880,130);ctx.stroke();
+   }
   }
-  function finish(){active=false;dead=true;cancelAnimationFrame(raf);status.textContent='🏁 Kouri a fini! '+Math.floor(distance)+' m • '+coins+' pyès. Eseye bat rekò ou!';startBtn.textContent='↻ REKÒMANSE';}
-  function frame(t){if(!active)return;let dt=Math.min(2,(t-last)/16.67||1);last=t;distance+=speed*dt*1.8;speed=Math.min(.68,.34+distance/18000);runPhase+=dt*.28;if(jump>0)jump=Math.min(1,jump+dt*.055);if(slide>0)slide=Math.max(0,slide-dt*.06);
-   spawn+=dt;if(spawn>Math.max(27,53-distance/800)){spawn=0;let l=lanes[Math.floor(Math.random()*3)],r=Math.random();items.push({lane:l,z:.02,type:r<.25?'coin':r<.52?'rock':r<.73?'barrier':'gap'});if(Math.random()<.45){let other=lanes.filter(x=>x!==l)[Math.floor(Math.random()*2)];items.push({lane:other,z:.02,type:'coin'});}}
-   for(let o of items){o.z+=speed*dt*.013;if(o.lane===lane&&o.z>.87&&o.z<1.04){if(o.type==='coin'){o.hit=true;coins++;}else if((o.type==='rock'||o.type==='gap')&&jump>.18){o.hit=true;}else if(o.type==='barrier'&&slide>.18){o.hit=true;}else{finish();return;}}}
-   items=items.filter(o=>o.z<1.15&&!o.hit);$('templeDistance').textContent=Math.floor(distance)+' m';$('templeCoins').textContent=coins;$('templeSpeed').textContent=(speed/.34).toFixed(1)+'×';draw(dt);raf=requestAnimationFrame(frame);
+  function drawTrack(){
+   // Perspective track bed
+   ctx.fillStyle=temple?'#44392a':'#303d48';ctx.beginPath();ctx.moveTo(414,168);ctx.lineTo(546,168);ctx.lineTo(945,600);ctx.lineTo(15,600);ctx.closePath();ctx.fill();
+   ctx.fillStyle=temple?'#8b7450':'#7a6553';ctx.beginPath();ctx.moveTo(427,174);ctx.lineTo(533,174);ctx.lineTo(895,600);ctx.lineTo(65,600);ctx.closePath();ctx.fill();
+   // Track sleepers / stone slabs animate toward camera
+   for(let i=0;i<14;i++){let z=((i/14+(distance*.006)%1));let y=174+z*z*426,half=53+z*410;ctx.globalAlpha=.15+z*.38;ctx.fillStyle=temple?'#e3c18a':'#c5b4a0';ctx.fillRect(W/2-half,y,half*2,2+z*7);ctx.globalAlpha=1;}
+   for(let l of [-1,0,1]){let top=project(l,0),bot=project(l,1);ctx.strokeStyle=temple?'#d5bd8d':'#d7dce1';ctx.lineWidth=l===0?3:temple?5:7;ctx.beginPath();if(temple){ctx.moveTo(top.x,top.y);ctx.lineTo(bot.x,bot.y);}else{ctx.moveTo(top.x-9,top.y);ctx.lineTo(bot.x-23,bot.y);ctx.moveTo(top.x+9,top.y);ctx.lineTo(bot.x+23,bot.y);}ctx.stroke();}
+   if(!temple){for(let l of [-1,0,1]){let p=project(l,1);ctx.fillStyle='#463c36';ctx.fillRect(p.x-3,p.y-4,6,8);}}
   }
-  function start(){if(active)return;if(dead)reset();active=true;last=performance.now();status.textContent='Kouri! Rete vijilan, vitès la ap monte.';startBtn.textContent='▶ AN KOU';raf=requestAnimationFrame(frame);}
+  function drawSideScenery(){
+   for(let i=0;i<8;i++){let z=((i/8+(distance*.002)%1));let p=project(-1.42,z),q=project(1.42,z),s=.2+z*.85;
+    if(temple){for(let [x,side] of [[p.x,-1],[q.x,1]]){ctx.fillStyle='#245239';ctx.beginPath();ctx.moveTo(x, p.y);ctx.lineTo(x+side*rand(12,26)*s,p.y-95*s);ctx.lineTo(x+side*rand(25,42)*s,p.y);ctx.fill();ctx.fillStyle='#8c7049';ctx.fillRect(x-9*s,p.y-27*s,18*s,30*s);}}
+    else{for(let x of [p.x,q.x]){ctx.fillStyle='#d7d4c8';ctx.fillRect(x-27*s,p.y-80*s,54*s,80*s);ctx.fillStyle='#3288b6';ctx.fillRect(x-20*s,p.y-68*s,40*s,30*s);ctx.fillStyle='#e2a64a';ctx.fillRect(x-20*s,p.y-29*s,40*s,20*s);}}
+   }
+  }
+  function drawCoin(o,p){let s=p.scale;ctx.save();ctx.translate(p.x,p.y-25*s);ctx.scale(s,s);ctx.fillStyle='#ffdc58';ctx.shadowColor='#ffbd26';ctx.shadowBlur=18;ctx.beginPath();ctx.ellipse(0,0,12,17,0,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#a96a19';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#fff1a7';ctx.fillRect(-2,-10,3,20);ctx.restore();}
+  function drawObstacle(o,p){const s=p.scale,x=p.x,y=p.y;if(temple){if(o.type==='gap'){ctx.fillStyle='#181a15';ctx.beginPath();ctx.ellipse(x,y,43*s,16*s,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#c2a779';ctx.lineWidth=5*s;ctx.stroke();}else if(o.type==='rock'){ctx.fillStyle='#514332';ctx.beginPath();ctx.moveTo(x-34*s,y);ctx.lineTo(x-30*s,y-39*s);ctx.lineTo(x-5*s,y-58*s);ctx.lineTo(x+31*s,y-35*s);ctx.lineTo(x+38*s,y);ctx.closePath();ctx.fill();ctx.strokeStyle='#b6a17a';ctx.lineWidth=3*s;ctx.stroke();}else{round(x-45*s,y-70*s,90*s,18*s,5*s,'#75431f');round(x-39*s,y-64*s,78*s,7*s,3*s,'#d4aa63');}}else{if(o.type==='train'){round(x-60*s,y-112*s,120*s,112*s,12*s,'#e64b39');round(x-49*s,y-98*s,98*s,43*s,7*s,'#18394f');ctx.fillStyle='#f3ca55';ctx.fillRect(x-52*s,y-48*s,104*s,9*s);ctx.fillStyle='#252d34';ctx.fillRect(x-42*s,y-7*s,20*s,12*s);ctx.fillRect(x+22*s,y-7*s,20*s,12*s);}else{round(x-44*s,y-72*s,88*s,72*s,8*s,'#e9c44c');round(x-36*s,y-64*s,72*s,25*s,4*s,'#d84b3f');ctx.fillStyle='#fff4d8';ctx.fillRect(x-27*s,y-58*s,54*s,9*s);}}}
+  function drawRunner(){
+   const p=project(lane,1),lift=jump>0?Math.sin((1-jump)*Math.PI)*112:0,x=p.x,y=525-lift,s=1;
+   ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(x,555,34,10,0,0,Math.PI*2);ctx.fill();
+   ctx.save();ctx.translate(x,y);if(slide>0){ctx.rotate(-.12);round(-31,-30,61,31,13,'#c16c2e');ctx.fillStyle='#eac69a';ctx.beginPath();ctx.arc(27,-27,14,0,Math.PI*2);ctx.fill();}
+   else{let swing=Math.sin(phase)*12;ctx.strokeStyle='#35251e';ctx.lineWidth=12;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-10,28);ctx.lineTo(-17+swing,66);ctx.moveTo(10,28);ctx.lineTo(17-swing,66);ctx.stroke();ctx.strokeStyle='#80502c';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(-16,-10);ctx.lineTo(-29-swing,-43);ctx.moveTo(16,-10);ctx.lineTo(29+swing,-42);ctx.stroke();round(-22,-40,44,70,14,temple?'#a85d2e':'#243d56');ctx.fillStyle=temple?'#d5a86b':'#f4e8d2';ctx.fillRect(-19,12,38,9);ctx.fillStyle='#eac69a';ctx.beginPath();ctx.arc(0,-58,19,0,Math.PI*2);ctx.fill();ctx.fillStyle=temple?'#4b3020':'#b52f28';ctx.beginPath();ctx.arc(0,-65,20,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(-19,-65,38,8);if(!temple){ctx.fillStyle='#fff';ctx.fillRect(-18,-25,36,17);ctx.fillStyle='#14283a';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText('MR JERY',0,-13);}}
+   ctx.restore();
+  }
+  function draw(){ctx.clearRect(0,0,W,H);drawBackground();drawSideScenery();drawTrack();items.slice().sort((a,b)=>a.z-b.z).forEach(o=>{const p=project(o.lane,o.z);if(o.type==='coin')drawCoin(o,p);else drawObstacle(o,p);});drawRunner();const v=ctx.createRadialGradient(W/2,H/2,210,W/2,H/2,610);v.addColorStop(.55,'#0000');v.addColorStop(1,'#07130c88');ctx.fillStyle=v;ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff1ce';ctx.font='900 23px system-ui';ctx.fillText(temple?'MR JERY • TEMPLE RUN':'MR JERY • SUBWAY SURFERS',22,36);}
+  function finish(){active=false;dead=true;cancelAnimationFrame(raf);status.textContent='🏁 Kous la fini! '+Math.floor(distance)+' m • '+coins+' pyès. Eseye bat rekò ou!';startBtn.textContent='↻ REKÒMANSE';}
+  function spawnItems(){const l=lanes[Math.floor(Math.random()*3)],r=Math.random();if(r<.42){for(let i=0;i<5;i++)items.push({lane:l,z:.05-i*.055,type:'coin'});}else{const type=temple?(r<.64?'rock':r<.82?'gap':'barrier'):(r<.68?'train':'barrier');items.push({lane:l,z:.04,type});if(Math.random()<.38){const other=lanes.filter(v=>v!==l)[Math.floor(Math.random()*2)];for(let i=0;i<3;i++)items.push({lane:other,z:.06-i*.06,type:'coin'});}}}
+  function frame(t){if(!active)return;let dt=Math.min(2.2,(t-last)/16.67||1);last=t;distance+=speed*dt*1.75;speed=Math.min(.72,.32+distance/23000);phase+=dt*.24;if(jump>0)jump=Math.min(1,jump+dt*.045);if(slide>0)slide=Math.max(0,slide-dt*.055);spawn+=dt;if(spawn>Math.max(24,49-distance/1000)){spawn=0;spawnItems();}
+   for(const o of items){o.z+=speed*dt*.013;if(o.lane===lane&&o.z>.88&&o.z<1.04){if(o.type==='coin'){o.hit=true;coins++;soundCoin();}else if((o.type==='rock'||o.type==='gap')&&jump>.2){o.hit=true;}else if(o.type==='barrier'&&slide>.2){o.hit=true;}else{finish();return;}}}
+   items=items.filter(o=>o.z<1.15&&!o.hit);$('irDistance').textContent=Math.floor(distance)+' m';$('irCoins').textContent=coins;$('irSpeed').textContent=(speed/.32).toFixed(1)+'×';draw();raf=requestAnimationFrame(frame);}
+  function start(){if(active)return;if(dead)reset();active=true;last=performance.now();status.textContent='Kouri! Kamera a ap swiv ou. Rete vijilan!';startBtn.textContent='▶ AN KOU';raf=requestAnimationFrame(frame);}
   const key=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='ArrowUp'||e.key===' ')action('jump');if(e.key==='ArrowDown')action('slide');}};
   let touch=null;canvas.addEventListener('pointerdown',e=>{touch={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',e=>{if(!touch)return;let dx=e.clientX-touch.x,dy=e.clientY-touch.y;touch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;if(Math.abs(dx)>Math.abs(dy))move(dx>0?1:-1);else action(dy<0?'jump':'slide');});
-  document.addEventListener('keydown',key);startBtn.addEventListener('click',start);$('templeLeft').addEventListener('click',()=>move(-1));$('templeRight').addEventListener('click',()=>move(1));$('templeJump').addEventListener('click',()=>action('jump'));$('templeSlide').addEventListener('click',()=>action('slide'));
+  document.addEventListener('keydown',key);startBtn.addEventListener('click',start);$('irLeft').addEventListener('click',()=>move(-1));$('irRight').addEventListener('click',()=>move(1));$('irJump').addEventListener('click',()=>action('jump'));$('irSlide').addEventListener('click',()=>action('slide'));
   cleanup=()=>{active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);};reset();
  }
-
- function startRunner(kind){
-  const temple=kind==='temple';
-  const title=temple?'MR JERY TEMPLE RUN':'MR JERY SUBWAY SURFERS';
-  showPanel((temple?'🏛️ ':'🚆 ')+title,'<p class="mrjg-muted">'+(temple?'Kouri sou chemen tanp lan, evite obstak epi ranmase pyès.':'Kouri sou ray tren yo, evite tren ak baryè, epi ranmase pyès.')+'</p><div class="runner-stats"><span>Distans <b id="runnerDistance">0</b></span><span>Pyès <b id="runnerCoins">0</b></span></div><canvas id="runnerCanvas" class="mrjg-runner" width="720" height="460" aria-label="Jwèt kous"></canvas><div class="mrjg-status" id="runnerStatus">Peze Kòmanse pou jwe.</div><div class="mrjg-controls runner-controls"><button id="runnerStart" class="mrjg-primary">▶ Kòmanse</button><button id="runnerLeft">← Agoch</button><button id="runnerJump">↑ Sote</button><button id="runnerSlide">↓ Glise</button><button id="runnerRight">Adwat →</button></div><p class="mrjg-note">Flèch klavye yo oswa glise dwèt ou sou ekran an pou deplase.</p>');
-  const canvas=$('runnerCanvas'),ctx=canvas.getContext('2d'),distEl=$('runnerDistance'),coinsEl=$('runnerCoins'),statusEl=$('runnerStatus'),startBtn=$('runnerStart');
-  let lane=1,items=[],distance=0,coins=0,speed=5,active=false,dead=false,jump=0,slide=0,last=0,spawn=0,raf=0;
-  const lanes=[canvas.width*.29,canvas.width*.5,canvas.width*.71];
-  function move(n){lane=Math.max(0,Math.min(2,lane+n));}
-  function action(a){if(!active||dead)return;if(a==='jump'&&jump<=0&&slide<=0)jump=25;if(a==='slide'&&jump<=0)slide=24;}
-  function reset(){lane=1;items=[];distance=0;coins=0;speed=5;jump=0;slide=0;spawn=0;dead=false;distEl.textContent='0';coinsEl.textContent='0';statusEl.textContent='Kouri! Evite obstak yo.';draw();}
-  function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
-  function draw(){
-   const w=canvas.width,h=canvas.height;
-   const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,temple?'#6bb4a4':'#8cc9e8');sky.addColorStop(1,temple?'#d6c58c':'#d9e6ee');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
-   if(temple){ctx.fillStyle='#315c43';for(let i=0;i<8;i++){let x=i*105-20;ctx.beginPath();ctx.moveTo(x,245);ctx.lineTo(x+40,70+(i%3)*24);ctx.lineTo(x+85,245);ctx.fill();}ctx.fillStyle='#9a8158';ctx.fillRect(0,225,w,235);}
-   else{ctx.fillStyle='#71808a';ctx.fillRect(0,170,w,290);ctx.fillStyle='#d3dbe0';for(let i=0;i<7;i++){ctx.fillRect(i*120+10,55,75,140);ctx.fillStyle='#9db3c1';ctx.fillRect(i*120+25,75,45,95);ctx.fillStyle='#d3dbe0';}}
-   ctx.fillStyle=temple?'#826b4c':'#424c57';ctx.beginPath();ctx.moveTo(w*.39,175);ctx.lineTo(w*.61,175);ctx.lineTo(w*.96,h);ctx.lineTo(w*.04,h);ctx.closePath();ctx.fill();
-   ctx.strokeStyle=temple?'#cbb58b':'#d8dce0';ctx.lineWidth=5;ctx.setLineDash([24,22]);ctx.lineDashOffset=-(distance%46);for(let i=1;i<=2;i++){let x=w*(.39+i*.11);ctx.beginPath();ctx.moveTo(x,180);ctx.lineTo(w*(.04+i*.31),h);ctx.stroke();}ctx.setLineDash([]);
-   items.forEach(o=>{if(o.type==='coin'){ctx.fillStyle='#ffd34e';ctx.beginPath();ctx.arc(o.x,o.y,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#a96c18';ctx.lineWidth=3;ctx.stroke();}else if(temple){rounded(o.x-25,o.y-34,50,45,7,o.type==='gap'?'#29251e':'#8e4930');ctx.fillStyle='#c9a16b';ctx.fillRect(o.x-19,o.y-27,38,8);}else{rounded(o.x-31,o.y-40,62,54,8,o.type==='train'?'#d34c48':'#e7ad39');ctx.fillStyle='#283b4b';ctx.fillRect(o.x-21,o.y-29,42,17);}});
-   const px=lanes[lane],py=h-88-jump*3;ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(px,h-38,26,8,0,0,Math.PI*2);ctx.fill();rounded(px-17,py-46,34,slide?25:46,12,temple?'#e6bd74':'#e9b43d');ctx.fillStyle='#f0d2ad';ctx.beginPath();ctx.arc(px,py-53,14,0,Math.PI*2);ctx.fill();ctx.fillStyle=temple?'#5a3b25':'#27394b';ctx.fillRect(px-15,py-68,30,8);
-   ctx.fillStyle='#fff';ctx.font='bold 20px system-ui';ctx.fillText(temple?'MR JERY • TEMPLE RUN':'MR JERY • SUBWAY SURFERS',18,30);
-  }
-  function finish(){active=false;dead=true;cancelAnimationFrame(raf);statusEl.textContent='💥 Ou frape yon obstak! Distans: '+Math.floor(distance)+' • Pyès: '+coins;startBtn.textContent='↻ Eseye ankò';}
-  function frame(t){if(!active)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;distance+=speed*dt;speed=Math.min(12,5+distance/900);spawn+=dt;if(spawn>Math.max(18,43-distance/100)){spawn=0;let l=Math.floor(Math.random()*3);items.push({lane:l,y:175,type:Math.random()<.48?'coin':(temple?'block':(Math.random()<.55?'train':'barrier'))});if(Math.random()<.55)items.push({lane:(l+1)%3,y:175,type:'coin'});}
-   items.forEach(o=>o.y+=speed*dt*1.7);
-   for(const o of items){if(o.lane===lane&&o.y>canvas.height-130&&o.y<canvas.height-48){if(o.type==='coin'){o.hit=true;coins++;coinsEl.textContent=coins;}else if(jump<8&&slide<8){finish();return;}}}
-   items=items.filter(o=>o.y<canvas.height+40&&!o.hit);if(jump>0)jump=Math.max(0,jump-dt);if(slide>0)slide=Math.max(0,slide-dt);
-   distEl.textContent=Math.floor(distance);draw();raf=requestAnimationFrame(frame);
-  }
-  function start(){if(active)return;if(dead)reset();active=true;last=performance.now();statusEl.textContent='Bon kouri!';startBtn.textContent='▶ An kou';raf=requestAnimationFrame(frame);}
-  const key=e=>{const m={ArrowLeft:-1,ArrowRight:1};if(m[e.key]){e.preventDefault();move(m[e.key]);}if(e.key==='ArrowUp'||e.key===' '){e.preventDefault();action('jump');}if(e.key==='ArrowDown'){e.preventDefault();action('slide');}};
-  let touch=null;canvas.addEventListener('pointerdown',e=>{touch={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',e=>{if(!touch)return;let dx=e.clientX-touch.x,dy=e.clientY-touch.y;touch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;if(Math.abs(dx)>Math.abs(dy))move(dx>0?1:-1);else action(dy<0?'jump':'slide');});
-  document.addEventListener('keydown',key);$('runnerStart').addEventListener('click',start);$('runnerLeft').addEventListener('click',()=>move(-1));$('runnerRight').addEventListener('click',()=>move(1));$('runnerJump').addEventListener('click',()=>action('jump'));$('runnerSlide').addEventListener('click',()=>action('slide'));
-  cleanup=()=>{active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);};reset();
- }
-
  function startSnake(){
   showPanel('🐍 SNAKE','<div class="snake-intro"><p>Manje pòm yo, grandi, epi bat rekò ou. Se ou menm k ap dirije koulèv la ak joystick la.</p></div><div class="snake-toolbar"><label for="snakeLevel">Nivo difikilte</label><select id="snakeLevel" class="snake-level"><option value="easy">Fasil</option><option value="medium" selected>Mwayen</option><option value="hard">Difisil</option></select></div><div class="snake-stats"><div><small>PÒN</small><strong id="snakeScore">0</strong></div><div><small>PI BON NÒT</small><strong id="snakeBest">0</strong></div><div><small>NIVO</small><strong id="snakeLevelName">Mwayen</strong></div></div><div id="snakeBoard" class="mrjg-snake" role="img" aria-label="Tablo jwèt Snake"></div><div id="snakeMessage" class="snake-message">Peze Kòmanse pou jwe.</div><div class="mrjg-controls snake-actions"><button type="button" id="snakeStart" class="mrjg-primary">▶ Kòmanse</button><button type="button" id="snakeReset">↻ Rekòmanse</button></div><div class="snake-joystick-wrap"><div class="snake-joystick-label">JOYSTICK</div><div id="snakeJoystick" class="snake-joystick" role="application" aria-label="Kontwòl analòg Snake"><div class="snake-joystick-cross"></div><div id="snakeJoystickKnob" class="snake-joystick-knob"><span></span></div></div><small>Deplase ti bouton won an pou dirije koulèv la</small></div><div class="mrjg-controls mrjg-snake-controls"><button type="button" data-snake="up" aria-label="Anwo">↑</button><span><button type="button" data-snake="left" aria-label="Agoch">←</button><button type="button" data-snake="down" aria-label="Anba">↓</button><button type="button" data-snake="right" aria-label="Adwat">→</button></span></div><p class="mrjg-note snake-help">Trennen joystick la pou dirije koulèv la. Ou ka sèvi ak flèch yo tou. Espas = poz / kontinye.</p>');
   const boardEl=$('snakeBoard'),scoreEl=$('snakeScore'),bestEl=$('snakeBest'),levelNameEl=$('snakeLevelName'),messageEl=$('snakeMessage'),levelEl=$('snakeLevel');
