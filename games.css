@@ -206,3 +206,15 @@
  .mrj-temple3d{width:100%;aspect-ratio:16/9;height:auto;min-height:0}
  .mrj-temple3d:fullscreen{width:100vw;height:100vh}
 }
+
+/* MR JERY Jungle Quest: original 2D side-scrolling adventure */
+.ariana-hud{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:12px auto;padding:10px;border:1px solid #247b78;border-radius:12px;background:#082d32;color:#d4f8e9}
+.ariana-hud span{font-size:11px;letter-spacing:.06em}.ariana-hud b{color:#ffdc69;font-size:17px;margin-left:4px}
+.ariana-stage{position:relative;width:100%;max-width:960px;margin:12px auto;border:2px solid #d4ac4f;border-radius:13px;overflow:hidden;background:#075d62;box-shadow:0 14px 36px #0008}
+.ariana-stage canvas{display:block;width:100%;height:auto;aspect-ratio:960/440;touch-action:none}
+.ariana-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#031c1cbd;color:#fff2c5;font-size:clamp(17px,3vw,28px);font-weight:900;text-align:center}
+.ariana-overlay[hidden]{display:none}
+.ariana-overlay button{border:1px solid #ffe29a;border-radius:10px;padding:12px 24px;background:linear-gradient(145deg,#e7b94f,#80531b);color:white;font-weight:900;cursor:pointer}
+.ariana-controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:12px auto}
+.ariana-controls button{min-width:68px;min-height:48px;border:1px solid #b98e3c;border-radius:11px;background:linear-gradient(145deg,#254d43,#102c29);color:#fff;font-weight:900;touch-action:none}
+@media(max-width:600px){.ariana-hud{gap:7px;padding:8px}.ariana-hud span{font-size:9px}.ariana-hud b{font-size:14px}.ariana-controls button{flex:1;min-width:0;padding:8px 5px}}
