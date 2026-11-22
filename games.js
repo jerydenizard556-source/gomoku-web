@@ -17,6 +17,8 @@
  $('mrjg2048').addEventListener('click',start2048);
  $('mrjgMemory').addEventListener('click',startMemory);
  $('mrjgSnake').addEventListener('click',startSnake);
+ $('mrjgTemple').addEventListener('click',()=>startRunner('temple'));
+ $('mrjgSubway').addEventListener('click',()=>startRunner('subway'));
  function startTic(){
   showPanel('⭕ 3×3 MORPION','<p class="mrjg-muted">De jwè sou menm aparèy la. X kòmanse.</p><div id="ticStatus" class="mrjg-status">Tou pa X</div><div id="ticBoard" class="mrjg-board mrjg-tic">'+Array.from({length:9},(_,i)=>'<button type="button" data-i="'+i+'" aria-label="Case '+(i+1)+'"></button>').join('')+'</div><div class="mrjg-controls"><button id="ticReset" type="button">↻ Rekòmanse</button></div>');
   let board=Array(9).fill(''),turn='X',done=false;const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -36,6 +38,43 @@
   document.addEventListener('keydown',key);cleanup=()=>document.removeEventListener('keydown',key);
   panel.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>move(b.dataset.dir)));$('reset2048').addEventListener('click',reset);reset();
  }
+
+ function startRunner(kind){
+  const temple=kind==='temple';
+  const title=temple?'MR JERY TEMPLE RUN':'MR JERY SUBWAY SURFERS';
+  showPanel((temple?'🏛️ ':'🚆 ')+title,'<p class="mrjg-muted">'+(temple?'Kouri sou chemen tanp lan, evite obstak epi ranmase pyès.':'Kouri sou ray tren yo, evite tren ak baryè, epi ranmase pyès.')+'</p><div class="runner-stats"><span>Distans <b id="runnerDistance">0</b></span><span>Pyès <b id="runnerCoins">0</b></span></div><canvas id="runnerCanvas" class="mrjg-runner" width="720" height="460" aria-label="Jwèt kous"></canvas><div class="mrjg-status" id="runnerStatus">Peze Kòmanse pou jwe.</div><div class="mrjg-controls runner-controls"><button id="runnerStart" class="mrjg-primary">▶ Kòmanse</button><button id="runnerLeft">← Agoch</button><button id="runnerJump">↑ Sote</button><button id="runnerSlide">↓ Glise</button><button id="runnerRight">Adwat →</button></div><p class="mrjg-note">Flèch klavye yo oswa glise dwèt ou sou ekran an pou deplase.</p>');
+  const canvas=$('runnerCanvas'),ctx=canvas.getContext('2d'),distEl=$('runnerDistance'),coinsEl=$('runnerCoins'),statusEl=$('runnerStatus'),startBtn=$('runnerStart');
+  let lane=1,items=[],distance=0,coins=0,speed=5,active=false,dead=false,jump=0,slide=0,last=0,spawn=0,raf=0;
+  const lanes=[canvas.width*.29,canvas.width*.5,canvas.width*.71];
+  function move(n){lane=Math.max(0,Math.min(2,lane+n));}
+  function action(a){if(!active||dead)return;if(a==='jump'&&jump<=0&&slide<=0)jump=25;if(a==='slide'&&jump<=0)slide=24;}
+  function reset(){lane=1;items=[];distance=0;coins=0;speed=5;jump=0;slide=0;spawn=0;dead=false;distEl.textContent='0';coinsEl.textContent='0';statusEl.textContent='Kouri! Evite obstak yo.';draw();}
+  function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
+  function draw(){
+   const w=canvas.width,h=canvas.height;
+   const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,temple?'#6bb4a4':'#8cc9e8');sky.addColorStop(1,temple?'#d6c58c':'#d9e6ee');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+   if(temple){ctx.fillStyle='#315c43';for(let i=0;i<8;i++){let x=i*105-20;ctx.beginPath();ctx.moveTo(x,245);ctx.lineTo(x+40,70+(i%3)*24);ctx.lineTo(x+85,245);ctx.fill();}ctx.fillStyle='#9a8158';ctx.fillRect(0,225,w,235);}
+   else{ctx.fillStyle='#71808a';ctx.fillRect(0,170,w,290);ctx.fillStyle='#d3dbe0';for(let i=0;i<7;i++){ctx.fillRect(i*120+10,55,75,140);ctx.fillStyle='#9db3c1';ctx.fillRect(i*120+25,75,45,95);ctx.fillStyle='#d3dbe0';}}
+   ctx.fillStyle=temple?'#826b4c':'#424c57';ctx.beginPath();ctx.moveTo(w*.39,175);ctx.lineTo(w*.61,175);ctx.lineTo(w*.96,h);ctx.lineTo(w*.04,h);ctx.closePath();ctx.fill();
+   ctx.strokeStyle=temple?'#cbb58b':'#d8dce0';ctx.lineWidth=5;ctx.setLineDash([24,22]);ctx.lineDashOffset=-(distance%46);for(let i=1;i<=2;i++){let x=w*(.39+i*.11);ctx.beginPath();ctx.moveTo(x,180);ctx.lineTo(w*(.04+i*.31),h);ctx.stroke();}ctx.setLineDash([]);
+   items.forEach(o=>{if(o.type==='coin'){ctx.fillStyle='#ffd34e';ctx.beginPath();ctx.arc(o.x,o.y,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#a96c18';ctx.lineWidth=3;ctx.stroke();}else if(temple){rounded(o.x-25,o.y-34,50,45,7,o.type==='gap'?'#29251e':'#8e4930');ctx.fillStyle='#c9a16b';ctx.fillRect(o.x-19,o.y-27,38,8);}else{rounded(o.x-31,o.y-40,62,54,8,o.type==='train'?'#d34c48':'#e7ad39');ctx.fillStyle='#283b4b';ctx.fillRect(o.x-21,o.y-29,42,17);}});
+   const px=lanes[lane],py=h-88-jump*3;ctx.fillStyle='#0004';ctx.beginPath();ctx.ellipse(px,h-38,26,8,0,0,Math.PI*2);ctx.fill();rounded(px-17,py-46,34,slide?25:46,12,temple?'#e6bd74':'#e9b43d');ctx.fillStyle='#f0d2ad';ctx.beginPath();ctx.arc(px,py-53,14,0,Math.PI*2);ctx.fill();ctx.fillStyle=temple?'#5a3b25':'#27394b';ctx.fillRect(px-15,py-68,30,8);
+   ctx.fillStyle='#fff';ctx.font='bold 20px system-ui';ctx.fillText(temple?'MR JERY • TEMPLE RUN':'MR JERY • SUBWAY SURFERS',18,30);
+  }
+  function finish(){active=false;dead=true;cancelAnimationFrame(raf);statusEl.textContent='💥 Ou frape yon obstak! Distans: '+Math.floor(distance)+' • Pyès: '+coins;startBtn.textContent='↻ Eseye ankò';}
+  function frame(t){if(!active)return;const dt=Math.min(2,(t-last)/16.67||1);last=t;distance+=speed*dt;speed=Math.min(12,5+distance/900);spawn+=dt;if(spawn>Math.max(18,43-distance/100)){spawn=0;let l=Math.floor(Math.random()*3);items.push({lane:l,y:175,type:Math.random()<.48?'coin':(temple?'block':(Math.random()<.55?'train':'barrier'))});if(Math.random()<.55)items.push({lane:(l+1)%3,y:175,type:'coin'});}
+   items.forEach(o=>o.y+=speed*dt*1.7);
+   for(const o of items){if(o.lane===lane&&o.y>canvas.height-130&&o.y<canvas.height-48){if(o.type==='coin'){o.hit=true;coins++;coinsEl.textContent=coins;}else if(jump<8&&slide<8){finish();return;}}}
+   items=items.filter(o=>o.y<canvas.height+40&&!o.hit);if(jump>0)jump=Math.max(0,jump-dt);if(slide>0)slide=Math.max(0,slide-dt);
+   distEl.textContent=Math.floor(distance);draw();raf=requestAnimationFrame(frame);
+  }
+  function start(){if(active)return;if(dead)reset();active=true;last=performance.now();statusEl.textContent='Bon kouri!';startBtn.textContent='▶ An kou';raf=requestAnimationFrame(frame);}
+  const key=e=>{const m={ArrowLeft:-1,ArrowRight:1};if(m[e.key]){e.preventDefault();move(m[e.key]);}if(e.key==='ArrowUp'||e.key===' '){e.preventDefault();action('jump');}if(e.key==='ArrowDown'){e.preventDefault();action('slide');}};
+  let touch=null;canvas.addEventListener('pointerdown',e=>{touch={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',e=>{if(!touch)return;let dx=e.clientX-touch.x,dy=e.clientY-touch.y;touch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;if(Math.abs(dx)>Math.abs(dy))move(dx>0?1:-1);else action(dy<0?'jump':'slide');});
+  document.addEventListener('keydown',key);$('runnerStart').addEventListener('click',start);$('runnerLeft').addEventListener('click',()=>move(-1));$('runnerRight').addEventListener('click',()=>move(1));$('runnerJump').addEventListener('click',()=>action('jump'));$('runnerSlide').addEventListener('click',()=>action('slide'));
+  cleanup=()=>{active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);};reset();
+ }
+
  function startSnake(){
   showPanel('🐍 SNAKE','<div class="snake-intro"><p>Manje pòm yo, grandi, epi bat rekò ou. Se ou menm k ap dirije koulèv la ak joystick la.</p></div><div class="snake-toolbar"><label for="snakeLevel">Nivo difikilte</label><select id="snakeLevel" class="snake-level"><option value="easy">Fasil</option><option value="medium" selected>Mwayen</option><option value="hard">Difisil</option></select></div><div class="snake-stats"><div><small>PÒN</small><strong id="snakeScore">0</strong></div><div><small>PI BON NÒT</small><strong id="snakeBest">0</strong></div><div><small>NIVO</small><strong id="snakeLevelName">Mwayen</strong></div></div><div id="snakeBoard" class="mrjg-snake" role="img" aria-label="Tablo jwèt Snake"></div><div id="snakeMessage" class="snake-message">Peze Kòmanse pou jwe.</div><div class="mrjg-controls snake-actions"><button type="button" id="snakeStart" class="mrjg-primary">▶ Kòmanse</button><button type="button" id="snakeReset">↻ Rekòmanse</button></div><div class="snake-joystick-wrap"><div class="snake-joystick-label">JOYSTICK</div><div id="snakeJoystick" class="snake-joystick" role="application" aria-label="Kontwòl analòg Snake"><div class="snake-joystick-cross"></div><div id="snakeJoystickKnob" class="snake-joystick-knob"><span></span></div></div><small>Deplase ti bouton won an pou dirije koulèv la</small></div><div class="mrjg-controls mrjg-snake-controls"><button type="button" data-snake="up" aria-label="Anwo">↑</button><span><button type="button" data-snake="left" aria-label="Agoch">←</button><button type="button" data-snake="down" aria-label="Anba">↓</button><button type="button" data-snake="right" aria-label="Adwat">→</button></span></div><p class="mrjg-note snake-help">Trennen joystick la pou dirije koulèv la. Ou ka sèvi ak flèch yo tou. Espas = poz / kontinye.</p>');
   const boardEl=$('snakeBoard'),scoreEl=$('snakeScore'),bestEl=$('snakeBest'),levelNameEl=$('snakeLevelName'),messageEl=$('snakeMessage'),levelEl=$('snakeLevel');
