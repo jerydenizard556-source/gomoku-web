@@ -92,3 +92,31 @@
 .snake-apple circle{fill:#f34c4c;stroke:#8d2028;stroke-width:.07;}
 .snake-apple path{fill:none;stroke:#9a5c2a;stroke-width:.07;stroke-linecap:round;}
 .snake-apple ellipse{fill:#7ed45a;stroke:#347c39;stroke-width:.035;}
+
+
+/* Snake refresh: vivid emerald body, premium forest board and crisp food feedback */
+.mrjg-snake{
+ border:1px solid #4edb91;
+ background-color:#071d19;
+ background-image:
+  linear-gradient(#8dffba12 1px,transparent 1px),
+  linear-gradient(90deg,#8dffba12 1px,transparent 1px),
+  radial-gradient(ellipse at 50% 42%,#1d5940 0%,#103629 56%,#071b17 100%);
+ box-shadow:0 0 0 1px #0b3828,0 16px 42px #0008,inset 0 0 35px #020c09aa;
+}
+.snake-outline{stroke:#062b1b;stroke-width:1.08;filter:drop-shadow(0 0 .12px #000);}
+.snake-body-art{
+ stroke:#21a85b;stroke-width:.84;stroke-linecap:round;stroke-linejoin:round;
+ filter:drop-shadow(0 0 .12px #a4ffc0) drop-shadow(0 .08px .12px #03140c);
+}
+.snake-head-shape{fill:#8af5a4;stroke:#08743b;stroke-width:.13;filter:drop-shadow(0 0 .1px #d2ffe0);}
+.snake-eye{fill:#fff;stroke:#07552c;stroke-width:.04;}
+.snake-pupil{fill:#062516;}
+.snake-tongue{stroke:#ff5268;stroke-width:.085;}
+.snake-apple circle{fill:#ff405b;stroke:#a91135;stroke-width:.075;filter:drop-shadow(0 0 .12px #ff9aab);}
+.snake-apple ellipse{fill:#9bf06a;stroke:#3d963c;stroke-width:.04;}
+.snake-message{color:#8af5b0;text-shadow:0 0 12px #21a85b55;}
+.snake-stats>div{border-color:#28684b;background:linear-gradient(145deg,#123b2b,#0a211a);}
+.snake-stats strong{color:#8af5b0;}
+.snake-joystick-label{color:#8af5b0;}
+.snake-level{border-color:#34885c;}
