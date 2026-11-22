@@ -130,7 +130,7 @@
   async function init(){
    try{
     status.textContent='N ap chaje pèsonaj gason 3D la…';
-    const [threeMod,loaderMod]=await Promise.all([import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js'),import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js')]);
+    const [threeMod,loaderMod]=await Promise.all([import('https://esm.sh/three@0.160.0'),import('https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js')]);
     if(disposed)return;THREE=threeMod;const GLTFLoader=loaderMod.GLTFLoader;buildWorld();
     const loader=new GLTFLoader();const asset='https://files.innerscene.com/library/run-sam-3d-person-animated-fa008c06/71777483056ccfecfed9/run-sam-3d-person-animated.glb';
     loader.load(asset,gltf=>{
