@@ -120,3 +120,14 @@
 .snake-stats strong{color:#8af5b0;}
 .snake-joystick-label{color:#8af5b0;}
 .snake-level{border-color:#34885c;}
+
+/* MR JERY Temple Run premium presentation */
+.mrjg-runner{display:block;width:min(100%,900px);height:auto;aspect-ratio:900/560;margin:14px auto;border:1px solid #b58a4c;border-radius:16px;background:#16382c;box-shadow:0 18px 46px #0008;touch-action:none;user-select:none}
+.temple-canvas{border:2px solid #b99152;box-shadow:0 0 0 1px #4d3823,0 18px 48px #0009}
+.temple-hud{max-width:900px}
+.temple-hud>span{display:flex;flex-direction:column;gap:4px;align-items:center;font-size:10px;letter-spacing:.12em;color:#c7b58e}
+.temple-hud b{font-size:22px;letter-spacing:0;color:#f4cb78}
+.runner-controls{justify-content:center}
+.runner-controls button{min-width:92px}
+#templeStart{background:linear-gradient(145deg,#bd8b3e,#79501f);border-color:#e2bd78;color:#fff7e6}
+#templeLeft,#templeRight,#templeJump,#templeSlide{background:linear-gradient(145deg,#293d32,#14241e);border-color:#806b45}
