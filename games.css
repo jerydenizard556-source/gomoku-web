@@ -180,3 +180,29 @@
 @media(max-width:600px){
  .mrj-temple3d{height:440px;min-height:340px;border-radius:10px}
 }
+
+/* Wide-screen landscape layout for Temple Run */
+.mrj-temple3d{
+ width:min(100%,1200px);
+ aspect-ratio:16/9;
+ height:auto;
+ min-height:0;
+ max-height:680px;
+ margin:10px auto 14px;
+ overflow:hidden;
+}
+.mrj-temple3d:fullscreen{
+ width:100vw;
+ height:100vh;
+ max-width:none;
+ max-height:none;
+ aspect-ratio:auto;
+ margin:0;
+ border:0;
+ border-radius:0;
+}
+.mrj-temple3d:fullscreen canvas{width:100%;height:100%}
+@media(max-width:700px){
+ .mrj-temple3d{width:100%;aspect-ratio:16/9;height:auto;min-height:0}
+ .mrj-temple3d:fullscreen{width:100vw;height:100vh}
+}
