@@ -337,18 +337,72 @@
  }
 
  function startSudoku(){
-  showPanel('🔢 SUDOKU MASTER','<p class="mrjg-muted">Ranpli chak liy, kolòn ak kare 3×3 avèk chif 1 rive 9. Chak chif dwe parèt yon sèl fwa.</p><div id="sdkInfo" class="mrjg-status">Chwazi yon kare vid, epi antre yon chif.</div><div id="sdkBoard" style="width:min(94vw,450px);margin:12px auto;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border:3px solid #d4af37;border-radius:8px;overflow:hidden;background:#111827;aspect-ratio:1"></div><div id="sdkKeys" class="mrjg-controls" style="max-width:450px;margin:10px auto;display:grid;grid-template-columns:repeat(9,1fr);gap:5px"></div><div class="mrjg-controls"><button id="sdkCheck">✓ Verifye repons</button><button id="sdkErase">⌫ Efase</button><button id="sdkReset">↻ Rekòmanse</button></div>');
+  showPanel('🔢 SUDOKU MASTER','<p class="mrjg-muted">Ranpli chak liy, kolòn ak kare 3×3. Chwazi yon kare epi itilize klavye a oswa bouton chif yo.</p><div id="sdkInfo" class="mrjg-status">Chwazi yon kare vid pou kòmanse.</div><div id="sdkStats" style="max-width:470px;margin:8px auto;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#cbd5e1;font-size:13px"><span id="sdkFilled">0 / 81 ranpli</span><span id="sdkMistakes">0 erè</span></div><div id="sdkBoard" style="width:min(94vw,470px);margin:12px auto;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border:3px solid #c9a34a;border-radius:10px;overflow:hidden;background:#101827;aspect-ratio:1;box-shadow:0 12px 32px #0006"></div><div style="max-width:470px;margin:12px auto 5px;color:#d7b96b;font-size:13px;font-weight:800;text-align:center">CHIF KI DISPONIB YO</div><div id="sdkKeys" style="max-width:470px;margin:6px auto 12px;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px"></div><div class="mrjg-controls"><button id="sdkHint">💡 Ti èd</button><button id="sdkCheck">✓ Verifye</button><button id="sdkErase">⌫ Efase</button><button id="sdkReset">↻ Rekòmanse</button></div><p class="mrjg-muted" style="text-align:center">Konsèy: klike yon kare epi peze 1–9 sou klavye ou. Chif ki anba yo montre konbyen plas ki rete pou chak nimewo.</p>');
   const puzzle=['530070000','600195000','098000060','800060003','400803001','700020006','060000280','000419005','000080079'];
   const solution=['534678912','672195348','198342567','859761423','426853791','713924856','961537284','287419635','345286179'];
-  const board=puzzle.map(r=>r.split('').map(Number)),fixed=board.map(r=>r.map(Boolean));let selected=-1;
+  const initial=puzzle.map(r=>r.split('').map(Number)),board=initial.map(r=>r.slice()),fixed=board.map(r=>r.map(Boolean));
+  let selected=-1,mistakes=0,done=false;
   const el=$('sdkBoard'),info=$('sdkInfo'),keys=$('sdkKeys');
-  function draw(){el.innerHTML='';board.forEach((row,r)=>row.forEach((v,c)=>{const i=r*9+c,b=document.createElement('button');b.type='button';b.textContent=v||'';b.style.cssText='aspect-ratio:1;border:0;border-right:'+(c===2||c===5?'3px solid #d4af37':'1px solid #64748b')+';border-bottom:'+(r===2||r===5?'3px solid #d4af37':'1px solid #64748b')+';background:'+(i===selected?'#785d20':fixed[r][c]?'#26364b':'#172235')+';color:'+(fixed[r][c]?'#fff':'#f5ce6a')+';font-size:clamp(14px,3.4vw,22px);font-weight:'+(fixed[r][c]?'900':'600')+';cursor:pointer;padding:0';b.addEventListener('click',()=>{selected=i;draw();});el.appendChild(b);}));}
-  function enter(n){if(selected<0){info.textContent='Chwazi yon kare vid anvan.';return;}const r=Math.floor(selected/9),c=selected%9;if(fixed[r][c])return;board[r][c]=n;draw();}
-  for(let n=1;n<=9;n++){const b=document.createElement('button');b.type='button';b.textContent=n;b.style.cssText='padding:10px 0;border:1px solid #b58a35;border-radius:8px;background:#26364b;color:#fff;font-weight:800;font-size:17px';b.addEventListener('click',()=>enter(n));keys.appendChild(b);}
+  const sameBox=(r,c,rr,cc)=>Math.floor(r/3)===Math.floor(rr/3)&&Math.floor(c/3)===Math.floor(cc/3);
+  function count(n){let total=0;board.forEach(row=>row.forEach(v=>{if(v===n)total++;}));return total;}
+  function conflicts(r,c){
+   const v=board[r][c];if(!v)return false;
+   for(let k=0;k<9;k++){if(k!==c&&board[r][k]===v)return true;if(k!==r&&board[k][c]===v)return true;}
+   for(let rr=Math.floor(r/3)*3;rr<Math.floor(r/3)*3+3;rr++)for(let cc=Math.floor(c/3)*3;cc<Math.floor(c/3)*3+3;cc++)if((rr!==r||cc!==c)&&board[rr][cc]===v)return true;
+   return false;
+  }
+  function renderKeys(){
+   keys.innerHTML='';
+   for(let n=1;n<=9;n++){
+    const left=9-count(n),b=document.createElement('button');b.type='button';b.disabled=left===0||done;
+    b.innerHTML='<span style="display:block;font-size:19px;font-weight:900">'+n+'</span><span style="display:block;font-size:10px;opacity:.85;margin-top:2px">'+left+' rete</span>';
+    b.style.cssText='min-width:0;padding:7px 1px;border:1px solid '+(left===0?'#475569':'#b58a35')+';border-radius:9px;background:'+(left===0?'#17202d':'linear-gradient(160deg,#34465f,#1b293d)')+';color:'+(left===0?'#8491a2':'#fff')+';font-weight:800;cursor:'+(left===0?'default':'pointer')+';opacity:'+(left===0?'.55':'1');
+    b.addEventListener('click',()=>enter(n));keys.appendChild(b);
+   }
+  }
+  function draw(){
+   el.innerHTML='';
+   board.forEach((row,r)=>row.forEach((v,c)=>{
+    const i=r*9+c,b=document.createElement('button'),isSel=i===selected,selR=Math.floor(selected/9),selC=selected%9;
+    const related=selected>=0&&(r===selR||c===selC||sameBox(r,c,selR,selC));
+    const same=selected>=0&&v!==0&&v===board[selR][selC];
+    const bad=conflicts(r,c)||(v!==0&&!fixed[r][c]&&v!==solution[r][c]);
+    b.type='button';b.textContent=v||'';b.setAttribute('aria-label','Liy '+(r+1)+', kolòn '+(c+1)+(v?', chif '+v:', vid'));
+    let bg=isSel?'#806323':bad?'#6b3038':same?'#365d75':related?'#263b50':fixed[r][c]?'#26364b':'#172235';
+    b.style.cssText='aspect-ratio:1;min-width:0;border:0;border-right:'+(c===2||c===5?'3px solid #c9a34a':'1px solid #506176')+';border-bottom:'+(r===2||r===5?'3px solid #c9a34a':'1px solid #506176')+';background:'+bg+';color:'+(bad?'#ffb4b4':fixed[r][c]?'#fff':'#f5ce6a')+';font-size:clamp(13px,3.4vw,22px);font-weight:'+(fixed[r][c]?'900':'700')+';cursor:pointer;padding:0';
+    b.addEventListener('click',()=>{selected=i;info.textContent='Kare '+(r+1)+', '+(c+1)+' chwazi. Antre yon chif.';draw();});el.appendChild(b);
+   }));
+   const filled=board.flat().filter(Boolean).length;$('sdkFilled').textContent=filled+' / 81 ranpli';$('sdkMistakes').textContent=mistakes+' erè';renderKeys();
+  }
+  function enter(n){
+   if(done)return;
+   if(selected<0){info.textContent='Chwazi yon kare vid anvan.';return;}
+   const r=Math.floor(selected/9),c=selected%9;if(fixed[r][c]){info.textContent='Ou pa ka modifye chif ki te deja nan tablo a.';return;}
+   if(n!==0&&count(n)>=9&&board[r][c]!==n){info.textContent='Ou deja itilize 9 chif '+n+'.';return;}
+   board[r][c]=n;
+   if(n&&n!==solution[r][c]){mistakes++;info.textContent='Chif sa a pa bon nan kare sa a. Eseye yon lòt.';}
+   else info.textContent=n?'Bon! Kontinye.':'Kare a efase.';
+   draw();
+   if(board.every((row,rr)=>row.every((v,cc)=>v===solution[rr][cc]))){done=true;info.textContent='🏆 Eksepsyonèl! Ou rezoud Sudoku a san kite okenn erè.';draw();}
+  }
+  function onKey(e){
+   if(e.key>='1'&&e.key<='9'){e.preventDefault();enter(Number(e.key));}
+   else if(e.key==='Backspace'||e.key==='Delete'||e.key==='0'){e.preventDefault();enter(0);}
+   else if(e.key.startsWith('Arrow')&&selected>=0){e.preventDefault();let r=Math.floor(selected/9),c=selected%9;if(e.key==='ArrowUp')r=(r+8)%9;if(e.key==='ArrowDown')r=(r+1)%9;if(e.key==='ArrowLeft')c=(c+8)%9;if(e.key==='ArrowRight')c=(c+1)%9;selected=r*9+c;draw();}
+  }
   $('sdkErase').addEventListener('click',()=>enter(0));
-  $('sdkCheck').addEventListener('click',()=>{let empty=0,wrong=0;board.forEach((row,r)=>row.forEach((v,c)=>{if(!v)empty++;else if(v!==solution[r][c])wrong++;}));if(!empty&&!wrong)info.textContent='🏆 Ekselan! Ou rezoud Sudoku a nèt!';else info.textContent=wrong+' move chif • '+empty+' kare vid. Kontinye!';});
-  $('sdkReset').addEventListener('click',()=>{puzzle.forEach((r,i)=>board[i]=r.split('').map(Number));selected=-1;info.textContent='Nou rekòmanse. Bon chans!';draw();});
-  draw();cleanup=()=>{};
+  $('sdkHint').addEventListener('click',()=>{
+   if(done)return;if(selected<0){info.textContent='Chwazi yon kare vid pou resevwa yon ti èd.';return;}
+   const r=Math.floor(selected/9),c=selected%9;if(fixed[r][c]){info.textContent='Chwazi yon kare vid.';return;}
+   board[r][c]=solution[r][c];info.textContent='💡 Men chif ki kòrèk la. Kontinye rezoud rès la!';draw();
+   if(board.every((row,rr)=>row.every((v,cc)=>v===solution[rr][cc]))){done=true;info.textContent='🏆 Sudoku fini!';draw();}
+  });
+  $('sdkCheck').addEventListener('click',()=>{
+   let empty=0,bad=0;board.forEach((row,r)=>row.forEach((v,c)=>{if(!v)empty++;else if(v!==solution[r][c]||conflicts(r,c))bad++;}));
+   info.textContent=bad+' chif pa bon • '+empty+' kare vid. Chif ki an wouj yo bezwen koreksyon.';
+  });
+  $('sdkReset').addEventListener('click',()=>{initial.forEach((row,r)=>board[r]=row.slice());selected=-1;mistakes=0;done=false;info.textContent='Nou rekòmanse. Bon chans!';draw();});
+  document.addEventListener('keydown',onKey);draw();cleanup=()=>document.removeEventListener('keydown',onKey);
  }
  function startQuiz(){
   // Gwo bank kesyon. Kesyon ki deja parèt rete make nan navigatè a pou yo pa repete.
