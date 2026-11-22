@@ -67,10 +67,6 @@
 .snake-help{text-align:center}
 @media(max-width:520px){.snake-stats strong{font-size:19px}.mrjg-snake{gap:1px;padding:5px;border-radius:10px}.mrjg-snake-controls button{min-width:54px;min-height:48px}}
 
-/* Snake automatic pilot toggle */
-.snake-auto-on{background:linear-gradient(135deg,#14532d,#166534)!important;border-color:#4ade80!important;color:#dcfce7!important}
-.snake-auto-off{background:#273449!important;border-color:#64748b!important;color:#e2e8f0!important}
-
 /* On-screen analog joystick for Snake */
 .snake-joystick-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;margin:18px auto 14px;color:#a9bad0;text-align:center}
 .snake-joystick-label{font-size:11px;font-weight:900;letter-spacing:.18em;color:#f5bd32}
