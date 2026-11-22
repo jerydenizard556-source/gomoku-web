@@ -40,7 +40,114 @@
  }
 
 
- function startTempleRun(){ startImmersiveRunner('temple'); }
+ function startTempleRun(){ startTempleRun3D(); }
+ function startTempleRun3D(){
+  showPanel('🏛️ MR JERY TEMPLE RUN','<p class="mrjg-muted">Kouri nan yon forè twopikal 3D, evite pyèj yo epi ranmase pyès lò.</p><div class="runner-stats temple-hud"><span>DISTANS <b id="irDistance">0 m</b></span><span>PYÈS <b id="irCoins">0</b></span><span>VITÈS <b id="irSpeed">1×</b></span></div><div id="ir3dMount" class="mrj-temple3d"><div class="mrj-3d-loading">CHAJMAN PÈSONAJ 3D…</div></div><div class="mrjg-status" id="irStatus">N ap prepare forè a…</div><div class="mrjg-controls runner-controls"><button id="irStart" class="mrjg-primary">▶ KÒMANSE</button><button id="irLeft">← AGOCH</button><button id="irJump">↑ SOTE</button><button id="irSlide">↓ GLISE</button><button id="irRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou sou ekran jwèt la.</p>');
+  const mount=$('ir3dMount'),status=$('irStatus'),startBtn=$('irStart');
+  let disposed=false,active=false,dead=false,raf=0,THREE=null,renderer=null,scene=null,camera=null,mixer=null,runAction=null,player=null,playerModel=null,clock=null,resizeObserver=null,audio=null;
+  let lane=0,coins=0,distance=0,speed=8,jump=0,slide=0,spawnClock=0,lastTime=0,world=[],obstacles=[],coinObjects=[],trees=[];
+  const laneX=[-2.25,0,2.25],rand=(a,b)=>a+Math.random()*(b-a);
+  const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+  function soundCoin(){try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return;if(!audio)audio=new A();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime;o.type='sine';o.frequency.setValueAtTime(900,t);o.frequency.exponentialRampToValueAtTime(1450,t+.09);g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.12,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.17);}catch(e){}}
+  function material(color,roughness=.9){return new THREE.MeshStandardMaterial({color,roughness});}
+  function box(w,h,d,mat,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
+  function makeTree(x,z,scale=1){
+   const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(scale);scene.add(g);
+   const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.22,.42,4.2,7),material(0x493321));trunk.position.y=2.1;trunk.castShadow=true;g.add(trunk);
+   const greens=[0x123c25,0x1b512d,0x28633a,0x397345];
+   for(let i=0;i<6;i++){const leaf=new THREE.Mesh(new THREE.IcosahedronGeometry(rand(1.0,1.65),1),material(greens[i%greens.length]));leaf.position.set(rand(-1.1,1.1),3.4+rand(-.25,2.1),rand(-.9,.9));leaf.scale.set(1.15,.8,1);leaf.castShadow=true;g.add(leaf);}
+   const vine=new THREE.Mesh(new THREE.CylinderGeometry(.025,.045,rand(2.5,4),5),material(0x314b25));vine.position.set(rand(-.7,.7),3.1,rand(-.5,.5));vine.rotation.z=rand(-.25,.25);g.add(vine);
+   trees.push(g);return g;
+  }
+  function makeCoin(x,z){const g=new THREE.Group();g.position.set(x,1.15,z);const gold=new THREE.MeshStandardMaterial({color:0xffc52e,metalness:.78,roughness:.2,emissive:0x684000});const ring=new THREE.Mesh(new THREE.TorusGeometry(.34,.09,10,24),gold);g.add(ring);const core=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.07,20),gold);core.rotation.x=Math.PI/2;g.add(core);scene.add(g);coinObjects.push({mesh:g,hit:false});}
+  function makeObstacle(type,laneIndex,z){
+   const g=new THREE.Group();g.position.set(laneX[laneIndex],0,z);g.userData={type,lane:laneIndex,hit:false};
+   if(type==='rock'){
+    const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.8,1),material(0x625743));rock.scale.set(1.2,.8,1);rock.position.y=.55;rock.castShadow=true;g.add(rock);
+   }else if(type==='gap'){
+    const hole=new THREE.Mesh(new THREE.CylinderGeometry(1.02,1.02,.13,32),new THREE.MeshStandardMaterial({color:0x090d09,roughness:1}));hole.scale.set(1,.15,1.45);hole.position.y=.025;g.add(hole);
+    const rim=new THREE.Mesh(new THREE.TorusGeometry(.92,.13,8,32),material(0x9a8054));rim.rotation.x=Math.PI/2;rim.position.y=.08;rim.scale.z=1.45;g.add(rim);
+   }else{
+    const log=new THREE.Mesh(new THREE.CylinderGeometry(.19,.23,2.25,10),material(0x68401f));log.rotation.z=Math.PI/2;log.position.y=1.2;log.castShadow=true;g.add(log);
+    for(const x of [-.9,.9]){const post=new THREE.Mesh(new THREE.CylinderGeometry(.09,.13,1.5,8),material(0x594027));post.position.set(x,.72,0);g.add(post);}
+   }
+   scene.add(g);obstacles.push(g);
+  }
+  function makeTemple(){
+   const stone=material(0x82745a),dark=material(0x263a2a);
+   const arch=new THREE.Group();arch.position.set(0,0,-54);scene.add(arch);
+   for(const x of [-5.5,5.5]){const p=new THREE.Mesh(new THREE.BoxGeometry(1.5,8,1.7),stone);p.position.set(x,4,0);p.castShadow=true;arch.add(p);const cap=new THREE.Mesh(new THREE.BoxGeometry(2.1,.65,2.1),material(0xb49a6b));cap.position.set(x,8.1,0);arch.add(cap);}
+   const top=new THREE.Mesh(new THREE.BoxGeometry(13,1.5,2),stone);top.position.y=8.4;arch.add(top);
+   const door=new THREE.Mesh(new THREE.BoxGeometry(7,6,.3),dark);door.position.set(0,3,-.85);arch.add(door);
+   for(let i=0;i<5;i++){const mark=new THREE.Mesh(new THREE.BoxGeometry(.12,1.1,.15),material(0xc5a36a));mark.position.set(-4+i*2,8.5,-1.08);arch.add(mark);}
+  }
+  function buildWorld(){
+   scene=new THREE.Scene();scene.background=new THREE.Color(0x91a98a);scene.fog=new THREE.FogExp2(0x718d6c,.014);
+   camera=new THREE.PerspectiveCamera(62,1,.1,220);camera.position.set(0,4.1,9.4);camera.lookAt(0,1,-4);
+   renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;mount.innerHTML='';mount.appendChild(renderer.domElement);
+   scene.add(new THREE.HemisphereLight(0xd9edff,0x39402a,2.0));const sun=new THREE.DirectionalLight(0xffe1ad,3.1);sun.position.set(-8,18,7);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+   const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,220),material(0x24472c));ground.rotation.x=-Math.PI/2;ground.position.set(0,-.12,-55);ground.receiveShadow=true;scene.add(ground);
+   const path=new THREE.Mesh(new THREE.PlaneGeometry(8.1,220),material(0x746448));path.rotation.x=-Math.PI/2;path.position.set(0,0,-55);path.receiveShadow=true;scene.add(path);
+   const edgeMat=material(0x9c8862);for(const x of [-4.1,4.1]){const edge=box(.18,.18,220,edgeMat,x,.06,-55);edge.receiveShadow=true;}
+   const slabMat=material(0x9a8969);for(let i=0;i<34;i++){const slab=box(7.7,.09,1.35,slabMat,0,.08,-i*5-3);world.push(slab);}
+   for(let i=0;i<24;i++){const z=-i*7-4;makeTree(-rand(6,13),z,rand(.8,1.5));makeTree(rand(6,13),z-rand(0,3),rand(.8,1.55));}
+   // Mossy boulders, distant jungle wall and twin waterfalls
+   for(let i=0;i<18;i++){const x=(i%2?1:-1)*rand(5,12),z=-rand(8,110);const b=new THREE.Mesh(new THREE.DodecahedronGeometry(rand(.6,1.7),1),material([0x40563b,0x596044,0x6b684b][i%3]));b.position.set(x,rand(.3,1),z);b.scale.y=.7;b.castShadow=true;scene.add(b);}
+   const waterMat=new THREE.MeshStandardMaterial({color:0x8bcbd0,transparent:true,opacity:.62,roughness:.18,metalness:.05});
+   for(const x of [-15,15]){const water=new THREE.Mesh(new THREE.PlaneGeometry(3,18),waterMat);water.position.set(x,9,-47);scene.add(water);}
+   makeTemple();
+   for(let i=0;i<3;i++){const torch=new THREE.PointLight(0xff9a35,3,12);torch.position.set(i%2?4:-4,2,-52-i*2);scene.add(torch);}
+   player=new THREE.Group();scene.add(player);player.position.set(0,0,0);
+   clock=new THREE.Clock();
+  }
+  function resize(){if(!renderer||!camera)return;const w=Math.max(320,mount.clientWidth),h=Math.max(240,mount.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  function setLane(n){if(!active||dead)return;lane=Math.max(-1,Math.min(1,lane+n));}
+  function doAction(type){if(!active||dead)return;if(type==='jump'&&jump<=0&&slide<=0)jump=.9;if(type==='slide'&&jump<=0)slide=.72;}
+  function resetGame(){lane=0;coins=0;distance=0;speed=8;jump=0;slide=0;spawnClock=0;dead=false;obstacles.forEach(o=>scene.remove(o));coinObjects.forEach(o=>scene.remove(o.mesh));obstacles=[];coinObjects=[];setText('irDistance','0 m');setText('irCoins','0');setText('irSpeed','1×');status.textContent='Pare pou kouri?';startBtn.textContent='▶ KÒMANSE';}
+  function finish(){active=false;dead=true;status.textContent='🏁 Ou fini! '+Math.floor(distance)+' m • '+coins+' pyès. Peze rekòmanse.';startBtn.textContent='↻ REKÒMANSE';}
+  function spawn(){const l=Math.floor(Math.random()*3),r=Math.random();if(r<.42){for(let i=0;i<5;i++)makeCoin(laneX[l],-42-i*1.6);}else makeObstacle(r<.65?'rock':r<.82?'gap':'barrier',l,-46);}
+  function animate(){
+   if(disposed)return;raf=requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.045);if(active){
+    distance+=speed*dt;speed=Math.min(17,8+distance/180);spawnClock+=dt;if(spawnClock>Math.max(.85,1.65-distance/10000)){spawnClock=0;spawn();}
+    if(jump>0)jump=Math.max(0,jump-dt);if(slide>0)slide=Math.max(0,slide-dt);
+    player.position.x+=(laneX[lane+1]-player.position.x)*Math.min(1,dt*11);player.position.y=jump>0?Math.sin((.9-jump)/.9*Math.PI)*1.65:0;
+    if(slide>0){player.rotation.x=Math.min(.55,slide*.8);player.position.y=-.22;}else player.rotation.x+=(0-player.rotation.x)*Math.min(1,dt*10);
+    if(mixer)mixer.update(dt);
+    world.forEach(s=>{s.position.z+=speed*dt;if(s.position.z>8)s.position.z-=170;});
+    trees.forEach(t=>{t.position.z+=speed*dt;if(t.position.z>12)t.position.z-=175;});
+    obstacles.forEach(o=>{o.position.z+=speed*dt;if(!o.userData.hit&&o.position.z>1.2&&o.position.z<2.1&&Math.abs(o.position.x-player.position.x)<.95){const type=o.userData.type,passed=(type==='rock'||type==='gap')?jump>.28:type==='barrier'?slide>.2:false;if(passed)o.userData.hit=true;else finish();}});
+    coinObjects.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.rotation.y+=dt*2.8;if(!o.hit&&o.mesh.position.z>1.1&&o.mesh.position.z<2.1&&Math.abs(o.mesh.position.x-player.position.x)<.95){o.hit=true;coins++;soundCoin();scene.remove(o.mesh);}});
+    obstacles=obstacles.filter(o=>{if(o.position.z>12){scene.remove(o);return false;}return true;});coinObjects=coinObjects.filter(o=>!o.hit&&o.mesh.position.z<12);
+    camera.position.x+=(player.position.x*.34-camera.position.x)*Math.min(1,dt*3.5);camera.lookAt(player.position.x*.16,1.15,-4);
+    setText('irDistance',Math.floor(distance)+' m');setText('irCoins',coins);setText('irSpeed',(speed/8).toFixed(1)+'×');
+   }else if(mixer)mixer.update(dt*.25);
+   renderer.render(scene,camera);
+  }
+  const key=e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')setLane(-1);if(e.key==='ArrowRight')setLane(1);if(e.key==='ArrowUp'||e.key===' ')doAction('jump');if(e.key==='ArrowDown')doAction('slide');}};
+  let touch=null;
+  function onPointerDown(e){touch={x:e.clientX,y:e.clientY};}
+  function onPointerUp(e){if(!touch)return;const dx=e.clientX-touch.x,dy=e.clientY-touch.y;touch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;if(Math.abs(dx)>Math.abs(dy))setLane(dx>0?1:-1);else doAction(dy<0?'jump':'slide');}
+  async function init(){
+   try{
+    status.textContent='N ap chaje pèsonaj gason 3D la…';
+    const [threeMod,loaderMod]=await Promise.all([import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js'),import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js')]);
+    if(disposed)return;THREE=threeMod;const GLTFLoader=loaderMod.GLTFLoader;buildWorld();
+    const loader=new GLTFLoader();const asset='https://files.innerscene.com/library/run-sam-3d-person-animated-fa008c06/71777483056ccfecfed9/run-sam-3d-person-animated.glb';
+    loader.load(asset,gltf=>{
+     if(disposed)return;playerModel=gltf.scene;const bounds=new THREE.Box3().setFromObject(playerModel),size=bounds.getSize(new THREE.Vector3());const scale=1.78/Math.max(size.y,.01);playerModel.scale.setScalar(scale);playerModel.position.y=-bounds.min.y*scale;playerModel.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});player.add(playerModel);
+     if(gltf.animations&&gltf.animations.length){mixer=new THREE.AnimationMixer(playerModel);runAction=mixer.clipAction(gltf.animations[0]);runAction.play();}
+     status.textContent='Pèsonaj reyèl la pare. Peze KÒMANSE pou jwe.';startBtn.disabled=false;resetGame();resize();animate();
+    },undefined,err=>{console.error('MR JERY 3D character load failed',err);status.textContent='Pèsonaj 3D a pa t ka chaje. Tcheke koneksyon an epi eseye rafrechi paj la.';mount.innerHTML='<div class="mrj-3d-error">Nou pa rive chaje modèl imen 3D a. Tanpri rafrechi paj la pou eseye ankò.</div>';});
+   }catch(err){console.error('MR JERY 3D init failed',err);status.textContent='Navigatè a pa rive louvri motè 3D a. Eseye dènye vèsyon Chrome oswa Edge.';mount.innerHTML='<div class="mrj-3d-error">WebGL / Three.js pa disponib sou navigatè sa a.</div>';}
+  }
+  startBtn.disabled=true;
+  startBtn.addEventListener('click',()=>{if(!renderer)return;if(dead)resetGame();active=true;status.textContent='Kouri! Evite pyèj yo.';startBtn.textContent='▶ AN KOU';});
+  $('irLeft').addEventListener('click',()=>setLane(-1));$('irRight').addEventListener('click',()=>setLane(1));$('irJump').addEventListener('click',()=>doAction('jump'));$('irSlide').addEventListener('click',()=>doAction('slide'));
+  mount.addEventListener('pointerdown',onPointerDown);mount.addEventListener('pointerup',onPointerUp);document.addEventListener('keydown',key);
+  if(typeof ResizeObserver!=='undefined'){resizeObserver=new ResizeObserver(resize);resizeObserver.observe(mount);}window.addEventListener('resize',resize);
+  cleanup=()=>{disposed=true;active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);window.removeEventListener('resize',resize);if(resizeObserver)resizeObserver.disconnect();if(renderer){renderer.dispose();renderer.domElement.remove();}if(audio){try{audio.close();}catch(e){}}};
+  init();
+ }
  function startRunner(kind){ startImmersiveRunner(kind==='temple'?'temple':'subway'); }
  function startImmersiveRunner(kind){
   const temple=kind==='temple', title=temple?'MR JERY TEMPLE RUN':'MR JERY SUBWAY SURFERS';
