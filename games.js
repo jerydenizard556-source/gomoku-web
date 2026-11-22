@@ -42,7 +42,7 @@
 
  function startTempleRun(){ startTempleRun3D(); }
  function startTempleRun3D(){
-  showPanel('🏛️ MR JERY TEMPLE RUN','<p class="mrjg-muted">Kouri nan yon forè twopikal 3D, evite pyèj yo epi ranmase pyès lò.</p><div class="runner-stats temple-hud"><span>DISTANS <b id="irDistance">0 m</b></span><span>PYÈS <b id="irCoins">0</b></span><span>VITÈS <b id="irSpeed">1×</b></span></div><div id="ir3dMount" class="mrj-temple3d"><div class="mrj-3d-loading">CHAJMAN PÈSONAJ 3D…</div></div><div class="mrjg-status" id="irStatus">N ap prepare forè a…</div><div class="mrjg-controls runner-controls"><button id="irStart" class="mrjg-primary">▶ KÒMANSE</button><button id="irLeft">← AGOCH</button><button id="irJump">↑ SOTE</button><button id="irSlide">↓ GLISE</button><button id="irRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou sou ekran jwèt la.</p>');
+  showPanel('🏛️ MR JERY TEMPLE RUN','<p class="mrjg-muted">Kouri nan yon forè twopikal 3D, evite pyèj yo epi ranmase pyès lò.</p><div class="runner-stats temple-hud"><span>DISTANS <b id="irDistance">0 m</b></span><span>PYÈS <b id="irCoins">0</b></span><span>VITÈS <b id="irSpeed">1×</b></span></div><div id="ir3dMount" class="mrj-temple3d"><div class="mrj-3d-loading">CHAJMAN PÈSONAJ 3D…</div></div><div class="mrjg-status" id="irStatus">N ap prepare forè a…</div><div class="mrjg-controls runner-controls"><button id="irStart" class="mrjg-primary">▶ KÒMANSE</button><button id="irFullscreen">⛶ EKRAN LAJ</button><button id="irLeft">← AGOCH</button><button id="irJump">↑ SOTE</button><button id="irSlide">↓ GLISE</button><button id="irRight">ADWAT →</button></div><p class="mrjg-note">Klavye: ← → pou chanje liy, ↑ oswa espas pou sote, ↓ pou glise. Sou telefòn: glise dwèt ou sou ekran jwèt la.</p>');
   const mount=$('ir3dMount'),status=$('irStatus'),startBtn=$('irStart');
   let disposed=false,active=false,dead=false,raf=0,THREE=null,renderer=null,scene=null,camera=null,mixer=null,runAction=null,player=null,playerModel=null,clock=null,resizeObserver=null,audio=null;
   let lane=0,coins=0,distance=0,speed=8,jump=0,slide=0,spawnClock=0,lastTime=0,world=[],obstacles=[],coinObjects=[],trees=[];
@@ -83,13 +83,22 @@
   }
   function buildWorld(){
    scene=new THREE.Scene();scene.background=new THREE.Color(0x91a98a);scene.fog=new THREE.FogExp2(0x718d6c,.014);
-   camera=new THREE.PerspectiveCamera(62,1,.1,220);camera.position.set(0,4.1,9.4);camera.lookAt(0,1,-4);
+   camera=new THREE.PerspectiveCamera(68,1,.1,240);camera.position.set(0,4.5,10.8);camera.lookAt(0,1.25,-7);
    renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;mount.innerHTML='';mount.appendChild(renderer.domElement);
    scene.add(new THREE.HemisphereLight(0xd9edff,0x39402a,2.0));const sun=new THREE.DirectionalLight(0xffe1ad,3.1);sun.position.set(-8,18,7);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
-   const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,220),material(0x24472c));ground.rotation.x=-Math.PI/2;ground.position.set(0,-.12,-55);ground.receiveShadow=true;scene.add(ground);
-   const path=new THREE.Mesh(new THREE.PlaneGeometry(8.1,220),material(0x746448));path.rotation.x=-Math.PI/2;path.position.set(0,0,-55);path.receiveShadow=true;scene.add(path);
-   const edgeMat=material(0x9c8862);for(const x of [-4.1,4.1]){const edge=box(.18,.18,220,edgeMat,x,.06,-55);edge.receiveShadow=true;}
-   const slabMat=material(0x9a8969);for(let i=0;i<34;i++){const slab=box(7.7,.09,1.35,slabMat,0,.08,-i*5-3);world.push(slab);}
+   const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,240),material(0x24472c));ground.rotation.x=-Math.PI/2;ground.position.set(0,-.16,-60);ground.receiveShadow=true;scene.add(ground);
+   // Textured asphalt road, with real road shoulders and painted lane markings
+   const roadCanvas=document.createElement('canvas');roadCanvas.width=512;roadCanvas.height=512;const roadCtx=roadCanvas.getContext('2d');
+   roadCtx.fillStyle='#343936';roadCtx.fillRect(0,0,512,512);
+   for(let i=0;i<11500;i++){const v=rand(35,92);roadCtx.fillStyle='rgba('+v+','+v+','+v+',0.22)';const x=Math.random()*512,y=Math.random()*512;roadCtx.fillRect(x,y,rand(1,3),rand(1,3));}
+   const roadTex=new THREE.CanvasTexture(roadCanvas);roadTex.wrapS=roadTex.wrapT=THREE.RepeatWrapping;roadTex.repeat.set(1,5);roadTex.colorSpace=THREE.SRGBColorSpace;
+   const asphalt=new THREE.Mesh(new THREE.PlaneGeometry(8.2,240),new THREE.MeshStandardMaterial({map:roadTex,color:0xffffff,roughness:.98}));asphalt.rotation.x=-Math.PI/2;asphalt.position.set(0,-.015,-60);asphalt.receiveShadow=true;scene.add(asphalt);
+   const shoulderMat=material(0x8b8062),edgeLine=material(0xe6e3d4),laneLine=material(0xf1e9c9);
+   for(const x of [-4.3,4.3]){const shoulder=box(.42,.09,240,shoulderMat,x,-.01,-60);shoulder.receiveShadow=true;const line=box(.11,.025,240,edgeLine,x>0?-3.78:3.78,.025,-60);line.receiveShadow=true;}
+   for(const x of [-1.35,1.35])for(let i=0;i<34;i++){const dash=box(.075,.025,2.4,laneLine,x,.025,-i*7-2);world.push(dash);}
+   // Gravel verges and roadside timber barriers
+   for(const x of [-4.8,4.8]){const rail=box(.16,.55,220,material(0x654b2d),x,.55,-60);rail.receiveShadow=true;for(let i=0;i<42;i++){const post=box(.24,.95,.25,material(0x715438),x,.48,-i*5-3);post.castShadow=true;}}
+   for(let i=0;i<28;i++){const z=-i*8-4;const pebble=new THREE.Mesh(new THREE.DodecahedronGeometry(rand(.12,.38),0),material(0x77715c));pebble.position.set(rand(-5.3,-4.5),-.02,z);pebble.scale.y=.45;scene.add(pebble);const pebble2=pebble.clone();pebble2.position.x=-pebble.position.x;scene.add(pebble2);}
    for(let i=0;i<24;i++){const z=-i*7-4;makeTree(-rand(6,13),z,rand(.8,1.5));makeTree(rand(6,13),z-rand(0,3),rand(.8,1.55));}
    // Mossy boulders, distant jungle wall and twin waterfalls
    for(let i=0;i<18;i++){const x=(i%2?1:-1)*rand(5,12),z=-rand(8,110);const b=new THREE.Mesh(new THREE.DodecahedronGeometry(rand(.6,1.7),1),material([0x40563b,0x596044,0x6b684b][i%3]));b.position.set(x,rand(.3,1),z);b.scale.y=.7;b.castShadow=true;scene.add(b);}
@@ -118,7 +127,7 @@
     obstacles.forEach(o=>{o.position.z+=speed*dt;if(!o.userData.hit&&o.position.z>1.2&&o.position.z<2.1&&Math.abs(o.position.x-player.position.x)<.95){const type=o.userData.type,passed=(type==='rock'||type==='gap')?jump>.28:type==='barrier'?slide>.2:false;if(passed)o.userData.hit=true;else finish();}});
     coinObjects.forEach(o=>{o.mesh.position.z+=speed*dt;o.mesh.rotation.y+=dt*2.8;if(!o.hit&&o.mesh.position.z>1.1&&o.mesh.position.z<2.1&&Math.abs(o.mesh.position.x-player.position.x)<.95){o.hit=true;coins++;soundCoin();scene.remove(o.mesh);}});
     obstacles=obstacles.filter(o=>{if(o.position.z>12){scene.remove(o);return false;}return true;});coinObjects=coinObjects.filter(o=>!o.hit&&o.mesh.position.z<12);
-    camera.position.x+=(player.position.x*.34-camera.position.x)*Math.min(1,dt*3.5);camera.lookAt(player.position.x*.16,1.15,-4);
+    camera.position.x+=(player.position.x*.34-camera.position.x)*Math.min(1,dt*3.5);camera.lookAt(player.position.x*.16,1.25,-7);
     setText('irDistance',Math.floor(distance)+' m');setText('irCoins',coins);setText('irSpeed',(speed/8).toFixed(1)+'×');
    }else if(mixer)mixer.update(dt*.25);
    renderer.render(scene,camera);
@@ -134,7 +143,7 @@
     if(disposed)return;THREE=threeMod;const GLTFLoader=loaderMod.GLTFLoader;buildWorld();
     const loader=new GLTFLoader();const asset='https://files.innerscene.com/library/run-sam-3d-person-animated-fa008c06/71777483056ccfecfed9/run-sam-3d-person-animated.glb';
     loader.load(asset,gltf=>{
-     if(disposed)return;playerModel=gltf.scene;const bounds=new THREE.Box3().setFromObject(playerModel),size=bounds.getSize(new THREE.Vector3());const scale=1.78/Math.max(size.y,.01);playerModel.scale.setScalar(scale);playerModel.position.y=-bounds.min.y*scale;playerModel.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});player.add(playerModel);
+     if(disposed)return;playerModel=gltf.scene;const bounds=new THREE.Box3().setFromObject(playerModel),size=bounds.getSize(new THREE.Vector3());const scale=1.78/Math.max(size.y,.01);playerModel.scale.setScalar(scale);playerModel.position.y=-bounds.min.y*scale;playerModel.rotation.y=Math.PI;playerModel.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});player.add(playerModel);
      if(gltf.animations&&gltf.animations.length){mixer=new THREE.AnimationMixer(playerModel);runAction=mixer.clipAction(gltf.animations[0]);runAction.play();}
      status.textContent='Pèsonaj reyèl la pare. Peze KÒMANSE pou jwe.';startBtn.disabled=false;resetGame();resize();animate();
     },undefined,err=>{console.error('MR JERY 3D character load failed',err);status.textContent='Pèsonaj 3D a pa t ka chaje. Tcheke koneksyon an epi eseye rafrechi paj la.';mount.innerHTML='<div class="mrj-3d-error">Nou pa rive chaje modèl imen 3D a. Tanpri rafrechi paj la pou eseye ankò.</div>';});
@@ -142,10 +151,12 @@
   }
   startBtn.disabled=true;
   startBtn.addEventListener('click',()=>{if(!renderer)return;if(dead)resetGame();active=true;status.textContent='Kouri! Evite pyèj yo.';startBtn.textContent='▶ AN KOU';});
+  $('irFullscreen').addEventListener('click',async()=>{try{if(!document.fullscreenElement){await mount.requestFullscreen();const orientation=screen.orientation;if(orientation&&orientation.lock)await orientation.lock('landscape');}else{if(screen.orientation&&screen.orientation.unlock)screen.orientation.unlock();await document.exitFullscreen();}}catch(e){status.textContent='Pou ekran laj, mete telefòn nan sou kote epi peze bouton an ankò.';}setTimeout(resize,120);});
+  document.addEventListener('fullscreenchange',resize);
   $('irLeft').addEventListener('click',()=>setLane(-1));$('irRight').addEventListener('click',()=>setLane(1));$('irJump').addEventListener('click',()=>doAction('jump'));$('irSlide').addEventListener('click',()=>doAction('slide'));
   mount.addEventListener('pointerdown',onPointerDown);mount.addEventListener('pointerup',onPointerUp);document.addEventListener('keydown',key);
   if(typeof ResizeObserver!=='undefined'){resizeObserver=new ResizeObserver(resize);resizeObserver.observe(mount);}window.addEventListener('resize',resize);
-  cleanup=()=>{disposed=true;active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);window.removeEventListener('resize',resize);if(resizeObserver)resizeObserver.disconnect();if(renderer){renderer.dispose();renderer.domElement.remove();}if(audio){try{audio.close();}catch(e){}}};
+  cleanup=()=>{disposed=true;active=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);document.removeEventListener('fullscreenchange',resize);window.removeEventListener('resize',resize);if(resizeObserver)resizeObserver.disconnect();if(renderer){renderer.dispose();renderer.domElement.remove();}if(audio){try{audio.close();}catch(e){}}};
   init();
  }
  function startRunner(kind){ startImmersiveRunner(kind==='temple'?'temple':'subway'); }
