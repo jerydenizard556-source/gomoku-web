@@ -211,7 +211,7 @@
 .ariana-hud{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:12px auto;padding:10px;border:1px solid #247b78;border-radius:12px;background:#082d32;color:#d4f8e9}
 .ariana-hud span{font-size:11px;letter-spacing:.06em}.ariana-hud b{color:#ffdc69;font-size:17px;margin-left:4px}
 .ariana-stage{position:relative;width:100%;max-width:960px;margin:12px auto;border:2px solid #d4ac4f;border-radius:13px;overflow:hidden;background:#075d62;box-shadow:0 14px 36px #0008}
-.ariana-stage canvas{display:block;width:100%;height:auto;aspect-ratio:960/440;touch-action:none}
+.ariana-stage canvas,.ariana-stage-3d #aqCanvas{display:block;width:100%;height:100%;aspect-ratio:16/9;touch-action:none}.ariana-stage-3d{aspect-ratio:16/9;min-height:250px;background:#16251b}.ariana-stage-3d #aqCanvas canvas{display:block;width:100%;height:100%}
 .ariana-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#031c1cbd;color:#fff2c5;font-size:clamp(17px,3vw,28px);font-weight:900;text-align:center}
 .ariana-overlay[hidden]{display:none}
 .ariana-overlay button{border:1px solid #ffe29a;border-radius:10px;padding:12px 24px;background:linear-gradient(145deg,#e7b94f,#80531b);color:white;font-weight:900;cursor:pointer}
