@@ -288,11 +288,11 @@
   const canvas=$('carCanvas'),ctx=canvas.getContext('2d'),overlay=$('carOverlay');
   const W=960,H=540,lanes=3,laneW=146,roadW=laneW*lanes,roadX=(W-roadW)/2;
   const levels=[{name:'FASIL',speed:225,spawn:.72,traffic:230},{name:'MWAYEN',speed:285,spawn:1.05,traffic:300},{name:'DIFISIL',speed:355,spawn:1.42,traffic:390},{name:'EKSPÈ',speed:420,spawn:1.75,traffic:470},{name:'LEJANN',speed:490,spawn:2.1,traffic:560}];
-  let raf=0,last=0,run=false,paused=false,dead=false,disposed=false,elapsed=0,distance=0,score=0,coins=0,lives=2,lane=1,playerX=0,traffic=[],pickups=[],particles=[],keys={},level=0,playerColor='#bd2934',stealReady=true,shield=0,spawnClock=0;
+  let raf=0,last=0,run=false,paused=false,dead=false,disposed=false,elapsed=0,distance=0,score=0,coins=0,lives=2,lane=1,playerX=roadX+laneW*1.5,traffic=[{x:roadX+laneW*.5,y:150,color:'#e1e5e8',speed:250},{x:roadX+laneW*2.5,y:-125,color:'#d89c35',speed:270}],pickups=[],particles=[],keys={},level=0,playerColor='#bd2934',stealReady=true,shield=0,spawnClock=0;
   let best=0;try{best=Number(localStorage.getItem('mrjClassicRacingBest'))||0;}catch(e){}
   const $id=id=>$(id),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   function resize(){const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
-  function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);}
+  function roundRect(x,y,w,h,r){ctx.beginPath();if(ctx.roundRect){ctx.roundRect(x,y,w,h,r);return;}const rr=Math.min(r,w/2,h/2);ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();}
   function car(x,y,color,player=false,angle=0){
    ctx.save();ctx.translate(x,y);ctx.rotate(angle);
    ctx.fillStyle='#080b10';roundRect(-34,-48,68,100,15);ctx.fill();
@@ -307,7 +307,7 @@
    ctx.restore();
   }
   function updateHud(){const vals={carScore:Math.floor(score),carCoins:coins,carLives:lives,carBest:best,carLevel:level+1};Object.keys(vals).forEach(id=>{const el=$(id);if(el)el.textContent=vals[id];});}
-  function reset(){elapsed=0;distance=0;score=0;coins=0;lives=2;lane=1;playerX=roadX+laneW*1.5;traffic=[];pickups=[];particles=[];dead=false;paused=false;level=0;playerColor='#bd2934';stealReady=true;shield=0;spawnClock=0;updateHud();overlay.style.display='grid';overlay.innerHTML='MR JERY CLASSIC RACING<div style="font-size:15px;color:#e8d6aa">2 CHANS • 5 NIVO • VÒLÈ MACHIN</div><button id="carStart" type="button" style="padding:13px 26px;border:1px solid #f4c76b;border-radius:12px;background:linear-gradient(135deg,#f5c76d,#9d6822);color:#17120a;font-weight:950;font-size:16px">▶ KÒMANSE KOURSI A</button><small style="font-size:12px;color:#d9e2ed">Peze E oswa bouton VÒLÈ MACHIN lè w toupre yon machin.</small>';$('carStart').addEventListener('click',start);draw();}
+  function reset(){elapsed=0;distance=0;score=0;coins=0;lives=2;lane=1;playerX=roadX+laneW*1.5;traffic=[{x:roadX+laneW*.5,y:150,color:'#e1e5e8',speed:levels[0].traffic},{x:roadX+laneW*2.5,y:-125,color:'#d89c35',speed:levels[0].traffic+25}];pickups=[];particles=[];dead=false;paused=false;level=0;playerColor='#bd2934';stealReady=true;shield=0;spawnClock=0;updateHud();overlay.style.display='grid';overlay.innerHTML='MR JERY CLASSIC RACING<div style="font-size:15px;color:#e8d6aa">2 CHANS • 5 NIVO • VÒLÈ MACHIN</div><button id="carStart" type="button" style="padding:13px 26px;border:1px solid #f4c76b;border-radius:12px;background:linear-gradient(135deg,#f5c76d,#9d6822);color:#17120a;font-weight:950;font-size:16px">▶ KÒMANSE KOURSI A</button><small style="font-size:12px;color:#d9e2ed">Peze E oswa bouton VÒLÈ MACHIN lè w toupre yon machin.</small>';$('carStart').addEventListener('click',start);draw();}
   function drawRoad(){
    const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#46565a');sky.addColorStop(1,'#182326');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
    ctx.fillStyle='#263b2c';ctx.fillRect(0,0,roadX,H);ctx.fillRect(roadX+roadW,0,W-roadX-roadW);
