@@ -447,7 +447,54 @@
    ['Ki aksyon ki ede pwoteje forè?',['Koupe tout pyebwa','Plante pyebwa epi limite debwazman','Boule fatra nan forè','Jete lwil nan rivyè'],1,'Anviwònman'],
    ['Ki sous enèji ki renouvlab?',['Chabon','Petwòl','Van','Gaz natirèl'],2,'Anviwònman'],
    ['Ki sa resiklaj pèmèt?',['Re-itilize materyèl pou diminye fatra','Ogmante fatra','Gaspiye dlo','Polye plis'],0,'Anviwònman'],
-   ['Ki gaz ki kontribye anpil nan rechofman planèt la lè li ogmante nan atmosfè?',['Gaz kabonik','Oksijèn','Elyòm','Neyon'],0,'Anviwònman']
+   ['Ki gaz ki kontribye anpil nan rechofman planèt la lè li ogmante nan atmosfè?',['Gaz kabonik','Oksijèn','Elyòm','Neyon'],0,'Anviwònman'],
+   ['Ki valè x nan ekwasyon 3x + 5 = 20?',['3','5','7','8'],1,'Matematik','Mwayen'],
+   ['Ki non pwosesis kote selil yo divize pou fòme de selil pitit ki idantik?',['Mitòz','Mejoz','Osmòz','Difizyon'],0,'Syans','Mwayen'],
+   ['Ki ògàn nan kò moun ki pwodui ensilin?',['Fwa','Pankreyas','Ren','Kè'],1,'Syans','Mwayen'],
+   ['Ki peyi Afriken ki gen kapital Addis-Abeba?',['Kenya','Etyopi','Gana','Senegal'],1,'Jewografi','Mwayen'],
+   ['Ki kanal ki konekte lanmè Mediterane ak lanmè Wouj?',['Kanal Panama','Kanal Suez','Kanal La Manche','Kanal Korent'],1,'Jewografi','Mwayen'],
+   ['Ki ane premye moun te mache sou Lalin?',['1959','1965','1969','1972'],2,'Istwa','Mwayen'],
+   ['Ki eleman chimik ki gen senbòl Au?',['Ajan','Lò','Aliminyòm','Ajan mèki'],1,'Syans','Mwayen'],
+   ['Ki inite yo itilize pou mezire fòs?',['Joul','Watt','Newton','Pascal'],2,'Syans','Mwayen'],
+   ['Ki peyi ki te genyen premye koup di mond foutbòl gason an an 1930?',['Ajantin','Itali','Irigwe','Brezil'],2,'Espò','Mwayen'],
+   ['Nan echèk, ki pyès ki ka deplase nenpòt kantite kare an dyagonal?',['Tou','Fou','Cheval','Pyon'],1,'Espò','Mwayen'],
+   ['Ki rezilta 15% nan 200?',['15','20','30','35'],2,'Matematik','Mwayen'],
+   ['Ki non poligòn ki gen uit kote?',['Egzagòn','Eptagòn','Oktagòn','Nonagòn'],2,'Matematik','Mwayen'],
+   ['Ki syantis ki te pwopoze teyori relativite a?',['Albert Einstein','Niels Bohr','Marie Curie','Nikola Tesla'],0,'Syans','Mwayen'],
+   ['Ki kouch Latè kote plak tektonik yo deplase?',['Nwayo entèn','Litosfè','Nwayo ekstèn','Atmosfè'],1,'Syans','Difikil'],
+   ['Ki non pwosesis kote yon likid pase dirèkteman nan eta solid?',['Evaporasyon','Kondansasyon','Solidifikasyon','Sublimasyon'],2,'Syans','Mwayen'],
+   ['Ki kapital Ostrali?',['Sydney','Melbourne','Canberra','Perth'],2,'Jewografi','Mwayen'],
+   ['Ki mòn ki pi wo sou Latè anwo nivo lanmè?',['K2','Kilimanjaro','Everest','Mont Blanc'],2,'Jewografi','Fasil'],
+   ['Ki peyi ki gen vil istorik Kyoto?',['Lachin','Japon','Vyetnam','Mongoli'],1,'Jewografi','Fasil'],
+   ['Ki trete ki te rekonèt endepandans Ayiti an 1825, men ki te egzije yon gwo dedomajman?',['Trete Pari','Òdonans Charles X','Trete Vèsay','Trete Tordesillas'],1,'Istwa','Difikil'],
+   ['Ki lidè revolisyonè ayisyen yo te rele “Papa peyi a” nan istwa endepandans lan?',['Jean-Jacques Dessalines','Alexandre Pétion','Henri Christophe','André Rigaud'],0,'Istwa','Mwayen'],
+   ['Ki ane Konstitisyon ameriken aktyèl la te siyen?',['1776','1787','1789','1791'],1,'Istwa','Difikil'],
+   ['Ki òganizasyon entènasyonal ki gen katye jeneral li nan New York?',['UNESCO','Nasyonzini','OPEC','NATO'],1,'Sosyete','Fasil'],
+   ['Ki dokiman legal ki bay yon moun dwa pou vwayaje aletranje?',['Paspò','Diplòm','Fakti','Kat bibliyotèk'],0,'Sosyete','Fasil'],
+   ['Ki sa enflasyon vle di nan ekonomi?',['Bès jeneral pri yo','Ogmantasyon jeneral pri yo','Ogmantasyon popilasyon sèlman','Diminisyon salè sèlman'],1,'Sosyete','Mwayen'],
+   ['Ki bank santral Ayiti?',['BNC','BRH','Sogebank','UNIBANK'],1,'Sosyete','Fasil'],
+   ['Ki pwotokòl entènèt ki sekirize kominikasyon sou sit entènèt?',['HTTP','HTTPS','FTP','SMTP'],1,'Teknoloji','Mwayen'],
+   ['Ki langaj sèvi prensipalman pou estriktire kontni yon paj entènèt?',['CSS','HTML','Python','SQL'],1,'Teknoloji','Fasil'],
+   ['Ki sa yon bazdone ye?',['Yon koleksyon done òganize','Yon aparèy pou enprime','Yon kalite ekran','Yon rezo elektrik'],0,'Teknoloji','Mwayen'],
+   ['Ki konbinezon kle ki kole yon bagay ou te kopye sou Windows?',['Ctrl + X','Ctrl + C','Ctrl + V','Ctrl + A'],2,'Teknoloji','Fasil'],
+   ['Ki mezi ki egal 1 000 mèt?',['1 santimèt','1 kilomèt','1 milimèt','1 desimèt'],1,'Matematik','Fasil'],
+   ['Ki rasin kare 225?',['12','13','15','25'],2,'Matematik','Mwayen'],
+   ['Si 5 travayè fini yon travay nan 12 jou, konbyen jou 10 travayè ta pran nan menm vitès la?',['3','6','12','24'],1,'Matematik','Difikil'],
+   ['Ki valè ang enteryè yon egzagòn regilye genyen an total?',['360°','540°','720°','900°'],2,'Matematik','Difikil'],
+   ['Ki non fòmil chimik dlo a?',['CO₂','H₂O','O₂','NaCl'],1,'Syans','Fasil'],
+   ['Ki pati nan san an ki ede koagilasyon?',['Globil wouj','Plakèt','Plasma sèlman','Globil blan'],1,'Syans','Mwayen'],
+   ['Ki maladi moustik Aedes aegypti ka transmèt?',['Deng','Tibèkiloz','Kolera','Tetanòs'],0,'Sante','Mwayen'],
+   ['Ki vitamin ki enpòtan anpil pou koagulasyon san?',['Vitamin A','Vitamin C','Vitamin K','Vitamin B1'],2,'Sante','Mwayen'],
+   ['Ki gaz ki nesesè pou konbisyon nòmal?',['Azòt','Oksijèn','Elyòm','Idwojèn sèlman'],1,'Syans','Fasil'],
+   ['Ki kouch atmosfè kote pifò fenomèn meteyowolojik fèt?',['Tèmosfè','Mezosfè','Twoposfè','Egzosfè'],2,'Syans','Difikil'],
+   ['Ki non enèji yon objè genyen poutèt mouvman li?',['Enèji potansyèl','Enèji sinetik','Enèji chimik','Enèji nikleyè'],1,'Syans','Mwayen'],
+   ['Ki peyi ki te genyen koup di mond foutbòl gason 2018 la?',['Almay','Ajantin','Frans','Kwoasi'],2,'Espò','Fasil'],
+   ['Nan foutbòl, konbyen minit tan nòmal yon match genyen san tan adisyonèl?',['80','90','100','120'],1,'Espò','Fasil'],
+   ['Ki atlèt ki te etabli rekò mondyal 100 m gason an 9.58 segonn?',['Carl Lewis','Usain Bolt','Yohan Blake','Justin Gatlin'],1,'Espò','Mwayen'],
+   ['Ki oseyan ki ant Afrik ak Ostrali?',['Atlantik','Pasifik','Endyen','Aktik'],2,'Jewografi','Mwayen'],
+   ['Ki peyi ki gen kapital Nairobi?',['Tanzani','Kenya','Uganda','Rwanda'],1,'Jewografi','Fasil'],
+   ['Ki prensip syantifik ki di enèji pa kreye ni detwi, li transfòme?',['Lwa aksyon-reyaksyon','Konsèvasyon enèji','Lwa gravite','Prensip ensètitid'],1,'Syans','Difikil']
+
   ];
   const historyKey='mrjery_quiz_seen_v2';
   let seen=new Set();
@@ -460,8 +507,9 @@
   function draw(){
    if(pos>=queue.length){finishBank();return;}
    answered=false;next.disabled=true;feedback.textContent='';
-   const item=questions[queue[pos]];
-   progress.textContent='KESYON #'+(asked+1)+' • PWEN: '+score+' • '+item[3]+' • RÈS: '+(queue.length-pos);
+   const qi=queue[pos],item=questions[qi];
+   const level=item[4]|| (qi<32?'Fasil':qi<68?'Mwayen':'Difikil');
+   progress.textContent='KESYON #'+(asked+1)+' • NIVO: '+level.toUpperCase()+' • PWEN: '+score+' • '+item[3]+' • RÈS: '+(queue.length-pos);
    q.textContent=item[0];answers.innerHTML='';
    const choices=item[1].map((v,i)=>({v,correct:i===item[2]})).sort(()=>Math.random()-.5);
    choices.forEach((choice,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+choice.v;b.style.cssText='min-height:58px;padding:12px;border:1px solid #52647d;border-radius:11px;background:#1d2c42;color:#fff;font-weight:700;font-size:15px;cursor:pointer';b.addEventListener('click',()=>answer(choice.correct,b));answers.appendChild(b);});
@@ -470,10 +518,12 @@
   function answer(correct){
    if(answered)return;answered=true;asked++;
    const item=questions[queue[pos]];seen.add(item[0]);try{localStorage.setItem(historyKey,JSON.stringify([...seen]));}catch(e){}
-   if(correct)score+=10;
+   const level=item[4]||(queue[pos]<32?'Fasil':queue[pos]<68?'Mwayen':'Difikil');
+   const points=level==='Difikil'?30:level==='Mwayen'?20:10;
+   if(correct)score+=points;
    [...answers.children].forEach((b)=>{b.disabled=true;const label=b.textContent.slice(3);if(label===item[1][item[2]])b.style.background='#17633f';else if(b===answers.querySelector(':focus'))b.style.background='#873737';});
-   feedback.textContent=correct?'✓ Bon repons! +10 pwen':'✗ Se pa sa. Bon repons lan: '+item[1][item[2]];
-   next.disabled=false;progress.textContent='KESYON #'+asked+' • PWEN: '+score+' • '+item[3];
+   feedback.textContent=correct?'✓ Bon repons! +'+points+' pwen ('+level+')':'✗ Se pa sa. Bon repons lan: '+item[1][item[2]];
+   next.disabled=false;progress.textContent='KESYON #'+asked+' • NIVO: '+level.toUpperCase()+' • PWEN: '+score+' • '+item[3];
   }
   next.addEventListener('click',()=>{if(!answered)return;pos++;draw();});
   $('quizRestart').addEventListener('click',()=>{buildQueue();score=0;asked=0;if(!queue.length){finishBank();return;}draw();});
