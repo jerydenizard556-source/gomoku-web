@@ -81,7 +81,7 @@
   }
   function drawSideScenery(){
    for(let i=0;i<8;i++){let z=((i/8+(distance*.002)%1));let p=project(-1.42,z),q=project(1.42,z),s=.2+z*.85;
-    if(temple){for(let [x,side] of [[p.x,-1],[q.x,1]]){ctx.fillStyle='#245239';ctx.beginPath();ctx.moveTo(x, p.y);ctx.lineTo(x+side*rand(12,26)*s,p.y-95*s);ctx.lineTo(x+side*rand(25,42)*s,p.y);ctx.fill();ctx.fillStyle='#8c7049';ctx.fillRect(x-9*s,p.y-27*s,18*s,30*s);}}
+    if(temple){for(let [x,side] of [[p.x,-1],[q.x,1]]){ctx.fillStyle='#245239';ctx.beginPath();ctx.moveTo(x, p.y);ctx.lineTo(x+side*(12+(i%3)*5)*s,p.y-95*s);ctx.lineTo(x+side*(25+(i%4)*4)*s,p.y);ctx.fill();ctx.fillStyle='#8c7049';ctx.fillRect(x-9*s,p.y-27*s,18*s,30*s);}}
     else{for(let x of [p.x,q.x]){ctx.fillStyle='#d7d4c8';ctx.fillRect(x-27*s,p.y-80*s,54*s,80*s);ctx.fillStyle='#3288b6';ctx.fillRect(x-20*s,p.y-68*s,40*s,30*s);ctx.fillStyle='#e2a64a';ctx.fillRect(x-20*s,p.y-29*s,40*s,20*s);}}
    }
   }
@@ -96,8 +96,8 @@
   }
   function draw(){ctx.clearRect(0,0,W,H);drawBackground();drawSideScenery();drawTrack();items.slice().sort((a,b)=>a.z-b.z).forEach(o=>{const p=project(o.lane,o.z);if(o.type==='coin')drawCoin(o,p);else drawObstacle(o,p);});drawRunner();const v=ctx.createRadialGradient(W/2,H/2,210,W/2,H/2,610);v.addColorStop(.55,'#0000');v.addColorStop(1,'#07130c88');ctx.fillStyle=v;ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff1ce';ctx.font='900 23px system-ui';ctx.fillText(temple?'MR JERY • TEMPLE RUN':'MR JERY • SUBWAY SURFERS',22,36);}
   function finish(){active=false;dead=true;cancelAnimationFrame(raf);status.textContent='🏁 Kous la fini! '+Math.floor(distance)+' m • '+coins+' pyès. Eseye bat rekò ou!';startBtn.textContent='↻ REKÒMANSE';}
-  function spawnItems(){const l=lanes[Math.floor(Math.random()*3)],r=Math.random();if(r<.42){for(let i=0;i<5;i++)items.push({lane:l,z:.05-i*.055,type:'coin'});}else{const type=temple?(r<.64?'rock':r<.82?'gap':'barrier'):(r<.68?'train':'barrier');items.push({lane:l,z:.04,type});if(Math.random()<.38){const other=lanes.filter(v=>v!==l)[Math.floor(Math.random()*2)];for(let i=0;i<3;i++)items.push({lane:other,z:.06-i*.06,type:'coin'});}}}
-  function frame(t){if(!active)return;let dt=Math.min(2.2,(t-last)/16.67||1);last=t;distance+=speed*dt*1.75;speed=Math.min(.72,.32+distance/23000);phase+=dt*.24;if(jump>0)jump=Math.min(1,jump+dt*.045);if(slide>0)slide=Math.max(0,slide-dt*.055);spawn+=dt;if(spawn>Math.max(24,49-distance/1000)){spawn=0;spawnItems();}
+  function spawnItems(){const l=lanes[Math.floor(Math.random()*3)],r=Math.random();if(r<.42){for(let i=0;i<5;i++)items.push({lane:l,z:.02+i*.055,type:'coin'});}else{const type=temple?(r<.64?'rock':r<.82?'gap':'barrier'):(r<.68?'train':'barrier');items.push({lane:l,z:.04,type});if(Math.random()<.38){const other=lanes.filter(v=>v!==l)[Math.floor(Math.random()*2)];for(let i=0;i<3;i++)items.push({lane:other,z:.06-i*.06,type:'coin'});}}}
+  function frame(t){if(!active)return;let dt=Math.min(2.2,(t-last)/16.67||1);last=t;distance+=speed*dt*1.75;speed=Math.min(.72,.32+distance/23000);phase+=dt*.24;if(jump>0)jump=Math.max(0,jump-dt*.045);if(slide>0)slide=Math.max(0,slide-dt*.055);spawn+=dt;if(spawn>Math.max(24,49-distance/1000)){spawn=0;spawnItems();}
    for(const o of items){o.z+=speed*dt*.013;if(o.lane===lane&&o.z>.88&&o.z<1.04){if(o.type==='coin'){o.hit=true;coins++;soundCoin();}else if((o.type==='rock'||o.type==='gap')&&jump>.2){o.hit=true;}else if(o.type==='barrier'&&slide>.2){o.hit=true;}else{finish();return;}}}
    items=items.filter(o=>o.z<1.15&&!o.hit);$('irDistance').textContent=Math.floor(distance)+' m';$('irCoins').textContent=coins;$('irSpeed').textContent=(speed/.32).toFixed(1)+'×';draw();raf=requestAnimationFrame(frame);}
   function start(){if(active)return;if(dead)reset();active=true;last=performance.now();status.textContent='Kouri! Kamera a ap swiv ou. Rete vijilan!';startBtn.textContent='▶ AN KOU';raf=requestAnimationFrame(frame);}
