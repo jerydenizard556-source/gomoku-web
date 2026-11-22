@@ -78,3 +78,17 @@
 .snake-joystick-knob{position:absolute;left:50%;top:50%;width:62px;height:62px;border-radius:50%;transform:translate(-50%,-50%);background:linear-gradient(145deg,#f8d77b,#c58b20);border:3px solid #ffe6a3;box-shadow:0 5px 14px #0008,inset 0 2px 5px #fff8;display:grid;place-items:center;pointer-events:none}
 .snake-joystick-knob span{width:19px;height:19px;border-radius:50%;background:#7a5014;box-shadow:inset 0 2px 4px #0006}
 @media(max-width:520px){.snake-joystick{width:142px;height:142px}.snake-joystick-knob{width:58px;height:58px}}
+
+
+/* Nokia-inspired Snake: seamless wall wrap and smooth snake artwork */
+.mrjg-snake{position:relative;display:block;overflow:hidden;padding:0;gap:0;border:1px solid #55704b;background-color:#182b22;background-image:linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px),radial-gradient(ellipse at 50% 40%,#284432,#13251d 80%);background-size:calc(100% / 18) calc(100% / 18),calc(100% / 18) calc(100% / 18),100% 100%;}
+.snake-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+.snake-outline{fill:none;stroke:#102a1b;stroke-width:1.02;stroke-linecap:round;stroke-linejoin:round;}
+.snake-body-art{fill:none;stroke:#3ebd68;stroke-width:.78;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 .06px .08px #06150c);}
+.snake-head-shape{fill:#64d77d;stroke:#17643a;stroke-width:.13;}
+.snake-eye{fill:#fff;stroke:#12351f;stroke-width:.035;}
+.snake-pupil{fill:#102318;}
+.snake-tongue{fill:none;stroke:#f04c58;stroke-width:.075;stroke-linecap:round;stroke-linejoin:round;}
+.snake-apple circle{fill:#f34c4c;stroke:#8d2028;stroke-width:.07;}
+.snake-apple path{fill:none;stroke:#9a5c2a;stroke-width:.07;stroke-linecap:round;}
+.snake-apple ellipse{fill:#7ed45a;stroke:#347c39;stroke-width:.035;}
