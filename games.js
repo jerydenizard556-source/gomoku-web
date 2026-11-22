@@ -337,11 +337,12 @@
  }
 
  function startSudoku(){
-  showPanel('🔢 SUDOKU MASTER','<p class="mrjg-muted">Ranpli chak liy, kolòn ak kare 3×3. Chwazi yon kare epi itilize klavye a oswa bouton chif yo.</p><div id="sdkInfo" class="mrjg-status">Chwazi yon kare vid pou kòmanse.</div><div id="sdkStats" style="max-width:470px;margin:8px auto;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#cbd5e1;font-size:13px"><span id="sdkFilled">0 / 81 ranpli</span><span id="sdkMistakes">0 erè</span></div><div id="sdkBoard" style="width:min(94vw,470px);margin:12px auto;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border:3px solid #c9a34a;border-radius:10px;overflow:hidden;background:#101827;aspect-ratio:1;box-shadow:0 12px 32px #0006"></div><div style="max-width:470px;margin:12px auto 5px;color:#d7b96b;font-size:13px;font-weight:800;text-align:center">CHIF KI DISPONIB YO</div><div id="sdkKeys" style="max-width:470px;margin:6px auto 12px;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px"></div><div class="mrjg-controls"><button id="sdkHint">💡 Ti èd</button><button id="sdkCheck">✓ Verifye</button><button id="sdkErase">⌫ Efase</button><button id="sdkReset">↻ Rekòmanse</button></div><p class="mrjg-muted" style="text-align:center">Konsèy: klike yon kare epi peze 1–9 sou klavye ou. Chif ki anba yo montre konbyen plas ki rete pou chak nimewo.</p>');
+  showPanel('🔢 SUDOKU MASTER','<p class="mrjg-muted">Ranpli chak liy, kolòn ak kare 3×3. Chwazi yon kare epi itilize klavye a oswa bouton chif yo.</p><div id="sdkInfo" class="mrjg-status">Chwazi yon kare vid pou kòmanse.</div><div id="sdkStats" style="max-width:470px;margin:8px auto;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#cbd5e1;font-size:13px"><span id="sdkFilled">0 / 81 ranpli</span><span id="sdkMistakes">0 erè</span></div><div id="sdkBoard" style="width:min(94vw,470px);margin:12px auto;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border:3px solid #c9a34a;border-radius:10px;overflow:hidden;background:#101827;aspect-ratio:1;box-shadow:0 12px 32px #0006"></div><div style="max-width:980px;margin:16px auto 8px;color:#d7b96b;font-size:13px;font-weight:900;text-align:center">9 PATI YO • CHIF KI BON AK SA KI MANKE • 2 ENDIS CHAK PATI</div><div id="sdkSections" style="max-width:980px;margin:8px auto 14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div><div style="max-width:470px;margin:12px auto 5px;color:#d7b96b;font-size:13px;font-weight:800;text-align:center">CHIF KI DISPONIB YO</div><div id="sdkKeys" style="max-width:470px;margin:6px auto 12px;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px"></div><div class="mrjg-controls"><button id="sdkHint">💡 Ti èd</button><button id="sdkCheck">✓ Verifye</button><button id="sdkErase">⌫ Efase</button><button id="sdkReset">↻ Rekòmanse</button></div><p class="mrjg-muted" style="text-align:center">Konsèy: klike yon kare epi peze 1–9 sou klavye ou. Chif ki anba yo montre konbyen plas ki rete pou chak nimewo.</p>');
   const puzzle=['530070000','600195000','098000060','800060003','400803001','700020006','060000280','000419005','000080079'];
   const solution=['534678912','672195348','198342567','859761423','426853791','713924856','961537284','287419635','345286179'];
   const initial=puzzle.map(r=>r.split('').map(Number)),board=initial.map(r=>r.slice()),fixed=board.map(r=>r.map(Boolean));
   let selected=-1,mistakes=0,done=false;
+  const hintsLeft=Array(9).fill(2);
   const el=$('sdkBoard'),info=$('sdkInfo'),keys=$('sdkKeys');
   const sameBox=(r,c,rr,cc)=>Math.floor(r/3)===Math.floor(rr/3)&&Math.floor(c/3)===Math.floor(cc/3);
   function count(n){let total=0;board.forEach(row=>row.forEach(v=>{if(v===n)total++;}));return total;}
@@ -350,6 +351,31 @@
    for(let k=0;k<9;k++){if(k!==c&&board[r][k]===v)return true;if(k!==r&&board[k][c]===v)return true;}
    for(let rr=Math.floor(r/3)*3;rr<Math.floor(r/3)*3+3;rr++)for(let cc=Math.floor(c/3)*3;cc<Math.floor(c/3)*3+3;cc++)if((rr!==r||cc!==c)&&board[rr][cc]===v)return true;
    return false;
+  }
+  function renderSections(){
+   const host=$('sdkSections');if(!host)return;host.innerHTML='';
+   for(let br=0;br<3;br++)for(let bc=0;bc<3;bc++){
+    const box=br*3+bc,correct=[],missing=[];
+    for(let n=1;n<=9;n++){
+     let found=false;
+     for(let r=br*3;r<br*3+3;r++)for(let c=bc*3;c<bc*3+3;c++)if(board[r][c]===n&&board[r][c]===Number(solution[r][c]))found=true;
+     (found?correct:missing).push(n);
+    }
+    const card=document.createElement('div');card.style.cssText='min-width:0;padding:9px;border:1px solid #52647a;border-radius:10px;background:linear-gradient(145deg,#24364b,#131f30);color:#e8edf5;font-size:12px';
+    const title=document.createElement('div');title.textContent='Pati '+(box+1);title.style.cssText='font-weight:900;color:#f3cf78;margin-bottom:5px';card.appendChild(title);
+    const good=document.createElement('div');good.innerHTML='<b style="color:#86efac">Bon:</b> '+(correct.join(' · ')||'Poko gen');good.style.cssText='min-height:31px;line-height:1.5';card.appendChild(good);
+    const miss=document.createElement('div');miss.innerHTML='<b style="color:#fbbf24">Manke:</b> '+(missing.join(' · ')||'Okenn');miss.style.cssText='min-height:31px;line-height:1.5;margin-top:3px';card.appendChild(miss);
+    const btn=document.createElement('button');btn.type='button';btn.textContent='💡 Endis ('+hintsLeft[box]+' rete)';btn.disabled=hintsLeft[box]===0||done;btn.style.cssText='width:100%;margin-top:7px;padding:7px 4px;border:1px solid #c9a34a;border-radius:7px;background:'+(btn.disabled?'#303b49':'#806323')+';color:#fff;font-weight:800;cursor:'+(btn.disabled?'default':'pointer');btn.addEventListener('click',()=>hintBox(box));card.appendChild(btn);
+    host.appendChild(card);
+   }
+  }
+  function hintBox(box){
+   if(done||hintsLeft[box]<=0)return;
+   const br=Math.floor(box/3),bc=box%3;let target=null;
+   for(let r=br*3;r<br*3+3&&target===null;r++)for(let c=bc*3;c<bc*3+3;c++)if(!fixed[r][c]&&board[r][c]!==Number(solution[r][c])){target=[r,c];break;}
+   if(!target){info.textContent='Pati sa a deja gen tout chif ki kòrèk yo.';return;}
+   const [r,c]=target;board[r][c]=Number(solution[r][c]);selected=r*9+c;hintsLeft[box]--;info.textContent='💡 Endis pou pati '+(box+1)+': ou gen '+hintsLeft[box]+' endis ki rete nan pati sa a.';draw();
+   if(board.every((row,rr)=>row.every((v,cc)=>v===Number(solution[rr][cc])))){done=true;info.textContent='🏆 Sudoku fini!';draw();}
   }
   function renderKeys(){
    keys.innerHTML='';
@@ -372,7 +398,7 @@
     b.style.cssText='aspect-ratio:1;min-width:0;border:0;border-right:'+(c===2||c===5?'3px solid #c9a34a':'1px solid #506176')+';border-bottom:'+(r===2||r===5?'3px solid #c9a34a':'1px solid #506176')+';background:'+bg+';color:'+(bad?'#ffb4b4':fixed[r][c]?'#fff':'#f5ce6a')+';font-size:clamp(13px,3.4vw,22px);font-weight:'+(fixed[r][c]?'900':'700')+';cursor:pointer;padding:0';
     b.addEventListener('click',()=>{selected=i;info.textContent='Kare '+(r+1)+', '+(c+1)+' chwazi. Antre yon chif.';draw();});el.appendChild(b);
    }));
-   const filled=board.flat().filter(Boolean).length;$('sdkFilled').textContent=filled+' / 81 ranpli';$('sdkMistakes').textContent=mistakes+' erè';renderKeys();
+   const filled=board.flat().filter(Boolean).length;$('sdkFilled').textContent=filled+' / 81 ranpli';$('sdkMistakes').textContent=mistakes+' erè';renderKeys();renderSections();
   }
   function enter(n){
    if(done)return;
@@ -392,16 +418,14 @@
   }
   $('sdkErase').addEventListener('click',()=>enter(0));
   $('sdkHint').addEventListener('click',()=>{
-   if(done)return;if(selected<0){info.textContent='Chwazi yon kare vid pou resevwa yon ti èd.';return;}
-   const r=Math.floor(selected/9),c=selected%9;if(fixed[r][c]){info.textContent='Chwazi yon kare vid.';return;}
-   board[r][c]=solution[r][c];info.textContent='💡 Men chif ki kòrèk la. Kontinye rezoud rès la!';draw();
-   if(board.every((row,rr)=>row.every((v,cc)=>v===solution[rr][cc]))){done=true;info.textContent='🏆 Sudoku fini!';draw();}
+   if(done)return;if(selected<0){info.textContent='Chwazi yon kare vid oswa itilize endis nan pati ki anba yo.';return;}
+   const r=Math.floor(selected/9),c=selected%9;hintBox(Math.floor(r/3)*3+Math.floor(c/3));
   });
   $('sdkCheck').addEventListener('click',()=>{
    let empty=0,bad=0;board.forEach((row,r)=>row.forEach((v,c)=>{if(!v)empty++;else if(v!==solution[r][c]||conflicts(r,c))bad++;}));
    info.textContent=bad+' chif pa bon • '+empty+' kare vid. Chif ki an wouj yo bezwen koreksyon.';
   });
-  $('sdkReset').addEventListener('click',()=>{initial.forEach((row,r)=>board[r]=row.slice());selected=-1;mistakes=0;done=false;info.textContent='Nou rekòmanse. Bon chans!';draw();});
+  $('sdkReset').addEventListener('click',()=>{initial.forEach((row,r)=>board[r]=row.slice());hintsLeft.fill(2);selected=-1;mistakes=0;done=false;info.textContent='Nou rekòmanse. Bon chans! Chak pati gen 2 nouvo endis.';draw();});
   document.addEventListener('keydown',onKey);draw();cleanup=()=>document.removeEventListener('keydown',onKey);
  }
  function startQuiz(){
