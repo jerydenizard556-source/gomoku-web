@@ -70,3 +70,15 @@
 /* Snake automatic pilot toggle */
 .snake-auto-on{background:linear-gradient(135deg,#14532d,#166534)!important;border-color:#4ade80!important;color:#dcfce7!important}
 .snake-auto-off{background:#273449!important;border-color:#64748b!important;color:#e2e8f0!important}
+
+/* On-screen analog joystick for Snake */
+.snake-joystick-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;margin:18px auto 14px;color:#a9bad0;text-align:center}
+.snake-joystick-label{font-size:11px;font-weight:900;letter-spacing:.18em;color:#f5bd32}
+.snake-joystick{position:relative;width:154px;height:154px;border-radius:50%;border:2px solid #526780;background:radial-gradient(circle at 35% 30%,#314761,#142338 72%);box-shadow:inset 0 4px 18px #0008,0 8px 22px #0005;touch-action:none;user-select:none;cursor:grab}
+.snake-joystick:before,.snake-joystick:after{content:"";position:absolute;background:#71849b55}
+.snake-joystick:before{width:1px;height:76%;left:50%;top:12%}
+.snake-joystick:after{height:1px;width:76%;top:50%;left:12%}
+.snake-joystick-cross{position:absolute;inset:18%;border:1px dashed #71849b55;border-radius:50%}
+.snake-joystick-knob{position:absolute;left:50%;top:50%;width:62px;height:62px;border-radius:50%;transform:translate(-50%,-50%);background:linear-gradient(145deg,#f8d77b,#c58b20);border:3px solid #ffe6a3;box-shadow:0 5px 14px #0008,inset 0 2px 5px #fff8;display:grid;place-items:center;pointer-events:none}
+.snake-joystick-knob span{width:19px;height:19px;border-radius:50%;background:#7a5014;box-shadow:inset 0 2px 4px #0006}
+@media(max-width:520px){.snake-joystick{width:142px;height:142px}.snake-joystick-knob{width:58px;height:58px}}
