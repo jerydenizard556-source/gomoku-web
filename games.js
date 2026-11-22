@@ -351,27 +351,135 @@
   draw();cleanup=()=>{};
  }
  function startQuiz(){
+  // Gwo bank kesyon. Kesyon ki deja parèt rete make nan navigatè a pou yo pa repete.
   const questions=[
    ['Ki planèt yo rele Planèt Wouj la?',['Mas','Venis','Jipitè','Mèki'],0,'Syans'],
-   ['Konbyen jwè yon ekip foutbòl genyen sou teren an?',['9','10','11','12'],2,'Espò'],
+   ['Konbyen jwè yon ekip foutbòl genyen sou teren an pandan match nòmal?',['9','10','11','12'],2,'Espò'],
    ['Ki oseyan ki pi gwo sou Latè?',['Atlantik','Pasifik','Endyen','Aktik'],1,'Jewografi'],
-   ['Ki gaz plant yo absòbe pou fotosentèz?',['Oksijèn','Azòt','Kabòn diyoksid','Idwojèn'],2,'Syans'],
-   ['Ki peyi ki gen vil Tokyo kòm kapital?',['Lachin','Japon','Kore di Sid','Thailand'],1,'Jewografi'],
+   ['Ki gaz plant yo absòbe pou fotosentèz?',['Oksijèn','Azòt','Gaz kabonik','Idwojèn'],2,'Syans'],
+   ['Ki peyi ki gen Tokyo kòm kapital?',['Lachin','Japon','Kore di Sid','Thailand'],1,'Jewografi'],
    ['Konbyen kote yon triyang genyen?',['2','3','4','5'],1,'Matematik'],
    ['Ki ògàn ki ponpe san nan kò moun?',['Poumon','Fwa','Kè','Ren'],2,'Syans'],
-   ['Nan ki kontinan peyi Ajantin ye?',['Ewòp','Afrik','Azi','Amerik di Sid'],3,'Jewografi'],
-   ['Ki lang prensipal yo pale ann Ayiti ansanm ak kreyòl?',['Panyòl','Fransè','Anglè','Pòtigè'],1,'Kilti'],
-   ['Konbyen minit ki genyen nan yon èdtan?',['30','45','60','90'],2,'Matematik']
+   ['Nan ki kontinan Ajantin ye?',['Ewòp','Afrik','Azi','Amerik di Sid'],3,'Jewografi'],
+   ['Ki lang ofisyèl Ayiti pale ansanm ak kreyòl?',['Panyòl','Fransè','Anglè','Pòtigè'],1,'Kilti'],
+   ['Konbyen minit ki genyen nan yon èdtan?',['30','45','60','90'],2,'Matematik'],
+   ['Ki zetwal ki pi pre Latè?',['Sirius','Solèy','Polaris','Vega'],1,'Syans'],
+   ['Ki pati plant lan ki absòbe dlo nan tè a?',['Fèy','Flè','Rasin','Fwi'],2,'Syans'],
+   ['Ki fòs ki fè objè tonbe atè?',['Mayetis','Gravite','Friksyon','Elektrisite'],1,'Syans'],
+   ['Ki eta dlo ye lè li tounen glas?',['Likid','Gaz','Solid','Plasma'],2,'Syans'],
+   ['Konbyen jou yon ane bisekstil genyen?',['364','365','366','367'],2,'Syans'],
+   ['Ki ògàn ki sèvi sitou pou respire?',['Kè','Poumon','Lestomak','Ren'],1,'Syans'],
+   ['Ki vitamin kò a ka fabrike lè po a resevwa limyè solèy?',['Vitamin A','Vitamin B12','Vitamin C','Vitamin D'],3,'Syans'],
+   ['Ki metal ki gen senbòl chimik Fe?',['Fè','Lò','Ajan','Kwiv'],0,'Syans'],
+   ['Ki gaz ki pi abondan nan atmosfè Latè?',['Oksijèn','Azòt','Gaz kabonik','Idwojèn'],1,'Syans'],
+   ['Ki syans ki etidye tranblemanntè?',['Astwonomi','Sismoloji','Botanik','Ekonomi'],1,'Syans'],
+   ['Ki kontinan ki pi gwo sou Latè?',['Afrik','Ewòp','Azi','Oseyani'],2,'Jewografi'],
+   ['Ki peyi ki gen kapital li nan Pòtoprens?',['Jamayik','Ayiti','Kiba','Repiblik Dominikèn'],1,'Jewografi'],
+   ['Ki lanmè ki separe Ayiti ak Kiba?',['Lanmè Karayib','Lanmè Mediterane','Lanmè Wouj','Lanmè Nwa'],0,'Jewografi'],
+   ['Ki kapital Kanada?',['Toronto','Vancouver','Ottawa','Monreyal'],2,'Jewografi'],
+   ['Sou ki kontinan peyi Lejip ye sitou?',['Afrik','Ewòp','Azi','Amerik'],0,'Jewografi'],
+   ['Ki peyi ki gen kapital Brasília?',['Pòtigal','Brezil','Meksik','Chili'],1,'Jewografi'],
+   ['Ki pi gwo dezè cho nan mond lan?',['Gobi','Sahara','Kalahari','Atacama'],1,'Jewografi'],
+   ['Ki liy imajinè ki separe Latè an emisfè nò ak sid?',['Meridyen Greenwich','Ekwatè','Twopik Kansè','Sèk Aktik'],1,'Jewografi'],
+   ['Ki kapital Lafrans?',['Lyon','Wòm','Pari','Bòdo'],2,'Jewografi'],
+   ['Ki peyi ki gen plis zile nan Karayib la?',['Kiba','Ayiti','Barbad','Sent Lisi'],0,'Jewografi'],
+   ['Nan ki espò yo itilize yon rakèt ak yon boul jòn?',['Boks','Tenis','Ragbi','Gòlf'],1,'Espò'],
+   ['Konbyen jwè yon ekip baskètbòl genyen sou teren an?',['4','5','6','7'],1,'Espò'],
+   ['Ki peyi ki te òganize koup di mond foutbòl 2022?',['Larisi','Katar','Brezil','Almay'],1,'Espò'],
+   ['Ki koulè kat abit la itilize pou ekspilse yon jwè nan foutbòl?',['Jòn','Vèt','Wouj','Ble'],2,'Espò'],
+   ['Konbyen bag ki nan senbòl olenpik la?',['4','5','6','7'],1,'Espò'],
+   ['Nan tenis, ki mo yo itilize lè yon jwè genyen zewo pwen nan yon jwèt?',['Love','Nilè','Zero','Blank'],0,'Espò'],
+   ['Ki distans yon maraton ofisyèl genyen apeprè?',['21.1 km','30 km','42.195 km','50 km'],2,'Espò'],
+   ['Ki jwè ki ka sèvi ak men li nan zòn pa li nan foutbòl?',['Atakan','Defansè','Gadyen','Mitan teren'],2,'Espò'],
+   ['Nan ki espò yo fè yon dunk?',['Baskètbòl','Tenis','Natasyon','Boks'],0,'Espò'],
+   ['Ki pyès echèk ki deplase an fòm L?',['Rèn','Tou','Cheval','Wa'],2,'Espò'],
+   ['Konbyen se 12 × 8?',['86','92','96','108'],2,'Matematik'],
+   ['Konbyen se 144 ÷ 12?',['10','11','12','14'],2,'Matematik'],
+   ['Ki non rezilta yon adisyon?',['Pwodwi','Som','Diferans','Kosyan'],1,'Matematik'],
+   ['Ki fraksyon ki egal ak 0.5?',['1/4','1/3','1/2','3/4'],2,'Matematik'],
+   ['Konbyen degre yon ang dwat genyen?',['45°','60°','90°','180°'],2,'Matematik'],
+   ['Ki nimewo premye nan lis sa a?',['21','27','29','33'],2,'Matematik'],
+   ['Si yon atik koute 100 goud epi yo retire 20%, konbyen li koute apre rabè a?',['70 goud','75 goud','80 goud','90 goud'],2,'Matematik'],
+   ['Ki fòm ki gen kat kote egal ak kat ang dwat?',['Rektang','Kare','Triyang','Trapèz'],1,'Matematik'],
+   ['Konbyen santimèt ki nan yon mèt?',['10','100','1 000','10 000'],1,'Matematik'],
+   ['Ki siy ki reprezante pi piti pase?',['>','<','=','÷'],1,'Matematik'],
+   ['Ki liv ki gen istwa Toussaint Louverture ak Revolisyon ayisyen an nan sant li?',['Istwa Ayiti','Istwa Wòm','Istwa Japon','Istwa Lagrès'],0,'Istwa'],
+   ['Nan ki ane Ayiti te pwoklame endepandans li?',['1791','1804','1825','1844'],1,'Istwa'],
+   ['Ki dat Ayiti selebre Jou Endepandans li?',['1ye janvye','18 me','18 novanm','1ye me'],0,'Istwa'],
+   ['Ki non batay istorik 18 novanm 1803 la?',['Vertières','Crête-à-Pierrot','Savannah','Rivière-Rouge'],0,'Istwa'],
+   ['Ki premye anperè Ayiti?',['Alexandre Pétion','Henri Christophe','Jean-Jacques Dessalines','Toussaint Louverture'],2,'Istwa'],
+   ['Ki peyi ki te bati piramid Giza yo?',['Lagrès','Lejip','Meksik','Pès'],1,'Istwa'],
+   ['Ki sivilizasyon ki te konstwi vil Machu Picchu?',['Maya','Enka','Women','Viking'],1,'Istwa'],
+   ['Ki ane Dezyèm Gè Mondyal la te fini?',['1918','1939','1945','1950'],2,'Istwa'],
+   ['Ki dokiman ki tabli prensip fondamantal yon peyi?',['Kontra','Konstitisyon','Resi','Kat idantite'],1,'Sosyete'],
+   ['Ki enstitisyon nan Ayiti ki responsab òganize eleksyon yo?',['DGI','CEP','BRH','MENFP'],1,'Sosyete'],
+   ['Ki lajan ofisyèl Ayiti?',['Peso','Goud','Dola kanadyen','Euro'],1,'Sosyete'],
+   ['Ki konpòtman ki pi bon pou pwoteje modpas ou?',['Pataje li ak tout moun','Sèvi ak menm modpas toupatou','Itilize modpas solid ak diferan','Ekri li sou rezo sosyal'],2,'Teknoloji'],
+   ['Ki aparèy ki distribye koneksyon Wi-Fi lakay?',['Enprimant','Routeur','Klavye','Eskanè'],1,'Teknoloji'],
+   ['Ki ekstansyon yon fichye imaj PNG genyen?',['.mp3','.png','.docx','.zip'],1,'Teknoloji'],
+   ['Ki sa CPU vle di nan yon òdinatè?',['Inite santral tretman','Kapasite prensipal USB','Kontwòl pwogram itilizatè','Koneksyon prive inivèsèl'],0,'Teknoloji'],
+   ['Ki aksyon ki pi saj lè yon imèl mande modpas ou sou yon lyen sispèk?',['Klike touswit','Voye modpas la','Verifye sous la epi pa bay modpas','Reponn ak tout enfòmasyon'],2,'Teknoloji'],
+   ['Ki zouti ki sèvi pou mezire tanperati?',['Baromèt','Tèmomèt','Altimèt','Voltmèt'],1,'Syans'],
+   ['Ki syantis ki asosye ak lwa mouvman ak gravite klasik?',['Isaac Newton','Louis Pasteur','Charles Darwin','Galileo Galilei'],0,'Syans'],
+   ['Ki pati nan selil la ki pote pifò enfòmasyon jenetik?',['Nwayo','Manbràn','Sitoplas','Mi selilè'],0,'Syans'],
+   ['Ki bèt ki se yon mamifè?',['Reken','Dòfen','Kwokodil','Tòti'],1,'Syans'],
+   ['Ki pwosesis dlo a suiv lè li pase likid pou vin vapè?',['Kondansasyon','Evaporasyon','Solidifikasyon','Fizyon'],1,'Syans'],
+   ['Ki enèji yon panèl solè transfòme limyè solèy la an li?',['Enèji elektrik','Enèji son','Enèji nikleyè','Enèji chimik sèlman'],0,'Syans'],
+   ['Ki ògàn kò a sèvi sitou pou filtre san epi pwodui pipi?',['Kè','Ren','Poumon','Lestomak'],1,'Syans'],
+   ['Ki pati nan je a ki kontwole kantite limyè k ap antre?',['Iris','Retin','Kònèy','Nè optik'],0,'Syans'],
+   ['Ki non syantifik pwosesis plant yo itilize pou fè manje ak limyè?',['Respirasyon','Fotosentèz','Fèmantasyon','Dijesyon'],1,'Syans'],
+   ['Ki bèt ki pi gwo pami bèt vivan yo konnen jodi a?',['Elefan afriken','Balèn ble','Reken blan','Jiraf'],1,'Syans'],
+   ['Ki lang yo itilize anpil pou kreye paj entènèt entèaktif ansanm ak HTML ak CSS?',['JavaScript','SQL sèlman','Bash sèlman','XML sèlman'],0,'Teknoloji'],
+   ['Ki aparèy ki pèmèt ou antre tèks nan òdinatè?',['Klavye','Ekran','Bwat son','Mikwo'],0,'Teknoloji'],
+   ['Ki sa URL reprezante?',['Adrès yon resous sou entènèt','Yon kalite batri','Yon sistèm son','Yon langaj desen'],0,'Teknoloji'],
+   ['Ki mezi ki pi apwopriye pou kapasite depo fichye?',['Kilogram','Gigaoctet','Kilomèt','Lit'],1,'Teknoloji'],
+   ['Ki sa navigatè entènèt la sèvi pou fè?',['Louvri paj entènèt','Enprime lajan','Mezire tanperati','Chaje batri'],0,'Teknoloji'],
+   ['Ki konbinezon klavye ki souvan sèvi pou kopye tèks sou Windows?',['Ctrl + V','Ctrl + C','Ctrl + X','Ctrl + Z'],1,'Teknoloji'],
+   ['Ki non pwosesis pou verifye idantite yon moun anvan li antre nan yon kont?',['Otantifikasyon','Konpresyon','Enpresyon','Tradiksyon'],0,'Teknoloji'],
+   ['Ki fwi ki se yon bon sous vitamin C?',['Zoranj','Bètrav','Diri','Manyòk'],0,'Sante'],
+   ['Ki abitid ki ede diminye pwopagasyon mikwòb?',['Lave men ak savon','Pataje sèvyèt sal','Pa kouvri tous','Manyen figi souvan'],0,'Sante'],
+   ['Ki sa yon rejim alimantè ekilibre dwe genyen?',['Yon sèl kalite manje','Divès gwoup manje an kantite apwopriye','Sèlman sik','Sèlman vyann'],1,'Sante'],
+   ['Ki aktivite ki bon pou sante kè a?',['Mache regilyèman','Rete chita tout jounen','Fimen','Pa dòmi'],0,'Sante'],
+   ['Ki siy ki montre yon moun ka bezwen bwè dlo?',['Swaf ak bouch sèk','Cheve long','Zong kout','Je mawon'],0,'Sante'],
+   ['Ki sa premye swen vle di?',['Swen imedya debaz anvan swen pwofesyonèl','Operasyon konplike','Tretman san evalyasyon','Sèlman medikaman'],0,'Sante'],
+   ['Ki aksyon ki pi bon lè yon moun pèdi konesans epi li pa respire nòmalman?',['Rele sèvis ijans epi kòmanse CPR si ou kapab','Ba li manje','Kite li pou kont li','Fòse li bwè dlo'],0,'Sante'],
+   ['Ki sa polisyon plastik nan lanmè ka fè?',['Mete bèt maren an danje','Ogmante oksijèn toujou','Fè dlo a vin dous','Pa gen okenn efè'],0,'Anviwònman'],
+   ['Ki aksyon ki ede pwoteje forè?',['Koupe tout pyebwa','Plante pyebwa epi limite debwazman','Boule fatra nan forè','Jete lwil nan rivyè'],1,'Anviwònman'],
+   ['Ki sous enèji ki renouvlab?',['Chabon','Petwòl','Van','Gaz natirèl'],2,'Anviwònman'],
+   ['Ki sa resiklaj pèmèt?',['Re-itilize materyèl pou diminye fatra','Ogmante fatra','Gaspiye dlo','Polye plis'],0,'Anviwònman'],
+   ['Ki gaz ki kontribye anpil nan rechofman planèt la lè li ogmante nan atmosfè?',['Gaz kabonik','Oksijèn','Elyòm','Neyon'],0,'Anviwònman']
   ];
-  showPanel('🧠 QUIZ CHALLENGE','<p class="mrjg-muted">Teste konesans ou nan 10 kesyon. Chak bon repons ba ou 10 pwen.</p><div id="quizProgress" class="mrjg-status"></div><div id="quizQuestion" style="max-width:650px;margin:16px auto;padding:22px;border:1px solid #b58a35;border-radius:16px;background:linear-gradient(145deg,#1c2c43,#101827);font-size:clamp(18px,3vw,24px);font-weight:800"></div><div id="quizAnswers" style="max-width:650px;margin:12px auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div><div id="quizFeedback" class="mrjg-status" aria-live="polite"></div><div class="mrjg-controls"><button id="quizNext" disabled>Kesyon apre →</button><button id="quizRestart">↻ Rekòmanse</button></div>');
-  let order=questions.map((_,i)=>i).sort(()=>Math.random()-.5),pos=0,score=0,answered=false;
+  const historyKey='mrjery_quiz_seen_v2';
+  let seen=new Set();
+  try{seen=new Set(JSON.parse(localStorage.getItem(historyKey)||'[]'));}catch(e){}
+  let queue=[],pos=0,score=0,answered=false,asked=0;
+  function buildQueue(){queue=questions.map((_,i)=>i).filter(i=>!seen.has(questions[i][0])).sort(()=>Math.random()-.5);pos=0;}
+  showPanel('🧠 QUIZ CHALLENGE','<p class="mrjg-muted">Yon gwo defi konesans san kantite kesyon fiks. Kesyon yo melanje, epi sa ou deja reponn yo pap parèt ankò sou aparèy sa a.</p><div id="quizProgress" class="mrjg-status"></div><div id="quizQuestion" style="max-width:650px;margin:16px auto;padding:22px;border:1px solid #b58a35;border-radius:16px;background:linear-gradient(145deg,#1c2c43,#101827);font-size:clamp(18px,3vw,24px);font-weight:800"></div><div id="quizAnswers" style="max-width:650px;margin:12px auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px"></div><div id="quizFeedback" class="mrjg-status" aria-live="polite"></div><div class="mrjg-controls"><button id="quizNext" disabled>Kesyon apre →</button><button id="quizRestart">↻ Rekòmanse defi a</button></div>');
   const q=$('quizQuestion'),answers=$('quizAnswers'),progress=$('quizProgress'),feedback=$('quizFeedback'),next=$('quizNext');
-  function draw(){answered=false;next.disabled=true;feedback.textContent='';const item=questions[order[pos]];progress.textContent='KESYON '+(pos+1)+' / '+questions.length+' • PWEN: '+score+' • '+item[3];q.textContent=item[0];answers.innerHTML='';item[1].forEach((choice,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+choice;b.style.cssText='min-height:58px;padding:12px;border:1px solid #52647d;border-radius:11px;background:#1d2c42;color:#fff;font-weight:700;font-size:15px;cursor:pointer';b.addEventListener('click',()=>answer(i,b));answers.appendChild(b);});next.textContent=pos===questions.length-1?'Gade rezilta':'Kesyon apre →';}
-  function answer(i,btn){if(answered)return;answered=true;const item=questions[order[pos]],correct=i===item[2];if(correct)score+=10;[...answers.children].forEach((b,k)=>{b.disabled=true;if(k===item[2])b.style.background='#17633f';else if(k===i)b.style.background='#873737';});feedback.textContent=correct?'✓ Bon repons! +10 pwen':'✗ Se pa sa. Bon repons lan: '+item[1][item[2]];next.disabled=false;progress.textContent='KESYON '+(pos+1)+' / '+questions.length+' • PWEN: '+score;}
-  next.addEventListener('click',()=>{if(!answered)return;if(pos<questions.length-1){pos++;draw();}else{q.textContent='🏆 Ou fini defi a!';answers.innerHTML='';progress.textContent='REZILTA FINAL';feedback.textContent='Ou fè '+score+' sou 100 pwen.';next.disabled=true;next.textContent='Defi fini';}});
-  $('quizRestart').addEventListener('click',()=>{order=questions.map((_,i)=>i).sort(()=>Math.random()-.5);pos=0;score=0;draw();});
-  draw();cleanup=()=>{};
+  function finishBank(){q.textContent='🏆 Ou fin reponn tout kesyon ki nan bank aktyèl la!';answers.innerHTML='';progress.textContent='BANK KESYON FINI • '+asked+' KESYON JWE';feedback.textContent='Ou fè '+score+' pwen nan sesyon sa a. Kesyon ou deja wè yo rete anrejistre pou yo pa repete. N ap kapab ajoute nouvo kesyon nan pwochen mizajou.';next.disabled=true;next.textContent='Bank lan fini';}
+  function draw(){
+   if(pos>=queue.length){finishBank();return;}
+   answered=false;next.disabled=true;feedback.textContent='';
+   const item=questions[queue[pos]];
+   progress.textContent='KESYON #'+(asked+1)+' • PWEN: '+score+' • '+item[3]+' • RÈS: '+(queue.length-pos);
+   q.textContent=item[0];answers.innerHTML='';
+   const choices=item[1].map((v,i)=>({v,correct:i===item[2]})).sort(()=>Math.random()-.5);
+   choices.forEach((choice,i)=>{const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+choice.v;b.style.cssText='min-height:58px;padding:12px;border:1px solid #52647d;border-radius:11px;background:#1d2c42;color:#fff;font-weight:700;font-size:15px;cursor:pointer';b.addEventListener('click',()=>answer(choice.correct,b));answers.appendChild(b);});
+   next.textContent='Kesyon apre →';
+  }
+  function answer(correct){
+   if(answered)return;answered=true;asked++;
+   const item=questions[queue[pos]];seen.add(item[0]);try{localStorage.setItem(historyKey,JSON.stringify([...seen]));}catch(e){}
+   if(correct)score+=10;
+   [...answers.children].forEach((b)=>{b.disabled=true;const label=b.textContent.slice(3);if(label===item[1][item[2]])b.style.background='#17633f';else if(b===answers.querySelector(':focus'))b.style.background='#873737';});
+   feedback.textContent=correct?'✓ Bon repons! +10 pwen':'✗ Se pa sa. Bon repons lan: '+item[1][item[2]];
+   next.disabled=false;progress.textContent='KESYON #'+asked+' • PWEN: '+score+' • '+item[3];
+  }
+  next.addEventListener('click',()=>{if(!answered)return;pos++;draw();});
+  $('quizRestart').addEventListener('click',()=>{buildQueue();score=0;asked=0;if(!queue.length){finishBank();return;}draw();});
+  buildQueue();if(queue.length)draw();else finishBank();cleanup=()=>{};
  }
+
  function startMemory(){
   showPanel('🧠 MEMORY MATCH','<p class="mrjg-muted">Jwenn tout pè imaj ki menm yo.</p><div id="memoryStatus" class="mrjg-status">Pè jwenn: 0 / 8</div><div id="memoryBoard" class="mrjg-board mrjg-memory"></div><div class="mrjg-controls"><button id="memoryReset">↻ Nouvo jwèt</button></div>');
   let vals,first=null,lock=false,matches=0,turns=0,timer=null;const icons=['🍎','🚀','⚽','🎲','🎧','🌟','🐼','🎯'];
