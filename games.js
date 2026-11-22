@@ -286,7 +286,7 @@
  function startArianaQuest(){
   showPanel('⚔️ MR JERY JUNGLE QUEST','<p class="mrjg-muted">Eksplore wayòm nan, sote sou platfòm, bat eskòpyon epi ranmase pyès lò.</p><div class="ariana-stage ariana-stage-2d" id="aqStage"><canvas id="aqCanvas" aria-label="MR JERY Jungle Quest"></canvas><div class="aq-hud"><div class="aq-player">MR JERY <span id="aqHearts">♥ ♥ ♥ ♥ ♥</span></div><div>SCORE <b id="aqScore">0</b></div><div>COINS <b>🟡 <span id="aqCoins">0</span></b></div><div>LIFE <b id="aqLife">×5</b></div><div class="aq-level">LEVEL 1-1 <b id="aqTime">5:49</b></div></div><div class="aq-touch aq-left"><button id="aqLeft" aria-label="Ale agoch">◀</button><button id="aqRight" aria-label="Ale adwat">▶</button></div><div class="aq-touch aq-right"><button id="aqJump" aria-label="Sote">⬆</button><button id="aqAttack" aria-label="Atake">⚔</button></div><div id="aqOverlay" class="ariana-overlay">MR JERY • JUNGLE QUEST<button id="aqPlay" type="button">▶ KÒMANSE</button></div></div><div class="ariana-controls"><button id="aqPause" type="button">Ⅱ POZ</button><button id="aqRestart" type="button">↻ REKÒMANSE</button></div><p class="mrjg-note">Klavye: ← → deplase, Espas/↑ sote, X/J atake. Sou telefòn, itilize bouton ki sou ekran an.</p>');
   const canvas=$('aqCanvas'),ctx=canvas.getContext('2d'),stage=$('aqStage'),overlay=$('aqOverlay');
-  let W=1280,H=720,raf=0,last=0,elapsed=0,score=0,coins=0,life=5,world=0,hero,enemyList=[],coinList=[],hazards=[],blocks=[],particles=[],keys={},running=false,paused=false,disposed=false,attack=0,levelTime=349,invulnerable=0;
+  let W=1280,H=720,raf=0,last=0,elapsed=0,score=0,coins=0,life=5,world=0,hero,enemyList=[],coinList=[],hazards=[],blocks=[],particles=[],keys={},running=false,paused=false,disposed=false,attack=0,attackNeedsRelease=false,attackHitDone=false,levelTime=349,invulnerable=0;
   const rnd=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),ground=566,gravity=1900;
   function resize(){const r=stage.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);W=1280;H=720;canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.width/(16/9)*dpr);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);}
   function path(points,fill,stroke=null,lw=2){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}}
@@ -315,10 +315,17 @@
    line([[-13,-64],[-25,-47+run*4],[-19,-38]],skin,9);line([[13,-64],[24,-47-run*4],[19,-38]],skin,9);
    ellipse(0,-91,16,19,skin,'#633a2c',2);ellipse(0,-101,18,10,'#211710');path([[-17,-95],[-19,-110],[-9,-105],[-3,-116],[4,-105],[13,-112],[17,-95]],'#2a1b16','#130e0b',2);ellipse(6,-91,2,2,'#20140e');
    line([[-14,-104],[-10,-119],[-3,-109],[2,-122],[8,-109],[15,-116],[15,-101]],gold,3);ellipse(1,-119,3,3,'#fff1a6');
-   ctx.save();ctx.translate(23,-52);ctx.rotate(attack>0?-1.15:-.22);path([[-3,0],[0,-72],[6,-78],[5,0]],'#dbe8ec','#5c7074',2);line([[2,-69],[3,-9]],'#fff',2);round(-9,-4,20,6,2,gold,'#80551d',1);round(-2,2,6,16,2,'#75451f');ctx.restore();ctx.restore();}
+   ctx.save();ctx.translate(22,-53);
+   const swing=attack>0?1-attack/.42:0,bladeAngle=attack>0?(-1.65+swing*2.05):-.22;
+   if(attack>0){ctx.save();ctx.globalAlpha=Math.sin(swing*Math.PI)*.9;ctx.beginPath();ctx.arc(0,0,77,-2.35,-.12);ctx.strokeStyle='#fff2a6';ctx.lineWidth=13;ctx.lineCap='round';ctx.stroke();ctx.beginPath();ctx.arc(0,0,84,-2.25,-.2);ctx.strokeStyle='rgba(255,190,58,.72)';ctx.lineWidth=5;ctx.stroke();ctx.restore();}
+   ctx.rotate(bladeAngle);
+   path([[-5,0],[-4,-61],[0,-84],[5,-61],[5,0]],'#dcebf4','#536b78',2);
+   line([[0,-80],[0,-12]],'#fff',2);path([[-4,-59],[0,-84],[4,-59]],'#ffffff','#91a9b5',1);
+   round(-12,-5,24,7,3,gold,'#80551d',1);round(-3,2,7,17,2,'#75451f','#3c281b',1);
+   ctx.restore();ctx.restore();}
   function addParticles(x,y,color,n){for(let i=0;i<n;i++)particles.push({x,y,vx:rnd(-160,160),vy:rnd(-220,-45),life:rnd(.35,.9),color});}
   function hud(){const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};set('aqScore',score);set('aqCoins',coins);set('aqLife','×'+life);set('aqHearts','♥ '.repeat(life).trim());set('aqTime',Math.floor(levelTime/60)+':'+String(levelTime%60).padStart(2,'0'));}
-  function reset(){elapsed=0;score=0;coins=0;life=5;world=0;levelTime=349;attack=0;invulnerable=0;hero={x:155,y:ground,vy:0,onGround:true};enemyList=[];coinList=[];hazards=[];blocks=[];particles=[];
+  function reset(){elapsed=0;score=0;coins=0;life=5;world=0;levelTime=349;attack=0;attackNeedsRelease=false;attackHitDone=false;invulnerable=0;hero={x:155,y:ground,vy:0,onGround:true};enemyList=[];coinList=[];hazards=[];blocks=[];particles=[];
    for(let x=520;x<18000;x+=rnd(620,850)){enemyList.push({x,alive:true,phase:rnd(0,6)});for(let j=0;j<5;j++)coinList.push({x:x-250+j*48,y:ground-105-rnd(0,45),got:false});if(Math.random()<.78)hazards.push({x:x+310,w:90});if(Math.random()<.72)blocks.push({x:x+110,y:ground-155,used:false});}
    hud();}
   function finish(win){running=false;overlay.hidden=false;overlay.innerHTML=(win?'🏆 WAYÒM NAN SOVE!':'💔 JWÈT FINI')+'<p>Score: '+score+' • Pyès: '+coins+'</p><button id="aqPlay" type="button">↻ REJWE</button>';$('aqPlay').addEventListener('click',start);}
@@ -333,7 +340,16 @@
    const vignette=ctx.createRadialGradient(W/2,H/2,180,W/2,H/2,850);vignette.addColorStop(0,'rgba(0,0,0,0)');vignette.addColorStop(1,'rgba(0,23,20,.28)');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);}
   function update(dt){elapsed+=dt;levelTime=Math.max(0,349-Math.floor(elapsed));world+=205*dt;if(keys.left)hero.x-=230*dt;if(keys.right)hero.x+=230*dt;hero.x=clamp(hero.x,world+90,world+W*.48);
    if(keys.jump&&hero.onGround){hero.vy=-735;hero.onGround=false;}hero.vy+=gravity*dt;hero.y+=hero.vy*dt;if(hero.y>=ground){hero.y=ground;hero.vy=0;hero.onGround=true;}
-   if(keys.attack&&attack<=0){attack=.34;addParticles(hero.x-world+35,hero.y-60,'#ffe18a',7);}if(attack>0){attack-=dt;enemyList.forEach(e=>{if(e.alive&&Math.abs(e.x-hero.x)<88&&hero.y>ground-130){e.alive=false;score+=150;addParticles(e.x-world,ground-45,'#f58a3d',18);hud();}});}
+   if(!keys.attack)attackNeedsRelease=false;
+   if(keys.attack&&attack<=0&&!attackNeedsRelease){attack=.42;attackNeedsRelease=true;attackHitDone=false;addParticles(hero.x-world+40,hero.y-65,'#fff0a0',9);}
+   if(attack>0){
+    const swingProgress=1-attack/.42;
+    if(!attackHitDone&&swingProgress>=.24&&swingProgress<=.72){
+     attackHitDone=true;
+     enemyList.forEach(e=>{const dx=e.x-hero.x;if(e.alive&&dx>8&&dx<132&&hero.y>ground-145){e.alive=false;score+=150;addParticles(e.x-world,ground-48,'#ffb04a',24);addParticles(e.x-world,ground-72,'#fff1b0',10);hud();}});
+    }
+    attack=Math.max(0,attack-dt);
+   }
    blocks.forEach(b=>{if(!b.used&&Math.abs(b.x-hero.x)<34&&hero.y< b.y+30&&hero.y>b.y-55){b.used=true;coins+=5;score+=50;addParticles(b.x-world,b.y-25,'#ffd64a',12);hud();}});
    if(invulnerable>0)invulnerable-=dt;enemyList.forEach(e=>{if(e.alive&&Math.abs(e.x-hero.x)<48&&hero.y>=ground-42)hit();});
    coinList.forEach(c=>{if(!c.got&&Math.abs(c.x-hero.x)<30&&Math.abs(c.y-(hero.y-58))<70){c.got=true;coins++;score+=25;addParticles(c.x-world,c.y,'#ffd64a',8);hud();}});
