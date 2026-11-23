@@ -8,10 +8,11 @@
  const panel=$('mrjgPlayArea');
  const status=$('mrjgStatus');
  let cleanup=null;
- function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}panel.removeAttribute('hidden');panel.hidden=false;panel.style.display='block';panel.style.visibility='visible';panel.innerHTML='<h2>'+title+'</h2>'+html;status.textContent='';requestAnimationFrame(()=>{panel.scrollIntoView({behavior:'smooth',block:'start'});});}
- function backHub(){if(cleanup){cleanup();cleanup=null;}panel.hidden=true;panel.innerHTML='';status.textContent='';}
+ function showPanel(title,html){if(cleanup){cleanup();cleanup=null;}hub.classList.add('mrjg-in-game');panel.removeAttribute('hidden');panel.hidden=false;panel.style.display='block';panel.style.visibility='visible';panel.innerHTML='<div class="mrjg-route-top"><button type="button" id="mrjgRouteBack">← TOUT JWE YO</button><span>MR JERY <b>ELITE</b> / GAME ROOM</span></div><h2>'+title+'</h2>'+html;status.textContent='';$('mrjgRouteBack').addEventListener('click',backHub);window.scrollTo({top:0,behavior:'smooth'});}
+ function backHub(){if(cleanup){cleanup();cleanup=null;}hub.classList.remove('mrjg-in-game');panel.hidden=true;panel.innerHTML='';status.textContent='';window.scrollTo({top:hub.offsetTop,behavior:'smooth'});}
  $('mrjgBack').addEventListener('click',()=>showScreen('accountMenuScreen'));
  $('mrjgBackTop').addEventListener('click',backHub);
+ hub.querySelectorAll('[data-mrjg-go]').forEach(btn=>btn.addEventListener('click',()=>{const target=$(btn.dataset.mrjgGo);if(target)target.scrollIntoView({behavior:'smooth',block:'start'});}));
  $('mrjgGomoku').addEventListener('click',()=>{const b=$('accountOnlineBtn');if(b)b.click();else showScreen('accountMenuScreen');});
  $('mrjgMorpion').addEventListener('click',startTic);
  $('mrjg2048').addEventListener('click',start2048);
