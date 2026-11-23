@@ -662,7 +662,7 @@
   const colors=['#46d8f4','#f6d34c','#b28aff','#ff984e','#4c83ff','#62d58a','#ef6596'];
   let board,cur,next,score=0,level=1,lines=0,started=false,over=false,timer=null,dropMs=500;
   function piece(){let id=Math.floor(Math.random()*shapes.length);return {id,m:shapes[id].map(r=>r.slice()),x:3,y:0};}
-  function valid(p,dx=0,dy=0,m=p.m){for(let y=0;y<m.length;y++)for(let x=0;x<m[y].length;x++)if(m[y][x]){let xx=p.x+x+dx,yy=p.y+y;if(xx<0||xx>=10||yy>=20||(yy>=0&&board[yy][xx]))return false;}return true;}
+  function valid(p,dx=0,dy=0,m=p.m){for(let y=0;y<m.length;y++)for(let x=0;x<m[y].length;x++)if(m[y][x]){let xx=p.x+x+dx,yy=p.y+y+dy;if(xx<0||xx>=10||yy>=20||(yy>=0&&board[yy][xx]))return false;}return true;}
   function rotate(){let m=cur.m[0].map((_,x)=>cur.m.map(row=>row[x]).reverse());if(valid(cur,0,0,m))cur.m=m;}
   function draw(){grid.innerHTML='';for(let y=0;y<20;y++)for(let x=0;x<10;x++){let v=board[y][x],ghost=0;if(cur&&!over){let gy=cur.y;while(valid({...cur,y:gy+1}))gy++;if(cur.m.some((row,yy)=>row.some((q,xx)=>q&&cur.x+xx===x&&gy+yy===y)))ghost=cur.id+1;}let b=document.createElement('div');b.style.cssText='aspect-ratio:1;border-radius:2px;background:'+(v?colors[v-1]:ghost?colors[cur.id]+'55':'#1a2a3d')+';border:1px solid '+(v?colors[v-1]:ghost?'#789':'#26394f');grid.appendChild(b);}scoreEl.textContent='PWEN: '+score;levelEl.textContent='NIVO: '+level;}
   function spawn(){cur=next||piece();next=piece();cur.x=3;cur.y=0;if(!valid(cur)){over=true;started=false;clearInterval(timer);msg.textContent='🏁 JWÈT FINI! Pwen: '+score+' — Peze rekòmanse.';}draw();}
