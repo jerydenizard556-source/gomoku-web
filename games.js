@@ -656,19 +656,47 @@
 
 
  function startBlockPuzzle(){
-  showPanel('🧩 BLOCK PUZZLE','<p class="mrjg-muted">Chwazi yon fòm anba a, epi peze yon kare sou griy la pou mete l. Ranpli yon liy oswa kolòn pou efase l epi fè pwen.</p><div class="mrjg-status" id="bpScore">PWEN: 0</div><div id="bpBoard" style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;width:min(100%,460px);margin:12px auto;padding:6px;background:#111d2e;border:1px solid #52647d;border-radius:12px;touch-action:manipulation"></div><div id="bpPieces" class="mrjg-controls"></div><div id="bpMsg" class="mrjg-status" aria-live="polite">Chwazi youn nan 3 fòm yo.</div><div class="mrjg-controls"><button id="bpReset">↻ Rekòmanse</button></div>');
-  const shapes=[[[0,0]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[1,1]],[[0,1],[1,0],[1,1],[1,2]]];
-  let board,score=0,selected=0,pieces=[];
+  showPanel('🧩 BLOCK PUZZLE','<p class="mrjg-muted">Trennen blòk yo sou griy la. Ranpli liy oswa kolòn pou efase yo. Chwazi yon fòm epi tape kote ou vle mete l; sou òdinatè ou ka trennen l tou.</p><div style="display:flex;justify-content:space-between;align-items:center;max-width:480px;margin:auto"><strong id="bpScore" style="font-size:20px">0</strong><small>PI BON: <b id="bpBest">0</b></small></div><div id="bpBoard" style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;width:min(100%,460px);margin:12px auto;padding:6px;background:#101b2a;border:1px solid #52647d;border-radius:10px;touch-action:manipulation"></div><div id="bpPieces" style="display:flex;justify-content:space-around;align-items:center;gap:8px;max-width:480px;margin:12px auto;min-height:100px"></div><div id="bpMsg" class="mrjg-status" aria-live="polite">Chwazi yon fòm anba a.</div><div class="mrjg-controls"><button id="bpReset">↻ REKÒMANSE</button></div>');
+  const shapes=[[[0,0]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[1,1]],[[0,1],[1,0],[1,1],[1,2]],[[0,0],[0,1],[0,2],[1,1]],[[0,0],[1,0],[2,0],[2,1]],[[0,0],[1,0],[1,1],[2,1]]];
+  const colors=['#42b9f5','#f5bc46','#65d48a','#e779b9','#ad8aff','#ff875e','#50d2d0','#94c55e','#f08d9b'];
+  let board,score=0,selected=0,pieces=[],finished=false;
   const grid=$('bpBoard'),tray=$('bpPieces'),msg=$('bpMsg');
-  function newPieces(){pieces=Array.from({length:3},()=>Math.floor(Math.random()*shapes.length));selected=0;}
+  const bestKey='mrjery_blockpuzzle_best';let best=0;try{best=Number(localStorage.getItem(bestKey)||0);}catch(e){}
+  $('bpBest').textContent=best;
+  function newPieces(){pieces=Array.from({length:3},()=>Math.floor(Math.random()*shapes.length));selected=pieces.findIndex(x=>x!==null);}
+  function canPlace(shape,r,c){return shape.every(([y,x])=>r+y<10&&c+x<10&&r+y>=0&&c+x>=0&&!board[r+y][c+x]);}
   function draw(){
-   grid.innerHTML='';for(let r=0;r<10;r++)for(let c=0;c<10;c++){const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Ranje '+(r+1)+', kolòn '+(c+1));b.style.cssText='aspect-ratio:1;min-width:0;border:1px solid #33465e;border-radius:3px;background:'+(board[r][c]?'linear-gradient(145deg,#60c7ff,#2465b3)':'#1b2a40')+';padding:0';b.addEventListener('click',()=>place(r,c));grid.appendChild(b);}
-   tray.innerHTML='';pieces.forEach((shape,i)=>{const b=document.createElement('button');b.type='button';b.style.cssText='min-width:82px;min-height:64px;border:1px solid '+(i===selected?'#e8bd59':'#52647d')+';border-radius:10px;background:'+(i===selected?'#293d57':'#172337')+';color:white;display:grid;place-items:center';b.innerHTML='<span style="display:grid;grid-template-columns:repeat(3,13px);gap:3px">'+Array.from({length:9},(_,k)=>{const rr=Math.floor(k/3),cc=k%3;return '<i style="width:13px;height:13px;border-radius:2px;background:'+shapes[shape].some(([y,x])=>y===rr&&x===cc?'#69c9ff':'transparent')+'"></i>';}).join('')+'</span><small>Fòm '+(i+1)+'</small>';b.addEventListener('click',()=>{selected=i;draw();});tray.appendChild(b);});
+   grid.innerHTML='';
+   for(let r=0;r<10;r++)for(let c=0;c<10;c++){
+    const b=document.createElement('button');b.type='button';b.style.cssText='aspect-ratio:1;min-width:0;border:1px solid #2d4056;border-radius:2px;padding:0;background:'+ (board[r][c]?colors[board[r][c]-1]:'linear-gradient(145deg,#1a2a3d,#152235)')+';box-shadow:'+(board[r][c]?'inset 0 1px 2px #fff5':'');b.addEventListener('click',()=>place(r,c));b.addEventListener('dragover',e=>e.preventDefault());b.addEventListener('drop',e=>{e.preventDefault();const idx=Number(e.dataTransfer.getData('text/plain'));if(Number.isInteger(idx)){selected=idx;place(r,c);}});grid.appendChild(b);
+   }
+   tray.innerHTML='';
+   pieces.forEach((shapeId,i)=>{const b=document.createElement('button');b.type='button';b.draggable=shapeId!==null;b.disabled=shapeId===null||finished;b.style.cssText='width:30%;min-height:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1px solid '+(i===selected?'#e8bd59':'#52647d')+';border-radius:10px;background:'+(i===selected?'#263b55':'#152338')+';color:#fff;opacity:'+(shapeId===null?'.18':'1')+';padding:8px;cursor:grab';
+    if(shapeId!==null){const sh=shapes[shapeId],maxY=Math.max(...sh.map(p=>p[0])),maxX=Math.max(...sh.map(p=>p[1]));const mini=document.createElement('div');mini.style.cssText='display:grid;grid-template-columns:repeat('+(maxX+1)+',13px);gap:3px';for(let y=0;y<=maxY;y++)for(let x=0;x<=maxX;x++){const q=document.createElement('i');q.style.cssText='width:13px;height:13px;border-radius:2px;background:'+ (sh.some(p=>p[0]===y&&p[1]===x)?colors[shapeId]:'transparent');mini.appendChild(q);}b.appendChild(mini);const label=document.createElement('small');label.textContent='FÒM '+(i+1);b.appendChild(label);b.addEventListener('click',()=>{selected=i;msg.textContent='Fòm '+(i+1)+' chwazi. Tape kote pou mete l.';draw();});b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',String(i));selected=i;});}
+    tray.appendChild(b);
+   });
    $('bpScore').textContent='PWEN: '+score;
   }
-  function fits(shape,r,c){return shape.every(([y,x])=>r+y<10&&c+x<10&&!board[r+y][c+x]);}
-  function place(r,c){if(pieces[selected]===null)return;const shape=shapes[pieces[selected]];if(!fits(shape,r,c)){msg.textContent='Fòm sa a pa antre la. Eseye yon lòt kare.';return;}shape.forEach(([y,x])=>board[r+y][c+x]=1);score+=shape.length;pieces[selected]=null;let rows=[],cols=[];for(let y=0;y<10;y++)if(board[y].every(Boolean))rows.push(y);for(let x=0;x<10;x++)if(board.every(row=>row[x]))cols.push(x);rows.forEach(y=>board[y].fill(0));cols.forEach(x=>board.forEach(row=>row[x]=0));score+=(rows.length+cols.length)*10;msg.textContent=(rows.length+cols.length?'✨ '+(rows.length+cols.length)+' liy efase! ':'Bon plasman! ');if(pieces.every(x=>x===null)){newPieces();}draw();if(!pieces.some(s=>s!==null&&shapes[s].some(([y,x])=>Array.from({length:10-y},(_,r)=>r).some(r=>Array.from({length:10-x},(_,c)=>c).some(c=>fits(shapes[s],r,c)))))){msg.textContent='🏁 Fen jwèt! Pwen final: '+score+'. Peze Rekòmanse.';pieces=[null,null,null];}}
-  function reset(){board=Array.from({length:10},()=>Array(10).fill(0));score=0;newPieces();msg.textContent='Chwazi youn nan 3 fòm yo.';draw();}
+  function place(r,c){
+   if(finished||selected<0||pieces[selected]===null)return;
+   const shape=shapes[pieces[selected]];
+   if(!canPlace(shape,r,c)){msg.textContent='Blòk la pa antre nan espas sa a. Chwazi yon lòt kote.';return;}
+   shape.forEach(([y,x])=>board[r+y][c+x]=pieces[selected]+1);
+   score+=shape.length;
+   const rows=[];const cols=[];
+   for(let y=0;y<10;y++)if(board[y].every(Boolean))rows.push(y);
+   for(let x=0;x<10;x++)if(board.every(row=>row[x]))cols.push(x);
+   rows.forEach(y=>board[y].fill(0));cols.forEach(x=>board.forEach(row=>row[x]=0));
+   score+=(rows.length+cols.length)*10;
+   if(score>best){best=score;try{localStorage.setItem(bestKey,String(best));}catch(e){}$('bpBest').textContent=best;}
+   pieces[selected]=null;
+   if(pieces.every(x=>x===null))newPieces();
+   selected=pieces.findIndex(x=>x!==null);
+   draw();
+   msg.textContent=(rows.length+cols.length?'✨ '+(rows.length+cols.length)+' liy/kolòn efase! ':'Blòk plase. ')+'Pwen: '+score;
+   if(!pieces.some(s=>s!==null&&shapes[s].some(([y,x])=>{for(let r=0;r<10-y;r++)for(let c=0;c<10-x;c++)if(canPlace(shapes[s],r,c))return true;return false;}))){finished=true;msg.textContent='🏁 Jwèt fini! Pwen: '+score+' • Rekò: '+best;draw();}
+  }
+  function reset(){board=Array.from({length:10},()=>Array(10).fill(0));score=0;finished=false;newPieces();msg.textContent='Chwazi yon fòm anba a epi mete l sou griy la.';draw();}
   $('bpReset').addEventListener('click',reset);reset();
  }
  function startLudo(){
