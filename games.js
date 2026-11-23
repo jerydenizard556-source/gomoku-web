@@ -656,48 +656,24 @@
 
 
  function startBlockPuzzle(){
-  showPanel('🧩 BLOCK PUZZLE','<p class="mrjg-muted">Trennen blòk yo sou griy la. Ranpli liy oswa kolòn pou efase yo. Chwazi yon fòm epi tape kote ou vle mete l; sou òdinatè ou ka trennen l tou.</p><div style="display:flex;justify-content:space-between;align-items:center;max-width:480px;margin:auto"><strong id="bpScore" style="font-size:20px">0</strong><small>PI BON: <b id="bpBest">0</b></small></div><div id="bpBoard" style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;width:min(100%,460px);margin:12px auto;padding:6px;background:#101b2a;border:1px solid #52647d;border-radius:10px;touch-action:manipulation"></div><div id="bpPieces" style="display:flex;justify-content:space-around;align-items:center;gap:8px;max-width:480px;margin:12px auto;min-height:100px"></div><div id="bpMsg" class="mrjg-status" aria-live="polite">Chwazi yon fòm anba a.</div><div class="mrjg-controls"><button id="bpReset">↻ REKÒMANSE</button></div>');
-  const shapes=[[[0,0]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[1,1]],[[0,1],[1,0],[1,1],[1,2]],[[0,0],[0,1],[0,2],[1,1]],[[0,0],[1,0],[2,0],[2,1]],[[0,0],[1,0],[1,1],[2,1]]];
-  const colors=['#42b9f5','#f5bc46','#65d48a','#e779b9','#ad8aff','#ff875e','#50d2d0','#94c55e','#f08d9b'];
-  let board,score=0,selected=0,pieces=[],finished=false;
-  const grid=$('bpBoard'),tray=$('bpPieces'),msg=$('bpMsg');
-  const bestKey='mrjery_blockpuzzle_best';let best=0;try{best=Number(localStorage.getItem(bestKey)||0);}catch(e){}
-  $('bpBest').textContent=best;
-  function newPieces(){pieces=Array.from({length:3},()=>Math.floor(Math.random()*shapes.length));selected=pieces.findIndex(x=>x!==null);}
-  function canPlace(shape,r,c){return shape.every(([y,x])=>r+y<10&&c+x<10&&r+y>=0&&c+x>=0&&!board[r+y][c+x]);}
-  function draw(){
-   grid.innerHTML='';
-   for(let r=0;r<10;r++)for(let c=0;c<10;c++){
-    const b=document.createElement('button');b.type='button';b.style.cssText='aspect-ratio:1;min-width:0;border:1px solid #2d4056;border-radius:2px;padding:0;background:'+ (board[r][c]?colors[board[r][c]-1]:'linear-gradient(145deg,#1a2a3d,#152235)')+';box-shadow:'+(board[r][c]?'inset 0 1px 2px #fff5':'');b.addEventListener('click',()=>place(r,c));b.addEventListener('dragover',e=>e.preventDefault());b.addEventListener('drop',e=>{e.preventDefault();const idx=Number(e.dataTransfer.getData('text/plain'));if(Number.isInteger(idx)){selected=idx;place(r,c);}});grid.appendChild(b);
-   }
-   tray.innerHTML='';
-   pieces.forEach((shapeId,i)=>{const b=document.createElement('button');b.type='button';b.draggable=shapeId!==null;b.disabled=shapeId===null||finished;b.style.cssText='width:30%;min-height:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1px solid '+(i===selected?'#e8bd59':'#52647d')+';border-radius:10px;background:'+(i===selected?'#263b55':'#152338')+';color:#fff;opacity:'+(shapeId===null?'.18':'1')+';padding:8px;cursor:grab';
-    if(shapeId!==null){const sh=shapes[shapeId],maxY=Math.max(...sh.map(p=>p[0])),maxX=Math.max(...sh.map(p=>p[1]));const mini=document.createElement('div');mini.style.cssText='display:grid;grid-template-columns:repeat('+(maxX+1)+',13px);gap:3px';for(let y=0;y<=maxY;y++)for(let x=0;x<=maxX;x++){const q=document.createElement('i');q.style.cssText='width:13px;height:13px;border-radius:2px;background:'+ (sh.some(p=>p[0]===y&&p[1]===x)?colors[shapeId]:'transparent');mini.appendChild(q);}b.appendChild(mini);const label=document.createElement('small');label.textContent='FÒM '+(i+1);b.appendChild(label);b.addEventListener('click',()=>{selected=i;msg.textContent='Fòm '+(i+1)+' chwazi. Tape kote pou mete l.';draw();});b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',String(i));selected=i;});}
-    tray.appendChild(b);
-   });
-   $('bpScore').textContent='PWEN: '+score;
-  }
-  function place(r,c){
-   if(finished||selected<0||pieces[selected]===null)return;
-   const shape=shapes[pieces[selected]];
-   if(!canPlace(shape,r,c)){msg.textContent='Blòk la pa antre nan espas sa a. Chwazi yon lòt kote.';return;}
-   shape.forEach(([y,x])=>board[r+y][c+x]=pieces[selected]+1);
-   score+=shape.length;
-   const rows=[];const cols=[];
-   for(let y=0;y<10;y++)if(board[y].every(Boolean))rows.push(y);
-   for(let x=0;x<10;x++)if(board.every(row=>row[x]))cols.push(x);
-   rows.forEach(y=>board[y].fill(0));cols.forEach(x=>board.forEach(row=>row[x]=0));
-   score+=(rows.length+cols.length)*10;
-   if(score>best){best=score;try{localStorage.setItem(bestKey,String(best));}catch(e){}$('bpBest').textContent=best;}
-   pieces[selected]=null;
-   if(pieces.every(x=>x===null))newPieces();
-   selected=pieces.findIndex(x=>x!==null);
-   draw();
-   msg.textContent=(rows.length+cols.length?'✨ '+(rows.length+cols.length)+' liy/kolòn efase! ':'Blòk plase. ')+'Pwen: '+score;
-   if(!pieces.some(s=>s!==null&&shapes[s].some(([y,x])=>{for(let r=0;r<10-y;r++)for(let c=0;c<10-x;c++)if(canPlace(shapes[s],r,c))return true;return false;}))){finished=true;msg.textContent='🏁 Jwèt fini! Pwen: '+score+' • Rekò: '+best;draw();}
-  }
-  function reset(){board=Array.from({length:10},()=>Array(10).fill(0));score=0;finished=false;newPieces();msg.textContent='Chwazi yon fòm anba a epi mete l sou griy la.';draw();}
-  $('bpReset').addEventListener('click',reset);reset();
+  showPanel('🧱 TETRIS — BLOK K AP TONBE','<p class="mrjg-muted">Blòk yo ap tonbe depi anlè. Deplase yo, vire yo, epi ranpli liy yo pou fè pwen.</p><div style="display:flex;justify-content:space-between;max-width:360px;margin:auto"><b id="bpScore">PWEN: 0</b><b id="bpLevel">NIVO: 1</b></div><div id="bpBoard" style="display:grid;grid-template-columns:repeat(10,1fr);gap:2px;width:min(100%,360px);margin:10px auto;padding:5px;background:#101b2a;border:1px solid #52647d;border-radius:8px;touch-action:none"></div><div class="mrjg-status" id="bpMsg">Peze KÒMANSE.</div><div class="mrjg-controls" style="max-width:360px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)"><button id="bpLeft">←</button><button id="bpRotate">⟳ VIRE</button><button id="bpRight">→</button><button id="bpDown">↓ PI VIT</button><button id="bpDrop">⬇️ TONBE</button><button id="bpStart">▶ KÒMANSE</button></div><p class="mrjg-note">Klavye: ← → deplase • ↑ vire • ↓ akselere • Espas tonbe nèt.</p>');
+  const grid=$('bpBoard'),msg=$('bpMsg'),scoreEl=$('bpScore'),levelEl=$('bpLevel');
+  const shapes=[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
+  const colors=['#46d8f4','#f6d34c','#b28aff','#ff984e','#4c83ff','#62d58a','#ef6596'];
+  let board,cur,next,score=0,level=1,lines=0,started=false,over=false,timer=null,dropMs=700;
+  function piece(){let id=Math.floor(Math.random()*shapes.length);return {id,m:shapes[id].map(r=>r.slice()),x:3,y:0};}
+  function valid(p,dx=0,dy=0,m=p.m){for(let y=0;y<m.length;y++)for(let x=0;x<m[y].length;x++)if(m[y][x]){let xx=p.x+x+dx,yy=p.y+y+dy;if(xx<0||xx>=10||yy>=20||(yy>=0&&board[yy][xx]))return false;}return true;}
+  function rotate(){let m=cur.m[0].map((_,x)=>cur.m.map(row=>row[x]).reverse());if(valid(cur,0,0,m))cur.m=m;}
+  function draw(){grid.innerHTML='';for(let y=0;y<20;y++)for(let x=0;x<10;x++){let v=board[y][x],ghost=0;if(!over&&cur){let gy=cur.y;while(valid({...cur,y:gy+1}))gy++;if(cur.m.some((row,yy)=>row.some((q,xx)=>q&&cur.x+xx===x&&gy+yy===y)))ghost=cur.id+1;}let b=document.createElement('div');b.style.cssText='aspect-ratio:1;border-radius:2px;background:'+(v?colors[v-1]:ghost?'#'+colors[cur.id].slice(1)+'55':'#1a2a3d')+';border:1px solid '+(v?colors[v-1]:ghost?'#789':'#26394f');grid.appendChild(b);}scoreEl.textContent='PWEN: '+score;levelEl.textContent='NIVO: '+level;}
+  function spawn(){cur=next||piece();next=piece();cur.x=3;cur.y=0;if(!valid(cur)){over=true;started=false;clearInterval(timer);msg.textContent='🏁 Jwèt fini! Pwen: '+score+' — rekòmanse.';}draw();}
+  function lock(){cur.m.forEach((row,y)=>row.forEach((v,x)=>{if(v&&cur.y+y>=0)board[cur.y+y][cur.x+x]=cur.id+1;}));let full=board.filter(row=>row.every(Boolean)).length;if(full){board=board.filter(row=>!row.every(Boolean));while(board.length<20)board.unshift(Array(10).fill(0));lines+=full;score+=([0,100,300,500,800][full]||full*250)*level;level=1+Math.floor(lines/10);dropMs=Math.max(100,700-(level-1)*55);clearInterval(timer);timer=setInterval(tick,dropMs);msg.textContent='✨ '+full+' liy efase!';}spawn();}
+  function tick(){if(!started||over)return;if(valid(cur,0,1))cur.y++;else lock();draw();}
+  function move(dx){if(started&&!over&&valid(cur,dx,0)){cur.x+=dx;draw();}}
+  function down(){if(started&&!over){if(valid(cur,0,1)){cur.y++;score++;}else lock();draw();}}
+  function hardDrop(){if(!started||over)return;while(valid(cur,0,1)){cur.y++;score+=2;}lock();draw();}
+  function begin(){clearInterval(timer);board=Array.from({length:20},()=>Array(10).fill(0));score=0;lines=0;level=1;dropMs=700;over=false;started=true;next=null;spawn();timer=setInterval(tick,dropMs);msg.textContent='Blòk la ap tonbe! Deplase l.';}
+  $('bpLeft').onclick=()=>move(-1);$('bpRight').onclick=()=>move(1);$('bpRotate').onclick=()=>{if(started&&!over){rotate();draw();}};$('bpDown').onclick=down;$('bpDrop').onclick=hardDrop;$('bpStart').onclick=begin;
+  const key=e=>{if(!panel.contains(document.activeElement)&&!panel.contains(e.target))return;if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp',' '].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='ArrowDown')down();if(e.key==='ArrowUp')rotate(),draw();if(e.key===' ')hardDrop();}};document.addEventListener('keydown',key);cleanup=()=>{clearInterval(timer);document.removeEventListener('keydown',key);};begin();
  }
  function startLudo(){
   showPanel('🎲 LUDO BATTLE','<p class="mrjg-muted">2–4 jwè sou menm aparèy. Fè 6 pou soti nan baz, deplase selon zo a, pran pyès advèsè sou kare ki pa pwoteje. Fòk ou fè kantite egzak pou rive lakay.</p><div class="mrjg-status" id="ludoStatus">Chwazi kantite jwè epi woule zo a.</div><div class="mrjg-controls" id="ludoSetup"><button data-players="2">2 JWÈ</button><button data-players="3">3 JWÈ</button><button data-players="4">4 JWÈ</button></div><div id="ludoDice" style="font-size:42px;text-align:center;margin:8px">🎲</div><div id="ludoBoard" style="display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:3px;width:min(100%,460px);margin:10px auto;padding:7px;background:#101c2c;border-radius:12px"></div><div id="ludoTokens" class="mrjg-controls"></div><div class="mrjg-controls"><button id="ludoRoll" class="mrjg-primary">🎲 JETE ZO A</button><button id="ludoReset">↻ Nouvo match</button></div><p class="mrjg-note">Règ vèsyon sa a: 40 etap pou rive lakay; chak jwè gen 4 pyès. Yon 6 bay yon lòt tou.</p>');
