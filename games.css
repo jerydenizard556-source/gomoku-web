@@ -317,3 +317,21 @@
  #mrjGamesScreen .mrjg-card{min-height:145px}
 }
 @media(prefers-reduced-motion:reduce){#mrjGamesScreen .mrjg-card,#mrjGamesScreen .mrjg-hero-cta{transition:none}}
+
+
+/* Step-by-step navigation: category stops -> dedicated game room -> back to hub */
+.mrjg-category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 25px}
+.mrjg-category-nav button{display:flex;align-items:center;gap:9px;min-height:54px;padding:10px 13px;border:1px solid #39465a;border-radius:12px;background:linear-gradient(135deg,#182438,#0d1522);color:#e9edf4;text-align:left;font-size:10px;font-weight:900;letter-spacing:.06em;cursor:pointer;transition:border-color .2s,transform .2s,background .2s}
+.mrjg-category-nav button:hover{border-color:#d6ad5c;transform:translateY(-2px);background:linear-gradient(135deg,#292a26,#111b2a)}
+.mrjg-category-nav button span{font-size:19px}
+.mrjg-category-nav button b{margin-left:auto;color:#e2b75f;font-size:16px}
+.mrjg-in-game .mrjg-elite-hero,.mrjg-in-game .mrjg-head,.mrjg-in-game .mrjg-category-nav,.mrjg-in-game .mrjg-section-title,.mrjg-in-game .mrjg-grid,.mrjg-in-game .mrjg-controls,.mrjg-in-game .mrjg-note{display:none!important}
+.mrjg-in-game .mrjg-play{display:block!important;min-height:70vh;margin:0;padding:clamp(15px,3vw,30px);border:1px solid #8c6a35;border-radius:18px;background:radial-gradient(ellipse at 85% 0%,#b58a3a18,transparent 35%),linear-gradient(145deg,#111c2c,#080e18);box-shadow:0 20px 55px #0008;animation:mrjgRouteIn .24s ease-out}
+.mrjg-route-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:23px;padding-bottom:14px;border-bottom:1px solid #ffffff1c}
+.mrjg-route-top button{padding:10px 13px;border:1px solid #8c6b35;border-radius:9px;background:#252b34;color:#f2d18c;font-size:10px;font-weight:900;letter-spacing:.08em;cursor:pointer}
+.mrjg-route-top span{color:#8595aa;font-size:9px;font-weight:900;letter-spacing:.16em}
+.mrjg-route-top span b{color:#e4b85f}
+.mrjg-in-game .mrjg-play>h2{margin:0 0 15px;color:#f0cb79;font-size:clamp(23px,4vw,34px)}
+@keyframes mrjgRouteIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:650px){.mrjg-category-nav{grid-template-columns:1fr;gap:7px;margin-bottom:19px}.mrjg-category-nav button{min-height:46px}.mrjg-in-game .mrjg-play{min-height:75vh;padding:13px;border-radius:13px}.mrjg-route-top span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.mrjg-in-game .mrjg-play{animation:none}}
