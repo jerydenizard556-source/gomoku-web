@@ -232,3 +232,88 @@
 .ariana-stage-2d .ariana-overlay{z-index:8}
 .ariana-stage-2d .ariana-overlay button{min-width:150px}
 @media(max-width:650px){.ariana-stage-2d{width:100%;border-radius:8px}.ariana-stage-2d .aq-hud{gap:7px;padding:5px 7px}.ariana-stage-2d .aq-level{padding:3px 5px}.ariana-stage-2d .aq-touch{bottom:2%}.ariana-stage-2d .aq-touch button{width:36px;height:36px;font-size:15px}}
+
+
+/* =========================================================
+   MR JERY ELITE — PREMIUM BLACK & GOLD GAME HUB
+   ========================================================= */
+#mrjGamesScreen{background:radial-gradient(ellipse at 82% 8%,rgba(170,119,38,.12),transparent 34%),#080d16}
+#mrjGamesScreen .mrjg-screen{width:min(1180px,100%);padding:18px 18px 42px}
+.mrjg-elite-hero{position:relative;isolation:isolate;overflow:hidden;min-height:360px;margin:0 0 28px;padding:25px 30px 18px;border:1px solid rgba(211,166,77,.52);border-radius:22px;background:linear-gradient(112deg,#101a2a 0%,#0a111e 52%,#171b25 100%);box-shadow:0 22px 60px #0008,inset 0 1px #ffffff0b}
+.mrjg-elite-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,transparent 45%,rgba(210,161,65,.07)),radial-gradient(circle at 77% 48%,rgba(207,155,57,.2),transparent 29%)}
+.mrjg-hero-top{display:flex;align-items:center;gap:11px;position:relative;z-index:2}
+.mrjg-brand-mark{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#f4d58b,#a66c20);color:#12151b;font-size:21px;font-weight:1000;box-shadow:0 5px 18px #d59c3c44}
+.mrjg-brand-name{display:flex;flex-direction:column;gap:2px;color:#fff;font-size:16px;font-weight:1000;letter-spacing:.08em}
+.mrjg-brand-name b{font-size:9px;color:#d7ad5b;letter-spacing:.2em}
+.mrjg-live{margin-left:auto;display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #40516a;border-radius:99px;color:#b7c4d5;font-size:9px;font-weight:900;letter-spacing:.14em}
+.mrjg-live i{width:7px;height:7px;border-radius:50%;background:#48d69a;box-shadow:0 0 10px #48d69a}
+.mrjg-hero-copy{position:relative;z-index:2;width:min(57%,570px);padding:44px 0 28px}
+.mrjg-hero-kicker{color:#d9b66c;font-size:10px;font-weight:900;letter-spacing:.24em}
+.mrjg-hero-copy h1{margin:12px 0 9px;color:#f7f8fb;font-size:clamp(36px,6vw,68px);line-height:.98;letter-spacing:-.055em;font-weight:1000}
+.mrjg-hero-copy h1 em{color:#e4b85f;font-style:normal;text-shadow:0 5px 28px #d69d3b33}
+.mrjg-hero-copy p{max-width:410px;margin:14px 0 20px;color:#aebbd0;font-size:14px;line-height:1.65}
+.mrjg-hero-cta{display:inline-flex;align-items:center;gap:22px;padding:12px 17px;border:1px solid #f1d28d;border-radius:9px;background:linear-gradient(135deg,#f0cb79,#a9782b);color:#171717;font-size:11px;font-weight:1000;letter-spacing:.1em;cursor:pointer;box-shadow:0 8px 22px #d5a34a33;transition:transform .2s,filter .2s}
+.mrjg-hero-cta:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.mrjg-hero-cta span{font-size:17px}
+.mrjg-hero-visual{position:absolute;z-index:1;right:2%;top:13%;width:43%;height:72%;display:grid;place-items:center;pointer-events:none}
+.mrjg-hero-crown{position:relative;z-index:2;font-size:clamp(100px,19vw,220px);line-height:1;color:#e0b45e;text-shadow:0 0 25px #e0b45e55,0 18px 35px #000b;transform:rotate(-8deg)}
+.mrjg-hero-glow{position:absolute;width:66%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#d3a34a42 0%,#a16b2620 38%,transparent 70%);filter:blur(7px)}
+.mrjg-orbit{position:absolute;width:78%;height:38%;border:1px solid #d8b66a55;border-radius:50%;transform:rotate(-27deg)}
+.mrjg-orbit.orbit-two{width:90%;height:57%;transform:rotate(52deg);border-color:#93a5bc30}
+.mrjg-hero-side{position:absolute;right:-5px;bottom:4%;writing-mode:vertical-rl;color:#c4a56a;font-size:8px;letter-spacing:.25em}
+.mrjg-hero-stats{position:relative;z-index:2;display:flex;gap:0;width:min(460px,60%);border-top:1px solid #ffffff1c;padding-top:13px}
+.mrjg-hero-stats span{display:flex;flex-direction:column;gap:3px;min-width:100px;padding:0 22px;border-right:1px solid #ffffff1c}
+.mrjg-hero-stats span:first-child{padding-left:0}
+.mrjg-hero-stats span:last-child{border:0}
+.mrjg-hero-stats b{color:#f0cb79;font-size:19px}
+.mrjg-hero-stats small{color:#8292a8;font-size:8px;font-weight:900;letter-spacing:.16em}
+#mrjGamesScreen .mrjg-head{margin:0 0 22px;padding:13px 2px;border-bottom:1px solid #ffffff16}
+#mrjGamesScreen .mrjg-head h1{color:#f0cb79;font-size:clamp(21px,3vw,29px);letter-spacing:.025em}
+#mrjGamesScreen .mrjg-head p{font-size:12px;color:#91a0b4}
+#mrjGamesScreen .mrjg-back{border-color:#4b402a;background:#171d29;color:#e7d3a6}
+#mrjGamesScreen .mrjg-section-title{display:flex;align-items:center;gap:10px;margin:30px 0 14px;color:#f0cb79;font-size:15px;font-weight:1000;letter-spacing:.045em}
+#mrjGamesScreen .mrjg-section-title>span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #8e6c32;border-radius:8px;color:#d8b66a;font-size:10px}
+#mrjGamesScreen .mrjg-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+#mrjGamesScreen .mrjg-card{position:relative;isolation:isolate;overflow:hidden;min-height:178px;padding:17px;border:1px solid #28374b;border-radius:15px;background:linear-gradient(145deg,#172336 0%,#0c1421 72%);box-shadow:0 9px 24px #0004;transition:transform .22s,border-color .22s,box-shadow .22s}
+#mrjGamesScreen .mrjg-card:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 100% 0%,rgba(212,169,87,.13),transparent 43%);opacity:.8}
+#mrjGamesScreen .mrjg-card:after{content:"";position:absolute;z-index:-1;right:-20px;bottom:-38px;width:125px;height:125px;border:1px solid #d5ad6030;border-radius:50%;box-shadow:0 0 0 15px #d5ad6008,0 0 0 31px #d5ad6005}
+#mrjGamesScreen .mrjg-card:hover{transform:translateY(-5px);border-color:#c79a49;box-shadow:0 15px 32px #0008,0 0 0 1px #c79a4922}
+#mrjGamesScreen .mrjg-card .emoji{display:grid;place-items:center;width:49px;height:49px;border:1px solid #8c6c36;border-radius:13px;background:linear-gradient(145deg,#302a20,#171d28);font-size:27px;filter:drop-shadow(0 5px 10px #0006)}
+#mrjGamesScreen .mrjg-card strong{margin-top:4px;color:#f5f6f8;font-size:15px;letter-spacing:.015em}
+#mrjGamesScreen .mrjg-card small{max-width:95%;color:#9eacc0;font-size:11px;line-height:1.55}
+#mrjGamesScreen .mrjg-tag{border-color:#725b31;background:#b78a3414;color:#e6c57f;font-size:8px;letter-spacing:.12em}
+#mrjGamesScreen #mrjgGomoku{border-color:#b38a43;background:linear-gradient(135deg,#292719,#111a27 75%);box-shadow:0 10px 28px #b68b3320}
+#mrjGamesScreen #mrjgGomoku .mrjg-tag{background:#c49a3a;color:#171717}
+#mrjGamesScreen #mrjgAriana{background:linear-gradient(145deg,#202b3a,#111824 75%)}
+#mrjGamesScreen .mrjg-play{border-color:#67512d;background:linear-gradient(145deg,#121e2e,#09111c);box-shadow:0 15px 36px #0007}
+#mrjGamesScreen .mrjg-controls button,#mrjGamesScreen .mrjg-primary{border-color:#927039;background:linear-gradient(145deg,#293346,#151d2a);color:#f5e5bf}
+#mrjGamesScreen .mrjg-primary{background:linear-gradient(145deg,#d6ad5c,#8f6426);color:#171717}
+#mrjGamesScreen .mrjg-status{color:#e5bd6d}
+#mrjGamesScreen .mrjg-note{color:#8292a8;text-align:center}
+#mrjGamesScreen .mrjg-controls:last-of-type{justify-content:center}
+@media(max-width:650px){
+ #mrjGamesScreen .mrjg-screen{padding:10px 9px 30px}
+ .mrjg-elite-hero{min-height:340px;padding:17px 16px 15px;border-radius:16px}
+ .mrjg-hero-copy{width:75%;padding:43px 0 24px}
+ .mrjg-hero-copy h1{font-size:clamp(36px,10vw,52px)}
+ .mrjg-hero-copy p{max-width:270px;font-size:12px}
+ .mrjg-hero-visual{right:-15%;top:20%;width:55%;height:55%;opacity:.72}
+ .mrjg-hero-crown{font-size:clamp(100px,29vw,155px)}
+ .mrjg-hero-side{display:none}
+ .mrjg-hero-stats{width:100%;gap:0}
+ .mrjg-hero-stats span{min-width:0;flex:1;padding:0 12px}
+ #mrjGamesScreen .mrjg-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #mrjGamesScreen .mrjg-card{min-height:166px;padding:12px;border-radius:12px}
+ #mrjGamesScreen .mrjg-card .emoji{width:42px;height:42px;font-size:23px}
+ #mrjGamesScreen .mrjg-card strong{font-size:13px}
+ #mrjGamesScreen .mrjg-card small{font-size:10px}
+ #mrjGamesScreen .mrjg-section-title{font-size:12px;letter-spacing:0;gap:7px}
+}
+@media(max-width:370px){
+ .mrjg-hero-copy{width:82%}
+ .mrjg-hero-copy h1{font-size:34px}
+ .mrjg-live{font-size:8px;padding:6px 8px}
+ #mrjGamesScreen .mrjg-grid{grid-template-columns:1fr}
+ #mrjGamesScreen .mrjg-card{min-height:145px}
+}
+@media(prefers-reduced-motion:reduce){#mrjGamesScreen .mrjg-card,#mrjGamesScreen .mrjg-hero-cta{transition:none}}
